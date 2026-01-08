@@ -7,7 +7,7 @@ function App() {
       <p>
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi aliquam maxime incidunt architecto. Earum,
         mollitia accusamus libero ad laboriosam, distinctio nihil, maiores facilis minima vero quibusdam dolorem
-        commodi! Et, aliquid?
+        commodi! Et, dolores?
       </p>
     </>
   );

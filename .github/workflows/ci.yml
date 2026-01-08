@@ -2,12 +2,12 @@ name: CI
 
 on:
   pull_request:
-    branches: [main, 6-basic-ci]
+    branches: [main, develop]
   push:
-    branches: [main, 6-basic-ci]
+    branches: [main, 6-]
 
 jobs:
-  analyze-and-install:
+  analyze-changes:
     runs-on: ubuntu-latest
     outputs:
       needs-eslint: ${{ steps.analyze.outputs.needs-eslint }}
@@ -18,32 +18,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # Нужно для git diff
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "18"
-          cache: "pnpm"
-
-      - name: Cache node_modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
-
-      - name: Install dependencies
-        run: pnpm install
 
       - name: Analyze changed files
         id: analyze
         run: |
+          # Получаем измененные файлы
           if [ -n "${{ github.event.pull_request.base.ref }}" ]; then
             # Для PR сравниваем с целевой веткой
             git fetch origin ${{ github.event.pull_request.base.ref }} --depth=1
@@ -76,22 +55,39 @@ jobs:
           fi
 
   checks:
-    needs: analyze-and-install
+    needs: analyze-changes
     runs-on: ubuntu-latest
 
     steps:
-      - name: Run ESLint
-        if: needs.analyze-and-install.outputs.needs-eslint == 'true'
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9 # Явно указываем версию
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: "pnpm" # Кеширование dependencies
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: ESLint
+        if: needs.analyze-changes.outputs.needs-eslint == 'true'
         run: pnpm run lint:js
 
-      - name: Run Stylelint
-        if: needs.analyze-and-install.outputs.needs-stylelint == 'true'
+      - name: Stylelint
+        if: needs.analyze-changes.outputs.needs-stylelint == 'true'
         run: pnpm run lint:css
 
-      - name: Run TypeScript
-        if: needs.analyze-and-install.outputs.needs-typescript == 'true'
+      - name: TypeScript check
+        if: needs.analyze-changes.outputs.needs-typescript == 'true'
         run: pnpm run type-check
 
-      - name: Run Prettier
-        if: needs.analyze-and-install.outputs.needs-prettier == 'true'
+      - name: Prettier check
+        if: needs.analyze-changes.outputs.needs-prettier == 'true'
         run: pnpm run format:check
