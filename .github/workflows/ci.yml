@@ -28,20 +28,18 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      # Запускаем все проверки, но параллельно
-      - name: Run checks in parallel
-        run: |
-          # ESLint
-          pnpm run lint:js &
+      - name: Run ESLint
+        run: pnpm run lint:js
+        continue-on-error: false # Если ESLint упадет - весь CI упадет
 
-          # Stylelint
-          pnpm run lint:css &
+      - name: Run Stylelint
+        run: pnpm run lint:css
+        continue-on-error: false
 
-          # TypeScript
-          pnpm run type-check &
+      - name: Run TypeScript type check
+        run: pnpm run type-check
+        continue-on-error: false
 
-          # Prettier
-          pnpm run format:check &
-
-          # Ждем завершения всех процессов
-          wait
+      - name: Run Prettier check
+        run: pnpm run format:check
+        continue-on-error: false
