@@ -1,5 +1,5 @@
-# **/*.css
-# **/*.module.css
+**/*.css
+**/*.module.css
 dist/
 pnpm-lock.yaml
 package-lock.json
