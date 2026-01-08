@@ -1,0 +1,41 @@
+name: "Generate CSS variables"
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+
+jobs:
+  generate:
+    if: github.event.pull_request.head.repo.fork == true
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout design branch
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install and generate CSS
+        run: |
+          npm ci
+          npm run build:tokens
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Коммитим и пушим
+          git add . && git commit -m "🎨 Auto CSS vars" && git push 2>/dev/null || true
+
+          echo "✅ CSS variables обновлены и запушены"
