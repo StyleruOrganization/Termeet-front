@@ -1,4 +1,14 @@
 **/*.css
 **/*.module.css
 dist/
-
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+*.lock
+dist/
+build/
+node_modules/
+coverage/
+.DS_Store
+.env*
+!.env.example
