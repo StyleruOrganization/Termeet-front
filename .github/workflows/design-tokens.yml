@@ -1,41 +1,98 @@
-name: "Generate CSS variables"
+name: "Design tokens sync"
+run-name: "Design tokens sync"
+
 on:
-  pull_request:
+  pull_request_target:
     branches: [main]
-    types: [opened, synchronize, reopened]
 
 jobs:
-  generate:
+  process-fork:
     if: github.event.pull_request.head.repo.fork == true
-
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pull-requests: write
 
     steps:
-      - name: Checkout design branch
+      - name: Checkout main repo
         uses: actions/checkout@v6
         with:
-          ref: ${{ github.event.pull_request.head.ref }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: "20"
-          cache: "npm"
+      - name: Setup Git bot user
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+      - name: Setup Variables
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          BRANCH_NAME="test/permissions-${DATE}-${{ github.run_id }}"
 
-      - name: Install and generate CSS
+          echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
+      - name: Fetch fork design branch
+        run: |
+          # Забираем ветку design/ из форка
+          FORK_URL="https://github.com/${{ github.event.pull_request.head.repo.full_name }}.git"
+          FORK_BRANCH="${{ github.event.pull_request.head.ref }}"
+
+          git fetch $FORK_URL $FORK_BRANCH:${{env.BRANCH_NAME}}
+          git checkout ${{env.BRANCH_NAME}}
+      - name: Check for tokens.json
+        id: check-tokens
+        run: |
+          if [ -f "tokens.json" ]; then
+            echo "✅ tokens.json found"
+            echo "has_tokens=true" >> $GITHUB_OUTPUT
+          else
+            echo "❌ tokens.json not found"
+            echo "has_tokens=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Generate CSS variables
+        if: steps.check-tokens.outputs.has_tokens == 'true'
+        id: generate-css
         run: |
           npm ci
           npm run build:tokens
 
-      - name: Commit and push changes
+          # Проверяем изменилось ли что-то
+          if git diff --quiet; then
+            echo "✅ No CSS changes needed"
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            git add .
+            git commit -m "🎨 Auto-generated CSS variables"
+            echo "✅ CSS changes committed"
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Push to main repo
+        if: steps.generate-css.outputs.has_changes == 'true'
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          echo "=== DEBUG INFO ==="
+          echo "Current branch: $(git branch --show-current)"
+          echo "Git status:"
+          git status
+          echo "Remote URL:"
+          git remote get-url origin
+          echo "Config:"
+          git config --list | grep -E "(user|remote)"
 
-          # Коммитим и пушим
-          git add . && git commit -m "🎨 Auto CSS vars" && git push 2>/dev/null || true
+          # Пушим ветку в основной репозиторий
+          git push origin ${{env.BRANCH_NAME}}
 
-          echo "✅ CSS variables обновлены и запушены"
+      - name: Create PR
+        if: steps.generate-css.outputs.has_changes == 'true'
+        run: |
+          # Создаем новый PR в основном репо
+          gh pr create \
+            --title "🎨 Design sync: ${{ github.event.pull_request.title }}" \
+            --body "Auto-synced from fork PR #${{ github.event.pull_request.number }}" \
+            --base main \
+            --head ${{env.BRANCH_NAME}} \
+
+          # Закрываем старый PR из форка
+          gh pr close ${{ github.event.pull_request.number }} \
+            --comment "✅ Auto-synced to new PR in main repository"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
