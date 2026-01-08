@@ -2,9 +2,9 @@ name: CI
 
 on:
   pull_request:
-    branches: [main, 6-basic-ci]
+    branches: [main]
   push:
-    branches: [main, 6-basic-ci]
+    branches: [main]
 
 jobs:
   analyze-changes:
@@ -51,7 +51,6 @@ jobs:
           # Проверяем, есть ли CSS файлы
           if echo "$CHANGED_FILES" | grep -q -E '\.(css|scss|sass|less)$'; then
             echo "::set-output name=needs-stylelint::true"
-            echo "::set-output name=needs-prettier::true"
           else
             echo "::set-output name=needs-stylelint::false"
           fi
@@ -67,7 +66,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 9 # Явно указываем версию
+          version: 9
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
