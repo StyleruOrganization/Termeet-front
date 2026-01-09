@@ -26,7 +26,7 @@ jobs:
       - name: Setup Variables
         run: |
           DATE=$(date +'%Y-%m-%d')
-          BRANCH_NAME="test/permissions-${DATE}-${{ github.run_id }}"
+          BRANCH_NAME="design/tokens-${DATE}-${{ github.run_id }}"
 
           echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
       - name: Fetch fork design branch
@@ -69,15 +69,6 @@ jobs:
       - name: Push to main repo
         if: steps.generate-css.outputs.has_changes == 'true'
         run: |
-          echo "=== DEBUG INFO ==="
-          echo "Current branch: $(git branch --show-current)"
-          echo "Git status:"
-          git status
-          echo "Remote URL:"
-          git remote get-url origin
-          echo "Config:"
-          git config --list | grep -E "(user|remote)"
-
           # Пушим ветку в основной репозиторий
           git push origin ${{env.BRANCH_NAME}}
 
