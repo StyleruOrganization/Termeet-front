@@ -19,24 +19,40 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 18
+          cache: pnpm
+
       - name: Setup Git bot user
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-      - name: Setup Variables
+
+      - name: Create new branch
         run: |
           DATE=$(date +'%Y-%m-%d')
           BRANCH_NAME="design/tokens-${DATE}-${{ github.run_id }}"
-
           echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
-      - name: Fetch fork design branch
+          git checkout -b "$BRANCH_NAME"
+
+      - name: Fetch only tokens.json from fork
         run: |
-          # Забираем ветку design/ из форка
+          # Забираем только tokens.json из форка
           FORK_URL="https://github.com/${{ github.event.pull_request.head.repo.full_name }}.git"
           FORK_BRANCH="${{ github.event.pull_request.head.ref }}"
 
-          git fetch $FORK_URL $FORK_BRANCH:${{env.BRANCH_NAME}}
-          git checkout ${{env.BRANCH_NAME}}
+          git fetch $FORK_URL $FORK_BRANCH:fetch/$FORK_BRANCH
+
+          # Checkout только tokens.json из ветки форка
+          git checkout fetch/$FORK_BRANCH -- tokens.json
+
       - name: Check for tokens.json
         id: check-tokens
         run: |
@@ -52,8 +68,8 @@ jobs:
         if: steps.check-tokens.outputs.has_tokens == 'true'
         id: generate-css
         run: |
-          npm ci
-          npm run build:tokens
+          pnpm i --frozen-lockfile
+          pnpm build:tokens
 
           # Проверяем изменилось ли что-то
           if git diff --quiet; then
