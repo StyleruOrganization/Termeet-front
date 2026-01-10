@@ -1,0 +1,22 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "types": [], // Попробуем без vite/client
+    "lib": ["ES2022", "DOM"],
+    "jsx": "react-jsx",
+    "useDefineForClassFields": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "path": {
+      "@": ["/src"],
+      "@pages": ["/src/pages"],
+      "@components": ["/src/components"],
+      "@hooks": ["/src/hooks"],
+      "@shared": ["/src/shared"],
+      "@assets": ["/src/assets"]
+    }
+  },
+  "include": ["src"] // Путь относительно tsconfig.json
+}

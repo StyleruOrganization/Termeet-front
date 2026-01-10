@@ -1,4 +1,7 @@
 {
-  "files": [],
-  "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }]
+  "files": [], // Для устранения двойной компиляции https://www.typescriptlang.org/docs/handbook/project-references.html#overall-structure
+  "references": [
+    { "path": "./configs/tsconfig.app.json" }, 
+    { "path": "./configs/tsconfig.node.json" }
+  ]
 }
