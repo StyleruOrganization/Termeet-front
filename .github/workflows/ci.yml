@@ -24,10 +24,14 @@ jobs:
       - name: Analyze changed files
         id: analyze
         run: |
+          echo "needs-eslint=false" >> $GITHUB_OUTPUT
+          echo "needs-stylelint=false" >> $GITHUB_OUTPUT
+          echo "needs-typescript=false" >> $GITHUB_OUTPUT
+          echo "needs-prettier=false" >> $GITHUB_OUTPUT
+
           # Получаем измененные файлы
           if [ -n "${{ github.event.pull_request.base.ref }}" ]; then
             # Для PR сравниваем с целевой веткой
-            git fetch origin ${{ github.event.pull_request.base.ref }} --depth=1
             CHANGED_FILES=$(git diff --name-only HEAD origin/${{ github.event.pull_request.base.ref }})
           else
             # Для push сравниваем с предыдущим коммитом
@@ -39,23 +43,18 @@ jobs:
 
           # Проверяем, есть ли JS/TS файлы
           if echo "$CHANGED_FILES" | grep -q -E '\.(js|jsx|ts|tsx)$'; then
-            echo "::set-output name=needs-eslint::true"
-            echo "::set-output name=needs-typescript::true"
-            echo "::set-output name=needs-prettier::true"
-          else
-            echo "::set-output name=needs-eslint::false"
-            echo "::set-output name=needs-typescript::false"
-            echo "::set-output name=needs-prettier::false"
+            echo "needs-eslint=true" >> $GITHUB_OUTPUT
+            echo "needs-typescript=true" >> $GITHUB_OUTPUT
+            echo "needs-prettier=true" >> $GITHUB_OUTPUT
           fi
 
           # Проверяем, есть ли CSS файлы
           if echo "$CHANGED_FILES" | grep -q -E '\.(css|scss|sass|less)$'; then
-            echo "::set-output name=needs-stylelint::true"
-          else
-            echo "::set-output name=needs-stylelint::false"
+            echo "needs-stylelint=true" >> $GITHUB_OUTPUT
           fi
 
   checks:
+    name: "Lint and Type Checks"
     needs: analyze-changes
     runs-on: ubuntu-latest
 
