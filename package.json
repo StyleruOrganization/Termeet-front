@@ -13,7 +13,9 @@
     "lint:js": "eslint . --max-warnings=0",
     "lint:css": "stylelint **/*.css --cache-location ./node_modules/.stylelintcache",
     "type-check": "tsc --noEmit",
-    "format:check": "prettier --check . --ignore-path .gitignore"
+    "format:check": "prettier --check .",
+    "format:write": "prettier --write . --ignore-path .gitignore --ignore-path .prettierignore",
+    "prepare": "husky"
   },
   "dependencies": {
     "react": "^19.2.0",

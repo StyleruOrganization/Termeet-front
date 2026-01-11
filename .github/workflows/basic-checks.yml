@@ -1,0 +1,88 @@
+name: basic-checks
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+run-name: "Linters and Types Checks"
+jobs:
+  analyze-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      needs-eslint: ${{ steps.analyze.outputs.needs-eslint || false }}
+      needs-stylelint: ${{ steps.analyze.outputs.needs-stylelint || false}}
+      needs-typescript: ${{ steps.analyze.outputs.needs-typescript || false}}
+      needs-prettier: ${{ steps.analyze.outputs.needs-prettier || false}}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Analyze changed files
+        id: analyze
+        run: |
+          # Получаем измененные файлы
+          if [ -n "${{ github.event.pull_request.base.ref }}" ]; then
+            # Для PR сравниваем с целевой веткой
+            CHANGED_FILES=$(git diff --name-only HEAD origin/${{ github.event.pull_request.base.ref }})
+          else
+            # Для push сравниваем с предыдущим коммитом
+            CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD)
+          fi
+
+          echo "Changed files:"
+          echo "$CHANGED_FILES"
+
+          # Проверяем, есть ли JS/TS файлы
+          if echo "$CHANGED_FILES" | grep -q -E '\.(js|jsx|ts|tsx)$'; then
+            echo "needs-eslint=true" >> "$GITHUB_OUTPUT"
+            echo "needs-typescript=true" >> "$GITHUB_OUTPUT"
+            echo "needs-prettier=true" >> "$GITHUB_OUTPUT"
+          fi
+
+          # Проверяем, есть ли CSS файлы
+          if echo "$CHANGED_FILES" | grep -q -E '\.(css)$'; then
+            echo "needs-stylelint=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  checks:
+    needs: analyze-changes
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: "pnpm" # Кеширование dependencies
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: ESLint
+        if: needs.analyze-changes.outputs.needs-eslint == 'true'
+        run: pnpm run lint:js
+
+      - name: Stylelint
+        if: needs.analyze-changes.outputs.needs-stylelint == 'true'
+        run: pnpm run lint:css
+
+      - name: TypeScript check
+        if: needs.analyze-changes.outputs.needs-typescript == 'true'
+        run: pnpm run type-check
+
+      - name: Prettier check
+        if: needs.analyze-changes.outputs.needs-prettier == 'true'
+        run: pnpm run format:check
