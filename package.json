@@ -9,7 +9,13 @@
     "preview": "vite preview",
     "eslint:fix": "eslint . --fix",
     "stylelint:fix": "stylelint **/*.css --cache-location ./node_modules/.stylelintcache --fix",
-    "build:tokens": "style-dictionary build -c tokens-config.json"
+    "build:tokens": "style-dictionary build -c tokens-config.json",
+    "lint:js": "eslint . --max-warnings=0",
+    "lint:css": "stylelint **/*.css --cache-location ./node_modules/.stylelintcache",
+    "type-check": "tsc -b",
+    "format:check": "prettier --check .",
+    "format:write": "prettier --write .",
+    "prepare": "husky"
   },
   "dependencies": {
     "react": "^19.2.0",

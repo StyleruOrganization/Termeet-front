@@ -1,7 +1,7 @@
 {
-  "extends": "./tsconfig.base.json",
+  "extends": "./ts-base.json",
   "compilerOptions": {
-    "types": [], // Попробуем без vite/client
+    "types": ["vite/client"], // Попробуем без vite/client
     "lib": ["ES2022", "DOM"],
     "jsx": "react-jsx",
     "useDefineForClassFields": true,
@@ -9,14 +9,14 @@
     "strictNullChecks": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
-    "path": {
-      "@": ["/src"],
-      "@pages": ["/src/pages"],
-      "@components": ["/src/components"],
-      "@hooks": ["/src/hooks"],
-      "@shared": ["/src/shared"],
-      "@assets": ["/src/assets"]
+    "paths": {
+      "@/*": ["../src/*"],
+      "@pages/*": ["../src/pages/*"],
+      "@components/*": ["../src/components/*"],
+      "@hooks/*": ["../src/hooks/*"],
+      "@shared/*": ["../src/shared/*"],
+      "@assets/*": ["../src/assets/*"]
     }
   },
-  "include": ["src"] // Путь относительно tsconfig.json
+  "include": ["../src"] // Путь относительно текущего файла
 }

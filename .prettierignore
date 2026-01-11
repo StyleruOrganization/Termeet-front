@@ -1,4 +1,13 @@
 **/*.css
 **/*.module.css
 dist/
-
+pnpm-lock.yaml
+package-lock.json
+dist/
+build/
+node_modules/
+.DS_Store
+.env*
+!.env.example
+.vscode/
+*.json
