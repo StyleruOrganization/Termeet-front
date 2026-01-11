@@ -81,6 +81,10 @@ jobs:
             echo "✅ CSS changes committed"
             echo "has_changes=true" >> $GITHUB_OUTPUT
           fi
+      - name: Stylelint
+        if: steps.generate-css.outputs.has_changes == 'true'
+        run: |
+          pnpm stylelint:fix
 
       - name: Push to main repo
         if: steps.generate-css.outputs.has_changes == 'true'
