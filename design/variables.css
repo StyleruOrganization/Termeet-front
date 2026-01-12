@@ -3,15 +3,13 @@
  */
 
 :root {
-  --termeet-gray-main-text-10: rgb(47 47 47 / 10%);
-  --termeet-gray-main-text-20: rgb(47 47 47 / 20%);
-  --termeet-gray-main-text-100: #2f2f2f;
-  --termeet-brand-secondary: #dae2ee;
-  --termeet-brand-light: #5591eb;
-  --termeet-brand-main: #102f55;
+  --termeet-color-gray-main-10: rgb(47 47 47 / 10%);
   --termeet-bg-inputs: #f8f8f8;
+  --termeet-color-gray-main-100: #2f2f2f;
+  --termeet-accent-errors: #fc3f1d;
+  --termeet-accent-success: #3cc713;
+  --termeet-brand-main: #386dd4;
   --termeet-always-white: #fff;
-  --termeet-always-black: #000;
-  --termeet-border-16: 16px;
-  --termeet-accent-error: #fc3f1d;
+  --termeet-brand-secondary: #5591eb;
+  --termeet-typo-body-s: manrope, 12px/18px;
 }
