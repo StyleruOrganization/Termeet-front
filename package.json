@@ -24,9 +24,9 @@
     "zod": "^4.3.5"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
+    "*.{js,jsx,mjs,ts,tsx}": [
       "npm run eslint:fix",
-      "prettier --write"
+      "prettier --write ."
     ],
     "*.css": "npm run stylelint:fix"
   },

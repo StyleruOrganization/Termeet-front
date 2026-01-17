@@ -33,7 +33,17 @@ export default {
         {
           groupName: "Размеры и отступы",
           emptyLineBefore: "always",
-          properties: ["width", "height", "margin", "padding", "padding-top", "padding-right", "padding-bottom", "padding-left", "box-sizing"],
+          properties: [
+            "width",
+            "height",
+            "margin",
+            "padding",
+            "padding-top",
+            "padding-right",
+            "padding-bottom",
+            "padding-left",
+            "box-sizing",
+          ],
           noEmptyLineBetween: true,
           order: "flexible",
         },
