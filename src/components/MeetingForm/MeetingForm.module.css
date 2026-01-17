@@ -1,0 +1,12 @@
+.MeetingForm {
+  display: flex;
+
+  flex-direction: column;
+  gap: 16px;
+}
+
+.MeetingForm__InputsTimes {
+  display: flex;
+
+  gap: 16px;
+}

@@ -1,0 +1,12 @@
+body {
+    font-family: manrope, sans-serif;
+}
+
+button:focus, input:focus, textarea:focus {
+    outline: none;
+}
+
+button:focus-visible, input:focus-visible, textarea:focus-visible {
+    outline: 2px solid var(--termeet-color-gray-main-100);
+}
+

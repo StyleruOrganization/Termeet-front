@@ -32,11 +32,12 @@ export default [
     },
     settings: {
       "import/resolver": {
-        node: {
-          extensions: [".js", ".jsx", ".ts", ".tsx"],
-        },
         typescript: {
           alwaysTryTypes: true,
+          project: "./configs/tsconfig.app.json",
+        },
+        node: {
+          extensions: [".js", ".jsx", ".ts", ".tsx", ".css"],
         },
       },
     },

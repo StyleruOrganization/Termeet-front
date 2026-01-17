@@ -15,8 +15,9 @@
       "@components/*": ["../src/components/*"],
       "@hooks/*": ["../src/hooks/*"],
       "@shared/*": ["../src/shared/*"],
-      "@assets/*": ["../src/assets/*"]
+      "@assets/*": ["../src/assets/*"],
+      "@styles/*": ["../styles/*"]
     }
   },
-  "include": ["../src"] // Путь относительно текущего файла
+  "include": ["../src", "../infra"] // Путь относительно текущего файла
 }
