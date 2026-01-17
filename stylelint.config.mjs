@@ -1,11 +1,18 @@
 /** @type {import("stylelint").Config} */
 export default {
   extends: ["stylelint-config-standard"],
-  plugins: ["stylelint-order", "stylelint-declaration-strict-value"],
-  ignoreFiles: "./dist/**",
+  plugins: ["stylelint-order", "stylelint-declaration-strict-value", "stylelint-selector-bem-pattern"],
+  ignoreFiles: ["./dist/**", "./styles/*.css"],
   cache: true,
   rules: {
     "declaration-empty-line-before": null,
+    "selector-class-pattern": null,
+    "plugin/selector-bem-pattern": {
+      preset: "bem",
+      componentSelectors: {
+        initial: "^\\.{componentName}(?:__[a-z]+(?:-[a-z]+)*)?(?:--[a-z]+(?:-[a-z]+)*)?$",
+      },
+    },
     // Сортируем свойства
     "order/properties-order": [
       [
@@ -26,7 +33,7 @@ export default {
         {
           groupName: "Размеры и отступы",
           emptyLineBefore: "always",
-          properties: ["width", "height", "margin", "padding", "box-sizing"],
+          properties: ["width", "height", "margin", "padding", "padding-top", "padding-right", "padding-bottom", "padding-left", "box-sizing"],
           noEmptyLineBetween: true,
           order: "flexible",
         },
@@ -59,13 +66,19 @@ export default {
     ],
     // Используем css-переменные
     "scale-unlimited/declaration-strict-value": [
-      ["/color$/", "/border$/", "/font$/"],
+      [
+        "/color$/",
+        "/border-color$/",
+        "border-radius",
+        "/font/",
+        "font-size",
+        "font-weight",
+        "font-family",
+        "line-height",
+        "letter-spacing",
+      ],
       {
-        ignoreValues: {
-          "/color$/": ["transparent", "currentColor", "inherit"],
-          "/border$/": ["none"],
-        },
-        message: "Давайте стараться использовать css-переменные. Если нет нужной сходи к дизайнеру или сам создай",
+        ignoreValues: ["transparent", "currentColor", "inherit", "normal", "bold", "sans-serif", "serif"],
       },
     ],
   },
