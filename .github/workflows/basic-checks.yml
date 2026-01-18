@@ -11,6 +11,11 @@ run-name: "Linters and Types Checks"
 jobs:
   analyze-changes:
     runs-on: ubuntu-latest
+
+    if: |
+      github.event_name == 'pull_request' ||
+      (github.event_name == 'push' && (!github.event.pull_request || github.event.pull_request.merged != true))
+
     outputs:
       needs-eslint: ${{ steps.analyze.outputs.needs-eslint || false }}
       needs-stylelint: ${{ steps.analyze.outputs.needs-stylelint || false}}
