@@ -1,0 +1,115 @@
+.TimeSelect {
+  position: relative;
+
+  width: 100%;
+}
+
+.TimeSelect__Toggle {
+  position: absolute;
+  right: 0;
+  top: 0;
+
+  display: flex;
+
+  height: 66px;
+  padding: 12px 16px;
+
+  border: none;
+  border-radius: var(--termeet-border-16);
+
+  align-items: end;
+
+  background: none;
+  cursor: pointer;
+}
+
+.TimeSelect__OpenIcon {
+  color: var(--termeet-color-gray-main-100);
+
+  transition:
+    transform,
+    opacity 0.2s ease;
+}
+
+.TimeSelect__OpenIcon:hover {
+  opacity: 0.7;
+}
+
+.TimeSelect__OpenIcon_open {
+  transform: rotate(180deg);
+}
+
+.TimeSelect__SuccessIcon {
+  position: absolute;
+  top: 34px;
+  right: 60px;
+
+  color: var(--termeet-color-accent-success);
+}
+
+.TimeSelect__Dropdown {
+  position: absolute;
+  z-index: 100;
+  top: calc(100% + 8px);
+  right: 0;
+  left: 0;
+
+  /* Симметрия с местом для скроллбара */
+  padding-left: 10px;
+
+  background-color: var(--termeet-color-always-white);
+  border: 1px solid var(--termeet-color-gray-main-10);
+  border-radius: var(--termeet-border-16);
+  box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
+
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.TimeSelect__List {
+  padding: 8px 2px;
+  padding-left: 0;
+
+  list-style: none;
+}
+
+.TimeSelect__Option {
+  width: 100%;
+  padding: 12px 16px;
+
+  font: var(--termeet-typo-body-m-bold);
+  text-align: left;
+
+  color: var(--termeet-color-gray-main-100);
+  border: none;
+  border-radius: var(--termeet-border-16);
+
+  transition: background-color 0.2s ease;
+
+  background: none;
+  cursor: pointer;
+}
+
+.TimeSelect__Option:hover {
+  background-color: var(--termeet-color-bg-inputs);
+  color: var(--termeet-color-brand-light-20);
+}
+
+.TimeSelect__Option_selected {
+  background-color: var(--termeet-color-brand-main);
+  color: var(--termeet-always-white);
+}
+
+.TimeSelect__Option_selected:hover {
+  background-color: var(--termeet-color-brand-main);
+  color: var(--termeet-color-brand-light-20);
+}
+
+/* Стили для скроллбара */
+.TimeSelect__Dropdown::-webkit-scrollbar {
+  width: 8px;
+}
+
+.TimeSelect__Dropdown::-webkit-scrollbar-track {
+  background: transparent;
+}
