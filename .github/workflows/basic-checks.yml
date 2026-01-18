@@ -8,9 +8,39 @@ on:
 
 run-name: "Linters and Types Checks"
 jobs:
-  analyze-changes:
+  determine-workflow:
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' || !contains(github.event.head_commit.message, '(#')
+    outputs:
+      run-checks: ${{ steps.decide.outputs.run-checks }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Analyze commit
+        id: decide
+        run: |
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            # Для PR - всегда запускаем проверки
+            echo "run-checks=true" >> $GITHUB_OUTPUT
+          else
+            # Для пушей в main
+            CURRENT_SHA="${{ github.sha }}"
+            PARENT_COUNT=$(git log --pretty=%P -n 1 $CURRENT_SHA | wc -w)
+            
+            if [ "$PARENT_COUNT" -eq 2 ]; then
+              # Это мердж коммит (у него 2 родителя)
+              echo "run-checks=false" >> $GITHUB_OUTPUT
+            else
+              # Это не мердж коммит (force push или прямой коммит)
+              echo "run-checks=true" >> $GITHUB_OUTPUT
+            fi
+          fi
+          
+  analyze-changes:
+    needs: determine-workflow
+    if: needs.determine-workflow.outputs.run-checks == 'true'
+    runs-on: ubuntu-latest
 
     outputs:
       needs-eslint: ${{ steps.analyze.outputs.needs-eslint || false }}
@@ -20,7 +50,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
