@@ -43,10 +43,19 @@ export const CalendarWidget = () => {
         nextLabel={<Arrow_24 className={styles.Calendar__Arrow} />}
         prevLabel={<Arrow_24 className={styles.Calendar__Arrow_Left} />}
         showNeighboringMonth={false}
+        // @ts-expect-error Хз, тоже типы не сходятся, но все воркает, как застилизовать слово внутри span незнаю как
         formatMonthYear={(_, date) => {
           const formattedDate = formatter.format(date).split(" ");
 
-          return `${formattedDate[0][0].toUpperCase()}${formattedDate[0].slice(1)} ${formattedDate[1]}`;
+          return (
+            <div className='custom-month-year'>
+              <span className='month'>
+                {formattedDate[0][0].toUpperCase()}
+                {formattedDate[0].slice(1)}
+              </span>
+              <span className='year'>{" " + formattedDate[1]}</span>
+            </div>
+          );
         }}
         formatShortWeekday={(_, date) => {
           return shortDayNames[date.getDay() - 1 < 0 ? 6 : date.getDay() - 1];
