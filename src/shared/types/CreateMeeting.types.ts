@@ -31,12 +31,7 @@ export const meetingSchema = z
         }),
       duration: z.string().optional(),
     }),
-    date: z
-      .object({
-        start: z.date(),
-        end: z.date(),
-      })
-      .optional(),
+    date: z.array(z.string(), "Нужно выбрать хотя бы один день").min(1, "Нужно выбрать хотя бы один день"),
   })
   .refine(
     data => {
@@ -53,11 +48,13 @@ export const meetingSchema = z
     },
   );
 
-type NestedKeyOf<Obj extends object> = {
-  [Key in keyof Obj & (string | number)]: Obj[Key] extends object
-    ? `${Key}` | `${Key}.${NestedKeyOf<Obj[Key]>}`
-    : `${Key}`;
-}[keyof Obj & (string | number)];
-
 export type Meeting = z.infer<typeof meetingSchema>;
-export type MeetingKeys = NestedKeyOf<Meeting>;
+export type MeetingKeys =
+  | "title"
+  | "description"
+  | "link"
+  | "time"
+  | "date"
+  | "time.start"
+  | "time.end"
+  | "time.duration";
