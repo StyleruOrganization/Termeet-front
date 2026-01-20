@@ -3,43 +3,10 @@ name: basic-checks
 on:
   pull_request:
     branches: [main]
-  push:
-    branches: [main]
 
 run-name: "Linters and Types Checks"
 jobs:
-  determine-workflow:
-    runs-on: ubuntu-latest
-    outputs:
-      run-checks: ${{ steps.decide.outputs.run-checks }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          
-      - name: Analyze commit
-        id: decide
-        run: |
-          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            # Для PR - всегда запускаем проверки
-            echo "run-checks=true" >> $GITHUB_OUTPUT
-          else
-            # Для пушей в main
-            CURRENT_SHA="${{ github.sha }}"
-            PARENT_COUNT=$(git log --pretty=%P -n 1 $CURRENT_SHA | wc -w)
-            
-            if [ "$PARENT_COUNT" -eq 2 ]; then
-              # Это мердж коммит (у него 2 родителя)
-              echo "run-checks=false" >> $GITHUB_OUTPUT
-            else
-              # Это не мердж коммит (force push или прямой коммит)
-              echo "run-checks=true" >> $GITHUB_OUTPUT
-            fi
-          fi
-          
   analyze-changes:
-    needs: determine-workflow
-    if: needs.determine-workflow.outputs.run-checks == 'true'
     runs-on: ubuntu-latest
 
     outputs:
@@ -57,23 +24,18 @@ jobs:
       - name: Analyze changed files
         id: analyze
         run: |
-          # Получаем измененные файлы
-          if [ -n "${{ github.event.pull_request.base.ref }}" ]; then
-            # Для PR сравниваем с целевой веткой
-            CHANGED_FILES=$(git diff --name-only HEAD origin/${{ github.event.pull_request.base.ref }})
-          else
-            # Для push сравниваем с предыдущим коммитом
-            CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD)
-          fi
+          CHANGED_FILES=$(git diff --name-only HEAD origin/${{ github.event.pull_request.base.ref }})
 
           echo "Changed files:"
           echo "$CHANGED_FILES"
 
-          # Проверяем, есть ли JS/TS файлы
           if echo "$CHANGED_FILES" | grep -q -E '\.(js|jsx|ts|tsx)$'; then
             echo "needs-eslint=true" >> "$GITHUB_OUTPUT"
-            echo "needs-typescript=true" >> "$GITHUB_OUTPUT"
             echo "needs-prettier=true" >> "$GITHUB_OUTPUT"
+          fi
+
+          if echo "$CHANGED_FILES" | grep -q -E '\.(ts|tsx)$'; then
+            echo "needs-typescript=true" >> "$GITHUB_OUTPUT"
           fi
 
           # Проверяем, есть ли CSS файлы
