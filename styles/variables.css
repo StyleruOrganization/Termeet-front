@@ -3,21 +3,27 @@
  */
 
 :root {
-  --termeet-color-gray-main-10: rgb(47 47 47 / 10%);
-  --termeet-color-gray-main-100: #2f2f2f;
+  --termeet-color-gray-main-10: rgba(47, 47, 47, 0.1);
   --termeet-color-bg-inputs: #f8f8f8;
+  --termeet-color-gray-main-100: #2f2f2f;
   --termeet-color-accent-errors: #fc3f1d;
   --termeet-color-accent-success: #3cc713;
   --termeet-color-brand-main: #386dd4;
-  --termeet-color-always-white: #fff;
+  --termeet-color-always-white: #ffffff;
   --termeet-color-brand-light-100: #5591eb;
-  --termeet-color-brand-light-20: rgb(85 145 235 / 20%);
-  --termeet-color-always-black: #000;
-  --termeet-typo-body-s: 12px/18px manrope;
+  --termeet-color-brand-light-20: rgba(85, 145, 235, 0.2);
+  --termeet-color-always-black: #000000;
+  --termeet-color-gray-main-20: rgba(47, 47, 47, 0.2);
+  --termeet-color-brand-main-dark: #102f55;
+  --termeet-color-gray-main-60: rgba(47, 47, 47, 0.6);
+  --termeet-color-shadow: rgba(0, 0, 0, 0.08);
+  --termeet-typo-body-s: 12px/18px Manrope;
   --termeet-border-16: 16px;
-  --termeet-typo-body-m: 16px/22px manrope;
-  --termeet-typo-body-m-bold: 600 16px/22px manrope;
-  --termeet-typo-body-l: 20px/24px manrope;
-  --termeet-typo-body-l-bold: 600 20px/24px manrope;
-  --termeet-typo-body-xl: 700 24px/28px manrope;
+  --termeet-typo-body-m: 16px/22px Manrope;
+  --termeet-typo-body-m-bold: 700 16px/22px Manrope;
+  --termeet-typo-body-l: 20px/24px Manrope;
+  --termeet-typo-body-l-bold: 700 20px/24px Manrope;
+  --termeet-typo-body-xl: 700 24px/28px Manrope;
+  --termeet-border-circle: 50%;
+  --termeet-type-heading-xl: 700 48px/48px Manrope;
 }
