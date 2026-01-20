@@ -31,6 +31,7 @@
 }
 
 .Calendar__Day {
+  --local-bg: transparent;
   position: relative;
   z-index: 100;
 
@@ -42,24 +43,22 @@
   border-radius: var(--termeet-border-circle);
 
   aspect-ratio: 1 / 1;
-
-  --local-bg: transparent;
 }
 
 .Calendar__Day::before {
-    position: absolute;
+  position: absolute;
 
-    display: block;
+  display: block;
 
-    width: calc(100% - var(--gap));
-    height: calc(100% - var(--gap));
+  width: calc(100% - var(--gap));
+  height: calc(100% - var(--gap));
 
-    background-color: var(--local-bg);
-    border-radius: var(--termeet-border-circle);
+  background-color: var(--local-bg);
+  border-radius: var(--termeet-border-circle);
 
-    transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease;
 
-    content: "";
+  content: "";
 } 
 
 .Calendar__Day:hover {
@@ -67,17 +66,19 @@
 }
 
 .Calendar__Day_Weekend {
-  color: var(--termeet-color-gray-main-60);
+  color: var(--termeet-color-gray-main-100);
+
+  opacity: .6;
 }
 
 .Calendar__Day_Selected {
   color: var(--termeet-color-always-white);
 
-  --local-bg: var(--termeet-color-brand-dark);
+  --local-bg: var(--termeet-color-brand-main-dark);
 }
 
 .Calendar__Day_Selected:hover {
-  --local-bg: var(--termeet-color-brand-dark);
+  --local-bg: var(--termeet-color-brand-main-dark);
 }
 
 .Calendar__ErrorField {

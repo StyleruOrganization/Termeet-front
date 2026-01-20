@@ -95,12 +95,12 @@
 }
 
 .TimeSelect__Option_selected {
-  background-color: var(--termeet-color-brand-dark);
+  background-color: var(--termeet-color-brand-main-dark);
   color: var(--termeet-color-always-white);
 }
 
 .TimeSelect__Option_selected:hover {
-  background-color: var(--termeet-color-brand-dark);
+  background-color: var(--termeet-color-brand-main-dark);
   color: var(--termeet-color-always-white);
 }
 

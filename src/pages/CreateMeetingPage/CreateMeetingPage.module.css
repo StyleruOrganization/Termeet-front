@@ -19,8 +19,7 @@
 
 .CreateMeetingPage__Calendar {
   display: flex;
-  flex: 1 1 300px;
-  gap: 20px;
+  flex: 1 1 310px;
   flex-direction: column;
 
   max-width: 650px;
@@ -35,14 +34,14 @@
 }
 
 .CreateMeetingPage__Content__Title {
-  font: var(--termeet-heading-xl);
+  font: var(--termeet-type-heading-xl);
 
   margin-bottom: 40px
 }
 
 .CreateMeetingPage__Content__FormWrapper {
   display: flex;
-  flex: 1 1 300px;
+  flex: 1 1 310px;
   gap: 20px;
   flex-direction: column;
 
