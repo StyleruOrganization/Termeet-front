@@ -2,7 +2,7 @@
 export default {
   extends: ["stylelint-config-standard"],
   plugins: ["stylelint-order", "stylelint-declaration-strict-value", "stylelint-selector-bem-pattern"],
-  ignoreFiles: ["./dist/**", "./styles/*.css"],
+  ignoreFiles: ["./dist/**", "./styles/*.css", "./infra/**"],
   cache: true,
   rules: {
     "declaration-empty-line-before": null,

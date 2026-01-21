@@ -5,6 +5,7 @@
     "stylelint.vscode-stylelint",
     "github.vscode-github-actions",
     "redhat.vscode-yaml",
-    "github.vscode-pull-request-github"
+    "github.vscode-pull-request-github",
+    "huuums.vscode-fast-folder-structure"
   ]
 }

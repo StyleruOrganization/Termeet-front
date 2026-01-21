@@ -3,7 +3,6 @@
 dist/
 pnpm-lock.yaml
 package-lock.json
-dist/
 build/
 node_modules/
 .DS_Store
@@ -11,3 +10,4 @@ node_modules/
 !.env.example
 .vscode/
 *.json
+infra/**

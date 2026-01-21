@@ -55,21 +55,31 @@ git config core.hooksPath .husky
 
 ### 3. Настройка VS Code
 
-При клонировании репозитория VS Code предложит установить рекомендуемые расширения из файла [`.vscode/extensions.json`](.vscode/extensions.json).
+- При клонировании репозитория VS Code предложит установить рекомендуемые расширения из файла [`.vscode/extensions.json`](.vscode/extensions.json).<br/>
+  Добавьте в настройки VS Code автоматическое исправление при сохранении:
 
-Добавьте в настройки VS Code автоматическое исправление при сохранении:
+  ```json
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "always",
+    "source.fixAll.stylelint": "always"
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
+  ```
 
-```json
-"editor.codeActionsOnSave": {
-  "source.fixAll.eslint": "always",
-  "source.fixAll.stylelint": "always"
-},
-"editor.defaultFormatter": "esbenp.prettier-vscode"
-```
+- Подъехала новая фича, теперь создавать шаблон для компонентов еще проще. Для этого выполните следующие шаги:
+1. Установить расширение [FolderTemplates](https://marketplace.visualstudio.com/items?itemName=Huuums.vscode-fast-folder-structure)
+2. В ```settings.json``` нужно добавить строчку в любое место
+    ``` json
+    folderTemplates.templateFolderPath": "./infra/vscode-folder-templates
+    ```
+3. Теперь в контекстном меню при клике на папку в которой хотите создать компонент, будет предложено ```Create new Templated Folder```, ее жмакаем и прописываем название компоненте, желательно без пробелов, но можно с маленькой буквы. 
+4. Автоматически после создания откроются файлы ```.tsx``` и ```.module.css```, и можете сразу писать логику основную. Это упрощает жизнь и экономит время. 
+
+**Важно**: Если у вас открыто сразу несколько папок в VS Code, то нужно подправить путь до templates, поэтому в одном окне лучше открывать только корень ```termeet```.
 
 ## Структура проекта
 
-_Раздел будет заполнен при начале разработки_
+_Раздел будет заполнен после начале разработки_
 
 ## Правила разработки
 
