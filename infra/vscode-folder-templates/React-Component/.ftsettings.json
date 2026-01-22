@@ -1,0 +1,7 @@
+{
+  "omitParentDirectory": true,
+  "openFilesWhenDone": [
+        "[FTName % capitalize]/[FTName % capitalize].tsx",
+        "[FTName % capitalize]/[FTName % capitalize].module.css"
+    ]
+}
