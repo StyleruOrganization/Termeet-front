@@ -13,14 +13,12 @@ export const CreateMeetingPage = () => {
   });
   const [stepCreating, setStepCreating] = useState<"calendar" | "form">("calendar");
   const isTouch = useMemo(() => isTouchDevice(), []);
-  const { handleSubmit, reset } = methods;
 
+  const { handleSubmit, reset } = methods;
   const onSubmit: SubmitHandler<Meeting> = data => {
     console.log(data);
     reset();
   };
-
-  console.log("isTouch: ", isTouch);
 
   return (
     <div className={styles.CreateMeetingPage}>

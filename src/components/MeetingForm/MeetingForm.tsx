@@ -1,8 +1,8 @@
 import { useFormState, useFormContext } from "react-hook-form";
 import { Input } from "@/shared/components/Input/Input";
+import { TimeSelect } from "@/shared/components/Select/Select";
 import { TextArea } from "@/shared/components/TextArea/TextArea";
-import { TimeSelect } from "@/shared/components/TimeSelect/TimeSelect";
-import { TIMES, DURATIONS } from "@/shared/consts/times";
+import { TIMES, DURATIONS } from "@/shared/consts/dateTimes";
 import styles from "./MeetingForm.module.css";
 import { formatTime } from "./MeetingForm.utils/timeFormat";
 import type { Meeting } from "@/shared/types/CreateMeeting.types";

@@ -2,9 +2,9 @@ import { useState, useRef, useEffect, useLayoutEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import CheckIcon from "@assets/icons/check.svg";
 import ChevronIcon from "@assets/icons/chevron-down.svg";
-import styles from "./TimeSelect.module.css";
+import styles from "./Select.module.css";
 import { Input } from "../Input/Input";
-import type { TimeSelectProps } from "./TimeSelect.types";
+import type { TimeSelectProps } from "./Select.types";
 import type { Meeting } from "@/shared/types/CreateMeeting.types";
 
 export const TimeSelect = ({

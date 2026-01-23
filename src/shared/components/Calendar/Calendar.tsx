@@ -1,33 +1,23 @@
 import Calendar from "react-calendar";
-import { useFormContext, useFormState, useWatch } from "react-hook-form";
+import { useFormContext, useFormState } from "react-hook-form";
 import Arrow_24 from "@assets/icons/arrow_24.svg";
 import ErrorIcon from "@assets/icons/error.svg";
+import { useDateSelect } from "./Calendar.hooks/useDateSelect";
 import styles from "./Calendar.module.css";
+import { formatMonthYearHeading, formatWeekday } from "./Calendar.utils/Formatters";
 import type { Meeting } from "@/shared/types/CreateMeeting.types";
 
-import "./overWriteCalendar.css";
-
-const shortDayNames = ["п", "в", "с", "ч", "п", "с", "в"];
+import "./OverWriteCalendar.css";
 
 export const CalendarWidget = () => {
-  const { register, setValue, control, trigger } = useFormContext<Meeting>();
-  register("date");
+  const { register, control } = useFormContext<Meeting>();
   const { errors } = useFormState({
     control,
     name: ["date"],
   });
+  const { onDateClick, selectedDates } = useDateSelect();
 
-  const formatter = new Intl.DateTimeFormat("ru-RU", {
-    month: "long",
-    year: "numeric",
-    weekday: "short",
-  });
-
-  const selectedDates = useWatch({
-    control,
-    name: "date",
-    defaultValue: [],
-  });
+  register("date");
 
   return (
     <>
@@ -45,7 +35,7 @@ export const CalendarWidget = () => {
         showNeighboringMonth={false}
         // @ts-expect-error Хз, тоже типы не сходятся, но все воркает, как застилизовать слово внутри span незнаю как
         formatMonthYear={(_, date) => {
-          const formattedDate = formatter.format(date).split(" ");
+          const formattedDate = formatMonthYearHeading(date);
 
           return (
             <div className='custom-month-year'>
@@ -58,25 +48,9 @@ export const CalendarWidget = () => {
           );
         }}
         formatShortWeekday={(_, date) => {
-          return shortDayNames[date.getDay() - 1 < 0 ? 6 : date.getDay() - 1];
+          return formatWeekday(date);
         }}
-        onClickDay={dateIso => {
-          if (dateIso === null) {
-            return;
-          }
-
-          const date = dateIso.toISOString().split("T")[0];
-          if (selectedDates.includes(date)) {
-            setValue(
-              "date",
-              selectedDates.filter(d => d !== date),
-            );
-          } else {
-            setValue("date", [...selectedDates, date]);
-          }
-
-          trigger("date");
-        }}
+        onClickDay={onDateClick}
         tileClassName={({ date, view }) => {
           let className = "";
           if (view === "month") {
