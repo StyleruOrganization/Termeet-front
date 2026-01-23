@@ -1,6 +1,6 @@
 import { useFormState, useFormContext } from "react-hook-form";
 import { Input } from "@/shared/components/Input/Input";
-import { TimeSelect } from "@/shared/components/Select/Select";
+import { Select } from "@/shared/components/Select/Select";
 import { TextArea } from "@/shared/components/TextArea/TextArea";
 import { TIMES, DURATIONS } from "@/shared/consts/dateTimes";
 import styles from "./MeetingForm.module.css";
@@ -24,7 +24,7 @@ export const MeetingForm = () => {
       />
       <Input name='link' label='Ссылка на встречу' placeholder='Ссылка на встречу' error={errors.link?.message} />
       <div className={styles.MeetingForm__InputsTimes}>
-        <TimeSelect
+        <Select
           name='time.start'
           label={"Начало"}
           placeholder='Выберите'
@@ -32,7 +32,7 @@ export const MeetingForm = () => {
           formatValue={formatTime}
           error={errors.time?.start?.message}
         />
-        <TimeSelect
+        <Select
           name='time.end'
           label={"Конец"}
           placeholder='Выберите'
@@ -41,7 +41,7 @@ export const MeetingForm = () => {
           error={errors.time?.end?.message}
         />
       </div>
-      <TimeSelect
+      <Select
         name='time.duration'
         label={"Продолжительность"}
         placeholder='Выберите'

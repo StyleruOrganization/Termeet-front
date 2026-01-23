@@ -7,7 +7,7 @@ import { Input } from "../Input/Input";
 import type { TimeSelectProps } from "./Select.types";
 import type { Meeting } from "@/shared/types/CreateMeeting.types";
 
-export const TimeSelect = ({
+export const Select = ({
   label,
   placeholder,
   options,
