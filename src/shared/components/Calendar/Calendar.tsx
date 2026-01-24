@@ -7,7 +7,7 @@ import styles from "./Calendar.module.css";
 import { formatMonthYearHeading, formatWeekday } from "./Calendar.utils/Formatters";
 import type { Meeting } from "@/shared/types/CreateMeeting.types";
 
-import "./OverWriteCalendar.css";
+import "./overWriteCalendar.css";
 
 export const CalendarWidget = () => {
   const { control } = useFormContext<Meeting>();
