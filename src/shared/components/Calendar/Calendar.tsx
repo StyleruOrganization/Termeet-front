@@ -15,6 +15,7 @@ export const CalendarWidget = () => {
     control,
     name: ["date"],
   });
+
   const { onDateClick, selectedDates } = useDateSelect();
 
   return (
