@@ -46,6 +46,37 @@ export const meetingSchema = z
       path: ["time", "start"],
       message: "Начало встречи должно быть раньше конца",
     },
+  )
+  .refine(
+    data => {
+      if (!data.time.duration) {
+        return true;
+      }
+      const normalized = data.time.duration.toLowerCase().trim();
+      let durationMinutes = 0;
+
+      const DURATION_REGEX = /^(?:(\d+)\s*ч)?(?:\s*(\d+)\s*мин)?$/;
+
+      if (DURATION_REGEX.test(normalized)) {
+        const match = normalized.match(DURATION_REGEX);
+        console.log(match);
+        if (match) {
+          const hours = parseInt(match[1]) || 0;
+          const minutes = parseInt(match[2]) || 0;
+          durationMinutes = hours * 60 + minutes;
+        }
+      }
+      const [startHours, startMinutes] = data.time.start.split(" : ");
+      const [endHours, endMinutes] = data.time.end.split(" : ");
+      const startTime = parseInt(startHours) * 60 + parseInt(startMinutes);
+      const endTime = parseInt(endHours) * 60 + parseInt(endMinutes);
+
+      return durationMinutes <= endTime - startTime;
+    },
+    {
+      path: ["time", "duration"],
+      message: "Продолжительность встречи не корректна",
+    },
   );
 
 export type Meeting = z.infer<typeof meetingSchema>;

@@ -74,6 +74,8 @@
 .Calendar__Day_Selected {
   color: var(--termeet-color-always-white);
 
+  opacity: 1;
+
   --local-bg: var(--termeet-color-brand-main-dark);
 }
 

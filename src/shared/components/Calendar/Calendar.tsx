@@ -10,14 +10,12 @@ import type { Meeting } from "@/shared/types/CreateMeeting.types";
 import "./OverWriteCalendar.css";
 
 export const CalendarWidget = () => {
-  const { register, control } = useFormContext<Meeting>();
+  const { control } = useFormContext<Meeting>();
   const { errors } = useFormState({
     control,
     name: ["date"],
   });
   const { onDateClick, selectedDates } = useDateSelect();
-
-  register("date");
 
   return (
     <>
@@ -35,15 +33,12 @@ export const CalendarWidget = () => {
         showNeighboringMonth={false}
         // @ts-expect-error Хз, тоже типы не сходятся, но все воркает, как застилизовать слово внутри span незнаю как
         formatMonthYear={(_, date) => {
-          const formattedDate = formatMonthYearHeading(date);
+          const [month, year] = formatMonthYearHeading(date).split(" ");
 
           return (
             <div className='custom-month-year'>
-              <span className='month'>
-                {formattedDate[0][0].toUpperCase()}
-                {formattedDate[0].slice(1)}
-              </span>
-              <span className='year'>{" " + formattedDate[1]}</span>
+              <span className='month'>{month}</span>
+              <span className='year'>{" " + year}</span>
             </div>
           );
         }}

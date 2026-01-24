@@ -3,7 +3,9 @@ import { MONTHS, SHORT_DAYS } from "@shared/consts/dateTimes";
 type Formatter = (date: Date) => string;
 
 export const formatMonthYearHeading: Formatter = date => {
-  return `${MONTHS[date.getMonth()]} ${date.getFullYear()}`;
+  const month = MONTHS[date.getMonth()];
+
+  return `${month[0][0].toUpperCase() + month.slice(1)} ${date.getFullYear()}`;
 };
 
 export const formatWeekday: Formatter = date => {
