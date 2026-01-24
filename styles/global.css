@@ -10,3 +10,10 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
     outline: 2px solid var(--termeet-color-gray-main-100);
 }
 
+
+:root.touchDevice {
+    --termeet-typo-body-xl: var(--termeet-typo-body-m-bold);
+    --termeet-heading-xl: var(--termeet-heading-m);
+    --termeet-typo-body-l-bold: var(--termeet-typo-body-m-bold);
+    --termeet : var(--termeet-typo-body-l-bold)
+}

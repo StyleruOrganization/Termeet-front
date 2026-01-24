@@ -29,3 +29,20 @@ function generateDurationOptions() {
 
   return durations;
 }
+
+export const MONTHS = [
+  "Январь",
+  "Февраль",
+  "Март",
+  "Апрель",
+  "Май",
+  "Июнь",
+  "Июль",
+  "Август",
+  "Сентябрь",
+  "Октябрь",
+  "Ноябрь",
+  "Декабрь",
+];
+
+export const SHORT_DAYS = ["п", "в", "с", "ч", "п", "с", "в"];
