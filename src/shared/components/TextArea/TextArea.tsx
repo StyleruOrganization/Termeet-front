@@ -1,5 +1,5 @@
 import { useFormContext } from "react-hook-form";
-import ErrorIcon from "@assets/icons/error.svg";
+import { ErrorIcon } from "@assets/icons";
 import styles from "./TextArea.module.css";
 import type { TextAreaProps } from "./TextArea.types";
 import type { Meeting } from "@/shared/types/CreateMeeting.types";

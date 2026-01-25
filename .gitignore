@@ -3,3 +3,9 @@ dist
 .DS_Store
 .stylelintcache
 .husky/_
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
