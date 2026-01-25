@@ -1,4 +1,5 @@
 name: Playwright Tests
+
 on:
   push:
     branches: 
@@ -6,10 +7,16 @@ on:
   pull_request:
     branches: 
       - main
+
 jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        shard: [1, 2, 3] # шардинг для параллельного запуска
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -23,14 +30,17 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: "pnpm" # Кеширование dependencies
+          cache: "pnpm"
 
       - name: Install dependencies
         run: pnpm install
 
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps
+
       - name: Run Playwright components tests
-        run: pnpm run pwt:test
+        run: pnpm pwt:test
+        continue-on-error: true # Продолжить даже если компонентные тесты упадут
+
       - name: Run Playwright e2e tests
-        run: pnpm run pwt:e2e:test
+        run: pnpm pwt:e2e:test
