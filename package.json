@@ -15,8 +15,9 @@
     "type-check": "tsc -b",
     "format:check": "prettier --check .",
     "format:write": "prettier --write .",
-    "prepare": "husky",
-    "test-ct": "playwright test -c playwright-ct.config.ts"
+    "pwt:test": "playwright test -c playwright-ct.config.ts",
+    "pwt:e2e:test": "playwright test",
+    "prepare": "husky"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
