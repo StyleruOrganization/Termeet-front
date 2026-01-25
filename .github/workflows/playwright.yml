@@ -13,10 +13,6 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     
-    strategy:
-      matrix:
-        shard: [1, 2, 3] # шардинг для параллельного запуска
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
