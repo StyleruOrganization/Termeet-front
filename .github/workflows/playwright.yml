@@ -1,14 +1,9 @@
 name: Playwright Tests
-run-name: "Termeet Playwright Tests"
 
 on:
   pull_request:
     branches: 
       - main
-
-env:
-  DOCKER_BUILDKIT: 1
-  PLAYWRIGHT_IMAGE: mcr.microsoft.com/playwright:v1.58.0-jammy
 
 jobs:
   test:
@@ -20,43 +15,37 @@ jobs:
             command: pwt:test
           - test-type: e2e
             command: pwt:e2e:test
-      fail-fast: false
+      fail-fast: true
     runs-on: ubuntu-latest
     
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
 
-      - name: Cache Docker layers
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          cache: "pnpm"
+          
+      - name: Cache Playwright browsers
         uses: actions/cache@v4
+        id: playwright-cache
         with:
-          path: /tmp/.buildx-cache
-          key: docker-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'docker/Dockerfile.playwright') }}
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: |
-            docker-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
-            docker-${{ runner.os }}-
+            playwright-${{ runner.os }}-
+      - name: Install dependencies
+        run: pnpm install
 
-      - name: Build Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: docker/Dockerfile.playwright
-          load: true
-          tags: playwright-tests:latest
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
-
-      - name: Move cache
-        run: |
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache 2>/dev/null || true
-
-      - name: Run tests in container
-        run: |
-          docker run --rm \
-            -v $(pwd)/src:/app/src \
-            playwright-tests:latest \
-            pnpm run ${{ matrix.command }}
+      - name: Install Playwright Browsers
+        run: pnpm exec playwright install --with-deps
+        
+      - name: Run tests
+        run: pnpm run ${{ matrix.command }}
