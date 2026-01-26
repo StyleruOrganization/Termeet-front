@@ -18,6 +18,7 @@ jobs:
             command: pwt:test
           - test-type: e2e
             command: pwt:e2e:test
+      fail-fast: true
     runs-on: ubuntu-latest
     
     steps:

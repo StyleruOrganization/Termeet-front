@@ -61,11 +61,11 @@ export default defineConfig({
       use: { ...devices["Desktop Safari"] },
     },
     {
-      name: "mobile-chrome",
+      name: "Mobile Chrome",
       use: { ...devices["Pixel 5"] },
     },
     {
-      name: "mobile-safari",
+      name: "Mobile Safari",
       use: { ...devices["iPhone 12"] },
     },
   ],
