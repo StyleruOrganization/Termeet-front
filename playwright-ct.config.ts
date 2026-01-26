@@ -60,7 +60,17 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: process.env.CI
-    ? [...commonProjects]
+    ? [
+        ...commonProjects,
+        {
+          name: "mobile Chrome",
+          use: { ...devices["Pixel 5"] },
+        },
+        {
+          name: "mobile Safari",
+          use: { ...devices["iPhone 12"] },
+        },
+      ]
     : [
         ...commonProjects,
         {
