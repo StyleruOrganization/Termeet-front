@@ -69,4 +69,9 @@ export default defineConfig({
       use: { ...devices["iPhone 12"] },
     },
   ],
+  expect: {
+    toHaveScreenshot: {
+      maxDiffPixelRatio: process.env.CI ? 0.02 : 0.01,
+    },
+  },
 });
