@@ -15,14 +15,6 @@ const commonProjects = [
     name: "webkit",
     use: { ...devices["Desktop Safari"] },
   },
-  {
-    name: "mobile Chrome",
-    use: { ...devices["Pixel 5"] },
-  },
-  {
-    name: "mobile Safari",
-    use: { ...devices["iPhone 12"] },
-  },
 ];
 
 export default defineConfig({
