@@ -1,5 +1,6 @@
 name: Playwright Tests
 run-name: "Termeet Playwright Tests"
+
 on:
   pull_request:
     branches: 

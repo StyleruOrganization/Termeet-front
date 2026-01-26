@@ -18,7 +18,7 @@
     "pwt:test": "playwright test -c playwright-ct.config.ts",
     "pwt:e2e:test": "playwright test",
     "prepare": "husky",
-    "pwt:test:docker": "docker run --rm -v $(pwd)/src:/app/src playwright-test:latest pnpm pwt:test"
+    "pwt:screens:update": "docker run --rm -v $(pwd)/src:/app/src playwright-test:latest pnpm pwt:test --update-snapshots"
 
   },
   "dependencies": {
