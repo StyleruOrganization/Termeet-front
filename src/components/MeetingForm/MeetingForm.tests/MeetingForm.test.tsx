@@ -38,6 +38,6 @@ test.describe("MeetingForm Component", () => {
     const secondEndOption = component.locator("[data-test-id='select-option-time.end']").nth(1);
     await secondEndOption.click();
 
-    await expect(component).toHaveScreenshot("meeting-form-with-values.png");
+    await expect(component).toHaveScreenshot();
   });
 });
