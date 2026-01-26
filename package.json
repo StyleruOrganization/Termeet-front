@@ -17,7 +17,9 @@
     "format:write": "prettier --write .",
     "pwt:test": "playwright test -c playwright-ct.config.ts",
     "pwt:e2e:test": "playwright test",
-    "prepare": "husky"
+    "prepare": "husky",
+    "pwt:test:docker": "docker run --rm -v $(pwd)/src:/app/src playwright-test:latest pnpm pwt:test"
+
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
