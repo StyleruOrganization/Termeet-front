@@ -33,6 +33,7 @@ jobs:
 
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps
+        
       - name: Run Playwright components tests
         run: pnpm pwt:test
         continue-on-error: true # Продолжить даже если компонентные тесты упадут
