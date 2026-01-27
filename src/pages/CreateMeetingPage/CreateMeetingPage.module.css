@@ -22,15 +22,14 @@
   flex: 1 1 310px;
   flex-direction: column;
 
-  max-width: 650px;
+  max-width: 650px
 } 
 
 .CreateMeetingPage__Content {
   display: flex;
   flex-direction: column;
 
-  padding: 8%;
-  padding-top: 0;
+  padding: 0 8%;
 }
 
 .CreateMeetingPage__Content__Title {
@@ -47,7 +46,8 @@
 
   font: var(--termeet-typo-body-s);
 
-  max-width: 650px
+  max-width: 650px;
+  min-height: 100vh;
 }
 
 .CreateMeetingPage__CreateButton, .CreateMeetingPage__ContinueButton {
@@ -64,6 +64,10 @@
 
   cursor: pointer;
   margin-bottom: 24px;
+}
+
+.CreateMeetingPage__ContinueButton {
+  margin-top: 24px;
 }
 
 .CreateMeetingPage__CreateButton:focus-visible {
