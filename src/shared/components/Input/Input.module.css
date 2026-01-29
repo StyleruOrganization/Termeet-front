@@ -28,12 +28,12 @@
 
 .Input__ErrorField {
   display: flex;
+  gap: 4px;
 
   font: var(--termeet-typo-body-s);
 
   color: var(--termeet-color-accent-errors);
 
-  gap: 4px;
   margin-top: 8px;
 }
 

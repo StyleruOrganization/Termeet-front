@@ -1,7 +1,6 @@
 import Calendar from "react-calendar";
 import { useFormContext, useFormState } from "react-hook-form";
-import Arrow_24 from "@assets/icons/arrow_24.svg";
-import ErrorIcon from "@assets/icons/error.svg";
+import { Arrow_24, ErrorIcon } from "@assets/icons";
 import { useDateSelect } from "./Calendar.hooks/useDateSelect";
 import styles from "./Calendar.module.css";
 import { formatMonthYearHeading, formatWeekday } from "./Calendar.utils/Formatters";
@@ -21,6 +20,7 @@ export const CalendarWidget = () => {
   return (
     <>
       <Calendar
+        data-test-id='calendar'
         locale='ru-RU'
         minDetail='month'
         nextAriaLabel='Go to next'
@@ -48,7 +48,7 @@ export const CalendarWidget = () => {
         }}
         onClickDay={onDateClick}
         tileClassName={({ date, view }) => {
-          let className = "";
+          let className = "calendar-day ";
           if (view === "month") {
             className += styles.Calendar__Day;
             if (date.getDay() == 6 || date.getDay() == 0) {
@@ -63,7 +63,7 @@ export const CalendarWidget = () => {
         }}
       />
       {errors.date?.message && (
-        <div className={styles.Calendar__ErrorField}>
+        <div data-test-id='error-field' className={styles.Calendar__ErrorField}>
           <ErrorIcon />
           <span>{errors.date.message}</span>
         </div>

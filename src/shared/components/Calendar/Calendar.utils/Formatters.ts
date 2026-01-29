@@ -1,4 +1,4 @@
-import { MONTHS, SHORT_DAYS } from "@shared/consts/dateTimes";
+import { MONTHS, SHORT_DAYS } from "@/shared/consts/dateTimes";
 
 type Formatter = (date: Date) => string;
 

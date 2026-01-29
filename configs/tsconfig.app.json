@@ -1,7 +1,7 @@
 {
   "extends": "./ts-base.json",
   "compilerOptions": {
-    "types": ["vite/client"], // Попробуем без vite/client
+    "types": ["vite/client"],
     "lib": ["ES2022", "DOM"],
     "jsx": "react-jsx",
     "useDefineForClassFields": true,
@@ -16,8 +16,8 @@
       "@hooks/*": ["../src/hooks/*"],
       "@shared/*": ["../src/shared/*"],
       "@assets/*": ["../src/assets/*"],
-      "@styles/*": ["../styles/*"]
+      "@styles/*": ["../styles/*"],
     }
   },
-  "include": ["../src", "../infra/*.ts"] // Путь относительно текущего файла
+  "include": ["../src", "../infra/*.ts", "../*.config.ts", "../playwright", "../e2e"]
 }

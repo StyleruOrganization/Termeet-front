@@ -14,7 +14,7 @@ export const MeetingForm = () => {
     name: ["title", "description", "link", "time.start", "time.end", "time.duration"],
   });
   return (
-    <div className={styles.MeetingForm}>
+    <div data-test-id='meeting-form' className={styles.MeetingForm}>
       <Input name='title' label='Название' placeholder='Название встречи' error={errors.title?.message} />
       <TextArea
         label='Описание'

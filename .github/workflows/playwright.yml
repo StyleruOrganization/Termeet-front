@@ -1,0 +1,52 @@
+name: Playwright Tests
+run-name: "Termeet Playwright Tests"
+
+on:
+  pull_request:
+    branches: 
+      - main
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        test-type: [components, e2e]
+        include:
+          - test-type: components
+            command: pwt:test
+          - test-type: e2e
+            command: pwt:e2e:test
+      fail-fast: true
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          cache: "pnpm"
+          
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            playwright-${{ runner.os }}-
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Install Playwright Browsers
+        run: pnpm exec playwright install --with-deps
+        
+      - name: Run tests
+        run: pnpm run ${{ matrix.command }}
