@@ -36,7 +36,7 @@ export const CreateMeetingPage = () => {
             {((isTouch && stepCreating === "form") || !isTouch) && (
               <div className={styles.CreateMeetingPage__Content__FormWrapper}>
                 <MeetingForm />
-                <button className={styles.CreateMeetingPage__CreateButton} type='submit'>
+                <button data-test-id='create-meet' className={styles.CreateMeetingPage__CreateButton} type='submit'>
                   Создать встречу
                 </button>
               </div>

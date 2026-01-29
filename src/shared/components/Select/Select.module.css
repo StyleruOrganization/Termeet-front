@@ -1,4 +1,5 @@
 .TimeSelect {
+  --dropdown-ofset: 100% + 8px;
   position: relative;
 
   width: 100%;
@@ -49,7 +50,7 @@
 .TimeSelect__Dropdown {
   position: absolute;
   z-index: 100;
-  top: calc(100% + 8px);
+  top: calc(var(--dropdown-ofset));
   right: 0;
   left: 0;
 
