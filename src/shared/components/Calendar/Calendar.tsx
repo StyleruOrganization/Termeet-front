@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import Calendar from "react-calendar";
 import { useFormContext, useFormState } from "react-hook-form";
 import { Arrow_24, ErrorIcon } from "@assets/icons";
@@ -8,7 +9,7 @@ import type { Meeting } from "@/shared/types/CreateMeeting.types";
 
 import "./overWriteCalendar.css";
 
-export const CalendarWidget = () => {
+export const CalendarWidget = forwardRef<HTMLDivElement>((_, ref) => {
   const { control } = useFormContext<Meeting>();
   const { errors } = useFormState({
     control,
@@ -20,6 +21,7 @@ export const CalendarWidget = () => {
   return (
     <>
       <Calendar
+        inputRef={ref}
         data-test-id='calendar'
         locale='ru-RU'
         minDetail='month'
@@ -70,4 +72,4 @@ export const CalendarWidget = () => {
       )}
     </>
   );
-};
+});
