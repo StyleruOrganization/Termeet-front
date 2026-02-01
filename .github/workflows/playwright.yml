@@ -1,6 +1,10 @@
 name: Playwright Tests
 run-name: "Termeet Playwright Tests"
 
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
 on:
   pull_request:
     branches: 
@@ -60,7 +64,7 @@ jobs:
         if: ${{ steps.run-tests.outputs.TESTS_PASSED == 'false' }}
         id: deploy
         run: |
-          DEPLOY_URL=$(pnpm run pwt:report:deploy)
+          DEPLOY_URL=$(npx vercel --cwd playwright-report deploy --target=staging --token=${{ secrets.VERCEL_TOKEN }})
           echo "DEPLOY_URL=$DEPLOY_URL" >> $GITHUB_OUTPUT
           
       - name: Create comment with report link
