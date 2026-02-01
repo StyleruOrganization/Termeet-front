@@ -19,5 +19,5 @@
       "@styles/*": ["../styles/*"],
     }
   },
-  "include": ["../src", "../infra/*.ts", "../*.config.ts", "../playwright", "../e2e"]
+  "include": ["../src", "../infra/*.ts", "../*.config.ts", "../playwright", "../e2e", "../playwright-report/vite.config.ts"]
 }

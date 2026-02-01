@@ -49,4 +49,25 @@ jobs:
         run: pnpm exec playwright install --with-deps
         
       - name: Run tests
-        run: pnpm run ${{ matrix.command }}
+        id: run-tests
+        run: |
+          if pnpm run ${{ matrix.command }}; then
+            echo "TESTS_PASSED=true" >> $GITHUB_OUTPUT
+          else
+            echo "TESTS_PASSED=false" >> $GITHUB_OUTPUT
+          fi
+      - name: Deploy report
+        if: ${{ steps.run-tests.outputs.TESTS_PASSED == 'false' }}
+        id: deploy
+        run: |
+          DEPLOY_URL=$(pnpm run pwt:report:deploy)
+          echo "DEPLOY_URL=$DEPLOY_URL" >> $GITHUB_OUTPUT
+          
+      - name: Create comment with report link
+        if: ${{ steps.run-tests.outputs.TESTS_PASSED == 'false' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DEPLOY_URL: ${{ steps.deploy.outputs.DEPLOY_URL }}
+        run: |
+          gh pr comment ${{ github.event.pull_request.number }} \
+            --body "🔴 Компонентные тесты упали! Отчет: $DEPLOY_URL"

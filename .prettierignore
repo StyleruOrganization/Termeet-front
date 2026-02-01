@@ -14,3 +14,4 @@ infra/**
 *.yaml
 *.yml
 *.md
+.vercel
