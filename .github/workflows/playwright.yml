@@ -55,20 +55,17 @@ jobs:
       - name: Run tests
         id: run-tests
         run: |
-          if pnpm run ${{ matrix.command }}; then
-            echo "TESTS_PASSED=true" >> $GITHUB_OUTPUT
-          else
-            echo "TESTS_PASSED=false" >> $GITHUB_OUTPUT
-          fi
+          pnpm run ${{ matrix.command }}
+          
       - name: Deploy report
-        if: ${{ steps.run-tests.outputs.TESTS_PASSED == 'false' }}
+        if: ${{ failure() && steps.run-tests.conclusion == 'failure' && matrix.command == 'pwt:test' }}
         id: deploy
         run: |
           DEPLOY_URL=$(npx vercel --cwd playwright-report deploy --target=staging --token=${{ secrets.VERCEL_TOKEN }})
           echo "DEPLOY_URL=$DEPLOY_URL" >> $GITHUB_OUTPUT
           
       - name: Create comment with report link
-        if: ${{ steps.run-tests.outputs.TESTS_PASSED == 'false' }}
+        if: ${{ failure() && steps.run-tests.outcome == 'failure' }}
         env:
           GH_TOKEN: ${{ github.token }}
           DEPLOY_URL: ${{ steps.deploy.outputs.DEPLOY_URL }}
