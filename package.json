@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
+    "prepare": "husky",
     "eslint:fix": "eslint . --fix",
     "stylelint:fix": "stylelint **/*.css --cache-location ./node_modules/.stylelintcache --fix",
     "build:tokens": "style-dictionary build -c tokens-config.json",
@@ -15,11 +16,10 @@
     "type-check": "tsc -b",
     "format:check": "prettier --check .",
     "format:write": "prettier --write .",
+    "pwt:report:deploy": "vercel --cwd playwright-report deploy --target=staging",
     "pwt:test": "playwright test -c playwright-ct.config.ts",
     "pwt:e2e:test": "playwright test",
-    "prepare": "husky",
-    "pwt:screens:update": "docker run --rm -v $(pwd)/src:/app/src -v $(pwd)/playwright-ct.config.ts:/app/playwright-ct.config.ts -v $(pwd)/styles:/app/styles playwright-test:latest pnpm pwt:test --update-snapshots"
-
+    "pwt:screens:update": "docker run --rm -v $(pwd)/src:/app/src -v $(pwd)/playwright-ct.config.ts:/app/playwright-ct.config.ts -v $(pwd)/styles:/app/styles -v $(pwd)/playwright-report:/app/playwright-report playwright-test:latest pnpm pwt:test --update-snapshots"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -63,6 +63,7 @@
     "stylelint-selector-bem-pattern": "^4.0.1",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.4",
+    "vercel": "^50.9.6",
     "vite": "^7.3.1",
     "vite-plugin-svgr": "^4.5.0"
   }

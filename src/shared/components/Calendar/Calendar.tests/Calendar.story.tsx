@@ -21,7 +21,7 @@ export const CalendarWithForm = ({ error }: { error?: string }) => {
   return (
     <div style={{ padding: "10px", maxWidth: "650px" }}>
       <FormProvider {...methods}>
-        <CalendarWidget />
+        <CalendarWidget minDate={new Date(2026, 0)} value={new Date(2026, 0, 1)} />
       </FormProvider>
     </div>
   );
