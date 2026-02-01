@@ -65,7 +65,7 @@ jobs:
           echo "DEPLOY_URL=$DEPLOY_URL" >> $GITHUB_OUTPUT
           
       - name: Create comment with report link
-        if: ${{ failure() && steps.run-tests.outcome == 'failure' }}
+        if: ${{ failure() && steps.run-tests.outcome == 'failure' && matrix.command == 'pwt:test'}}
         env:
           GH_TOKEN: ${{ github.token }}
           DEPLOY_URL: ${{ steps.deploy.outputs.DEPLOY_URL }}
