@@ -60,7 +60,7 @@
   background-color: var(--termeet-color-always-white);
   border: 1px solid var(--termeet-color-gray-main-10);
   border-radius: var(--termeet-border-16);
-  box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
+  box-shadow: 0 4px 12px var(--termeet-color-shadow);
 
   max-height: 240px;
   overflow-y: auto;

@@ -4,7 +4,7 @@
 
   font: var(--termeet-typo-body-xl);
 
-  box-shadow: 0 0 42px rgb(0 0 0 / 8%);
+  box-shadow: 0 0 42px var(--termeet-color-shadow);
 
   margin-bottom: 40px;
 }
