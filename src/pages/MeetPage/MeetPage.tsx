@@ -4,8 +4,8 @@ import styles from "./MeetPage.module.css";
 import type { MeetPageProps } from "./MeetPage.types";
 
 const moocks = {
-  start_time: "09:30:00",
-  end_time: "17:00:00",
+  start_time: "00:30:00",
+  end_time: "23:00:00",
   meeting_days: ["2026-02-03", "2026-02-04"],
 };
 

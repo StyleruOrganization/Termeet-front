@@ -26,6 +26,7 @@ export const TableColumn = ({ cells }: TableColumnProps) => {
   return (
     <div
       onTouchStart={e => {
+        e.preventDefault();
         const touch = e.touches[0];
         const element = document.elementFromPoint(touch.clientX, touch.clientY) as HTMLElement;
         if (!element) return;
@@ -39,6 +40,7 @@ export const TableColumn = ({ cells }: TableColumnProps) => {
         }
       }}
       onTouchMove={e => {
+        e.preventDefault();
         const touch = e.touches[0];
         const element = document.elementFromPoint(touch.clientX, touch.clientY);
         if (!element) return;
@@ -59,6 +61,7 @@ export const TableColumn = ({ cells }: TableColumnProps) => {
         console.log("touchMove in touchCollumn", dataId);
       }}
       onTouchEnd={e => {
+        e.preventDefault();
         console.log("touchEnd in touchColumn");
         if (isRemoving) {
           setSelectedCells(prev => {
