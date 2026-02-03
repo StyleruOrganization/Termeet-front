@@ -1,0 +1,10 @@
+.TableCell {
+  width: 200px;
+  height: 30px;
+
+  border: 1px solid #E4E4E4; 
+}
+
+.TableCell_selected {
+  background-color: var(--termeet-color-brand-main);
+}
