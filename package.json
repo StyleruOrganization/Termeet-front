@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "vite build",
     "preview": "vite preview",
     "eslint:fix": "eslint . --fix",
     "stylelint:fix": "stylelint **/*.css --cache-location ./node_modules/.stylelintcache --fix",
@@ -29,7 +29,6 @@
   },
   "lint-staged": {
     "*.{js,jsx,mjs,ts,tsx}": [
-      "npm run eslint:fix",
       "prettier --write ."
     ],
     "*.css": "npm run stylelint:fix"

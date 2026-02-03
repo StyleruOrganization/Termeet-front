@@ -1,0 +1,7 @@
+.TableColumn {
+  display: flex;
+  flex-direction: column;
+
+  cursor: pointer;
+  touch-action: none;
+}

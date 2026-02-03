@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { isTouchDevice } from "@shared/utils/isTouchDevice";
-import { CreateMeetingPage } from "./pages/CreateMeetingPage";
+// import { CreateMeetingPage } from "./pages/CreateMeetingPage";
+import { MeetPage } from "./pages/MeetPage";
 
 import "@styles/reset.css";
 import "@styles/global.css";
@@ -15,9 +16,10 @@ function App() {
       document.documentElement.classList.remove("touchDevice");
     }
   }, []);
+
   return (
     <>
-      <CreateMeetingPage />
+      <MeetPage />
     </>
   );
 }
