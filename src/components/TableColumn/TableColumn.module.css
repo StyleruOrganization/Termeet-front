@@ -3,4 +3,5 @@
   flex-direction: column;
 
   cursor: pointer;
+  touch-action: none;
 }
