@@ -32,9 +32,6 @@ export const TableColumn = ({ cells }: TableColumnProps) => {
         setIsSelecting(true);
         if (dataId && selectedCells.has(dataId)) {
           setIsRemoving(true);
-        }
-
-        if (isRemoving) {
           setSelectedCells(prev => {
             const newSet = new Set(prev);
             newSet.delete(dataId);
