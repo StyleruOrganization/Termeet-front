@@ -1,6 +1,10 @@
 name: Playwright Tests
 run-name: "Termeet Playwright Tests"
 
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
 on:
   pull_request:
     branches: 
@@ -49,4 +53,22 @@ jobs:
         run: pnpm exec playwright install --with-deps
         
       - name: Run tests
-        run: pnpm run ${{ matrix.command }}
+        id: run-tests
+        run: |
+          pnpm run ${{ matrix.command }}
+          
+      - name: Deploy report
+        if: ${{ failure() && steps.run-tests.conclusion == 'failure' && matrix.command == 'pwt:test' }}
+        id: deploy
+        run: |
+          DEPLOY_URL=$(npx vercel --cwd playwright-report deploy --target=staging --token=${{ secrets.VERCEL_TOKEN }})
+          echo "DEPLOY_URL=$DEPLOY_URL" >> $GITHUB_OUTPUT
+          
+      - name: Create comment with report link
+        if: ${{ failure() && steps.run-tests.outcome == 'failure' && matrix.command == 'pwt:test'}}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DEPLOY_URL: ${{ steps.deploy.outputs.DEPLOY_URL }}
+        run: |
+          gh pr comment ${{ github.event.pull_request.number }} \
+            --body "🔴 Компонентные тесты упали! Отчет: $DEPLOY_URL"
