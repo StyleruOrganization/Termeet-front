@@ -6,6 +6,7 @@ import variables from "@styles/variables.css?url";
 import { App as AppContainer } from "./App";
 import type { Route } from "./+types/root";
 
+/* eslint-disable react-refresh/only-export-components */
 export const links: Route.LinksFunction = () => [
   {
     rel: "stylesheet",
