@@ -1,7 +1,7 @@
 {
   "extends": "./ts-base.json",
   "compilerOptions": {   
-    "rootDirs": ["../", "../.react-router/types"],
+    "rootDirs": ["../","../.react-router/types", "./","./.react-router/types"],
     "composite": true, 
     "types": ["vite/client"],
     "lib": ["ES2022", "DOM"],
