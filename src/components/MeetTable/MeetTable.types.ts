@@ -1,5 +1,3 @@
-export interface MeetTableProps {
-  meeting_days: string[];
-  start_time: string;
-  end_time: string;
-}
+import type { IMeetingInfo } from "@/shared/types/Meet.types";
+
+export type MeetTableProps = Pick<IMeetingInfo["meeting"], "meeting_days" | "start_time" | "end_time">;

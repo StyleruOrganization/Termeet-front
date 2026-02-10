@@ -1,3 +1,14 @@
 export interface TableColumnProps {
-  cells: string[];
+  /**
+   * Массив data-id для ячеек
+   */
+  cellIds: string[];
+  /**
+   * id столбца
+   */
+  columnId: string;
+  /**
+   * Ширина столбца
+   */
+  columnWidth?: number;
 }

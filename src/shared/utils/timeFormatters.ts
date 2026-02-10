@@ -1,6 +1,7 @@
 /**
  @returns [number, number][] 
- @example generateTimeOptions("09:00:00", "18:00:00", 30)
+ @example generateTimeOptions("09:00:00Z", "18:00:00Z", 30)
+ @default intervalMinutes=30
  */
 export function generateTimeOptions(from: string, to: string, intervalMinutes: number = 30) {
   const [startHour, startMinutes] = from.split(":").map(Number);

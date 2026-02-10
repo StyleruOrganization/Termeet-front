@@ -40,10 +40,6 @@ img {
 	vertical-align: top;
 }
 
-img, svg {
-	max-width: 100%;
-}
-
 address {
   font-style: normal;
 }

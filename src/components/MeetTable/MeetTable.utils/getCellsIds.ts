@@ -11,7 +11,7 @@ export const getCellIds = ({ start_time, end_time, meeting_days }: MeetTableProp
     result[day] = [];
 
     for (const time of times) {
-      result[day].push(`${day}-${time[0].toString().padStart(2, "0")}:${time[1].toString().padStart(2, "0")}`);
+      result[day].push(`${day}T${time[0].toString().padStart(2, "0")}:${time[1].toString().padStart(2, "0")}:00Z`);
     }
   }
 

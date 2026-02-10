@@ -87,9 +87,10 @@
   display: flex;
   gap: 4px;
 
-  font: var(--termeet-typo-body-s);
-
   color: var(--termeet-color-accent-errors);
+
+  font-size: 3rem;
+  line-height: 18px;
 
   margin-top: 8px;
 }

@@ -10,11 +10,13 @@
     height: 128px;
     padding: 30px 16px 12px;
 
-    font: var(--termeet-typo-body-m-bold);
-
+    background-color: var(--termeet-color-bg-inputs);
     border: 1px solid var(--termeet-color-gray-main-10);
     border-radius: var(--termeet-border-16);
-    background-color: var(--termeet-color-bg-inputs);
+
+    font-size: 4rem;
+    font-weight: 700;
+    line-height: 22px;
 
     resize: none;
 }
@@ -29,21 +31,23 @@
     top: 12px;
     left: 16px;
 
-    font: var(--termeet-typo-body-s);
-
     color: var(--termeet-color-gray-main-100);
+
+    font-size: 3rem;
+    line-height: 18px;
 
     pointer-events: none;
 }
 
 .TextArea__ErrorField {
     display: flex;
-
-    font: var(--termeet-typo-body-s);
+    gap: 4px;
 
     color: var(--termeet-color-accent-errors);
 
-    gap: 4px;
+    font-size: 3rem;
+    line-height: 18px;
+
     margin-top: 4px;
 }
 

@@ -1,88 +1,133 @@
-import { useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, memo } from "react";
+import { MONTHS_GENITIVE } from "@/shared/consts/dateTimes";
+import { useColumnData } from "./TableColumn.hooks/useColumnData";
 import styles from "./TableColumn.module.css";
 import { TableCell } from "../TableCell";
 import type { TableColumnProps } from "./TableColumn.types";
 
-export const TableColumn = ({ cells }: TableColumnProps) => {
+export const TableColumn = memo(({ cellIds, columnId, columnWidth }: TableColumnProps) => {
   const [isSelecting, setIsSelecting] = useState(false);
   const [isRemoving, setIsRemoving] = useState(false);
-  const [selectedCells, setSelectedCells] = useState<Set<string | null>>(new Set<string>());
-  const beginDataId = useRef<string | null>(null);
+  const columnRef = useRef<HTMLDivElement>(null);
+  const { columnData, newSelectedSlots, isEditing, setSelectNewSell, maxSelectCount, hoveredUser } =
+    useColumnData(columnId);
 
-  const handlePointerUp = () => {
-    console.log("select end TableColumn");
+  const date = useMemo(() => {
+    const partsOfDate = columnId.split("-").map(Number);
+    const month = partsOfDate[1],
+      day = partsOfDate[2];
+    return day + " " + MONTHS_GENITIVE.at(month - 1);
+  }, [columnId]);
+
+  useEffect(() => {
+    // Завершаем выделение, после того как отпустили указатель за пределами
+    const handleEndSelection = () => {
+      console.log("DEBUG: End selection in window");
+      setIsSelecting(false);
+    };
+    window.addEventListener("pointerup", handleEndSelection);
+
+    return () => {
+      window.removeEventListener("pointermove", handleEndSelection);
+    };
+  }, []);
+
+  useEffect(() => {
+    const columnEl = columnRef.current;
+    if (!columnEl) return;
+    // Для мобилок чтобы норм выделялось
+    if (isEditing) {
+      columnEl.style.touchAction = "pan-x";
+    } else {
+      columnEl.style.touchAction = "auto";
+    }
+  }, [isEditing]);
+
+  const handlePointerDown: React.PointerEventHandler<HTMLDivElement> = e => {
+    if (!isEditing) return;
+    console.log("DEBUG: handleDown in TableColumn", "isEditing", isEditing, "isSelecting", isSelecting);
+
+    e.preventDefault();
+    const element = document.elementFromPoint(e.clientX, e.clientY);
+    const dataId = element?.getAttribute("data-id")?.split("T")[1];
+    if (!element || !dataId) return;
+
+    setIsSelecting(true);
+    if (newSelectedSlots?.includes(dataId)) {
+      setIsRemoving(true);
+      setSelectNewSell(columnId, dataId, true);
+    } else {
+      setSelectNewSell(columnId, dataId);
+    }
+  };
+
+  const handlePointerMove: React.PointerEventHandler<HTMLDivElement> = e => {
+    console.log("DEBUG: handleMove in TableColumn", "isEditing", isEditing, "isSelecting", isSelecting);
+    if (!isEditing) return;
+
+    e.preventDefault();
+    if (!isSelecting) return;
+    const element = document.elementFromPoint(e.clientX, e.clientY);
+    const dataId = element?.getAttribute("data-id")?.split("T")[1];
+    if (!element || !dataId) return;
+    if (isRemoving && newSelectedSlots?.includes(dataId)) {
+      setSelectNewSell(columnId, dataId, true);
+    } else if (!isRemoving && !newSelectedSlots?.includes(dataId)) {
+      setSelectNewSell(columnId, dataId);
+    }
+    console.log("PointerMove in touchCollumn", dataId, "isRemoving", isRemoving);
+  };
+
+  const handlePointerUp: React.PointerEventHandler<HTMLDivElement> = e => {
+    if (!isEditing) return;
+
+    console.log("DEBUG: handleUp in TableColumn ");
+
+    e.preventDefault();
+    console.log("PointerEnd in touchColumn");
     setIsSelecting(false);
     setIsRemoving(false);
   };
 
-  const handleSelectStart = ({ isRemoving }: { isRemoving: boolean }) => {
-    console.log("select start in TableColumn");
-    setIsSelecting(true);
-    setIsRemoving(isRemoving);
-  };
-
-  console.log("SelectedSells", selectedCells);
-
   return (
-    <div
-      onTouchStart={e => {
-        const touch = e.touches[0];
-        const element = document.elementFromPoint(touch.clientX, touch.clientY) as HTMLElement;
-        if (!element) return;
-        const dataId = element.getAttribute("data-id");
-        console.log("tpuchStart in tableColumn", dataId);
-        beginDataId.current = dataId;
-
-        setIsSelecting(true);
-        if (dataId && selectedCells.has(dataId)) {
-          setIsRemoving(true);
-        }
-      }}
-      onTouchMove={e => {
-        const touch = e.touches[0];
-        const element = document.elementFromPoint(touch.clientX, touch.clientY);
-        if (!element) return;
-        const dataId = element.getAttribute("data-id");
-        if (isRemoving) {
-          setSelectedCells(prev => {
-            const newSet = new Set(prev);
-            newSet.delete(dataId);
-            return newSet;
-          });
-        } else {
-          setSelectedCells(prev => {
-            const newSet = new Set(prev);
-            newSet.add(dataId);
-            return newSet;
-          });
-        }
-        console.log("touchMove in touchCollumn", dataId);
-      }}
-      onTouchEnd={e => {
-        console.log("touchEnd in touchColumn");
-        if (isRemoving) {
-          setSelectedCells(prev => {
-            const newSet = new Set(prev);
-            newSet.delete(beginDataId.current);
-            return newSet;
-          });
-        } else {
-          setSelectedCells(prev => {
-            const newSet = new Set(prev);
-            newSet.add(beginDataId.current);
-            return newSet;
-          });
-        }
-
-        setIsSelecting(false);
-        setIsRemoving(false);
-      }}
-      // onPointerUp={handlePointerUp}
-      className={styles.TableColumn}
-    >
-      {cells.map((cell, index) => (
-        <TableCell id={cell} key={index} isSelected={selectedCells.has(cell)} />
-      ))}
-    </div>
+    <>
+      <span className={styles.TableColumnTitle}>{date}</span>
+      <div
+        style={{ width: `${columnWidth}px` }}
+        ref={columnRef}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerLeave={() => {
+          console.log("PointerLeave in TableColumn", columnId);
+        }}
+        className={styles.TableColumn}
+      >
+        {cellIds.map((cell, index) => {
+          const key = cell.split("T")[1];
+          const selectedPersons = columnData?.get(key) || [];
+          return (
+            <TableCell
+              id={cell}
+              key={index}
+              opacityPercent={
+                hoveredUser
+                  ? selectedPersons.includes(hoveredUser)
+                    ? 100
+                    : 0
+                  : newSelectedSlots?.includes(key)
+                    ? 100
+                    : ((selectedPersons.length || 0) / (maxSelectCount || 1)) * 100
+              }
+              users={selectedPersons}
+              isSelected={
+                (Boolean(selectedPersons) && !isEditing) ||
+                Boolean(newSelectedSlots?.includes(key) || selectedPersons.includes(hoveredUser))
+              }
+            />
+          );
+        })}
+      </div>
+    </>
   );
-};
+});

@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { useFormContext } from "react-hook-form";
+import { FormInput } from "@/shared/components/Input/Input";
 import { ChevronDown, Check } from "@assets/icons";
 import styles from "./Select.module.css";
-import { Input } from "../Input/Input";
 import type { TimeSelectProps } from "./Select.types";
 import type { Meeting } from "@/shared/types/CreateMeeting.types";
 
@@ -30,6 +30,7 @@ export const Select = ({
   const fieldValue = watch(name);
 
   useEffect(() => {
+    if (!isOpen) return;
     const input = dropdownRef.current;
     if (!input) return;
 
@@ -79,6 +80,7 @@ export const Select = ({
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("formattedValue in Select.tsx");
     const formatted = formatValue(event.target.value as string);
     setShowSuccess(formatted.isValid);
 
@@ -101,7 +103,7 @@ export const Select = ({
       className={styles.TimeSelect}
       ref={dropdownRef}
     >
-      <Input
+      <FormInput
         name={name}
         onChange={handleChange}
         label={label}
@@ -119,7 +121,7 @@ export const Select = ({
       >
         <ChevronDown className={`${styles.TimeSelect__OpenIcon} ${isOpen ? styles.TimeSelect__Icon_open : ""}`} />
       </button>
-      {isOpen && (
+      {isOpen && dropdownPosition && (
         <div className={styles.TimeSelect__Dropdown}>
           <ul className={styles.TimeSelect__List}>
             {options.map(time => (

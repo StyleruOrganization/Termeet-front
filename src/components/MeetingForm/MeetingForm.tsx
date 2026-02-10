@@ -1,5 +1,5 @@
 import { useFormState, useFormContext } from "react-hook-form";
-import { Input } from "@/shared/components/Input/Input";
+import { FormInput } from "@/shared/components/Input/Input";
 import { Select } from "@/shared/components/Select/Select";
 import { TextArea } from "@/shared/components/TextArea/TextArea";
 import { TIMES, DURATIONS } from "@/shared/consts/dateTimes";
@@ -15,14 +15,14 @@ export const MeetingForm = () => {
   });
   return (
     <div data-test-id='meeting-form' className={styles.MeetingForm}>
-      <Input name='title' label='Название' placeholder='Название встречи' error={errors.title?.message} />
+      <FormInput name='title' label='Название' placeholder='Название встречи' error={errors.title?.message} />
       <TextArea
         label='Описание'
         placeholder='Добавьте описание для вашей встречи'
         name='description'
         error={errors.description?.message}
       />
-      <Input name='link' label='Ссылка на встречу' placeholder='Ссылка на встречу' error={errors.link?.message} />
+      <FormInput name='link' label='Ссылка на встречу' placeholder='Ссылка на встречу' error={errors.link?.message} />
       <div className={styles.MeetingForm__InputsTimes}>
         <Select
           name='time.start'

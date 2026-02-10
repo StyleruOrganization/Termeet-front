@@ -1,11 +1,11 @@
-import react from "@vitejs/plugin-react";
+import { reactRouter } from "@react-router/dev/vite";
 import { defineConfig } from "vite";
 import svgr from "vite-plugin-svgr";
+import tsconfigPaths from "vite-tsconfig-paths";
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
-    react(),
     svgr({
       svgrOptions: {
         exportType: "default",
@@ -15,14 +15,12 @@ export default defineConfig({
       },
       include: "**/*.svg",
     }),
+    reactRouter(),
+    tsconfigPaths(),
   ],
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          "react": ["react"],
-          "react-dom": ["react-dom"],
-        },
         assetFileNames: "assets/[name].[hash][extname]",
         chunkFileNames: "chunks/[name].[hash].js",
         entryFileNames: "entries/[name].[hash].js",

@@ -1,7 +1,9 @@
 /* Переопределение стилей с помощью классов из библы */
 
 .react-calendar *{
-  font: var(--termeet-typo-body-l-bold)
+  font-size: 5rem;
+  font-weight: 700;
+  line-height: 24px;
 }
 
 .react-calendar__month-view__weekdays {

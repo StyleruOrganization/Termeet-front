@@ -1,7 +1,7 @@
 import { forwardRef } from "react";
 import Calendar from "react-calendar";
 import { useFormContext, useFormState } from "react-hook-form";
-import { Arrow_24, ErrorIcon } from "@assets/icons";
+import { Arrow, ErrorIcon } from "@assets/icons";
 import { useDateSelect } from "./Calendar.hooks/useDateSelect";
 import styles from "./Calendar.module.css";
 import { formatMonthYearHeading, formatWeekday } from "./Calendar.utils/Formatters";
@@ -22,7 +22,6 @@ export const CalendarWidget = forwardRef<HTMLDivElement, { minDate?: Date; value
     return (
       <>
         <Calendar
-          value={value}
           inputRef={ref}
           data-test-id='calendar'
           locale='ru-RU'
@@ -30,11 +29,12 @@ export const CalendarWidget = forwardRef<HTMLDivElement, { minDate?: Date; value
           nextAriaLabel='Go to next'
           prevAriaLabel='Go to prev'
           minDate={minDate}
+          value={value}
           className={styles.Calendar}
           next2Label={null}
           prev2Label={null}
-          nextLabel={<Arrow_24 className={styles.Calendar__Arrow} />}
-          prevLabel={<Arrow_24 className={styles.Calendar__Arrow_Left} />}
+          nextLabel={<Arrow className={styles.Calendar__Arrow} />}
+          prevLabel={<Arrow className={styles.Calendar__Arrow_Left} />}
           showNeighboringMonth={false}
           // @ts-expect-error Хз, тоже типы не сходятся, но все воркает, как застилизовать слово внутри span незнаю как
           formatMonthYear={(_, date) => {

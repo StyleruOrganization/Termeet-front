@@ -1,4 +1,141 @@
 .MeetTable {
   display: flex;
-  gap: 10px
+  gap: 10px;
+  align-items: center;
+
+  font-size: 6rem;
+  font-weight: 500;
 }
+
+.MeetTable__Columns {
+  display: flex;
+
+  width: 100%;
+
+  /* Для IE и Edge */
+  -ms-overflow-style: none;
+
+  overflow-x:auto;
+
+  /* Для Firefox */
+  scrollbar-width: none;
+}
+
+.MeetTable__Columns::-webkit-scrollbar {
+  /* Для Chrome, Safari и Opera */
+  display: none;
+
+  width: 0;
+  height: 0;
+}
+
+.MeetTable__ColumnWrapper{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  width: 100%
+}
+
+.MeetTable__Times {
+  display: flex;
+  gap: 66px;
+  flex-direction: column;
+
+  padding-top: 43px;
+
+  align-self: start;
+  margin-right: 20px;
+
+  span{
+    line-height: 100%;
+  }
+}
+
+.MeetTable__Arrows {
+  display: flex;
+  align-items: center;
+
+  svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  button {
+    padding: 4px;
+    width: 40px;
+    height: 40px;
+
+    cursor: pointer;
+  }
+
+  button:first-child{
+    svg {
+      rotate: -180deg;
+    }
+  }
+}
+
+.MeetTable__Arrow {
+  color: var(--termeet-color-gray-main-10)
+}
+
+.MeetTable__Arrow_active {
+  color: var(--termeet-always-black)
+}
+
+[data-column-id]:first-child [data-id] {
+  margin-left: 0;
+}
+
+[data-column-id]:first-child [data-id]:first-child {
+  border-top-left-radius: var(--termeet-border-16);
+}
+
+[data-column-id]:first-child [data-id]:last-child {
+  border-bottom-left-radius: var(--termeet-border-16);
+}
+
+[data-column-id]:last-child [data-id]:first-child {
+  border-top-right-radius: var(--termeet-border-16);
+}
+
+[data-column-id]:last-child [data-id]:last-child {
+  border-bottom-right-radius: var(--termeet-border-16);
+}
+
+@media (width<= 768px){
+  .MeetTable__Times  {
+    gap: 46px
+  }
+
+  .MeetTable {
+    font-size: 5rem;
+  }
+}
+
+@media (width<= 425px) {
+  .MeetTable {
+    font-size: 4rem;
+  }
+
+  .MeetTable__Times {
+    gap: 54px;
+
+    padding-top: 35px;
+
+    margin-right: 16px;
+  }
+
+  .MeetTable__Arrows {
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    button {
+      padding: 2px;
+      width: 20px;
+      height: 20px;
+    }
+}}

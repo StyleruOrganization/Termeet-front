@@ -1,6 +1,8 @@
 {
   "extends": "./ts-base.json",
-  "compilerOptions": {
+  "compilerOptions": {   
+    "rootDirs": ["../", "../.react-router/types"],
+    "composite": true, 
     "types": ["vite/client"],
     "lib": ["ES2022", "DOM"],
     "jsx": "react-jsx",
@@ -19,5 +21,13 @@
       "@styles/*": ["../styles/*"],
     }
   },
-  "include": ["../src", "../infra/*.ts", "../*.config.ts", "../playwright", "../e2e"]
+  "include": [
+    "../src", 
+    "../infra/*.ts", 
+    "../*.config.ts", 
+    "../playwright", 
+    "../e2e", 
+    "../src/app", 
+    "../.react-router/types/**/*.ts"
+  ]
 }

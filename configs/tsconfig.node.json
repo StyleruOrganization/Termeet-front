@@ -1,6 +1,7 @@
 {
   "extends": "./ts-base.json",
   "compilerOptions": {
+    "composite": true,
     "types": ["node"],
     "lib": ["ES2023"]
   },

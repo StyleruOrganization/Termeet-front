@@ -2,5 +2,20 @@
   display: flex;
   flex-direction: column;
 
-  cursor: pointer;
+  cursor: pointer; 
+  user-select: none; /* Стандартный синтаксис */
 }
+
+.TableColumnTitle {
+  overflow: hidden; /* скрыть переполнение */
+
+  line-height:100%;
+  margin-left: 3px;
+  max-width: 100%; /* ограничить ширину */
+  text-overflow: ellipsis; /* троеточие */
+
+  white-space: nowrap; /* запрет переноса */
+}
+
+
+

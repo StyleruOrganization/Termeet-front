@@ -1,20 +1,10 @@
-.CreateMeetingPage__Header {
-  padding: 28px 0;
-  padding-left: 10%;
-
-  font: var(--termeet-typo-body-xl);
-
-  box-shadow: 0 0 42px var(--termeet-color-shadow);
-
-  margin-bottom: 40px;
-}
-
 .CreateMeetingPage__Form {
   display: flex;
   flex-wrap: wrap;
   gap: 24px;
 
-  font: var(--termeet-typo-body-s);
+  font-size: 3rem;
+  line-height: 18px;
 }
 
 .CreateMeetingPage__Calendar {
@@ -28,12 +18,11 @@
 .CreateMeetingPage__Content {
   display: flex;
   flex-direction: column;
-
-  padding: 0 8%;
 }
 
 .CreateMeetingPage__Content__Title {
-  font: var(--termeet-type-heading-xl);
+  font-size: 12rem;
+  line-height: 48px;
 
   margin-bottom: 40px
 }
@@ -44,7 +33,7 @@
   gap: 20px;
   flex-direction: column;
 
-  font: var(--termeet-typo-body-s);
+  font-size: 3rem;
 
   max-width: 650px;
   min-height: 100vh;
@@ -53,7 +42,6 @@
 .CreateMeetingPage__CreateButton, .CreateMeetingPage__ContinueButton {
   padding: 12px 16px;
 
-  font:var(--termeet-typo-body-l-bold);
   text-align: center;
 
   color: var(--termeet-color-always-white);
@@ -63,6 +51,9 @@
   transition: opacity 0.2s ease;
 
   cursor: pointer;
+
+  font-size: 5rem;
+  line-height: 24px;
   margin-bottom: 24px;
 }
 

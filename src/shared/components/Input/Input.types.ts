@@ -11,4 +11,5 @@ export interface InputProps {
   /** Сообщение об ошибке */
   error?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  inputRef?: React.RefObject<HTMLInputElement | null>;
 }

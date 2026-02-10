@@ -1,10 +1,15 @@
 .TableCell {
-  width: 200px;
-  height: 30px;
+  height: 46px;
+  
+  border: 1px solid var(--termeet-color-gray-light-table);
 
-  border: 1px solid #E4E4E4; 
+  transition: background-color 0.2s ease;
+
+  font-size: 16px;
 }
 
-.TableCell_selected {
-  background-color: var(--termeet-color-brand-main);
+@media(width<=768px){
+  .TableCell {
+    height: 36px;
+  }
 }

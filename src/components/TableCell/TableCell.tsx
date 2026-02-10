@@ -1,90 +1,38 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useState } from "react";
+import { useMeetContext } from "@/shared/hooks/useMeetContext";
 import styles from "./TableCell.module.css";
 import type { TableCellProps } from "./TableCell.types";
 
-export const TableCell = ({ id, isSelected }: TableCellProps) => {
-  // Используем useCallback для сохранения ссылок на функции
-  // const handlePointerMove = useCallback(
-  //   e => {
-  //     console.log("pointer move in TableCell", isSelectedSession.current, content);
-  //     if (isSelecting && isSelectedSession.current) {
-  //       isSelectedSession.current = false;
-  //       setIsSelected(!isRemoving);
-  //     }
-  //   },
-  //   [isSelecting, isRemoving, content],
-  // );
+export const TableCell = ({ id, isSelected, opacityPercent, users }: TableCellProps) => {
+  const setHoveredUsers = useMeetContext(store => store.setHoveredUsers);
+  const isEditingMode = useMeetContext(store => store.isEditing);
+  const hoveredUser = useMeetContext(store => store.hoveredUser);
+  const [isHovered, setIsHovered] = useState(false);
 
-  // const handlePointerUp = useCallback(
-  //   e => {
-  //     console.log("pointer up in TableCell", isSelectedSession.current, content);
-  //     if (isSelectedSession.current) {
-  //       setIsSelected(selected => !selected);
-  //       isSelectedSession.current = false;
-  //     }
-  //   },
-  //   [content],
-  // );
+  const handleCellChoose: React.MouseEventHandler = e => {
+    e.preventDefault();
+    if (isEditingMode || hoveredUser) return;
 
-  // const handlePointerDown = useCallback(
-  //   e => {
-  //     console.log("pointer down in TableCell", content);
-  //     onSelectStart({ isRemoving: isSelected });
-  //   },
-  //   [onSelectStart, isSelected, content],
-  // );
+    setHoveredUsers(users);
+    setIsHovered(true);
+  };
 
-  // useEffect(() => {
-  //   isSelectedSession.current = isSelecting;
-  //   console.log(isSelecting, "in UseEffect");
-  // }, [isSelecting]);
-
-  // useEffect(() => {
-  //   const span = spanRef.current;
-  //   if (!span) return;
-
-  //   const handleTouchStart = (e: TouchEvent) => {
-  //     e.preventDefault();
-  //     console.log("touchstart in TableCell");
-  //     handlePointerDown(e);
-  //   };
-
-  //   const handleTouchMove = (e: TouchEvent) => {
-  //     e.preventDefault();
-  //     console.log("touchmove in TableCell");
-  //     handlePointerMove(e);
-  //   };
-
-  //   const handleTouchEnd = (e: TouchEvent) => {
-  //     e.preventDefault();
-  //     console.log("touchend in TableCell");
-  //     handlePointerUp(e);
-  //   };
-
-  //   span.addEventListener("touchstart", handleTouchStart, { passive: false });
-  //   span.addEventListener("touchmove", handleTouchMove, { passive: false });
-  //   span.addEventListener("touchend", handleTouchEnd, { passive: false });
-
-  //   return () => {
-  //     span.removeEventListener("touchstart", handleTouchStart);
-  //     span.removeEventListener("touchmove", handleTouchMove);
-  //     span.removeEventListener("touchend", handleTouchEnd);
-  //   };
-  // }, [handlePointerDown, handlePointerMove, handlePointerUp]);
-
+  const handlePointerLeave: React.PointerEventHandler = e => {
+    e.preventDefault();
+    setHoveredUsers([]);
+    setIsHovered(false);
+  };
   return (
-    <span
-      data-id={id}
-      onTouchMove={() => {
-        console.log("onTouchMove in TableCell", id);
+    <div
+      style={{
+        backgroundColor: isSelected ? `rgba(96, 138, 221, ${opacityPercent}%` : "",
+        boxShadow: !isEditingMode && isHovered ? "inset 0 0 0 2px var(--termeet-color-brand-main-dark)" : "",
       }}
-      // ref={spanRef}
-      // onPointerMove={handlePointerMove}
-      // onPointerDown={handlePointerDown}
-      // onPointerUp={handlePointerUp}
-      className={styles.TableCell + (isSelected ? " " + styles.TableCell_selected : "")}
-    >
-      {id}
-    </span>
+      onClick={handleCellChoose}
+      onPointerMove={handleCellChoose}
+      onPointerLeave={handlePointerLeave}
+      data-id={id}
+      className={styles.TableCell}
+    />
   );
 };

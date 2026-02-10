@@ -1,9 +1,9 @@
 import { test, expect } from "@playwright/experimental-ct-react";
-import { InputWithForm } from "./Input.story";
+import { InputStory } from "./Input.story";
 
 test.describe("Input Component", () => {
   test("default state", async ({ mount }) => {
-    const component = await mount(<InputWithForm />);
+    const component = await mount(<InputStory />);
 
     await expect(component).toBeVisible();
     await expect(component.locator("input")).toBeVisible();
@@ -14,7 +14,7 @@ test.describe("Input Component", () => {
   });
 
   test("error state", async ({ mount }) => {
-    const component = await mount(<InputWithForm error='Поле обязательно для заполнения' />);
+    const component = await mount(<InputStory error='Поле обязательно для заполнения' />);
 
     await expect(component).toBeVisible();
     await expect(component.locator("[data-test-id='error-field']")).toBeVisible();
@@ -24,7 +24,7 @@ test.describe("Input Component", () => {
   });
 
   test("with value", async ({ mount }) => {
-    const component = await mount(<InputWithForm />);
+    const component = await mount(<InputStory />);
 
     const input = component.locator("input");
     await input.fill("Новая встреча");

@@ -1,0 +1,11 @@
+.Header {
+  padding: 28px 0;
+  padding-left: 10%;
+
+  box-shadow: 0 0 42px var(--termeet-color-shadow);
+
+  font-size: 6rem;
+  line-height: 28px;
+
+  margin-bottom: 40px;
+}
