@@ -10,7 +10,16 @@ export default [
   {
     // Global ignores for linting - Default: ["**/node_modules/", ".git/"].
     name: "Ignore files and directories",
-    ignores: ["dist/", "eslint.config.js", ".husky/", "./infra/**", "playwright/", ".vercel/**"], // Build Directory and config files
+    ignores: [
+      "dist/",
+      "eslint.config.js",
+      ".husky/",
+      "./infra/**",
+      "playwright/",
+      ".vercel/**",
+      ".react-router/**",
+      "build",
+    ], // Build Directory and config files
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,

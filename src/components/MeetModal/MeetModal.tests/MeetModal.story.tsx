@@ -1,5 +1,10 @@
+import { MeetProvider } from "@shared/providers/MeetProvider";
 import { MeetModal } from "../MeetModal";
 
 export const MeetModalStory = () => {
-  return <MeetModal />;
+  return (
+    <MeetProvider isModalOpen={true}>
+      <MeetModal />
+    </MeetProvider>
+  );
 };

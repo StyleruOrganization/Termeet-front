@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "react-router dev",
-    "build": "react-router build",
+    "build": "tsc -b && react-router build",
     "preview": "vite preview",
     "prepare": "husky",
     "eslint:fix": "eslint . --fix",
@@ -34,6 +34,7 @@
   },
   "lint-staged": {
     "*.{js,jsx,mjs,ts,tsx}": [
+      "npm run eslint:fix",
       "prettier --write ."
     ],
     "*.css": "npm run stylelint:fix"

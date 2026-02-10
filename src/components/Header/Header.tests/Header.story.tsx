@@ -1,5 +1,9 @@
 import { Header } from "../Header";
 
 export const HeaderStory = () => {
-  return <Header />;
+  return (
+    <div style={{ padding: "10px" }}>
+      <Header />
+    </div>
+  );
 };
