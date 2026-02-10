@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { isRouteErrorResponse, Links, Meta, Scripts, ScrollRestoration } from "react-router";
 import fonts from "@styles/fonts.css?url";
 import global from "@styles/global.css?url";

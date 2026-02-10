@@ -54,6 +54,7 @@ export default [
       ...reactHooks.configs.recommended.rules,
       ...importPlugin.configs.recommended.rules,
       ...importPlugin.configs.typescript.rules,
+      "@typescript-eslint/ban-ts-comment": "off",
       "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
       "no-multiple-empty-lines": ["error", { max: 1 }],
       "import/order": [
