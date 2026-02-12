@@ -14,21 +14,11 @@ jobs:
       pull-requests: write
 
     steps:
-      - name: Checkout main repo
-        uses: actions/checkout@v6
-        with:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with: 
           fetch-depth: 0
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: 18
-          cache: pnpm
+      - uses: ./.github/actions/custom-preparing-action
 
       - name: Setup Git bot user
         run: |
@@ -68,7 +58,6 @@ jobs:
         if: steps.check-tokens.outputs.has_tokens == 'true'
         id: generate-css
         run: |
-          pnpm i --frozen-lockfile
           pnpm build:tokens
 
           # Проверяем изменилось ли что-то
