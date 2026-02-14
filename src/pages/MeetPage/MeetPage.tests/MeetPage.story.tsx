@@ -1,5 +1,5 @@
 import { MeetProvider } from "@shared/providers/MeetProvider";
-import MeetPage from "../MeetPage";
+import { MeetPage } from "../MeetPage";
 import { useMeetingInfo } from "../MeetPage.hooks/useGetMeetingInfo";
 import { useInitialContextValue } from "../MeetPage.hooks/useInitialContextValue";
 

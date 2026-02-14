@@ -7,7 +7,7 @@ import { useMeetingInfo } from "./MeetPage.hooks/useGetMeetingInfo";
 import { useInitialContextValue } from "./MeetPage.hooks/useInitialContextValue";
 import styles from "./MeetPage.module.css";
 
-export default function MeetPage() {
+export function MeetPage() {
   const meetingInfo = useMeetingInfo({
     withSlots: true,
   });

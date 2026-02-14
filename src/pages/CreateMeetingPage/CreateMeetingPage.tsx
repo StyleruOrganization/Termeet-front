@@ -1,17 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, type SubmitHandler, FormProvider } from "react-hook-form";
-import { Form, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { CalendarWidget } from "@/shared/components/Calendar/Calendar";
 import { MeetingForm } from "@components/MeetingForm";
 import { meetingSchema, type Meeting } from "@shared/types/CreateMeeting.types";
 import { useTouchSelectDate } from "./CreateMeetingPage.hooks/useTouchSelectDate";
 import styles from "./CreateMeetingPage.module.css";
 
-export async function ClientAction() {
-  console.log("Action in CreateMeetingPage");
-}
-
-export default function CreateMeetingPage() {
+export function CreateMeetingPage() {
   const methods = useForm<Meeting>({
     resolver: zodResolver(meetingSchema),
   });
@@ -29,7 +25,7 @@ export default function CreateMeetingPage() {
     <div className={styles.CreateMeetingPage__Content}>
       <h1 className={styles.CreateMeetingPage__Content__Title}>Создать встречу</h1>
       <FormProvider {...methods}>
-        <Form className={styles.CreateMeetingPage__Form} onSubmit={handleSubmit(onSubmit)}>
+        <form className={styles.CreateMeetingPage__Form} onSubmit={handleSubmit(onSubmit)}>
           <div className={styles.CreateMeetingPage__Calendar}>
             <CalendarWidget ref={calendarRef} />
             {isTouch && stepCreating === "calendar" && (
@@ -46,7 +42,7 @@ export default function CreateMeetingPage() {
               </button>
             </div>
           )}
-        </Form>
+        </form>
       </FormProvider>
     </div>
   );

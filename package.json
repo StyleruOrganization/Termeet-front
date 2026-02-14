@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "react-router dev",
-    "build": "tsc -b && react-router build",
+    "dev": "vite",
+    "build": "tsc -b && vite build",
     "preview": "vite preview",
     "prepare": "husky",
     "eslint:fix": "eslint . --fix",
@@ -22,15 +22,12 @@
     "pwt:screens:update": "docker run --rm -v $(pwd)/src:/app/src -v $(pwd)/playwright-ct.config.ts:/app/playwright-ct.config.ts -v $(pwd)/styles:/app/styles -v $(pwd)/playwright-report:/app/playwright-report playwright-test:latest pnpm pwt:test --update-snapshots"
   },
   "dependencies": {
-    "@react-router/node": "7.12.0",
-    "@react-router/serve": "7.12.0",
     "react-router": "7.12.0",
     "@hookform/resolvers": "^5.2.2",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "zod": "^4.3.5",
-    "zustand": "^5.0.11",
-    "isbot": "^5"
+    "zustand": "^5.0.11"
   },
   "lint-staged": {
     "*.{js,jsx,mjs,ts,tsx}": [
@@ -40,7 +37,6 @@
     "*.css": "npm run stylelint:fix"
   },
   "devDependencies": {
-    "@react-router/dev": "7.12.0",
     "@eslint/js": "^9.39.1",
     "@estruyf/github-actions-reporter": "^1.10.0",
     "@playwright/experimental-ct-react": "^1.58.0",

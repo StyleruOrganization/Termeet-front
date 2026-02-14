@@ -30,6 +30,7 @@ export const Select = ({
   const fieldValue = watch(name);
 
   useEffect(() => {
+    console.log("Calculate dropdown position");
     if (!isOpen) return;
     const input = dropdownRef.current;
     if (!input) return;
@@ -38,8 +39,10 @@ export const Select = ({
 
     const spaceBelow = document.documentElement.clientHeight - positions.bottom;
 
+    console.log("spaceBelow", spaceBelow, "DROPDOWN_HEIGHT", DROPDOWN_HEIGHT);
+
     setTimeout(() => {
-      if (spaceBelow >= DROPDOWN_HEIGHT) {
+      if (spaceBelow > DROPDOWN_HEIGHT + 8 + 5) {
         setDropdownPosition("100% + 8px");
       } else {
         setDropdownPosition("-240px - 8px");
@@ -57,6 +60,7 @@ export const Select = ({
       }
 
       if (event.target instanceof Node && !dropdownRef.current?.contains(event.target)) {
+        setDropdownPosition("");
         setIsOpen(false);
       }
     };
@@ -76,11 +80,11 @@ export const Select = ({
   }, [isDirty]);
 
   const toggleDropdown = () => {
+    setDropdownPosition("");
     setIsOpen(!isOpen);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("formattedValue in Select.tsx");
     const formatted = formatValue(event.target.value as string);
     setShowSuccess(formatted.isValid);
 
@@ -124,27 +128,30 @@ export const Select = ({
       {isOpen && dropdownPosition && (
         <div className={styles.TimeSelect__Dropdown}>
           <ul className={styles.TimeSelect__List}>
-            {options.map(time => (
-              <li key={time} className={styles.TimeSelect__Item}>
-                <button
-                  type='button'
-                  className={`${styles.TimeSelect__Option} ${fieldValue === time ? styles.TimeSelect__Option_selected : ""}`}
-                  data-test-id={"select-option-" + name}
-                  onClick={() => {
-                    setValue(name, time, {
-                      shouldValidate: true,
-                      shouldDirty: true,
-                      shouldTouch: true,
-                    });
-                    setIsOpen(false);
-                    setShowSuccess(true);
-                    trigger(["time.start", "time.end", "time.duration"]);
-                  }}
-                >
-                  {time}
-                </button>
-              </li>
-            ))}
+            {options.map(time => {
+              console.log("render Option time");
+              return (
+                <li key={time} className={styles.TimeSelect__Item}>
+                  <button
+                    type='button'
+                    className={`${styles.TimeSelect__Option} ${fieldValue === time ? styles.TimeSelect__Option_selected : ""}`}
+                    data-test-id={"select-option-" + name}
+                    onClick={() => {
+                      setValue(name, time, {
+                        shouldValidate: true,
+                        shouldDirty: true,
+                        shouldTouch: true,
+                      });
+                      setIsOpen(false);
+                      setShowSuccess(true);
+                      trigger(["time.start", "time.end", "time.duration"]);
+                    }}
+                  >
+                    {time}
+                  </button>
+                </li>
+              );
+            })}
           </ul>
         </div>
       )}
