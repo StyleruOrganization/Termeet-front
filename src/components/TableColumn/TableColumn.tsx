@@ -48,7 +48,8 @@ export const TableColumn = memo(({ cellIds, columnId, columnWidth }: TableColumn
     console.log("DEBUG: handleDown in TableColumn", "isEditing", isEditing, "isSelecting", isSelecting);
 
     e.preventDefault();
-    const element = document.elementFromPoint(e.clientX, e.clientY);
+    const element = e.target as Element;
+    console.log(element, e.target);
     const dataId = element?.getAttribute("data-id")?.split("T")[1];
     if (!element || !dataId) return;
 

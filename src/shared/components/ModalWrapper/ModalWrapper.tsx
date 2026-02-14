@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { CrossIcon } from "@/assets/icons/cross";
 import styles from "./ModalWrapper.module.css";
 import type { IModalWrapperProps } from "./ModalWrapper.types";
@@ -13,14 +13,16 @@ export const ModalWrapper = ({
 }: IModalWrapperProps) => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [isVisible, setVisible] = useState(false);
+  const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Обработчик закрытия с анимацией
   const handleClose = useCallback(() => {
     if (isAnimate) {
+      if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
       setIsAnimating(true);
       setVisible(false);
-      // Ждем завершения анимации закрытия перед вызовом onClose
-      setTimeout(() => {
+      closeTimeoutRef.current = setTimeout(() => {
+        closeTimeoutRef.current = null;
         onClose();
         setIsAnimating(false);
       }, animationDuration);
@@ -28,6 +30,12 @@ export const ModalWrapper = ({
       onClose();
     }
   }, [onClose, isAnimate, animationDuration]);
+
+  useEffect(() => {
+    return () => {
+      if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
+    };
+  }, []);
 
   const handleEscape = useCallback(
     (e: KeyboardEvent) => {

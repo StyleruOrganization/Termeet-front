@@ -90,6 +90,12 @@
   color: var(--termeet-always-black)
 }
 
+/* Самому нижнему слоту в столбце убираем отступ */
+[data-column-id] [data-id]:last-child {
+  margin-bottom: 0;
+}
+
+/* В первом столбце всем убираем слева */
 [data-column-id]:first-child [data-id] {
   margin-left: 0;
 }

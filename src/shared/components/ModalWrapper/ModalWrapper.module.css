@@ -46,7 +46,7 @@
 }
 
 .ModalWrapper__ModalContainer_Opened {
-  transform: translateY(50%) scale(1);
+  transform: translateY(40px) scale(1);
 
   opacity: 1;
 }

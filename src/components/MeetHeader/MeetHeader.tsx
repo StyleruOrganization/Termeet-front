@@ -2,6 +2,7 @@ import { useShallow } from "zustand/shallow";
 import { LinkIcon, ClockIcon, PencilIcon } from "@/assets/icons";
 import { useMeetContext } from "@shared/hooks/useMeetContext";
 import styles from "./MeetHeader.module.css";
+import { getFormattedDuration } from "./MeetHeader.utils/getFormatDuration";
 import type { MeetHeaderProps } from "./MeetHeader.types";
 
 export const MeetHeader = ({ duration, description, name }: MeetHeaderProps) => {
@@ -21,12 +22,8 @@ export const MeetHeader = ({ duration, description, name }: MeetHeaderProps) => 
       return isEmpty;
     }),
   );
+  const formattedDuration = getFormattedDuration(duration);
 
-  const [hours, minutes] = duration.split(":");
-  const formattedDuration =
-    (hours === "00" ? "" : (hours.startsWith("0") ? hours[1] : hours) + " ч") +
-    " " +
-    (minutes === "00" ? "" : (minutes.startsWith("0") ? minutes[1] : minutes) + " мин");
   return (
     <div className={styles.MeetHeader}>
       <div className={styles.MeetHeader__Info}>
