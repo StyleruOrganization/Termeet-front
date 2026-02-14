@@ -10,7 +10,8 @@ import { getCellIds } from "./MeetTable.utils/getCellsIds";
 import type { MeetTableProps } from "./MeetTable.types";
 
 export const MeetTable = ({ start_time, end_time, meeting_days }: MeetTableProps) => {
-  const { columnContainerRef, columnWidth, calculateColumnWidth } = useColumnWidth(meeting_days);
+  const { columnContainerRef, measureContainerRef, columnWidth, calculateColumnWidth, daysVisible } =
+    useColumnWidth(meeting_days);
   const { onScrollLeft, onScrollRight, updateArrows, arrowsState } = useArrows(columnContainerRef, columnWidth);
   const setHoveredUsers = useMeetContext(store => store.setHoveredUsers);
   const setHoveredUser = useMeetContext(store => store.setHoveredUser);
@@ -68,16 +69,23 @@ export const MeetTable = ({ start_time, end_time, meeting_days }: MeetTableProps
           <span>{timeOption}</span>
         ))}
       </div>
-      <div ref={columnContainerRef} className={styles.MeetTable__Columns}>
-        {Object.keys(cellIds).map((column, index) => (
-          <div
-            style={{ width: `${columnWidth}px` }}
-            data-column-id={column}
-            className={styles.MeetTable__ColumnWrapper}
-          >
-            <TableColumn columnWidth={columnWidth} key={index} columnId={column} cellIds={cellIds[column]} />
-          </div>
-        ))}
+      <div ref={measureContainerRef} className={styles.MeetTable__ColumnsWrapper}>
+        <div
+          ref={columnContainerRef}
+          className={styles.MeetTable__Columns}
+          style={daysVisible > 0 ? { maxWidth: `${daysVisible * columnWidth}px` } : undefined}
+        >
+          {Object.keys(cellIds).map((column, index) => (
+            <div
+              key={index}
+              style={{ width: `${columnWidth}px` }}
+              data-column-id={column}
+              className={styles.MeetTable__ColumnWrapper}
+            >
+              <TableColumn columnWidth={columnWidth} key={index} columnId={column} cellIds={cellIds[column]} />
+            </div>
+          ))}
+        </div>
       </div>
       {arrowsState.leftActive || arrowsState.rightActive ? (
         <div className={styles.MeetTable__Arrows}>

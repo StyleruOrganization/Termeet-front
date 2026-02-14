@@ -7,6 +7,12 @@
   font-weight: 500;
 }
 
+.MeetTable__ColumnsWrapper {
+  width: 100%;
+
+  min-width: 0;
+}
+
 .MeetTable__Columns {
   display: flex;
 
@@ -15,7 +21,7 @@
   /* Для IE и Edge */
   -ms-overflow-style: none;
 
-  overflow-x:auto;
+  overflow-x: auto;
 
   /* Для Firefox */
   scrollbar-width: none;

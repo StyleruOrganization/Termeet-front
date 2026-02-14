@@ -1,11 +1,12 @@
 .TableCell {
   height: 46px;
+  margin: 0 0 -1px -1px;
   
   border: 1px solid var(--termeet-color-gray-light-table);
 
   transition: background-color 0.2s ease;
 
-  font-size: 16px;
+  font-size: 16px
 }
 
 @media(width<=768px){

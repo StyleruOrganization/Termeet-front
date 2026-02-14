@@ -9,7 +9,7 @@ import styles from "./MeetPage.module.css";
 
 export function MeetPage() {
   const meetingInfo = useMeetingInfo({
-    withSlots: true,
+    withSlots: false,
   });
 
   const { formattedUserSlots, maxSelectCount, users } = useInitialContextValue(meetingInfo.userSlots);

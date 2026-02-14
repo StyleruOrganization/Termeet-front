@@ -28,7 +28,7 @@ export const TableColumn = memo(({ cellIds, columnId, columnWidth }: TableColumn
     window.addEventListener("pointerup", handleEndSelection);
 
     return () => {
-      window.removeEventListener("pointermove", handleEndSelection);
+      window.removeEventListener("pointerup", handleEndSelection);
     };
   }, []);
 
