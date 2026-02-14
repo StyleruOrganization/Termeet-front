@@ -24,7 +24,6 @@
     "../infra/*.ts", 
     "../*.config.ts", 
     "../playwright", 
-    "../e2e", 
-    "../src/app"
+    "../e2e"
   ]
 }
