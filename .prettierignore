@@ -15,5 +15,3 @@ infra/**
 *.yml
 *.md
 .vercel
-.react-router/**
-build

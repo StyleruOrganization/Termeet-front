@@ -1,7 +1,6 @@
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import svgr from "vite-plugin-svgr";
-import tsconfigPaths from "vite-tsconfig-paths";
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -16,7 +15,6 @@ export default defineConfig({
       },
       include: "**/*.svg",
     }),
-    tsconfigPaths(),
   ],
   build: {
     rollupOptions: {
@@ -24,6 +22,10 @@ export default defineConfig({
         assetFileNames: "assets/[name].[hash][extname]",
         chunkFileNames: "chunks/[name].[hash].js",
         entryFileNames: "entries/[name].[hash].js",
+        manualChunks: {
+          "react": ["react"],
+          "react-dom": ["react-dom"],
+        },
       },
     },
   },
