@@ -1,9 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, type SubmitHandler, FormProvider } from "react-hook-form";
 import { useNavigate } from "react-router";
-import { createMeetSchema } from "@/pages/CreateMeetPage/model/createMeet.schema";
 import styles from "./CreateMeetPage.module.css";
 import { useTouchSelectDate } from "../../lib/useTouchSelectDate";
+import { createMeetSchema } from "../../model";
 import { CalendarWidget } from "../Calendar";
 import { MeetingForm } from "../MeetingForm/";
 import type { ICreateMeet } from "../../model";

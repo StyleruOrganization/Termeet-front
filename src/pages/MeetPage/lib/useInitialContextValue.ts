@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { generateTimeOptions } from "@/shared/libs/dates/generateTimeOptions";
+import { generateTimeOptions } from "@/shared/libs";
 import type { SelectedSlots, IMeetInfo } from "@/entities/Meet";
 
 // Хотим посчитать кол-во людей, которые выбрали одно время, а также смерджить времена всех людей в один объект, а также юзером в массив собрать

@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState } from "react";
 import { type UseFormReturn } from "react-hook-form";
-import { isTouchDevice } from "@/shared/libs/devices/isTouchDevice";
+import { isTouchDevice } from "@/shared/libs";
 import type { ICreateMeet } from "../model";
 
 export const useTouchSelectDate = (methods: UseFormReturn<ICreateMeet>) => {

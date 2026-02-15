@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, memo } from "react";
-import { MONTHS_GENITIVE } from "@/shared/libs/dates/const";
+import { MONTHS_GENITIVE } from "@/shared/libs";
 import { useColumnData } from "./lib/useColumnData";
 import styles from "./TableColumn.module.css";
 import { TableCell } from "../TableCell/TableCell";

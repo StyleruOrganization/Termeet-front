@@ -1,5 +1,5 @@
 import { useFormState, useFormContext } from "react-hook-form";
-import { TIMES, DURATIONS } from "@/shared/libs/dates/const";
+import { TIMES, DURATIONS } from "@/shared/libs";
 import { InputForm } from "@features/InputForm";
 import { TextAreaForm } from "@features/TextAreaForm";
 import styles from "./MeetingForm.module.css";

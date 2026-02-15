@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { debounce } from "@/shared/libs/func/functionWrappers";
+import { debounce } from "@/shared/libs";
 
 const BREAKPOINT_MOBILE = 768;
 const PERCENT_MIN_WIDTH_COLUMN = 15;

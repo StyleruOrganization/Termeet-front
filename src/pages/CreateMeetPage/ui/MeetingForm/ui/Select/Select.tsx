@@ -30,7 +30,6 @@ export const Select = ({
   const fieldValue = watch(name);
 
   useEffect(() => {
-    console.log("Calculate dropdown position");
     if (!isOpen) return;
     const input = dropdownRef.current;
     if (!input) return;
@@ -38,8 +37,6 @@ export const Select = ({
     const positions = input.getBoundingClientRect();
 
     const spaceBelow = document.documentElement.clientHeight - positions.bottom;
-
-    console.log("spaceBelow", spaceBelow, "DROPDOWN_HEIGHT", DROPDOWN_HEIGHT);
 
     setTimeout(() => {
       if (spaceBelow > DROPDOWN_HEIGHT + 8 + 5) {

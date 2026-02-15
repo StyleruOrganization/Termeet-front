@@ -6,6 +6,8 @@
     "github.vscode-github-actions",
     "redhat.vscode-yaml",
     "github.vscode-pull-request-github",
-    "ms-playwright.playwright"
+    "ms-playwright.playwright",
+    "ms-playwright.playwright",
+    "usernamehw.errorlens"
   ]
 }

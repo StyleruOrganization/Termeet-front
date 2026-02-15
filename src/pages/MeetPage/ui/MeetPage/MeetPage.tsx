@@ -1,11 +1,11 @@
 import { MeetProvider } from "@/entities/Meet";
-import { MeetTable } from "@widgets/MeetTable";
 import styles from "./MeetPage.module.css";
 import { useMeetingInfo } from "../../lib/useGetMeetingInfo";
 import { useInitialContextValue } from "../../lib/useInitialContextValue";
 import { MeetHeader } from "../MeetHeader";
 import { MeetModal } from "../MeetModal";
 import { MeetPeoples } from "../MeetPeoples";
+import { MeetTable } from "../MeetTable/MeetTable";
 
 export function MeetPage() {
   const meetingInfo = useMeetingInfo({

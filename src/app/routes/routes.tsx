@@ -1,7 +1,7 @@
 import { Route, Routes as ReactRoutes } from "react-router";
 import { CreateMeetPage } from "@pages/CreateMeetPage";
 import { MeetPage } from "@pages/MeetPage";
-import { Layout } from "../ui/Layout";
+import { Layout } from "../Layout";
 
 export const Routes = () => {
   return (
