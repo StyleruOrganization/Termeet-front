@@ -1,6 +1,7 @@
 {
   "extends": "./ts-base.json",
-  "compilerOptions": {   
+  "compilerOptions": {
+    "baseUrl": "..",
     "types": ["vite/client"],
     "lib": ["ES2022", "DOM"],
     "jsx": "react-jsx",
@@ -10,20 +11,15 @@
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
     "paths": {
-      "@/*": ["../src/*"],
-      "@pages/*": ["../src/pages/*"],
-      "@components/*": ["../src/components/*"],
-      "@hooks/*": ["../src/hooks/*"],
-      "@shared/*": ["../src/shared/*"],
-      "@assets/*": ["../src/assets/*"],
-      "@styles/*": ["../styles/*"],
+      "@/*": ["src/*"],
+      "@app/*": ["src/app/*"],
+      "@assets/*": ["src/assets/*"],
+      "@entities/*": ["src/entities/*"],
+      "@features/*": ["src/features/*"],
+      "@pages/*": ["src/pages/*"],
+      "@shared/*": ["src/shared/*"],
+      "@widgets/*": ["src/widgets/*"],
     }
   },
-  "include": [
-    "../src", 
-    "../infra/*.ts", 
-    "../*.config.ts", 
-    "../playwright", 
-    "../e2e"
-  ]
+  "include": ["../src/", "../infra/*.ts", "../*.config.ts", "../playwright", "../e2e"]
 }

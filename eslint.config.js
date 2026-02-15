@@ -34,7 +34,7 @@ export default [
       "import/resolver": {
         typescript: {
           alwaysTryTypes: true,
-          project: "./configs/tsconfig.app.json",
+          project: "./tsconfig.json",
         },
         node: {
           extensions: [".js", ".jsx", ".ts", ".tsx", ".css"],

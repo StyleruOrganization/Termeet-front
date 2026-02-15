@@ -1,7 +1,6 @@
 // Import styles, initialize component theme here.
-// import '../src/common.css';
 
-import "../styles/reset.css";
-import "../styles/global.css";
-import "../styles/fonts.css";
-import "../styles/variables.css";
+import "../src/app/styles/reset.css";
+import "../src/app/styles/global.css";
+import "../src/app/styles/fonts.css";
+import "../src/app/styles/variables.css";

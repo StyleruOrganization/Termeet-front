@@ -1,4 +1,4 @@
-import type { IMeetingInfo } from "@shared/types/Meet.types";
+import type { IMeetingInfo } from "@/entities/Meet";
 
 export const mockMeetingInfo: IMeetingInfo = {
   meeting: {
