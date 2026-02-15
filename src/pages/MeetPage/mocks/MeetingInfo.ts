@@ -1,6 +1,6 @@
-import type { IMeetingInfo } from "@/entities/Meet";
+import type { IMeetInfo } from "@/entities/Meet";
 
-export const mockMeetingInfo: IMeetingInfo = {
+export const mockMeetingInfo: IMeetInfo = {
   meeting: {
     id: 2,
     name: "Большая встречка",
@@ -24,7 +24,7 @@ export const mockMeetingInfo: IMeetingInfo = {
   userSlots: [],
 };
 
-export const mockMeetingInfoWithUserSlots: IMeetingInfo = {
+export const mockMeetingInfoWithUserSlots: IMeetInfo = {
   meeting: {
     id: 1,
     name: "Планёрка команды разработки",

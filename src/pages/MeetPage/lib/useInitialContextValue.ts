@@ -1,10 +1,10 @@
 import { useMemo } from "react";
 import { generateTimeOptions } from "@/shared/libs/dates/generateTimeOptions";
-import type { SelectedSlots, IMeetingInfo } from "@/entities/Meet";
+import type { SelectedSlots, IMeetInfo } from "@/entities/Meet";
 
 // Хотим посчитать кол-во людей, которые выбрали одно время, а также смерджить времена всех людей в один объект, а также юзером в массив собрать
 // мб схему поменять надо и на беке все считать
-export const useInitialContextValue = (userSlots: IMeetingInfo["userSlots"]) => {
+export const useInitialContextValue = (userSlots: IMeetInfo["userSlots"]) => {
   const meetInfo = useMemo(() => {
     const formattedUserSlots: SelectedSlots = new Map();
     const users = new Set<string>();

@@ -5,7 +5,7 @@ import { createMeetSchema } from "@/pages/CreateMeetPage/model/createMeet.schema
 import styles from "./CreateMeetPage.module.css";
 import { useTouchSelectDate } from "../../lib/useTouchSelectDate";
 import { CalendarWidget } from "../Calendar";
-import { MeetingForm } from "../MeetingForm";
+import { MeetingForm } from "../MeetingForm/";
 import type { ICreateMeet } from "../../model";
 
 export function CreateMeetPage() {

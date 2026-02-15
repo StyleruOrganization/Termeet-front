@@ -1,4 +1,4 @@
-import type { MeetingKeys } from "@shared/types/CreateMeeting";
+import type { MeetingFields } from "../../../../model";
 
 export interface TimeSelectProps {
   /** Заголовок поля ввода */
@@ -9,7 +9,7 @@ export interface TimeSelectProps {
   /** Сообщение об ошибке */
   error?: string;
   /** Текущее значение */
-  name: MeetingKeys;
+  name: MeetingFields;
   readonly?: boolean;
   onItemClick?: (value: string) => void;
   formatValue: (value: string) => { isValid: boolean; value: string };

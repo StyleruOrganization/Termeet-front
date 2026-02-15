@@ -5,10 +5,10 @@ import { TextAreaForm } from "@features/TextAreaForm";
 import styles from "./MeetingForm.module.css";
 import { formatTime } from "../../lib/timeFormat";
 import { Select } from "../Select";
-import type { Meeting } from "@shared/types/CreateMeeting";
+import type { ICreateMeet } from "../../../../model";
 
 export const MeetingForm = () => {
-  const { control } = useFormContext<Meeting>();
+  const { control } = useFormContext<ICreateMeet>();
   const { errors } = useFormState({
     control,
     name: ["title", "description", "link", "time.start", "time.end", "time.duration"],

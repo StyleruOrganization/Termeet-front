@@ -1,10 +1,10 @@
 import { FormProvider, useForm } from "react-hook-form";
 import { MeetingForm } from "../ui/MeetingForm/MeetingForm";
-import type { Meeting } from "@shared/types/CreateMeeting.types";
+import type { ICreateMeet } from "../../../model";
 
 // Обертка для компонента с react-hook-form
 export const MeetingFormWithForm = () => {
-  const methods = useForm<Meeting>();
+  const methods = useForm<ICreateMeet>();
 
   return (
     <div style={{ padding: "10px" }}>

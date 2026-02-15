@@ -1,10 +1,10 @@
 import { FormProvider, useForm } from "react-hook-form";
 import { CalendarWidget } from "../index";
-import type { Meeting } from "@shared/types/CreateMeeting";
+import type { ICreateMeet } from "../../../model";
 
 // Обертка для компонента с react-hook-form
 export const CalendarWithForm = ({ error }: { error?: string }) => {
-  const methods = useForm<Meeting>({
+  const methods = useForm<ICreateMeet>({
     defaultValues: {
       date: [],
     },

@@ -1,6 +1,6 @@
 import { mockMeetingInfo, mockMeetingInfoWithUserSlots } from "../mocks/MeetingInfo";
-import type { IMeetingInfo } from "@/entities/Meet/model/Meet.types";
+import type { IMeetInfo } from "@/entities/Meet";
 
-export const useMeetingInfo = ({ withSlots }: { withSlots: boolean }): IMeetingInfo => {
+export const useMeetingInfo = ({ withSlots }: { withSlots: boolean }): IMeetInfo => {
   return withSlots ? mockMeetingInfoWithUserSlots : mockMeetingInfo;
 };

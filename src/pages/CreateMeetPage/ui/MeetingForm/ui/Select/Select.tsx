@@ -4,7 +4,7 @@ import { ChevronDown, Check } from "@assets/icons";
 import { InputForm } from "@features/InputForm";
 import styles from "./Select.module.css";
 import type { TimeSelectProps } from "./Select.types";
-import type { Meeting } from "@shared/types/CreateMeeting";
+import type { ICreateMeet } from "../../../../model";
 
 const DROPDOWN_HEIGHT = 240;
 
@@ -26,7 +26,7 @@ export const Select = ({
     watch,
     trigger,
     formState: { isDirty },
-  } = useFormContext<Meeting>();
+  } = useFormContext<ICreateMeet>();
   const fieldValue = watch(name);
 
   useEffect(() => {

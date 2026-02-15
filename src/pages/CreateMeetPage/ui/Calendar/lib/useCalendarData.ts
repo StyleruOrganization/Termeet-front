@@ -1,10 +1,10 @@
 import { useFormContext, useWatch } from "react-hook-form";
 import styles from "../ui/Calendar.module.css";
-import type { Meeting } from "@shared/types/CreateMeeting.types";
+import type { ICreateMeet } from "../../../model";
 import type { TileClassNameFunc } from "react-calendar";
 
 export const useCalendarData = () => {
-  const { control, setValue, trigger } = useFormContext<Meeting>();
+  const { control, setValue, trigger } = useFormContext<ICreateMeet>();
   const selectedDates = useWatch({
     control,
     name: "date",
