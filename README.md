@@ -92,7 +92,8 @@ src/
 ├── app/                    # Слой приложения: роутинг, провайдеры, глобальные стили
 │   ├── routes/             # Роуты
 │   ├── styles/             # reset, global, fonts, variables
-│   └── ui/                 # Layout и обёртки уровня приложения
+│   ├── ui/                 # Layout и обёртки уровня приложения
+│   └── entrypoint/         # Точка входа
 ├── assets/                 # Статика (иконки как React-компоненты)
 ├── features/               # Фичи Например: InputForm, TextAreaForm
 │   └── <slice>/
@@ -103,10 +104,7 @@ src/
 ├── shared/                 # Переиспользуемое: ui, types, model, helpers, consts, utils, hooks, providers
 │   ├── ui/                 # UI-кит приложения (Чистые компоненты, без бизнес-логики) - Input, TextArea, Header, ModalWrapper
 │   ├── lib/                # Коллекция внутренних библиотек. - Каждая библиотека в этой папке должна иметь одну область фокуса, например, даты, цвета, манипуляции с текстом и т.д.
-│   ├── consts/             # Константы которые много где используются - MONTHS, MONTHS_GENITIVE
-│   ├── types/              # Чистые types, interfaces - CreateMeeting, Meet
-│   ├── model/              # Слайсы в которых могут быть: сторы, контексты, провайдеры и хуки связанные с ними
-│   ├── helpers/            # Функции которые используются много где - generateTimeOptions, isTouchDevice
+│   ├── api/                # Что-то общее для работы с API
 └── widgets/                # Композитные блоки -  Calendar, MeetTable, MeetingForm
     ├── Calendar/           # ui, lib, tests, index.ts
     ├── MeetTable/          # ui (MeetTable, TableColumn, TableCell), lib, index.ts
