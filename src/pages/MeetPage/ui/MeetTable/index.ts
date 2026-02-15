@@ -1,1 +1,1 @@
-export { MeetTable } from "../MeetTable";
+export { MeetTable } from "./MeetTable";

@@ -1,7 +1,7 @@
 import { useMemo, useRef, useState } from "react";
 import { type UseFormReturn } from "react-hook-form";
 import { isTouchDevice } from "@/shared/libs";
-import type { ICreateMeet } from "../model";
+import type { ICreateMeet } from "../../../model";
 
 export const useTouchSelectDate = (methods: UseFormReturn<ICreateMeet>) => {
   const calendarRef = useRef<HTMLDivElement>(null);
