@@ -9,7 +9,6 @@ export default defineConfig([
     files: ["./src/**"],
     rules: {
       "fsd/insignificant-slice": "off",
-      "fsd/no-reserved-folder-names": "off",
       "fsd/no-segmentless-slices": "off",
     },
   },

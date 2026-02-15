@@ -1,5 +1,5 @@
 import { generateTimeOptions } from "@/shared/libs";
-import type { MeetTableProps } from "../MeetTable.types";
+import type { MeetTableProps } from "../../ui/MeetTable/MeetTable.types";
 
 export const getCellIds = ({ start_time, end_time, meeting_days }: MeetTableProps): Record<string, string[]> => {
   const result: Record<string, string[]> = {};

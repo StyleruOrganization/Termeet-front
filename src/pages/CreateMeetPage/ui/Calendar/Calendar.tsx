@@ -3,9 +3,9 @@ import { Calendar as ReactCalendar } from "react-calendar";
 import { useFormContext, useFormState } from "react-hook-form";
 import { Arrow, ErrorIcon } from "@assets/icons";
 import styles from "./Calendar.module.css";
-import { formatMonthYearHeading, formatWeekday } from "../helpers/formatters";
-import { useCalendarData } from "../lib/useCalendarData";
-import type { ICreateMeet } from "../../../model";
+import { useCalendarData } from "../../lib";
+import { formatMonthYearHeading, formatWeekday } from "../../lib/formatting/calendarFormatters";
+import type { ICreateMeet } from "../../model";
 
 import "./overWriteCalendar.css";
 

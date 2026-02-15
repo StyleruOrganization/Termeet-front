@@ -1,5 +1,5 @@
 import { useFormContext, useWatch } from "react-hook-form";
-import styles from "../ui/Calendar.module.css";
+import styles from "../../../CreateMeetPage.module.css";
 import type { ICreateMeet } from "../../../model";
 import type { TileClassNameFunc } from "react-calendar";
 

@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { useStore } from "zustand";
-import { MeetContext } from "../model/MeetContext";
+import { MeetContext } from "../model/context/MeetContext";
 import type { IMeetContext } from "../model/Meet.types";
 
 export function useMeetContext<T>(selector: (state: IMeetContext) => T): T {

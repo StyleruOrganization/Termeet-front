@@ -3,9 +3,9 @@ import { TIMES, DURATIONS } from "@/shared/libs";
 import { InputForm } from "@features/InputForm";
 import { TextAreaForm } from "@features/TextAreaForm";
 import styles from "./MeetingForm.module.css";
-import { formatTime } from "../../lib/timeFormat";
+import { formatTime } from "../../lib";
 import { Select } from "../Select";
-import type { ICreateMeet } from "../../../../model";
+import type { ICreateMeet } from "../../model";
 
 export const MeetingForm = () => {
   const { control } = useFormContext<ICreateMeet>();

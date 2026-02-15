@@ -1,4 +1,4 @@
-name: basic-checks
+name: FSD
 run-name: "Feature Slced Design Architecture"
 
 on:
@@ -16,4 +16,4 @@ jobs:
       - uses: ./.github/actions/custom-preparing-action
 
       - name: Check FSD Common Rules
-        run: 
+        run: npm run check-fsd

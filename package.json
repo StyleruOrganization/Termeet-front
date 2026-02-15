@@ -33,8 +33,7 @@
   "lint-staged": {
     "*.{js,jsx,mjs,ts,tsx}": [
       "npm run eslint:fix",
-      "prettier --write .",
-      "npm run check-fsd"
+      "prettier --write ."
     ],
     "*.css": "npm run stylelint:fix"
   },

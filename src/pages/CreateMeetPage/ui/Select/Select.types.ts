@@ -1,4 +1,4 @@
-import type { MeetingFields } from "../../../../model";
+import type { MeetingFields } from "../../model";
 
 export interface TimeSelectProps {
   /** Заголовок поля ввода */

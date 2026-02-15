@@ -1,8 +1,8 @@
 import { useShallow } from "zustand/shallow";
 import { LinkIcon, ClockIcon, PencilIcon } from "@assets/icons";
 import { useMeetContext } from "@entities/Meet";
-import { getFormattedDuration } from "./helpers/getFormatDuration";
 import styles from "./MeetHeader.module.css";
+import { getFormattedDuration } from "../../lib";
 import type { MeetHeaderProps } from "./MeetHeader.types";
 
 export const MeetHeader = ({ duration, description, name }: MeetHeaderProps) => {

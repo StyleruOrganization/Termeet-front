@@ -1,7 +1,7 @@
 import { MeetProvider } from "@/entities/Meet";
-import { useMeetingInfo } from "../lib/useGetMeetingInfo";
-import { useInitialContextValue } from "../lib/useInitialContextValue";
-import { MeetPage } from "../ui/MeetPage/MeetPage";
+import { useMeetingInfo } from "../lib/meeting/useGetMeetingInfo";
+import { useInitialContextValue } from "../lib/meeting/useInitialContextValue";
+import { MeetPage } from "../MeetPage";
 
 export const MeetPageStory = () => {
   const meetingInfo = useMeetingInfo({

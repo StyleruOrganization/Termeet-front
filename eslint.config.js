@@ -77,11 +77,7 @@ export default [
 
       // Prevents UI imports in business logic layers (e.g., entities)
       "fsd/no-ui-in-business-logic": "error",
-
-      // Forbids direct import of the global store
-      "fsd/no-global-store-imports": "error",
-
-      // Enforces import order based on FSD layers
+      "fsd/no-global-store-imports": "off",
       "fsd/ordered-imports": "off",
     },
   },

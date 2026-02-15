@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { createMeetStore } from "./createMeetStore";
-import { MeetContext } from "./MeetContext";
-import type { IMeetContext } from "./Meet.types";
+import { MeetContext } from "../context/MeetContext";
+import { createMeetStore } from "../store/createMeetStore";
+import type { IMeetContext } from "../Meet.types";
 
 type IMeetProvider = Partial<React.PropsWithChildren<IMeetContext>>;
 

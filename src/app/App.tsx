@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Outlet } from "react-router";
 import { Header } from "@shared/ui";
-import styles from "./Layout.module.css";
+import styles from "./layouts/Layout.module.css";
 import { Routes } from "./routes/routes";
 
 // Global Styles

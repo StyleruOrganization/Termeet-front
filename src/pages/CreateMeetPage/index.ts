@@ -1,1 +1,1 @@
-export { CreateMeetPage } from "./ui/CreateMeetPage/CreateMeetPage";
+export { CreateMeetPage } from "./CreateMeetPage";

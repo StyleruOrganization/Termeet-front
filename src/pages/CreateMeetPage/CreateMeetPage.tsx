@@ -2,11 +2,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, type SubmitHandler, FormProvider } from "react-hook-form";
 import { useNavigate } from "react-router";
 import styles from "./CreateMeetPage.module.css";
-import { useTouchSelectDate } from "../../lib/useTouchSelectDate";
-import { createMeetSchema } from "../../model";
-import { CalendarWidget } from "../Calendar";
-import { MeetingForm } from "../MeetingForm/";
-import type { ICreateMeet } from "../../model";
+import { useTouchSelectDate } from "./lib";
+import { createMeetSchema } from "./model";
+import { CalendarWidget } from "./ui/Calendar";
+import { MeetingForm } from "./ui/MeetingForm";
+import type { ICreateMeet } from "./CreateMeetPage.types";
 
 export function CreateMeetPage() {
   const methods = useForm<ICreateMeet>({

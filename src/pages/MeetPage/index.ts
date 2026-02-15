@@ -1,1 +1,1 @@
-export { MeetPage } from "./ui/MeetPage/MeetPage";
+export { MeetPage } from "./MeetPage";

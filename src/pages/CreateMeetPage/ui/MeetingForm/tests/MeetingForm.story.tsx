@@ -1,5 +1,5 @@
 import { FormProvider, useForm } from "react-hook-form";
-import { MeetingForm } from "../ui/MeetingForm/MeetingForm";
+import { MeetingForm } from "./../MeetingForm";
 import type { ICreateMeet } from "../../../model";
 
 // Обертка для компонента с react-hook-form

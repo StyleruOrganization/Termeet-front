@@ -1,6 +1,6 @@
 import { FormProvider, useForm } from "react-hook-form";
 import { Select } from "../Select";
-import type { ICreateMeet } from "../../../../../model";
+import type { ICreateMeet } from "../../../model";
 import type { TimeSelectProps } from "../Select.types";
 
 // Обертка для компонента с react-hook-form

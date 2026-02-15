@@ -2,10 +2,8 @@ import { useEffect, useMemo } from "react";
 import { generateTimeOptions } from "@/shared/libs";
 import { Arrow } from "@assets/icons";
 import { useMeetContext } from "@entities/Meet";
-import { getCellIds } from "./helpers/getCellsIds";
-import { useArrows } from "./lib/useArrows";
-import { useColumnWidth } from "./lib/useColumnWidth";
 import styles from "./MeetTable.module.css";
+import { useColumnWidth, useArrows, getCellIds } from "../../lib";
 import { TableColumn } from "../TableColumn/TableColumn";
 import type { MeetTableProps } from "./MeetTable.types";
 

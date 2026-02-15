@@ -1,5 +1,5 @@
 import { createStore } from "zustand";
-import type { IMeetContext } from "./Meet.types";
+import type { IMeetContext } from "../Meet.types";
 
 export type IMeetStore = ReturnType<typeof createMeetStore>;
 

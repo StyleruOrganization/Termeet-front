@@ -1,1 +1,1 @@
-export { MeetingForm } from "./ui/MeetingForm/MeetingForm";
+export { MeetingForm } from ".//MeetingForm";
