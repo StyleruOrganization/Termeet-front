@@ -1,0 +1,56 @@
+.Input {
+  position: relative;
+
+  width:100%;
+
+  min-width: 0
+}
+
+.Input__Field {
+  width: 100%;
+  padding: 30px 48px 12px 16px;
+
+  background-color: var(--termeet-color-bg-inputs);
+  border: 1px solid;
+  border-radius: var(--termeet-border-16);
+
+  transition: border-color 0.2s ease;
+
+  border-color: var(--termeet-color-gray-main-10);
+
+  font-size: 4rem;
+  font-weight: 700;
+  line-height: 24px;
+}
+
+.Input__Error .Input__Field {
+  color: var(--termeet-color-accent-errors);
+
+  border-color: var(--termeet-color-accent-errors);
+  outline: none; /* Смотрится не очень две обводки */
+}
+
+.Input__ErrorField {
+  display: flex;
+  gap: 4px;
+
+  color: var(--termeet-color-accent-errors);
+
+  font-size: 3rem;
+  line-height: 16px;
+
+  margin-top: 8px;
+}
+
+.Input__Label {
+  position: absolute;
+  top: 12px;
+  left: 16px;
+
+  color: var(--termeet-color-gray-main-100);
+
+  font-size: 3rem;
+  line-height: 16px;
+
+  text-overflow: ellipsis;
+}

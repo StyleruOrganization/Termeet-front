@@ -1,0 +1,121 @@
+.MeetPeoples {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  h3 {
+    font-size: 7rem;
+  }
+}
+
+.MeetPeoples__Count {
+  color: var(--termeet-color-gray-main-60)
+}
+
+.MeetPeoples__Users__Container {
+  display: grid;
+  justify-content: start;
+
+  column-gap: 20px;
+
+  grid-template-columns: repeat(3, auto);
+}
+
+.MeetPeoples__user {
+  position: relative;
+
+  overflow: hidden;
+
+  padding: 8px 12px;
+
+  text-align: start;
+
+  color: var(--termeet-color-gray-main-60);
+
+
+  transition: all 0.2s ease;
+
+  cursor: pointer;
+  font-size: 5rem;
+  font-weight: 800;
+
+  max-width: 100%; /* ограничить ширину */
+  text-overflow: ellipsis; /* троеточие */
+
+  white-space: nowrap; /* запрет переноса */
+
+  &:not(:nth-child(3n))::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    height: 100%;
+    width: 1px;
+
+    background-color: var(--termeet-color-gray-main-20);
+
+    content: "";
+  }
+}
+
+.MeetPeoples__user_hovered, .MeetPeoples__user:hover {
+  color: var(--termeet-color-brand-light-100);
+}
+
+@media (width <= 768px) {
+  .MeetPeoples {
+    gap: 12px;
+
+    h3 {
+      font-size: 6rem;
+    }
+  }
+
+  .MeetPeoples__Users__Container {
+    grid-template-columns: repeat(2, auto);
+  }
+
+  .MeetPeoples__user {
+    padding: 4px 6px;
+
+    &:not(:nth-child(2n))::after {
+       position: absolute;
+      top: 0;
+      right: 0;
+
+      height: 100%;
+      width: 1px;
+
+      background-color: var(--termeet-color-gray-main-20);
+
+      content: "";
+    }
+
+    &:nth-child(2n)::after {
+      height: 0;
+      width: 0;
+    }
+  }
+}
+
+@media (width <= 425px) {
+  .MeetPeoples {
+    h3 {
+      font-size: 4rem;
+    }
+  }
+
+  .MeetPeoples__Users__Container {
+    grid-template-columns: repeat(1, auto);
+    justify-items: start;
+  }
+
+  .MeetPeoples__user {
+    &:nth-child(n)::after {
+      height: 0;
+      width: 0;
+    }
+
+    font-size: 3.5rem;
+  }
+}

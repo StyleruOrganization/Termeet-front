@@ -92,17 +92,7 @@ export default {
     ],
     // Используем css-переменные
     "scale-unlimited/declaration-strict-value": [
-      [
-        "/color$/",
-        "/border-color$/",
-        "border-radius",
-        "/font/",
-        "font-size",
-        "font-weight",
-        "font-family",
-        "line-height",
-        "letter-spacing",
-      ],
+      ["/color$/", "/border-color$/", "border-radius"],
       {
         ignoreValues: ["transparent", "currentColor", "inherit", "normal", "bold", "sans-serif", "serif"],
       },

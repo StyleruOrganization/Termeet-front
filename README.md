@@ -85,7 +85,62 @@ git config core.hooksPath .husky
 
 ## Структура проекта
 
-Раздел будет заполнен после начале разработки
+Архитектура основана на [Feature-Sliced Design (FSD)](https://fsd.how/ru/docs/get-started/overview). Нижуе приведен пример, текущей композиции компонентов, дополнять не нужно при разработке.
+
+```
+src/
+├── app/                    # Слой приложения: роутинг, провайдеры, глобальные стили
+│   ├── routes/             # Роуты
+│   ├── styles/             # reset, global, fonts, variables
+│   ├── ui/                 # Layout и обёртки уровня приложения
+│   └── entrypoint/         # Точка входа
+├── assets/                 # Статика (иконки как React-компоненты)
+├── features/               # Фичи Например: InputForm, TextAreaForm
+│   └── <slice>/
+│       └── index.ts        # Публичный API слайса
+├── pages/                  # Страницы (роуты)
+│   ├── CreateMeetingPage/  # ui, lib
+│   └── MeetPage/           # ui (MeetPage, MeetHeader, MeetModal, MeetPeoples), lib, model, mocks, tests
+├── shared/                 # Переиспользуемое: ui, types, model, helpers, consts, utils, hooks, providers
+│   ├── ui/                 # UI-кит приложения (Чистые компоненты, без бизнес-логики) - Input, TextArea, Header, ModalWrapper
+│   ├── lib/                # Коллекция внутренних библиотек. - Каждая библиотека в этой папке должна иметь одну область фокуса, например, даты, цвета, манипуляции с текстом и т.д.
+│   ├── api/                # Что-то общее для работы с API
+└── widgets/                # Композитные блоки -  Calendar, MeetTable, MeetingForm
+    ├── Calendar/           # ui, lib, tests, index.ts
+    ├── MeetTable/          # ui (MeetTable, TableColumn, TableCell), lib, index.ts
+    └── MeetingForm/        # ui (MeetingForm, Select), lib, tests, index.ts
+```
+
+Правила по FSD в проекте:
+
+- **На уровне слайса** — только сегменты (папки ui, lib, model, tests), без «голых» файлов в корне слайса.
+- **Сегменты** — нейминг FSD: `ui`, `lib`, `model`, `tests`, `helpers`.
+- **Из документации:** *`Не поддавайтесь искушению создать папку shared/types или добавить сегмент types в ваши слайсы. Категория "типы" похожа на категорию "компоненты" или "хуки" в том, что она описывает содержимое, а не то, для чего оно нужно. Сегменты должны описывать цель кода, а не его суть.`*
+
+Импорты через алиасы: `@app`, `@assets`, `@features`, `@pages`, `@shared`, `@widgets`.
+
+### Структура слайса
+
+Внутри слайса — только сегменты. Компоненты и тесты лежат в соответствующих сегментах.
+
+```
+SliceName/
+├── index.ts              # Публичный экспорт слайса (только здесь)
+├── ui/                   # Компоненты
+│   └── ComponentName/
+│       ├── ComponentName.tsx
+│       ├── ComponentName.module.css
+│       ├── ComponentName.types.ts
+│       └── tests/   # при необходимости
+├── lib/                  # Хуки
+├── helpers/              # Утилиты
+├── model/                # типы слайса (если есть)
+```
+
+### Роутинг
+
+Используется [React Router](https://reactrouter.com/) v7. Роуты задаются в [`src/app/routes/routes.tsx`](src/app/routes/routes.tsx).
+
 
 ## Правила разработки
 

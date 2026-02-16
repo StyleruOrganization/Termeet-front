@@ -1,0 +1,24 @@
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --termeet-color-gray-main-10: rgb(47 47 47 / 10%);
+  --termeet-color-bg-inputs: #f8f8f8;
+  --termeet-color-gray-main-100: #2f2f2f;
+  --termeet-color-accent-errors: #fc3f1d;
+  --termeet-color-accent-success: #3cc713;
+  --termeet-color-brand-main: #386dd4;
+  --termeet-color-always-white: #fff;
+  --termeet-color-brand-light-100: #5591eb;
+  --termeet-color-brand-light-20: rgb(85 145 235 / 20%);
+  --termeet-color-always-black: #000;
+  --termeet-color-gray-main-20: rgb(47 47 47 / 20%);
+  --termeet-color-brand-main-dark: #102f55;
+  --termeet-color-gray-main-60: rgb(47 47 47 / 60%);
+  --termeet-color-shadow: rgb(0 0 0 / 8%);
+  --termeet-color-gray-light-table: #e4e4e4;
+  --termeet-color-bg-table-main: #608add;
+  --termeet-border-16: 16px;
+  --termeet-border-circle: 50%;
+}

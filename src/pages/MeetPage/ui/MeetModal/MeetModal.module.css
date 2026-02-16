@@ -1,0 +1,25 @@
+.MeetModal {
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+  align-items: start;
+
+  padding: 20px;
+  
+  font-size: 4rem;
+
+  min-width: min(50vw, 550px);
+}
+
+.MeetModal__SaveButton {
+  padding: 10px 20px;
+
+  color: var(--termeet-color-always-white);
+  background-color: var(--termeet-color-brand-main-dark);
+  border-radius: var(--termeet-border-16);
+
+  align-self: end;
+
+  cursor: pointer;
+  font-size: 4rem;
+}

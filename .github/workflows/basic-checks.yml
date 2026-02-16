@@ -1,10 +1,10 @@
 name: basic-checks
+run-name: "Linters and Types Checks"
 
 on:
   pull_request:
     branches: [main]
 
-run-name: "Linters and Types Checks"
 jobs:
   analyze-changes:
     runs-on: ubuntu-latest

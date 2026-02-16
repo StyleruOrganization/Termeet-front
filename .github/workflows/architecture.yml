@@ -1,0 +1,19 @@
+name: FSD
+run-name: "Feature Slced Design Architecture"
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  check-architecture:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: ./.github/actions/custom-preparing-action
+
+      - name: Check FSD Common Rules
+        run: npm run check-fsd

@@ -1,0 +1,104 @@
+.ModalWrapper__Overlay {
+  position: fixed;
+  z-index: 1000;
+
+  display: flex;
+  visibility: hidden;
+  justify-content: center;
+  align-items: flex-start;
+
+  padding: 20px;
+
+  background-color: var(--termeet-color-gray-main-20);
+
+  transition: 
+    opacity var(--animation-duration, 300ms) ease,
+    visibility var(--animation-duration, 300ms) ease;
+
+  inset: 0;
+
+  opacity: 0;
+  overflow-y: auto; /* Скролл если контент не помещается */
+}
+
+.ModalWrapper__Overlay_visible {
+  visibility: visible;
+
+  opacity: 1;
+}
+
+.ModalWrapper__ModalContainer {
+  display: flex;
+  flex-direction: column;
+
+  background-color: var(--termeet-color-always-white);
+  border-radius: var(--termeet-border-16);
+  box-shadow: 0 10px 40px var(--termeet-color-shadow);
+
+  transform: translateY(-100px) scale(0.95);
+  transition: 
+    transform var(--animation-duration, 300ms) cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity var(--animation-duration, 300ms) ease;
+
+  max-width: calc(100vw - 70px);
+
+  opacity: 0;
+}
+
+.ModalWrapper__ModalContainer_Opened {
+  transform: translateY(40px) scale(1);
+
+  opacity: 1;
+}
+
+.ModalWrapper__ModalContent {
+  flex-grow: 1;
+
+  overflow-y: auto;
+}
+
+.ModalWrapper__CloseButton {
+  position: absolute;
+  top: -30px;
+  right: -30px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 5px;
+
+  color: var(--termeet-color-gray-main-100);
+  border-radius: var(--termeet-border-circle);
+  background-color: var(--termeet-color-always-white);
+
+  transition: opacity 0.2s ease;
+
+  cursor: pointer; 
+  rotate: 45deg;
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.ModalWrapper__CloseButton:hover {
+  opacity: .7;
+}
+
+@media (width <= 425px) {
+  .ModalWrapper__CloseButton {
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+}
+
+@media (width <= 768px) {
+  .ModalWrapper__Overlay {
+    padding: 10px;
+  }
+
+}

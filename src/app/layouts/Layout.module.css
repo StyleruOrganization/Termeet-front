@@ -1,0 +1,14 @@
+.MainContainer {
+  padding-left: 120px;
+  padding-bottom: 40px;
+  
+  max-width: 90vw;
+}
+
+@media (width <= 768px) {
+  .MainContainer {
+    padding: 16px;
+
+    max-width: 100%;
+  }
+}

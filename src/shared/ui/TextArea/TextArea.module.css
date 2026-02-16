@@ -1,0 +1,53 @@
+.TextArea {
+    position: relative;
+
+    width: 100%;
+    height: fit-content;
+}
+
+.TextArea__Field {
+    width: 100%;
+    height: 128px;
+    padding: 30px 16px 12px;
+
+    background-color: var(--termeet-color-bg-inputs);
+    border: 1px solid var(--termeet-color-gray-main-10);
+    border-radius: var(--termeet-border-16);
+
+    font-size: 4rem;
+    font-weight: 700;
+    line-height: 22px;
+
+    resize: none;
+}
+
+.TextArea__Error .TextArea__Field {
+    border-color: var(--termeet-color-accent-errors);
+    outline: none; /* Убого выглядят две обводки */
+}
+
+.TextArea__Label {
+    position: absolute;
+    top: 12px;
+    left: 16px;
+
+    color: var(--termeet-color-gray-main-100);
+
+    font-size: 3rem;
+    line-height: 18px;
+
+    pointer-events: none;
+}
+
+.TextArea__ErrorField {
+    display: flex;
+    gap: 4px;
+
+    color: var(--termeet-color-accent-errors);
+
+    font-size: 3rem;
+    line-height: 18px;
+
+    margin-top: 4px;
+}
+
