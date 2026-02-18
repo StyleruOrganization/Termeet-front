@@ -76,7 +76,7 @@ jobs:
             **Детали:**
             - Ветка: \`${context.payload.pull_request.head.ref}\`
             - Коммит: \`${commitSha}\`
-            - Образ: \`cr.yandex/${{ secrets.CONTAINER_REGISTRY }}/pr-${prNumber}:${commitSha}\`
+            - Образ: \`cr.yandex/${{ secrets.CONTAINER_REGISTRY }}/pr-${prNumber}\`
             
             > ⚠️ Стенд будет автоматически удален после мержа PR.
             

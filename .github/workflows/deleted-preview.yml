@@ -13,6 +13,8 @@ jobs:
       Y_TOKEN: ${{ secrets.Y_TOKEN }}
       REGISTRY: cr.yandex/${{ secrets.CONTAINER_REGISTRY }}
       DOMAIN: pr-${{ github.event.number }}.termeet-dev.ru
+      PR_NUMBER: ${{ github.event.number }}
+
     if: github.event.pull_request.draft == false
     
     steps:
@@ -22,8 +24,12 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          envs: PR_NUMBER
+          envs: PR_NUMBER,REGISTRY
           script: |
-            # Останавливаем и удаляем старый контейнер
+            echo "${Y_TOKEN}" | docker login \
+              --username oauth \
+              --password-stdin \
+              cr.yandex
             docker stop pr-${PR_NUMBER} 2>/dev/null || true
             docker rm pr-${PR_NUMBER} 2>/dev/null || true
+            docker rmi ${REGISTRY}/pr-${PR_NUMBER} || true
