@@ -51,10 +51,9 @@ jobs:
               --password-stdin \
               cr.yandex
             
-            # Запускаем новый контейнер с конкретным тегом (не latest!)
             docker run -d \
               --name termeet \
               -e VIRTUAL_HOST=${DOMAIN} \
               --network nginx-proxy \
               --restart unless-stopped \
-              ${REGISTRY}/termeet
+              ${REGISTRY}/termeet:latest
