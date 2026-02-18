@@ -1,10 +1,6 @@
 name: Playwright Tests
 run-name: "Termeet Playwright Tests"
 
-env:
-  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-
 on:
   pull_request:
     branches: 
@@ -34,14 +30,14 @@ jobs:
         uses: actions/checkout@v4
       - uses: ./.github/actions/custom-preparing-action
           
-      - name: Cache Playwright browsers
-        uses: actions/cache@v4
-        id: playwright-cache
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: |
-            playwright-${{ runner.os }}-
+      # - name: Cache Playwright browsers
+      #   uses: actions/cache@v4
+      #   id: playwright-cache
+      #   with:
+      #     path: ~/.cache/ms-playwright
+      #     key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+      #     restore-keys: |
+      #       playwright-${{ runner.os }}-
 
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps
