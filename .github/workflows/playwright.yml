@@ -22,6 +22,12 @@ jobs:
             command: pwt:e2e:test
       fail-fast: true
     runs-on: ubuntu-latest
+    env:
+      CONTAINER_RIGISTRY: ${{ secrets.CONTAINER_REGISTRY }}
+      Y_TOKEN: ${{ secrets.Y_TOKEN }}
+      PR_NUMBER: ${{ github.event.number }}
+      REGISTRY: cr.yandex/${{ secrets.CONTAINER_REGISTRY }}
+      DOMAIN: test-report-${{ github.event.number }}.termeet-dev.ru
     
     steps:
       - name: Checkout
@@ -44,19 +50,146 @@ jobs:
         id: run-tests
         run: |
           pnpm run ${{ matrix.command }}
-          
-      - name: Deploy report
-        if: ${{ failure() && steps.run-tests.conclusion == 'failure' && matrix.command == 'pwt:test' }}
-        id: deploy
+
+    # - name: Login to Container Registry
+    #     run: |
+    #       echo $Y_TOKEN | docker login \
+    #         --username oauth \
+    #         --password-stdin cr.yandex
+
+    #   - name: Build Docker image
+    #     run: |
+    #       docker build \
+    #         -t cr.yandex/$CONTAINER_RIGISTRY/pr-${PR_NUMBER} .
+
+    #   - name: Push Docker images
+    #     run: |
+    #       docker push cr.yandex/$CONTAINER_RIGISTRY/pr-${PR_NUMBER}
+
+    #   - name: Deploy to server
+    #     uses: appleboy/ssh-action@v1.0.0
+    #     with:
+    #       host: ${{ secrets.SERVER_HOST }}
+    #       username: ${{ secrets.SERVER_USER }}
+    #       key: ${{ secrets.SSH_PRIVATE_KEY }}
+    #       envs: PR_NUMBER,REGISTRY,DOMAIN,Y_TOKEN
+    #       script: |
+    #         # Останавливаем и удаляем старый контейнер
+    #         docker stop pr-${PR_NUMBER} 2>/dev/null || true
+    #         docker rm pr-${PR_NUMBER} 2>/dev/null || true
+
+    #         echo "${Y_TOKEN}" | docker login \
+    #           --username oauth \
+    #           --password-stdin \
+    #           cr.yandex
+            
+    #         # Запускаем новый контейнер с конкретным тегом (не latest!)
+    #         docker run -d \
+    #           --name pr-${PR_NUMBER} \
+    #           -e VIRTUAL_HOST=${DOMAIN} \
+    #           --network nginx-proxy \
+    #           --restart unless-stopped \
+    #           ${REGISTRY}/pr-${PR_NUMBER}
+
+    #   - name: Comment PR
+    #     uses: actions/github-script@v7
+    #     env:
+    #       PR_NUMBER: ${{ github.event.number }}
+    #     with:
+    #       script: |
+    #         const prNumber = context.issue.number;
+    #         const domain = `pr-${prNumber}.termeet-dev.ru`;
+    #         const commitSha = context.payload.pull_request.head.sha.substring(0, 7);
+            
+    #         const body = `## 🚀 Бета-версия готова к тестированию!
+            
+    #         **Ссылка:** http://${domain}
+            
+    #         **Детали:**
+    #         - Ветка: \`${context.payload.pull_request.head.ref}\`
+    #         - Коммит: \`${commitSha}\`
+    #         - Образ: \`cr.yandex/${{ secrets.CONTAINER_REGISTRY }}/pr-${prNumber}\`
+            
+    #         > ⚠️ Стенд будет автоматически удален после мержа PR.
+            
+    #         **Тестируйте!** 🧪`;
+            
+    #         github.rest.issues.createComment({
+    #           issue_number: prNumber,
+    #           owner: context.repo.owner,
+    #           repo: context.repo.repo,
+    #           body: body
+    #         });
+      - name: Login to Container Registry
         run: |
-          DEPLOY_URL=$(npx vercel --cwd playwright-report deploy --target=staging --token=${{ secrets.VERCEL_TOKEN }})
-          echo "DEPLOY_URL=$DEPLOY_URL" >> $GITHUB_OUTPUT
-          
-      - name: Create comment with report link
-        if: ${{ failure() && steps.run-tests.outcome == 'failure' && matrix.command == 'pwt:test'}}
+          echo $Y_TOKEN | docker login \
+            --username oauth \
+            --password-stdin cr.yandex
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            -t cr.yandex/$CONTAINER_RIGISTRY/test-report-{$PR_NUMBER} .
+
+      - name: Push Docker images
+        run: |
+          docker push cr.yandex/$CONTAINER_RIGISTRY/test-report-{$PR_NUMBER}
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          envs: PR_NUMBER,REGISTRY,DOMAIN,Y_TOKEN
+          script: |
+            # Останавливаем и удаляем старый контейнер
+            docker stop test-report-{$PR_NUMBER} 2>/dev/null || true
+            docker rm test-report-{$PR_NUMBER} 2>/dev/null || true
+
+            echo "${Y_TOKEN}" | docker login \
+              --username oauth \
+              --password-stdin \
+              cr.yandex
+            
+            # Запускаем новый контейнер с конкретным тегом (не latest!)
+            docker run -d \
+              --name test-report-{$PR_NUMBER} \
+              -e VIRTUAL_HOST=${DOMAIN} \
+              --network nginx-proxy \
+              --restart unless-stopped \
+              ${REGISTRY}/test-report-{$PR_NUMBER}
+      - name: Comment PR
+        uses: actions/github-script@v7
         env:
-          GH_TOKEN: ${{ github.token }}
-          DEPLOY_URL: ${{ steps.deploy.outputs.DEPLOY_URL }}
-        run: |
-          gh pr comment ${{ github.event.pull_request.number }} \
-            --body "🔴 Компонентные тесты упали! Отчет: $DEPLOY_URL"
+          PR_NUMBER: ${{ github.event.number }}
+        with:
+          script: |
+            const prNumber = context.issue.number;
+            const domain = `test-report-${prNumber}.termeet-dev.ru`;
+            const commitSha = context.payload.pull_request.head.sha.substring(0, 7);
+            
+            const body = `## 🚨 Упали Playwright тесты!
+            
+            **Ссылка на отчет:** http://${domain}
+            
+            **Что делать:**
+            - Открыть отчет
+            - Найти упавшие тесты (будут подсвечены красным)
+            - Починить код или обновить cкриншоты
+            
+            **Детали:**
+            - Ветка: \`${context.payload.pull_request.head.ref}\`
+            - Коммит: \`${commitSha}\`
+            - Образ: \`cr.yandex/${{ secrets.CONTAINER_REGISTRY }}/test-report-${prNumber}\`
+            
+            > ⚠️ Отчет будет удален после мержа PR.
+            
+            **Починил?** Заливай фикс! 🔧`;
+            
+            github.rest.issues.createComment({
+              issue_number: prNumber,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
