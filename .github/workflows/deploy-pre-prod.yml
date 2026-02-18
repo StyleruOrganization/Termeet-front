@@ -9,6 +9,8 @@ jobs:
   build-and-deploy:
     env:
       Y_TOKEN: ${{ secrets.Y_TOKEN }}
+      REGISTRY: cr.yandex/${{ secrets.CONTAINER_REGISTRY }}
+      DOMAIN: termeet-dev.ru
     runs-on: ubuntu-latest
     
     steps:
@@ -25,7 +27,7 @@ jobs:
       - name: Build Docker image
         run: |
           docker build \
-            -t cr.yandex/${{ secrets.CONTAINER_REGISTRY }}/termeet
+            -t cr.yandex/${{ secrets.CONTAINER_REGISTRY }}/termeet .
 
       - name: Push Docker images
         run: |
@@ -33,14 +35,11 @@ jobs:
 
       - name: Deploy to server
         uses: appleboy/ssh-action@v1.0.0
-        env:
-          REGISTRY: cr.yandex/${{ secrets.CONTAINER_REGISTRY }}
-          DOMAIN: termeet-dev.ru
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          envs: Y_TOKEN
+          envs: Y_TOKEN,REGISTRY,DOMAIN
           script: |
             # Останавливаем и удаляем старый контейнер
             docker stop termeet 2>/dev/null || true
@@ -51,10 +50,9 @@ jobs:
               --password-stdin \
               cr.yandex
             
-            # Запускаем новый контейнер с конкретным тегом (не latest!)
             docker run -d \
               --name termeet \
               -e VIRTUAL_HOST=${DOMAIN} \
               --network nginx-proxy \
               --restart unless-stopped \
-              ${REGISTRY}/termeet
+              ${REGISTRY}/termeet:latest
