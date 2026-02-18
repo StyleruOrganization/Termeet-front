@@ -7,40 +7,36 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    env:
+      CONTAINER_RIGISTRY: ${{ secrets.CONTAINER_REGISTRY }}
+      Y_TOKEN: ${{ secrets.Y_TOKEN }}
+      PR_NUMBER: ${{ github.event.number }}
+      COMMIT_SHA: ${{ github.event.pull_request.head.sha }}
+      REGISTRY: cr.yandex/${{ secrets.CONTAINER_REGISTRY }}
+      DOMAIN: pr-${{ github.event.number }}.termeet-dev.ru
     if: github.event.pull_request.draft == false
     
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Login to Yandex Container Registry
+      - name: Login to Container Registry
         run: |
-          echo ${{ secrets.Y_TOKEN }} | docker login \
+          echo $Y_TOKEN | docker login \
             --username oauth \
             --password-stdin cr.yandex
 
       - name: Build Docker image
-        env:
-          PR_NUMBER: ${{ github.event.number }}
-          COMMIT_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           docker build \
-            -t cr.yandex/${{ secrets.CONTAINER_REGISTRY }}/pr-${PR_NUMBER}:${COMMIT_SHA}
+            -t cr.yandex/$CONTAINER_RIGISTRY/pr-${PR_NUMBER}:${COMMIT_SHA}
 
       - name: Push Docker images
-        env:
-          PR_NUMBER: ${{ github.event.number }}
-          COMMIT_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
-          docker push cr.yandex/${{ secrets.CONTAINER_REGISTRY }}/pr-${PR_NUMBER}:${COMMIT_SHA}
+          docker push cr.yandex/$CONTAINER_RIGISTRY/pr-${PR_NUMBER}:${COMMIT_SHA}
 
       - name: Deploy to server
         uses: appleboy/ssh-action@v1.0.0
-        env:
-          PR_NUMBER: ${{ github.event.number }}
-          COMMIT_SHA: ${{ github.event.pull_request.head.sha }}
-          REGISTRY: cr.yandex/${{ secrets.CONTAINER_REGISTRY }}
-          DOMAIN: pr-${{ github.event.number }}.termeet-dev.ru
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
@@ -62,7 +58,7 @@ jobs:
             # Проверяем успешность
             if [ $? -eq 0 ]; then
               echo "✅ PR #${PR_NUMBER} доступен по адресу http://${DOMAIN}"
-              
+
             else
               echo "❌ Ошибка запуска контейнера"
               exit 1
