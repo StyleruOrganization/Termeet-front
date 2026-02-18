@@ -41,11 +41,16 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          envs: PR_NUMBER,COMMIT_SHA,REGISTRY,DOMAIN
+          envs: PR_NUMBER,COMMIT_SHA,REGISTRY,DOMAIN,Y_TOKEN
           script: |
             # Останавливаем и удаляем старый контейнер
             docker stop pr-${PR_NUMBER} 2>/dev/null || true
             docker rm pr-${PR_NUMBER} 2>/dev/null || true
+
+            echo "${Y_TOKEN}" | docker login \
+              --username oauth \
+              --password-stdin \
+              cr.yandex
             
             # Запускаем новый контейнер с конкретным тегом (не latest!)
             docker run -d \
