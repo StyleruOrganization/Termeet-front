@@ -1,4 +1,4 @@
-name: Deploy PR
+name: Deploy preprod
 run-name: "Build and Deploy PreProd"
 
 on:

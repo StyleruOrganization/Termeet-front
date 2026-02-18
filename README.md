@@ -6,7 +6,7 @@
 
 ## Фронтенд-часть проекта Termeet
 
-[![Deploy](https://github.com/StyleruOrganization/Termeet-front/actions/workflows/deploy-pre-prod.yaml/badge.svg)](https://github.com/StyleruOrganization/Termeet-front/actions/workflows/deploy-pre-prod.yml)
+[![Deploy PR](https://github.com/StyleruOrganization/Termeet-front/actions/workflows/deploy-pre-prod.yml/badge.svg?branch=main)](https://github.com/StyleruOrganization/Termeet-front/actions/workflows/deploy-pre-prod.yml)
 
 Версия из main ветки доступна по [адресу](https://termeet-front.vercel.app/)
 **_\* После мерджа нужно подождать немного пока пересоберется проект._**

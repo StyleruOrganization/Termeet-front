@@ -1,4 +1,4 @@
-name: Deploy PR
+name: Deploy beta for PR
 run-name: "Build and Deploy Beta for PR #${{ github.event.number }}"
 
 on:
