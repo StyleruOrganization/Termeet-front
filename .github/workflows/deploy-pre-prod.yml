@@ -2,7 +2,7 @@ name: Deploy PR
 run-name: "Build and Deploy PreProd"
 
 on:
-  push:
+  pull_request:
     branches: ["main"]
 
 jobs:
@@ -25,7 +25,7 @@ jobs:
       - name: Build Docker image
         run: |
           docker build \
-            -t cr.yandex/${{ secrets.CONTAINER_REGISTRY }}/termeet
+            -t cr.yandex/${{ secrets.CONTAINER_REGISTRY }}/termeet .
 
       - name: Push Docker images
         run: |
