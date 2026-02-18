@@ -2,7 +2,7 @@ name: Deploy PR
 run-name: "Build and Deploy PreProd"
 
 on:
-  pull_request:
+  push:
     branches: ["main"]
 
 jobs:
