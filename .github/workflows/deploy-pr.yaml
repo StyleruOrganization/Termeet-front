@@ -58,7 +58,6 @@ jobs:
             # Проверяем успешность
             if [ $? -eq 0 ]; then
               echo "✅ PR #${PR_NUMBER} доступен по адресу http://${DOMAIN}"
-
             else
               echo "❌ Ошибка запуска контейнера"
               exit 1
