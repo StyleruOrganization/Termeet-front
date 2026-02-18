@@ -1,0 +1,60 @@
+name: Deploy PR
+run-name: "Build and Deploy PreProd"
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to Yandex Container Registry
+        run: |
+          echo ${{ secrets.Y_TOKEN }} | docker login \
+            --username oauth \
+            --password-stdin cr.yandex
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            -t cr.yandex/${{ secrets.CONTAINER_REGISTRY }}/termeet
+
+      - name: Push Docker images
+        run: |
+          docker push cr.yandex/${{ secrets.CONTAINER_REGISTRY }}/termeet
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1.0.0
+        env:
+          REGISTRY: cr.yandex/${{ secrets.CONTAINER_REGISTRY }}
+          DOMAIN: termeet-dev.ru
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            # Останавливаем и удаляем старый контейнер
+            docker stop termeet 2>/dev/null || true
+            docker rm termeet 2>/dev/null || true
+            
+            # Запускаем новый контейнер с конкретным тегом (не latest!)
+            docker run -d \
+              --name termeet \
+              -e VIRTUAL_HOST=${DOMAIN} \
+              --network nginx-proxy \
+              --restart unless-stopped \
+              ${REGISTRY}/termeet
+            
+            # Проверяем успешность
+            if [ $? -eq 0 ]; then
+              echo "✅ PR #${PR_NUMBER} доступен по адресу http://${DOMAIN}"
+              
+            else
+              echo "❌ Ошибка запуска контейнера"
+              exit 1
+            fi

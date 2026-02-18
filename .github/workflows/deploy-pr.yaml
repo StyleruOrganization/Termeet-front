@@ -1,0 +1,99 @@
+name: Deploy PR
+run-name: "Build and Deploy Beta for PR #${{ github.event.number }}"
+
+on:
+  pull_request:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to Yandex Container Registry
+        run: |
+          echo ${{ secrets.Y_TOKEN }} | docker login \
+            --username oauth \
+            --password-stdin cr.yandex
+
+      - name: Build Docker image
+        env:
+          PR_NUMBER: ${{ github.event.number }}
+          COMMIT_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          docker build \
+            -t cr.yandex/${{ secrets.CONTAINER_REGISTRY }}/pr-${PR_NUMBER}:${COMMIT_SHA}
+
+      - name: Push Docker images
+        env:
+          PR_NUMBER: ${{ github.event.number }}
+          COMMIT_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          docker push cr.yandex/${{ secrets.CONTAINER_REGISTRY }}/pr-${PR_NUMBER}:${COMMIT_SHA}
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1.0.0
+        env:
+          PR_NUMBER: ${{ github.event.number }}
+          COMMIT_SHA: ${{ github.event.pull_request.head.sha }}
+          REGISTRY: cr.yandex/${{ secrets.CONTAINER_REGISTRY }}
+          DOMAIN: pr-${{ github.event.number }}.termeet-dev.ru
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          envs: PR_NUMBER,COMMIT_SHA,REGISTRY,DOMAIN
+          script: |
+            # Останавливаем и удаляем старый контейнер
+            docker stop pr-${PR_NUMBER} 2>/dev/null || true
+            docker rm pr-${PR_NUMBER} 2>/dev/null || true
+            
+            # Запускаем новый контейнер с конкретным тегом (не latest!)
+            docker run -d \
+              --name pr-${PR_NUMBER} \
+              -e VIRTUAL_HOST=${DOMAIN} \
+              --network nginx-proxy \
+              --restart unless-stopped \
+              ${REGISTRY}/pr-${PR_NUMBER}:${COMMIT_SHA}
+            
+            # Проверяем успешность
+            if [ $? -eq 0 ]; then
+              echo "✅ PR #${PR_NUMBER} доступен по адресу http://${DOMAIN}"
+              
+            else
+              echo "❌ Ошибка запуска контейнера"
+              exit 1
+            fi
+
+      - name: Comment PR
+        uses: actions/github-script@v7
+        env:
+          PR_NUMBER: ${{ github.event.number }}
+        with:
+          script: |
+            const prNumber = context.issue.number;
+            const domain = `pr-${prNumber}.termeet-dev.ru`;
+            const commitSha = context.payload.pull_request.head.sha.substring(0, 7);
+            
+            const body = `## 🚀 Бета-версия готова к тестированию!
+            
+            **Ссылка:** http://${domain}
+            
+            **Детали:**
+            - Ветка: \`${context.payload.pull_request.head.ref}\`
+            - Коммит: \`${commitSha}\`
+            - Образ: \`cr.yandex/${{ secrets.CONTAINER_REGISTRY }}/pr-${prNumber}:${commitSha}\`
+            
+            > ⚠️ Стенд будет автоматически удален после мержа PR.
+            
+            **Тестируйте!** 🧪`;
+            
+            github.rest.issues.createComment({
+              issue_number: prNumber,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
