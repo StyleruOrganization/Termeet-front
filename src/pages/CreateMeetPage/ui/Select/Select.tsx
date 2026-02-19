@@ -128,7 +128,10 @@ export const Select = ({
             {options.map(time => {
               console.log("render Option time");
               return (
-                <li key={time} className={styles.TimeSelect__Item}>
+                <li
+                  key={time}
+                  //  className={styles.TimeSelect__Item}
+                >
                   <button
                     type='button'
                     className={`${styles.TimeSelect__Option} ${fieldValue === time ? styles.TimeSelect__Option_selected : ""}`}
