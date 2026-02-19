@@ -23,6 +23,7 @@ jobs:
       Y_TOKEN: ${{ secrets.Y_TOKEN }}
       PR_NUMBER: ${{ github.event.number }}
       DOMAIN: test-report-${{ github.event.number }}.termeet-dev.ru
+      EMAIL: ${{ secrets.EMAIL }}
     
     steps:
       - name: Checkout
@@ -68,7 +69,7 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          envs: PR_NUMBER,REGISTRY,DOMAIN,Y_TOKEN
+          envs: PR_NUMBER,REGISTRY,DOMAIN,Y_TOKEN,EMAIL
           script: |
             # Останавливаем и удаляем старый контейнер
             docker stop test-report-${PR_NUMBER} 2>/dev/null || true
@@ -82,6 +83,7 @@ jobs:
             docker run -d \
               --name test-report-${PR_NUMBER} \
               -e VIRTUAL_HOST=${DOMAIN} \
+              -e LETSENCRYPT_EMAIL=${EMAIL} \
               --network nginx-proxy \
               --restart unless-stopped \
               ${REGISTRY}/test-report-${PR_NUMBER}
