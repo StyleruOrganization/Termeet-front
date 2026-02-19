@@ -58,7 +58,7 @@ jobs:
       - name: Build and push Docker image
         if: ${{ failure() && steps.run-tests.conclusion == 'failure' && matrix.command == 'pwt:test' }}
         run: |
-          docker build -t $REGISTRY/test-report-${PR_NUMBER} -f Dockerfile.playwright.report ./docker          
+          docker build -t $REGISTRY/test-report-${PR_NUMBER} -f docker/Dockerfile.playwright.report .          
           docker push $REGISTRY/test-report-${PR_NUMBER}
 
       - name: Deploy to server
