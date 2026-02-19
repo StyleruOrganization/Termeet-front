@@ -56,6 +56,7 @@ jobs:
               --name pr-${PR_NUMBER} \
               -e VIRTUAL_HOST=${DOMAIN} \
               -e LETSENCRYPT_EMAIL=${EMAIL} \
+              -e LETSENCRYPT_HOST=${DOMAIN} \
               --network nginx-proxy \
               --restart unless-stopped \
               ${REGISTRY}/pr-${PR_NUMBER}

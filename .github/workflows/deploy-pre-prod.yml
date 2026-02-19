@@ -54,7 +54,8 @@ jobs:
             docker run -d \
               --name termeet \
               -e VIRTUAL_HOST=${DOMAIN} \
-               -e LETSENCRYPT_EMAIL=${EMAIL} \
+              -e LETSENCRYPT_EMAIL=${EMAIL} \
+              -e LETSENCRYPT_HOST=${DOMAIN} \
               --network nginx-proxy \
               --restart unless-stopped \
               ${REGISTRY}/termeet:latest

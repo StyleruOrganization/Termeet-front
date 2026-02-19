@@ -84,6 +84,7 @@ jobs:
               --name test-report-${PR_NUMBER} \
               -e VIRTUAL_HOST=${DOMAIN} \
               -e LETSENCRYPT_EMAIL=${EMAIL} \
+              -e LETSENCRYPT_HOST=${DOMAIN} \
               --network nginx-proxy \
               --restart unless-stopped \
               ${REGISTRY}/test-report-${PR_NUMBER}
