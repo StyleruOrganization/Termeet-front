@@ -14,7 +14,7 @@ export const SelectWithForm = ({
   const methods = useForm<ICreateMeet>();
 
   return (
-    <div style={{ padding: "25px" }}>
+    <div style={{ padding: "10px" }}>
       <FormProvider {...methods}>
         <Select
           label={label}
