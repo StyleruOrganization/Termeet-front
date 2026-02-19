@@ -19,10 +19,9 @@ jobs:
       fail-fast: true
     runs-on: ubuntu-latest
     env:
-      CONTAINER_RIGISTRY: ${{ secrets.CONTAINER_REGISTRY }}
+      REGISTRY: cr.yandex/${{ secrets.CONTAINER_REGISTRY }}
       Y_TOKEN: ${{ secrets.Y_TOKEN }}
       PR_NUMBER: ${{ github.event.number }}
-      REGISTRY: cr.yandex/${{ secrets.CONTAINER_REGISTRY }}
       DOMAIN: test-report-${{ github.event.number }}.termeet-dev.ru
     
     steps:
@@ -59,8 +58,8 @@ jobs:
       - name: Build and push Docker image
         if: ${{ failure() && steps.run-tests.conclusion == 'failure' && matrix.command == 'pwt:test' }}
         run: |
-          docker build -t cr.yandex/$CONTAINER_REGISTRY/test-report-${PR_NUMBER} -f Dockerfile.playwright.report ./docker          
-          docker push cr.yandex/$CONTAINER_RIGISTRY/test-report-${$PR_NUMBER}
+          docker build -t $REGISTRY/test-report-${PR_NUMBER} -f Dockerfile.playwright.report ./docker          
+          docker push $REGISTRY/test-report-${PR_NUMBER}
 
       - name: Deploy to server
         if: ${{ failure() && steps.run-tests.conclusion == 'failure' && matrix.command == 'pwt:test' }}
