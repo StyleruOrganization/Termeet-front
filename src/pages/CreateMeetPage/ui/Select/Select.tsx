@@ -23,11 +23,11 @@ export const Select = ({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const {
     setValue,
-    watch,
+    // watch,
     trigger,
     formState: { isDirty },
   } = useFormContext<ICreateMeet>();
-  const fieldValue = watch(name);
+  // const fieldValue = watch(name);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -128,13 +128,10 @@ export const Select = ({
             {options.map(time => {
               console.log("render Option time");
               return (
-                <li
-                  key={time}
-                  //  className={styles.TimeSelect__Item}
-                >
+                <li key={time}>
                   <button
                     type='button'
-                    className={`${styles.TimeSelect__Option} ${fieldValue === time ? styles.TimeSelect__Option_selected : ""}`}
+                    // className={`${styles.TimeSelect__Option} ${fieldValue === time ? styles.TimeSelect__Option_selected : ""}`}
                     data-test-id={"select-option-" + name}
                     onClick={() => {
                       setValue(name, time, {
