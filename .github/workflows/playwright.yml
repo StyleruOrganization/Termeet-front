@@ -59,8 +59,7 @@ jobs:
       - name: Build and push Docker image
         if: ${{ failure() && steps.run-tests.conclusion == 'failure' && matrix.command == 'pwt:test' }}
         run: |
-          docker build \
-            -t cr.yandex/$CONTAINER_RIGISTRY/test-report-{$PR_NUMBER} .
+          docker build -t cr.yandex/$CONTAINER_RIGISTRY/test-report-{$PR_NUMBER} docker/Dockerfile.playwright.report
           docker push cr.yandex/$CONTAINER_RIGISTRY/test-report-{$PR_NUMBER}
 
       - name: Deploy to server
@@ -81,7 +80,6 @@ jobs:
               --password-stdin \
               cr.yandex
             
-            # Запускаем новый контейнер с конкретным тегом (не latest!)
             docker run -d \
               --name test-report-{$PR_NUMBER} \
               -e VIRTUAL_HOST=${DOMAIN} \
