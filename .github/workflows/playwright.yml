@@ -59,8 +59,8 @@ jobs:
       - name: Build and push Docker image
         if: ${{ failure() && steps.run-tests.conclusion == 'failure' && matrix.command == 'pwt:test' }}
         run: |
-          docker build -t cr.yandex/$CONTAINER_RIGISTRY/test-report-{$PR_NUMBER} docker/Dockerfile.playwright.report
-          docker push cr.yandex/$CONTAINER_RIGISTRY/test-report-{$PR_NUMBER}
+          docker build -t cr.yandex/$CONTAINER_RIGISTRY/test-report-${PR_NUMBER} docker/Dockerfile.playwright.report
+          docker push cr.yandex/$CONTAINER_RIGISTRY/test-report-${$PR_NUMBER}
 
       - name: Deploy to server
         if: ${{ failure() && steps.run-tests.conclusion == 'failure' && matrix.command == 'pwt:test' }}
@@ -72,8 +72,8 @@ jobs:
           envs: PR_NUMBER,REGISTRY,DOMAIN,Y_TOKEN
           script: |
             # Останавливаем и удаляем старый контейнер
-            docker stop test-report-{$PR_NUMBER} 2>/dev/null || true
-            docker rm test-report-{$PR_NUMBER} 2>/dev/null || true
+            docker stop test-report-${PR_NUMBER} 2>/dev/null || true
+            docker rm test-report-${PR_NUMBER} 2>/dev/null || true
 
             echo "${Y_TOKEN}" | docker login \
               --username oauth \
@@ -81,11 +81,11 @@ jobs:
               cr.yandex
             
             docker run -d \
-              --name test-report-{$PR_NUMBER} \
+              --name test-report-${PR_NUMBER} \
               -e VIRTUAL_HOST=${DOMAIN} \
               --network nginx-proxy \
               --restart unless-stopped \
-              ${REGISTRY}/test-report-{$PR_NUMBER}
+              ${REGISTRY}/test-report-${PR_NUMBER}
       - name: Comment PR
         if: ${{ failure() && steps.run-tests.conclusion == 'failure' && matrix.command == 'pwt:test' }}
         uses: actions/github-script@v7
