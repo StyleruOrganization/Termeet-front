@@ -11,6 +11,7 @@ jobs:
       Y_TOKEN: ${{ secrets.Y_TOKEN }}
       REGISTRY: cr.yandex/${{ secrets.CONTAINER_REGISTRY }}
       DOMAIN: termeet-dev.ru
+      EMAIL: ${{ secrets.EMAIL }}
     runs-on: ubuntu-latest
     
     steps:
@@ -39,7 +40,7 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          envs: Y_TOKEN,REGISTRY,DOMAIN
+          envs: Y_TOKEN,REGISTRY,DOMAIN,EMAIL
           script: |
             # Останавливаем и удаляем старый контейнер
             docker stop termeet 2>/dev/null || true
@@ -53,6 +54,8 @@ jobs:
             docker run -d \
               --name termeet \
               -e VIRTUAL_HOST=${DOMAIN} \
+              -e LETSENCRYPT_EMAIL=${EMAIL} \
+              -e LETSENCRYPT_HOST=${DOMAIN} \
               --network nginx-proxy \
               --restart unless-stopped \
               ${REGISTRY}/termeet:latest

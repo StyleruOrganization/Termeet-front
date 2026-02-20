@@ -1,10 +1,6 @@
 name: Playwright Tests
 run-name: "Termeet Playwright Tests"
 
-env:
-  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-
 on:
   pull_request:
     branches: 
@@ -22,6 +18,12 @@ jobs:
             command: pwt:e2e:test
       fail-fast: true
     runs-on: ubuntu-latest
+    env:
+      REGISTRY: cr.yandex/${{ secrets.CONTAINER_REGISTRY }}
+      Y_TOKEN: ${{ secrets.Y_TOKEN }}
+      PR_NUMBER: ${{ github.event.number }}
+      DOMAIN: test-report-${{ github.event.number }}.termeet-dev.ru
+      EMAIL: ${{ secrets.EMAIL }}
     
     steps:
       - name: Checkout
@@ -43,20 +45,81 @@ jobs:
       - name: Run tests
         id: run-tests
         run: |
+          rm -rf playwright/.cache
+          rm -rf test-results
           pnpm run ${{ matrix.command }}
-          
-      - name: Deploy report
+
+      - name: Login to Container Registry
         if: ${{ failure() && steps.run-tests.conclusion == 'failure' && matrix.command == 'pwt:test' }}
-        id: deploy
         run: |
-          DEPLOY_URL=$(npx vercel --cwd playwright-report deploy --target=staging --token=${{ secrets.VERCEL_TOKEN }})
-          echo "DEPLOY_URL=$DEPLOY_URL" >> $GITHUB_OUTPUT
-          
-      - name: Create comment with report link
-        if: ${{ failure() && steps.run-tests.outcome == 'failure' && matrix.command == 'pwt:test'}}
+          echo $Y_TOKEN | docker login \
+            --username oauth \
+            --password-stdin cr.yandex
+
+      - name: Build and push Docker image
+        if: ${{ failure() && steps.run-tests.conclusion == 'failure' && matrix.command == 'pwt:test' }}
+        run: |
+          docker build -t $REGISTRY/test-report-${PR_NUMBER} -f docker/Dockerfile.playwright.report .          
+          docker push $REGISTRY/test-report-${PR_NUMBER}
+
+      - name: Deploy to server
+        if: ${{ failure() && steps.run-tests.conclusion == 'failure' && matrix.command == 'pwt:test' }}
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          envs: PR_NUMBER,REGISTRY,DOMAIN,Y_TOKEN,EMAIL
+          script: |
+            # Останавливаем и удаляем старый контейнер
+            docker stop test-report-${PR_NUMBER} 2>/dev/null || true
+            docker rm test-report-${PR_NUMBER} 2>/dev/null || true
+
+            echo "${Y_TOKEN}" | docker login \
+              --username oauth \
+              --password-stdin \
+              cr.yandex
+            
+            docker run -d \
+              --name test-report-${PR_NUMBER} \
+              -e VIRTUAL_HOST=${DOMAIN} \
+              -e LETSENCRYPT_EMAIL=${EMAIL} \
+              -e LETSENCRYPT_HOST=${DOMAIN} \
+              --network nginx-proxy \
+              --restart unless-stopped \
+              ${REGISTRY}/test-report-${PR_NUMBER}
+      - name: Comment PR
+        if: ${{ failure() && steps.run-tests.conclusion == 'failure' && matrix.command == 'pwt:test' }}
+        uses: actions/github-script@v7
         env:
-          GH_TOKEN: ${{ github.token }}
-          DEPLOY_URL: ${{ steps.deploy.outputs.DEPLOY_URL }}
-        run: |
-          gh pr comment ${{ github.event.pull_request.number }} \
-            --body "🔴 Компонентные тесты упали! Отчет: $DEPLOY_URL"
+          PR_NUMBER: ${{ github.event.number }}
+        with:
+          script: |
+            const prNumber = context.issue.number;
+            const domain = `test-report-${prNumber}.termeet-dev.ru`;
+            const commitSha = context.payload.pull_request.head.sha.substring(0, 7);
+            
+            const body = `## 🚨 Упали Playwright тесты!
+            
+            **Ссылка на отчет:** https://${domain}
+            
+            **Что делать:**
+            - Открыть отчет
+            - Найти упавшие тесты (будут подсвечены красным)
+            - Починить код или обновить cкриншоты
+            
+            **Детали:**
+            - Ветка: \`${context.payload.pull_request.head.ref}\`
+            - Коммит: \`${commitSha}\`
+            - Образ: \`cr.yandex/${{ secrets.CONTAINER_REGISTRY }}/test-report-${prNumber}\`
+            
+            > ⚠️ Отчет будет удален после мержа PR.
+            
+            **Починил?** Заливай фикс! 🔧`;
+            
+            github.rest.issues.createComment({
+              issue_number: prNumber,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });

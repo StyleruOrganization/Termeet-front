@@ -17,7 +17,6 @@
     "check-fsd": "steiger ./src",
     "format:check": "prettier --check .",
     "format:write": "prettier --write .",
-    "pwt:report:deploy": "vercel --cwd playwright-report deploy --target=staging",
     "pwt:test": "playwright test -c playwright-ct.config.ts",
     "pwt:e2e:test": "playwright test",
     "pwt:screens:update": "docker run --rm -v $(pwd)/src:/app/src -v $(pwd)/playwright-ct.config.ts:/app/playwright-ct.config.ts -v $(pwd)/styles:/app/styles -v $(pwd)/playwright-report:/app/playwright-report playwright-test:latest pnpm pwt:test --update-snapshots"
@@ -69,7 +68,6 @@
     "stylelint-selector-bem-pattern": "^4.0.1",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.4",
-    "vercel": "^50.9.6",
     "vite": "^7.3.1",
     "vite-plugin-svgr": "^4.5.0"
   }
