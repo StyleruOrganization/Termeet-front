@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import { CrossIcon } from "@assets/icons/cross";
 import styles from "./ModalWrapper.module.css";
+import { useFocusTrap } from "../../libs/hooks/useFocusTrap";
 import type { IModalWrapperProps } from "./ModalWrapper.types";
 
 export const ModalWrapper = ({
@@ -14,6 +15,7 @@ export const ModalWrapper = ({
   const [isAnimating, setIsAnimating] = useState(false);
   const [isVisible, setVisible] = useState(false);
   const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
 
   // Обработчик закрытия с анимацией
   const handleClose = useCallback(() => {
@@ -31,20 +33,13 @@ export const ModalWrapper = ({
     }
   }, [onClose, isAnimate, animationDuration]);
 
+  useFocusTrap(modalRef, isOpen, handleClose);
+
   useEffect(() => {
     return () => {
       if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
     };
   }, []);
-
-  const handleEscape = useCallback(
-    (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        handleClose();
-      }
-    },
-    [handleClose],
-  );
 
   // Обработчик клика на оверлей
   const handleOverlayClick = useCallback(
@@ -63,13 +58,10 @@ export const ModalWrapper = ({
       document.body.style.overflow = "hidden";
     }
 
-    document.addEventListener("keydown", handleEscape);
-
     return () => {
-      document.removeEventListener("keydown", handleEscape);
       document.body.style.overflow = prev;
     };
-  }, [isOpen, isAnimating, handleEscape]);
+  }, [isOpen, isAnimating]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -94,6 +86,7 @@ export const ModalWrapper = ({
           "--animation-duration": `${animationDuration}ms`,
         } as React.CSSProperties
       }
+      ref={modalRef}
     >
       <div
         className={`${styles.ModalWrapper__ModalContainer} ${isOpen && isVisible ? styles.ModalWrapper__ModalContainer_Opened : ""}`}
