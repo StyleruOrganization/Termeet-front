@@ -12,7 +12,7 @@
   flex: 1 1 310px;
   flex-direction: column;
 
-  max-width: 650px
+  max-width: 575px
 } 
 
 .CreateMeetingPage__Content {
@@ -23,6 +23,7 @@
 .CreateMeetingPage__Content__Title {
   font-size: 12rem;
   line-height: 48px;
+  font-weight: 700;
 
   margin-bottom: 40px
 }
