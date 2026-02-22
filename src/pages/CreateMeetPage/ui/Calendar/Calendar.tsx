@@ -36,10 +36,11 @@ export const Calendar = forwardRef<HTMLDivElement, { minDate?: Date; value?: Dat
           nextLabel={<Arrow className={styles.Calendar__Arrow} />}
           prevLabel={<Arrow className={styles.Calendar__Arrow_Left} />}
           showNeighboringMonth={false}
-          // @ts-expect-error Хз, тоже типы не сходятся, но все воркает, как застилизовать слово внутри span незнаю как
           formatMonthYear={(_, date) => {
+            return formatMonthYearHeading(date);
+          }}
+          navigationLabel={({ date }) => {
             const [month, year] = formatMonthYearHeading(date).split(" ");
-
             return (
               <div className='custom-month-year'>
                 <span className='month'>{month}</span>

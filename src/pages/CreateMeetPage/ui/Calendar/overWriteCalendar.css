@@ -1,8 +1,8 @@
 /* Переопределение стилей с помощью классов из библы */
 
-.react-calendar *{
+.react-calendar * {
   font-size: 5rem;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 24px;
 }
 
@@ -17,7 +17,7 @@
   margin-bottom: 16px;
 }
 
-.react-calendar__month-view__weekdays::after{
+.react-calendar__month-view__weekdays::after {
   position: absolute;
   bottom: -8px;
 
@@ -30,10 +30,10 @@
 }
 
 .react-calendar__month-view__weekdays__weekday--weekend {
-  color: var(--termeet-color-gray-main-60);
+  color: var(--termeet-color-brand-light-100)
 }
 
-abbr{
+abbr {
   text-decoration: none;
 }
 
@@ -54,6 +54,18 @@ abbr{
   aspect-ratio: 1 / 1;
 }
 
-.custom-month-year .month{
+.react-calendar__navigation__arrow:disabled {
+  cursor: not-allowed;
+  opacity: .4;
+  pointer-events: none;
+}
+
+.react-calendar .custom-month-year,
+.react-calendar .custom-month-year * {
+  font-size: 6rem !important;
+  line-height: 117%;
+}
+
+.custom-month-year .year {
   color: var(--termeet-color-brand-light-100)
 }
