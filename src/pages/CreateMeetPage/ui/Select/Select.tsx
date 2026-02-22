@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useFormContext } from "react-hook-form";
+import { useFocusTrap } from "@/shared/libs";
 import { ChevronDown, Check } from "@assets/icons";
 import { InputForm } from "@features/InputForm";
 import styles from "./Select.module.css";
@@ -21,17 +22,19 @@ export const Select = ({
   const [showSuccess, setShowSuccess] = useState(false);
   const [dropdownPosition, setDropdownPosition] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const selectRef = useRef<HTMLDivElement>(null);
   const {
     setValue,
     watch,
     trigger,
     formState: { isDirty },
   } = useFormContext<ICreateMeet>();
+  useFocusTrap(dropdownRef, isOpen, () => setIsOpen(false));
   const fieldValue = watch(name);
 
   useEffect(() => {
     if (!isOpen) return;
-    const input = dropdownRef.current;
+    const input = selectRef.current;
     if (!input) return;
 
     const positions = input.getBoundingClientRect();
@@ -50,13 +53,13 @@ export const Select = ({
   // Закрытие выпадающего списка при клике вне компонента
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      const el = dropdownRef.current;
+      const el = selectRef.current;
 
       if (!el) {
         return;
       }
 
-      if (event.target instanceof Node && !dropdownRef.current?.contains(event.target)) {
+      if (event.target instanceof Node && !selectRef.current?.contains(event.target)) {
         setDropdownPosition("");
         setIsOpen(false);
       }
@@ -102,7 +105,7 @@ export const Select = ({
         } as React.CSSProperties
       }
       className={styles.TimeSelect}
-      ref={dropdownRef}
+      ref={selectRef}
     >
       <InputForm
         name={name}
@@ -123,7 +126,7 @@ export const Select = ({
         <ChevronDown className={`${styles.TimeSelect__OpenIcon} ${isOpen ? styles.TimeSelect__Icon_open : ""}`} />
       </button>
       {isOpen && dropdownPosition && (
-        <div className={styles.TimeSelect__Dropdown}>
+        <div className={styles.TimeSelect__Dropdown} ref={dropdownRef}>
           <ul className={styles.TimeSelect__List}>
             {options.map(time => {
               console.log("render Option time");
