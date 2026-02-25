@@ -33,8 +33,3 @@ jobs:
             docker stop pr-${PR_NUMBER} 2>/dev/null || true
             docker rm pr-${PR_NUMBER} 2>/dev/null || true
             docker rmi ${REGISTRY}/pr-${PR_NUMBER} || true
-            # удаляем контейнер с отчетом
-            
-            docker stop test-report-${PR_NUMBER} 2>/dev/null || true
-            docker rm test-report-${PR_NUMBER} 2>/dev/null || true
-            docker rmi ${REGISTRY}/test-report-${PR_NUMBER} || true

@@ -2,7 +2,15 @@ import { useMeetContext } from "@entities/Meet";
 import styles from "./TableCell.module.css";
 import type { TableCellProps } from "./TableCell.types";
 
-export const TableCell = ({ id, isSelected, opacityPercent, users }: TableCellProps) => {
+export const TableCell = ({
+  id,
+  isSelected,
+  opacityPercent,
+  users,
+  isDisabled,
+  isShowBefore,
+  isShowAfter,
+}: TableCellProps) => {
   const setHoveredUsers = useMeetContext(store => store.setHoveredUsers);
   const isEditingMode = useMeetContext(store => store.isEditing);
   const hoveredUser = useMeetContext(store => store.hoveredUser);
@@ -11,7 +19,7 @@ export const TableCell = ({ id, isSelected, opacityPercent, users }: TableCellPr
     e.preventDefault();
     if (isEditingMode || hoveredUser) return;
 
-    setHoveredUsers(users);
+    setHoveredUsers(users || []);
   };
 
   const handlePointerLeave: React.PointerEventHandler = e => {
@@ -27,7 +35,10 @@ export const TableCell = ({ id, isSelected, opacityPercent, users }: TableCellPr
       onPointerMove={handleCellChoose}
       onPointerLeave={handlePointerLeave}
       data-id={id}
-      className={styles.TableCell}
+      data-disabled={isDisabled ? "true" : "false"}
+      data-show-before={isShowBefore ? "true" : "false"}
+      data-show-after={isShowAfter ? "true" : "false"}
+      className={styles.TableCell + (isDisabled ? " " + styles.TableCell_disabled : "")}
     />
   );
 };

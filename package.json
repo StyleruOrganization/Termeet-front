@@ -8,18 +8,17 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "prepare": "husky",
-    "eslint:fix": "eslint . --fix",
     "stylelint:fix": "stylelint **/*.css --cache-location ./node_modules/.stylelintcache --fix",
     "build:tokens": "style-dictionary build -c tokens-config.json",
-    "lint:js": "eslint . --max-warnings=0",
+    "lint:eslint": "eslint . --max-warnings=0",
     "lint:css": "stylelint **/*.css --cache-location ./node_modules/.stylelintcache",
     "type-check": "tsc -b",
     "check-fsd": "steiger ./src",
     "format:check": "prettier --check .",
     "format:write": "prettier --write .",
     "pwt:test": "playwright test -c playwright-ct.config.ts",
-    "pwt:e2e:test": "playwright test",
-    "pwt:screens:update": "docker run --rm -v $(pwd)/src:/app/src -v $(pwd)/playwright-ct.config.ts:/app/playwright-ct.config.ts -v $(pwd)/styles:/app/styles -v $(pwd)/playwright-report:/app/playwright-report playwright-test:latest pnpm pwt:test --update-snapshots"
+    "pwt:e2e:test": "NODE_ENV=test playwright test",
+    "pwt:screens:update": "docker run --rm -v $(pwd)/src:/app/src -v $(pwd)/playwright-ct.config.ts:/app/playwright-ct.config.ts -v $(pwd)/playwright-report:/app/playwright-report playwright-test:latest pnpm pwt:test"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -31,17 +30,19 @@
   },
   "lint-staged": {
     "*.{js,jsx,mjs,ts,tsx}": [
-      "npm run eslint:fix",
+      "npm run lint:eslint",
       "prettier --write ."
     ],
     "*.css": "npm run stylelint:fix"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.1",
-    "@estruyf/github-actions-reporter": "^1.10.0",
-    "@feature-sliced/steiger-plugin": "^0.5.7",
+    "@cerios/openapi-to-zod": "^1.5.1",
+    "@eslint/js": "^9.39.1",    "@feature-sliced/steiger-plugin": "^0.5.7",
     "@playwright/experimental-ct-react": "^1.58.0",
     "@playwright/test": "^1.58.0",
+    "@tanstack/eslint-plugin-query": "^5.91.4",
+    "@tanstack/react-query": "^5.90.21",
+    "@tanstack/react-query-devtools": "^5.91.3",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
@@ -56,6 +57,7 @@
     "globals": "^16.5.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
+    "msw": "^2.12.10",
     "prettier": "^3.7.4",
     "react-calendar": "^6.0.0",
     "react-hook-form": "^7.71.1",
@@ -70,5 +72,10 @@
     "typescript-eslint": "^8.46.4",
     "vite": "^7.3.1",
     "vite-plugin-svgr": "^4.5.0"
+  },
+  "msw": {
+    "workerDirectory": [
+      "src/shared/mocks"
+    ]
   }
 }

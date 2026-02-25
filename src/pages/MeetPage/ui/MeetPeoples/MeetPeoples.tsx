@@ -1,8 +1,14 @@
-import { useMeetContext } from "@entities/Meet";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "react-router";
+import { MeetQueries, useMeetContext } from "@/entities/Meet";
 import styles from "./MeetPeoples.module.css";
 
 export const MeetPeoples = () => {
-  const users = useMeetContext(store => store.users);
+  const { hash = "" } = useParams();
+  const { data: users = [] } = useQuery({
+    ...MeetQueries.meet(hash),
+    select: data => data.users,
+  });
   const hoveredUsers = useMeetContext(store => store.hoveredUsers);
   const newSelectedSlots = useMeetContext(store => store.newSelectedSlots);
   const setHoveredUser = useMeetContext(store => store.setHoveredUser);
@@ -14,8 +20,8 @@ export const MeetPeoples = () => {
 
   return (
     <>
-      {users.length > 0 ? (
-        <div className={styles.MeetPeoples}>
+      {(users.length || 0) > 0 ? (
+        <div data-test-id='meet-people' className={styles.MeetPeoples}>
           <h3>
             Проголосовавшие:{" "}
             {hoveredUsers.length ? <span className={styles.MeetPeoples__Count}>{hoveredUsers.length} / </span> : null}
@@ -24,6 +30,7 @@ export const MeetPeoples = () => {
           <div className={styles.MeetPeoples__Users__Container}>
             {users.map(user => (
               <span
+                key={user}
                 onClick={e => {
                   e.preventDefault();
                   e.stopPropagation();

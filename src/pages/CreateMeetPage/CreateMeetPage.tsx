@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, type SubmitHandler, FormProvider } from "react-hook-form";
-import { useNavigate } from "react-router";
+import { useCreateMeet } from "./api";
 import styles from "./CreateMeetPage.module.css";
 import { useTouchSelectDate } from "./lib";
 import { createMeetSchema } from "./model";
@@ -14,13 +14,23 @@ export function CreateMeetPage() {
   });
   const { handleSubmit, reset } = methods;
   const { stepCreating, isTouch, calendarRef, setStepForm } = useTouchSelectDate(methods);
-  const navigate = useNavigate();
+  const { createMeet, isPending } = useCreateMeet({
+    onSuccess: () => {
+      reset();
+    },
+  });
 
   const onSubmit: SubmitHandler<ICreateMeet> = async data => {
-    console.log(data);
-    reset();
-    navigate("/meet");
+    createMeet(data);
   };
+
+  if (isPending) {
+    return (
+      <div className={styles.CreateMeetingPage__Content}>
+        <h1 className={styles.CreateMeetingPage__Content__Title}>Создание встречи...</h1>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.CreateMeetingPage__Content}>

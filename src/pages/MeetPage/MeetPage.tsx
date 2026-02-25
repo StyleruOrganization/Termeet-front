@@ -1,5 +1,6 @@
-import { MeetProvider } from "@/entities/Meet";
-import { useMeetingInfo, useInitialContextValue } from "./lib";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { useParams } from "react-router";
+import { MeetProvider, MeetQueries } from "@/entities/Meet";
 import styles from "./MeetPage.module.css";
 import { MeetHeader } from "./ui/MeetHeader";
 import { MeetModal } from "./ui/MeetModal";
@@ -7,25 +8,21 @@ import { MeetPeoples } from "./ui/MeetPeoples";
 import { MeetTable } from "./ui/MeetTable/MeetTable";
 
 export function MeetPage() {
-  const meetingInfo = useMeetingInfo({
-    withSlots: true,
-  });
+  const { hash } = useParams();
+  const { data, isLoading } = useSuspenseQuery(MeetQueries.meet(hash || ""));
 
-  const { formattedUserSlots, maxSelectCount, users } = useInitialContextValue(meetingInfo.userSlots);
+  if (!hash) {
+    return <h1>Необходим идентификатор встречи</h1>;
+  }
+  if (isLoading) {
+    return <h1>Загрузка...</h1>;
+  }
 
   return (
-    <MeetProvider oldSelectedSlots={formattedUserSlots} maxSelectCount={maxSelectCount} users={users}>
-      <div className={styles.MeetPage}>
-        <MeetHeader
-          duration={meetingInfo.meeting.duration}
-          description={meetingInfo.meeting.description}
-          name={meetingInfo.meeting.name}
-        />
-        <MeetTable
-          meeting_days={meetingInfo.meeting.meeting_days}
-          start_time={meetingInfo.meeting.start_time}
-          end_time={meetingInfo.meeting.end_time}
-        />
+    <MeetProvider>
+      <div data-test-id='meet-page' className={styles.MeetPage}>
+        <MeetHeader duration={data.duration} description={data.description} name={data.name} />
+        <MeetTable meeting_days={data.meeting_days} timeRanges={data.timeRanges} />
         <MeetPeoples />
         <MeetModal />
       </div>

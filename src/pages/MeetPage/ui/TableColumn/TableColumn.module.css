@@ -2,19 +2,46 @@
   display: flex;
   flex-direction: column;
 
+  height: 100%;
+}
+
+.TableColumnRange {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
   cursor: pointer; 
   user-select: none; /* Стандартный синтаксис */
+}
+
+.TableColumnActiveRange {
+  width: 100%;
+  margin: 0 -1px 0 0;
 }
 
 .TableColumnTitle {
   overflow: hidden; /* скрыть переполнение */
 
-  line-height:100%;
+  line-height: 100%;
   margin-left: 3px;
   max-width: 100%; /* ограничить ширину */
+
+  min-height: 24px;
   text-overflow: ellipsis; /* троеточие */
 
   white-space: nowrap; /* запрет переноса */
+}
+
+.TableColumnSeparator {
+  height: 46px;
+
+  text-align: center;
+}
+
+@media(width<=768px){
+  .TableColumnSeparator {
+    height: 36px;
+  }
 }
 
 

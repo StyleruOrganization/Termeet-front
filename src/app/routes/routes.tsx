@@ -8,7 +8,7 @@ export const Routes = () => {
     <ReactRoutes>
       <Route path='/' element={<Layout />}>
         <Route index element={<CreateMeetPage />} />
-        <Route path='meet' element={<MeetPage />} />
+        <Route path='/meet/:hash?' element={<MeetPage />} />
       </Route>
     </ReactRoutes>
   );

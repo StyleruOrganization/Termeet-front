@@ -1,9 +1,16 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { launchWorker } from "@shared/mocks";
 import { App } from "../App";
 
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-);
+async function startApp() {
+  await launchWorker();
+
+  createRoot(document.getElementById("root")!).render(
+    <StrictMode>
+      <App />
+    </StrictMode>,
+  );
+}
+
+startApp();

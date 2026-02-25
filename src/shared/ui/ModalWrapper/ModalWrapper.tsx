@@ -93,7 +93,7 @@ export const ModalWrapper = ({
         role='dialog'
         aria-modal='true'
       >
-        <button className={styles.ModalWrapper__CloseButton} onClick={handleClose}>
+        <button data-test-id='close-modal' className={styles.ModalWrapper__CloseButton} onClick={handleClose}>
           <CrossIcon />
         </button>
 

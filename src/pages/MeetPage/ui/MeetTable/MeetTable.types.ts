@@ -1,3 +1,3 @@
-import type { IMeetInfo } from "@/entities/Meet";
+import type { IMeet } from "@/entities/Meet";
 
-export type MeetTableProps = Pick<IMeetInfo["meeting"], "meeting_days" | "start_time" | "end_time">;
+export type MeetTableProps = Pick<IMeet, "meeting_days" | "timeRanges">;

@@ -129,7 +129,6 @@ export const Select = ({
         <div className={styles.TimeSelect__Dropdown} ref={dropdownRef}>
           <ul className={styles.TimeSelect__List}>
             {options.map(time => {
-              console.log("render Option time");
               return (
                 <li key={time}>
                   <button
