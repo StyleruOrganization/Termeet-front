@@ -1,9 +1,5 @@
 export interface TableColumnProps {
   /**
-   * Массив data-id для ячеек
-   */
-  cellIds: string[];
-  /**
    * id столбца
    */
   columnId: string;
@@ -11,4 +7,8 @@ export interface TableColumnProps {
    * Ширина столбца
    */
   columnWidth?: number;
+  /**
+   * Промежутки времени для всех дней
+   */
+  timeRanges: [string, string][];
 }

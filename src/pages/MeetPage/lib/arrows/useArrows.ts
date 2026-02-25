@@ -30,7 +30,6 @@ export function useArrows(columnsContainerRef: React.RefObject<HTMLDivElement | 
 
   // Обработчики прокрутки
   const onScrollLeft = () => {
-    console.log("scrollLeft");
     if (!columnsContainerRef.current) return;
     const columnContainerEl = columnsContainerRef.current;
 
@@ -49,11 +48,9 @@ export function useArrows(columnsContainerRef: React.RefObject<HTMLDivElement | 
   };
 
   const onScrollRight = () => {
-    console.log("scrollRight");
     if (!columnsContainerRef.current) return;
     const columnContainerEl = columnsContainerRef.current;
     // Делаем подскролл к ближайшему правому столбцу
-    console.log("scrollRight", "scrollRight", columnContainerEl.scrollLeft, "columnWidth", columnWidth);
 
     let scrollDistance = 0;
     if (Math.ceil(columnContainerEl.scrollLeft) % columnWidth === 0) {

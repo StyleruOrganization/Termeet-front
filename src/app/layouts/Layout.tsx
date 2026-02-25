@@ -1,5 +1,6 @@
+import { Suspense } from "react";
 import { Outlet } from "react-router";
-import { Header } from "@shared/ui";
+import { Loader, Header } from "@/shared/ui";
 import styles from "./Layout.module.css";
 
 // Global Styles
@@ -12,7 +13,9 @@ export const Layout = () => (
   <>
     <Header />
     <div className={styles.MainContainer}>
-      <Outlet />
+      <Suspense fallback={<Loader />}>
+        <Outlet />
+      </Suspense>
     </div>
   </>
 );

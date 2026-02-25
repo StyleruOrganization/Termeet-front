@@ -1,78 +1,65 @@
-export interface Meet {
-  id: number;
+// Данные которые, положим в кеш обработанные и подготовленные для отрисовки
+export interface IMeet {
   name: string;
   description?: string;
   link?: string;
-  hash: string;
   /**
     @example  HH:MM
   */
-  duration: string;
+  duration?: string;
   /**
+   * Дни в которые проходит встреча
     @example  ["2026-02-03"]
   */
   meeting_days: string[];
   /**
-    @example  09:00:00
-  */
-  start_time: string;
+   * Для бокового времени, промежутки который могут быть во всех днях. Максимум два.
+   */
+  timeRanges: [string, string][];
+
   /**
-    @example  17:00:00
-  */
-  end_time: string;
+   * Все пользователи которые голосовали
+   */
+  users: string[];
+  /**
+   * Максимальное кол-во людей выбравших одно время
+   */
+  maxSelectCount: number;
+
+  // Ключ - дата, значение - промежутки которые могут быть выбраны пользователем. Максимум два. (Смещения из-за часовых поясов)
+  // И слоты - мапа ключ - время, значение - массив пользователей
+  timeInfo: Map<string, { timeRanges: [string, string][]; userSlots: Map<string, string[]> }>;
 }
 
-// Слот не может быть в двух разных днях, ага, хер там, может, потом будем с этим разбираться
-type Slot = {
-  /**
-   * @example  2026-02-03T07:00:00Z
-   */
-  start_time: string;
-  /**
-   * @example  2026-02-03T17:00:00Z
-   */
-  end_time: string;
-};
-
-export interface IMeetInfo {
-  meeting: Meet;
-  // Мб добавить какой-то айдишник для каждого юзера
-  userSlots: { user: string; slots: Slot[] }[];
+// Слоты для бека
+interface IPreparedNewSlots {
+  slots: string[][];
 }
-
-// key - дата ("2026-02-03"), value - Map где ключ время, значение - массив пользователей для этого времени
-export type SelectedSlots = Map<string, Map<string, string[]>>;
 
 export interface IMeetContext {
-  // getColumn: (columnId: string) => Map<string, string[]>;
   setSelectNewSell: (date: string, time: string, isRemove?: boolean) => void;
-  saveNewSelectedSlots: (userName: string) => void;
+  // Сохраняем юзеров которых нужно подсветить при наведении на слот
   setHoveredUsers: (users: string[]) => void;
+  // Сохраняем юзера чьи слоты нужно подсветить
   setHoveredUser: (user: string) => void;
+  // Режим выбора слотов
   setIsEditing: (isEditing: boolean) => void;
+  // Очищаем новые выбранные слоты
   clearNewSelectedSlots: () => void;
   // Модалка для имени пользователя
   setIsModalOpen: (isOpen: boolean) => void;
+  // Готовим слоты для бека, делаем отрезки из мапы
+  getPreparedNewSlots: () => IPreparedNewSlots;
+  // Получаем новые слоты в виде мапы
+  getNewSelectedSlots: () => IMeetContext["newSelectedSlots"];
   // _+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+
 
   // Юзер пока не известен поэтому просто Map
   newSelectedSlots: Map<string, string[]>;
   /**
-   * Старые слоты с бека, которые пришли
-   */
-  oldSelectedSlots: SelectedSlots;
-  /**
-   * Максимальное кол-во людей выбравших одно время
-   */
-  maxSelectCount: number;
-  /**
    * true если пользователь выбирает время
    */
   isEditing: boolean;
-  /**
-   * Пользователи которые уже проголосовали
-   */
-  users: string[];
   /**
    * Пользователи которых нужно выделить при наведении на слот
    */

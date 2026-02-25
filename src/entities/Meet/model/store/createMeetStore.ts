@@ -6,23 +6,21 @@ export type IMeetStore = ReturnType<typeof createMeetStore>;
 export const createMeetStore = (initProps?: Partial<IMeetContext>) => {
   const DEFAULT_PROPS: IMeetContext = {
     newSelectedSlots: new Map(),
-    oldSelectedSlots: new Map(),
-    maxSelectCount: 0,
     isEditing: false,
-    users: [],
     hoveredUsers: [],
     hoveredUser: "",
     isModalOpen: false,
     setSelectNewSell: () => {},
-    saveNewSelectedSlots: () => {},
     setHoveredUsers: () => {},
     setHoveredUser: () => {},
     setIsEditing: () => {},
     clearNewSelectedSlots: () => {},
     setIsModalOpen: () => {},
+    getPreparedNewSlots: () => ({ slots: [] }),
+    getNewSelectedSlots: () => new Map(),
   };
 
-  return createStore<IMeetContext>()(set => ({
+  return createStore<IMeetContext>()((set, get) => ({
     ...DEFAULT_PROPS,
     ...initProps,
     setSelectNewSell: (date, time, isRemove = false) => {
@@ -42,40 +40,57 @@ export const createMeetStore = (initProps?: Partial<IMeetContext>) => {
         };
       });
     },
-    saveNewSelectedSlots: userName => {
-      set(state => {
-        const oldSelectedSlots = new Map(state.oldSelectedSlots);
-        const newSelectedSlots = new Map(state.newSelectedSlots);
-        let maxSelectCountNew = state.maxSelectCount;
+    getPreparedNewSlots: () => {
+      const newSelectedSlots = get().newSelectedSlots;
+      const allSlots: Date[] = [];
 
-        const newSelectedEntries = Array.from(newSelectedSlots.entries());
+      newSelectedSlots.forEach((times, date) => {
+        times.forEach(time => {
+          const localDate = new Date(`${date}T${time}`);
 
-        for (const [date, times] of newSelectedEntries) {
-          if (!oldSelectedSlots.has(date)) {
-            oldSelectedSlots.set(date, new Map());
-          }
-          const oldSelectedSlotsDate = oldSelectedSlots.get(date);
+          allSlots.push(localDate);
+        });
+      });
 
-          for (const time of times) {
-            if (!oldSelectedSlotsDate?.has(time)) {
-              oldSelectedSlotsDate?.set(time, []);
-            }
-            const countPeoples = oldSelectedSlotsDate?.get(time)?.length || 0;
-            oldSelectedSlotsDate?.set(time, [...(oldSelectedSlotsDate?.get(time) || []), userName]);
+      // Сортируем по возрастанию даты и времени
+      allSlots.sort((a, b) => a.getTime() - b.getTime());
 
-            if (countPeoples + 1 > maxSelectCountNew) {
-              maxSelectCountNew = countPeoples + 1;
-            }
-          }
+      console.log("allSlots", allSlots);
+
+      // Группируем в непрерывные отрезки
+      const slots: string[][] = [];
+      let currentSegment: Date[] = [];
+
+      allSlots.forEach((slot, index) => {
+        if (index === 0) {
+          currentSegment = [slot];
+          return;
         }
 
-        return {
-          oldSelectedSlots,
-          newSelectedSlots,
-          maxSelectCount: maxSelectCountNew,
-          users: [...state.users, userName],
-        };
+        // Если слоты из одного дня по местному и они отличаются на 30 минут
+        if (
+          slot.getDate() === currentSegment[currentSegment.length - 1].getDate() &&
+          slot.getTime() - currentSegment[currentSegment.length - 1].getTime() === 30 * 60 * 1000
+        ) {
+          currentSegment.push(slot);
+          return;
+        } else {
+          slots.push([currentSegment[0].toISOString(), currentSegment[currentSegment.length - 1].toISOString()]);
+          currentSegment = [slot];
+        }
       });
+
+      // Добавляем последний отрезок
+      if (currentSegment.length > 0) {
+        slots.push([currentSegment[0].toISOString(), currentSegment[currentSegment.length - 1].toISOString()]);
+      }
+
+      return {
+        slots,
+      };
+    },
+    getNewSelectedSlots: () => {
+      return get().newSelectedSlots;
     },
     setHoveredUser: hoveredUser => {
       set(() => ({

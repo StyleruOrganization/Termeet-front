@@ -3,28 +3,26 @@ import { generateTimeOptions } from "@/shared/libs";
 import { Arrow } from "@assets/icons";
 import { useMeetContext } from "@entities/Meet";
 import styles from "./MeetTable.module.css";
-import { useColumnWidth, useArrows, getCellIds } from "../../lib";
+import { useColumnWidth, useArrows } from "../../lib";
 import { TableColumn } from "../TableColumn/TableColumn";
 import type { MeetTableProps } from "./MeetTable.types";
 
-export const MeetTable = ({ start_time, end_time, meeting_days }: MeetTableProps) => {
+export const MeetTable = ({ timeRanges, meeting_days }: MeetTableProps) => {
   const { columnContainerRef, measureContainerRef, columnWidth, calculateColumnWidth, daysVisible } =
     useColumnWidth(meeting_days);
   const { onScrollLeft, onScrollRight, updateArrows, arrowsState } = useArrows(columnContainerRef, columnWidth);
   const setHoveredUsers = useMeetContext(store => store.setHoveredUsers);
   const setHoveredUser = useMeetContext(store => store.setHoveredUser);
 
-  const cellIds = useMemo(
-    () => getCellIds({ start_time, end_time, meeting_days }),
-    [start_time, end_time, meeting_days],
-  );
-
   const timeOptions = useMemo(() => {
-    const times = generateTimeOptions(start_time, end_time, 60);
-    return times.map(([hours, minutes]) => {
-      return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
+    return timeRanges.map(([startTime, endTime]) => {
+      const times = generateTimeOptions(startTime, endTime, 60);
+
+      return times.map(([hours, minutes]) => {
+        return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
+      });
     });
-  }, [start_time, end_time]);
+  }, [timeRanges]);
 
   useEffect(() => {
     const columnContainer = columnContainerRef.current;
@@ -60,9 +58,30 @@ export const MeetTable = ({ start_time, end_time, meeting_days }: MeetTableProps
 
   return (
     <div className={styles.MeetTable}>
-      <div className={styles.MeetTable__Times}>
-        {timeOptions.map(timeOption => (
-          <span key={timeOption}>{timeOption}</span>
+      <div className={styles.MeetTable__TimesContainer}>
+        {timeOptions.map((timePeriodOpitions, indexPeriods) => (
+          <div key={indexPeriods}>
+            <div
+              className={
+                styles.MeetTable__TimesPeriod +
+                (indexPeriods < timeOptions.length - 1 ? " " + styles.MeetTable__TimesPeriod_beforeSepate : "")
+              }
+              key={`period-${indexPeriods}`}
+              style={
+                {
+                  "--size-factor": `${timePeriodOpitions.at(-1)}:00` !== timeRanges[indexPeriods].at(-1) ? "1" : "0",
+                } as React.CSSProperties
+              }
+            >
+              {timePeriodOpitions.map(timeOption => (
+                <span key={timeOption}>{timeOption}</span>
+              ))}
+            </div>
+            {indexPeriods < timeOptions.length - 1 &&
+              Number(timeOptions[indexPeriods][timePeriodOpitions.length - 1].split(":")[0]) -
+                Number(timeRanges[indexPeriods + 1][0].split(":")[0]) !=
+                -1 && <div className={styles.MeetTable__TimesPeriodSeparator}>...</div>}
+          </div>
         ))}
       </div>
       <div ref={measureContainerRef} className={styles.MeetTable__ColumnsWrapper}>
@@ -71,14 +90,14 @@ export const MeetTable = ({ start_time, end_time, meeting_days }: MeetTableProps
           className={styles.MeetTable__Columns}
           style={daysVisible > 0 ? { maxWidth: `${daysVisible * columnWidth}px` } : undefined}
         >
-          {Object.keys(cellIds).map((column, index) => (
+          {meeting_days.map((columnId, index) => (
             <div
               key={index}
               style={{ width: `${columnWidth}px` }}
-              data-column-id={column}
+              data-column-id={columnId}
               className={styles.MeetTable__ColumnWrapper}
             >
-              <TableColumn columnWidth={columnWidth} key={index} columnId={column} cellIds={cellIds[column]} />
+              <TableColumn timeRanges={timeRanges} columnWidth={columnWidth} key={index} columnId={columnId} />
             </div>
           ))}
         </div>

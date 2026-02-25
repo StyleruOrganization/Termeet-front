@@ -1,6 +1,7 @@
-import { BrowserRouter as Router, Outlet } from "react-router";
-import { Header } from "@shared/ui";
-import styles from "./layouts/Layout.module.css";
+import { QueryClientProvider } from "@tanstack/react-query";
+// import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { BrowserRouter as Router } from "react-router";
+import { queryClient } from "@shared/api";
 import { Routes } from "./routes/routes";
 
 // Global Styles
@@ -11,17 +12,11 @@ import "./styles/variables.css";
 
 export const App = () => {
   return (
-    <Router>
-      <Routes />
-    </Router>
+    <QueryClientProvider client={queryClient}>
+      <Router>
+        <Routes />
+      </Router>
+      {/* <ReactQueryDevtools /> */}
+    </QueryClientProvider>
   );
 };
-
-export const Layout = () => (
-  <>
-    <Header />
-    <div className={styles.MainContainer}>
-      <Outlet />
-    </div>
-  </>
-);

@@ -29,12 +29,14 @@ export const MeetHeader = ({ duration, description, name }: MeetHeaderProps) => 
       <div className={styles.MeetHeader__Info}>
         <div className={styles.MeetHeader__Info__Wrapper}>
           <div className={styles.MeetHeader__Info__Title}>
-            <h2>{name}</h2>
+            <h2 data-test-id='meet-name'>{name}</h2>
             <button className={styles.MeetHeader__Info__Title__EditButton}>
               <PencilIcon />
             </button>
           </div>
-          <div className={styles.MeetHeader__Info__Desc}>{description}</div>
+          <div className={styles.MeetHeader__Info__Desc} data-test-id='meet-description'>
+            {description}
+          </div>
           <span className={styles.MeetHeader__Info__DurationBadge}>
             <ClockIcon />
             <span>{formattedDuration}</span>
@@ -53,6 +55,7 @@ export const MeetHeader = ({ duration, description, name }: MeetHeaderProps) => 
             clearNewSelectedSlots();
           }}
           className={styles.Button + " " + styles.MeetHeader__Time__Final}
+          data-test-id='cancel-meet-button'
         >
           {isEditing ? "Отмена" : "Выбрать итоговое время"}
         </button>
@@ -66,6 +69,7 @@ export const MeetHeader = ({ duration, description, name }: MeetHeaderProps) => 
           }}
           disabled={isEditing && newSelectedSlotsEmpty}
           className={styles.Button + " " + styles.MeetHeader__Time__Choose}
+          data-test-id='edit-mode-meet-button'
         >
           {isEditing ? "Сохранить" : "Выбрать время"}
         </button>

@@ -6,6 +6,7 @@ import globals from "globals";
 import tseslint from "typescript-eslint";
 import eslintConfigPrettier from "eslint-config-prettier";
 import fsdPlugin from "eslint-plugin-fsd-lint";
+import pluginQuery from "@tanstack/eslint-plugin-query";
 
 export default [
   {
@@ -15,6 +16,8 @@ export default [
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,
+  ...pluginQuery.configs["flat/recommended"],
+  eslintConfigPrettier,
   {
     files: ["**/*.{ts,tsx,js,jsx}"],
     languageOptions: {
@@ -47,6 +50,7 @@ export default [
       ...reactHooks.configs.recommended.rules,
       ...importPlugin.configs.recommended.rules,
       ...importPlugin.configs.typescript.rules,
+      ...pluginQuery.configs.recommended.rules,
       "@typescript-eslint/ban-ts-comment": "off",
       "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
       "no-multiple-empty-lines": ["error", { max: 1 }],
@@ -86,5 +90,4 @@ export default [
     files: ["**/*.js"],
     ...tseslint.configs.disableTypeChecked,
   },
-  eslintConfigPrettier,
 ];

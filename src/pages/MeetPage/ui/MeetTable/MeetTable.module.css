@@ -10,6 +10,8 @@
 .MeetTable__ColumnsWrapper {
   width: 100%;
 
+  align-self: start;
+
   min-width: 0;
 }
 
@@ -43,12 +45,10 @@
   width: 100%
 }
 
-.MeetTable__Times {
+.MeetTable__TimesPeriod {
   display: flex;
   gap: 66px;
   flex-direction: column;
-
-  padding-top: 43px;
 
   align-self: start;
   margin-right: 20px;
@@ -56,6 +56,27 @@
   span{
     line-height: 100%;
   }
+}
+
+.MeetTable__TimesContainer {
+  display: flex;
+  flex-direction: column;
+
+  padding-top: 45px;
+
+  align-self: start;
+}
+
+.MeetTable__TimesPeriodSeparator {
+  display: flex;
+  justify-content: center;
+
+  height: 45px;
+}
+
+.MeetTable__TimesPeriod_beforeSepate {
+  --size-cell: 46px;
+  margin-bottom: calc(calc(var(--size-cell) - 2px) - 1em + calc(var(--size-cell) * var(--size-factor, 0)));
 }
 
 .MeetTable__Arrows {
@@ -100,29 +121,43 @@
   margin-left: 0;
 }
 
-[data-column-id]:first-child [data-id]:first-child {
+[data-column-id]:first-child [data-id][data-disabled="true"] {
+  margin-left: 1px;
+}
+
+[data-column-id]:first-child [data-id]:first-child[data-show-before="false"] {
   border-top-left-radius: var(--termeet-border-16);
 }
 
-[data-column-id]:first-child [data-id]:last-child {
+[data-column-id]:first-child [data-id]:last-child[data-disabled="false"] {
   border-bottom-left-radius: var(--termeet-border-16);
 }
 
-[data-column-id]:last-child [data-id]:first-child {
+[data-column-id]:last-child [data-id]:first-child[data-disabled="false"] {
   border-top-right-radius: var(--termeet-border-16);
 }
 
-[data-column-id]:last-child [data-id]:last-child {
+[data-column-id]:last-child [data-id]:last-child[data-show-after="false"] {
   border-bottom-right-radius: var(--termeet-border-16);
 }
 
 @media (width<= 768px){
-  .MeetTable__Times  {
-    gap: 46px
-  }
-
   .MeetTable {
     font-size: 5rem;
+  }
+
+  .MeetTable__TimesPeriod_beforeSepate {
+    --size-cell: 36px;
+  }
+
+  .MeetTable__TimesPeriodSeparator {
+    height: 35px;
+  }
+  
+  .MeetTable__TimesPeriod {
+    gap: 50px;
+
+    margin-right: 0;
   }
 }
 
@@ -130,13 +165,11 @@
   .MeetTable {
     font-size: 4rem;
   }
-
-  .MeetTable__Times {
+    
+  .MeetTable__TimesPeriod {
     gap: 54px;
 
-    padding-top: 35px;
-
-    margin-right: 16px;
+    margin-right: 0
   }
 
   .MeetTable__Arrows {
