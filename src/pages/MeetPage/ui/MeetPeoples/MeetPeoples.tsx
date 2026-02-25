@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router";
-import { MeetQueries } from "@/entities/Meet/api";
-import { useMeetContext } from "@entities/Meet";
+import { MeetQueries, useMeetContext } from "@/entities/Meet";
 import styles from "./MeetPeoples.module.css";
 
 export const MeetPeoples = () => {

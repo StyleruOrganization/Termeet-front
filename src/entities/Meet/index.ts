@@ -8,3 +8,4 @@ export {
   type MeetResponse,
   slotsUserSchema,
 } from "./model/Meet.schema";
+export { MeetQueries } from "./api/Meet.query";

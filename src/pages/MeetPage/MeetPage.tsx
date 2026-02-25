@@ -1,7 +1,6 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useParams } from "react-router";
-import { MeetProvider } from "@/entities/Meet";
-import { MeetQueries } from "@/entities/Meet/api";
+import { MeetProvider, MeetQueries } from "@/entities/Meet";
 import styles from "./MeetPage.module.css";
 import { MeetHeader } from "./ui/MeetHeader";
 import { MeetModal } from "./ui/MeetModal";

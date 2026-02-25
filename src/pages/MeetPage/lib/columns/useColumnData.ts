@@ -2,8 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { useParams } from "react-router";
 import { useShallow } from "zustand/shallow";
-import { MeetQueries } from "@/entities/Meet/api";
-import { useMeetContext } from "@entities/Meet";
+import { MeetQueries, useMeetContext } from "@/entities/Meet";
 import { isMoreThan30Min } from "@shared/libs";
 import { getCellIds } from "../cells/getCellsIds";
 

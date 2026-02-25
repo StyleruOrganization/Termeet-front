@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { launchWorker } from "@shared/mocks/browser";
+import { launchWorker } from "@shared/mocks";
 import { App } from "../App";
 
 async function startApp() {

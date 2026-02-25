@@ -1,6 +1,5 @@
 import { apiClient } from "@/shared/api";
-import { generateTimeOptions } from "@/shared/libs";
-import { getLocalTime } from "@/shared/libs/times/getLocalTime";
+import { generateTimeOptions, getLocalTime } from "@/shared/libs";
 import { meetResponseSchema, type MeetResponse } from "../model/Meet.schema";
 import type { IMeet } from "../model/Meet.types";
 

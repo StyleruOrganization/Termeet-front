@@ -1,6 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useMeetContext, slotsUserSchema } from "@/entities/Meet";
-import { MeetQueries } from "@/entities/Meet/api";
+import { useMeetContext, slotsUserSchema, MeetQueries } from "@/entities/Meet";
 import { apiClient } from "@/shared/api";
 
 export const useSaveUserSelectedData = (meetHash: string, onMutate?: () => void) => {
