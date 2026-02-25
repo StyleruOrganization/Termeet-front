@@ -1,6 +1,6 @@
 .TableCell {
   width: 100%;
-  height: 46px;
+  height: 32px;
   margin: 0 0 -1px -1px;
   
   border: 1px solid var(--termeet-color-gray-light-table);

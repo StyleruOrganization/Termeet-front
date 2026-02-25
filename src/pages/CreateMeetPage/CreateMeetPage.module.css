@@ -18,6 +18,8 @@
 .CreateMeetingPage__Content {
   display: flex;
   flex-direction: column;
+
+  max-width: 1530px;
 }
 
 .CreateMeetingPage__Content__Title {
