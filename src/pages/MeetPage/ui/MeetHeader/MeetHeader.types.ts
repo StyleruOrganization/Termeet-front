@@ -1,3 +1,3 @@
-import type { Meet } from "@/entities/Meet";
+import type { IMeet } from "@/entities/Meet";
 
-export type MeetHeaderProps = Pick<Meet, "description" | "duration" | "name">;
+export type MeetHeaderProps = Pick<IMeet, "description" | "duration" | "name">;

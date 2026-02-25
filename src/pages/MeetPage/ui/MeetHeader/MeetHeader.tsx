@@ -22,7 +22,7 @@ export const MeetHeader = ({ duration, description, name }: MeetHeaderProps) => 
       return isEmpty;
     }),
   );
-  const formattedDuration = getFormattedDuration(duration);
+  const formattedDuration = getFormattedDuration(duration || "");
 
   return (
     <div className={styles.MeetHeader}>
