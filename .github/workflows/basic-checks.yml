@@ -54,7 +54,7 @@ jobs:
 
       - name: ESLint
         if: needs.analyze-changes.outputs.needs-eslint == 'true'
-        run: pnpm run lint:js
+        run: pnpm run lint:eslint
 
       - name: Stylelint
         if: needs.analyze-changes.outputs.needs-stylelint == 'true'

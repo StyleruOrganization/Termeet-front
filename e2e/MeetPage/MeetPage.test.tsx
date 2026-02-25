@@ -1,9 +1,5 @@
 import { test, expect } from "@playwright/test";
-import {
-  mockMeetTimezones,
-  mockMeetingInfoWithUserSlots,
-  mockMeetTimezonesSpecial,
-} from "@/shared/mocks/Meet/meet.mock";
+import { mockMeetTimezones, mockMeetingInfoWithUserSlots, mockMeetTimezonesSpecial } from "@/shared/mocks/Meet/mocks";
 
 const uid = "d6d85ef8-1673-4194-9069-598c7cf739dd";
 const timeZoneUid = "1893e8e1-0c70-4bc5-8be8-61acc0b06a61";

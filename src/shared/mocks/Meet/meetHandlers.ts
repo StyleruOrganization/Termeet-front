@@ -1,5 +1,5 @@
 import { http, HttpResponse, delay } from "msw";
-import { mockMeetingInfoWithUserSlots, mockMeetTimezones, mockMeetTimezonesSpecial } from "./meet.mock";
+import { mockMeetingInfoWithUserSlots, mockMeetTimezones, mockMeetTimezonesSpecial } from "./mocks";
 
 export const uid = "d6d85ef8-1673-4194-9069-598c7cf739dd";
 export const timeZoneUid = "1893e8e1-0c70-4bc5-8be8-61acc0b06a61";

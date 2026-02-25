@@ -8,10 +8,9 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "prepare": "husky",
-    "eslint:fix": "eslint . --fix",
     "stylelint:fix": "stylelint **/*.css --cache-location ./node_modules/.stylelintcache --fix",
     "build:tokens": "style-dictionary build -c tokens-config.json",
-    "lint:js": "eslint . --max-warnings=0",
+    "lint:eslint": "eslint . --max-warnings=0",
     "lint:css": "stylelint **/*.css --cache-location ./node_modules/.stylelintcache",
     "type-check": "tsc -b",
     "check-fsd": "steiger ./src",
@@ -31,7 +30,7 @@
   },
   "lint-staged": {
     "*.{js,jsx,mjs,ts,tsx}": [
-      "npm run eslint:fix",
+      "npm run lint:eslint",
       "prettier --write ."
     ],
     "*.css": "npm run stylelint:fix"
