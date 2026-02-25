@@ -13,16 +13,6 @@ test.describe("Meet Page", () => {
       });
     });
 
-    await page.evaluate(() => {
-      // Remove tanstack query button, it intercepts clicking on the expand menu button
-      const element = document.querySelector(".tsqd-open-btn-container");
-      console.log("element", element);
-
-      if (element) {
-        element.remove();
-      }
-    });
-
     await page.goto(`/meet/${uid}`);
 
     // Ждем загрузки страницы
