@@ -14,7 +14,6 @@ export function MeetPage() {
   if (!hash) {
     return <h1>Необходим идентификатор встречи</h1>;
   }
-
   if (isLoading) {
     return <h1>Загрузка...</h1>;
   }
