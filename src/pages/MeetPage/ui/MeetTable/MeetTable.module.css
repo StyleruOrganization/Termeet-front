@@ -143,19 +143,19 @@
 
 @media (width<= 768px){
   .MeetTable {
-    font-size: 5rem;
+    font-size: 4rem;
   }
 
   .MeetTable__TimesPeriod_beforeSepate {
-    --size-cell: 36px;
+    --size-cell: 32px;
   }
 
   .MeetTable__TimesPeriodSeparator {
-    height: 35px;
+    height: 36px;
   }
   
   .MeetTable__TimesPeriod {
-    gap: 50px;
+    gap: 46px;
 
     margin-right: 0;
   }
@@ -167,7 +167,7 @@
   }
     
   .MeetTable__TimesPeriod {
-    gap: 54px;
+    gap: 46px;
 
     margin-right: 0
   }
