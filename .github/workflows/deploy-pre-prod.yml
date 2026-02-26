@@ -44,7 +44,10 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           envs: Y_TOKEN,REGISTRY,DOMAIN,EMAIL,IMAGE_TAG
           script: |
-            # Логинимся в registry
+            # Останавливаем и удаляем старый контейнер
+            docker stop termeet 2>/dev/null || true
+            docker rm termeet 2>/dev/null || true
+
             echo "${Y_TOKEN}" | docker login \
               --username oauth \
               --password-stdin \
