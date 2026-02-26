@@ -45,7 +45,7 @@ jobs:
             # Останавливаем и удаляем старый контейнер
             docker stop termeet 2>/dev/null || true
             docker rm termeet 2>/dev/null || true
-            docker rmi $REGISTRY 2>dev/null || true
+            docker rmi $REGISTRY/termeet:latest 2>dev/null || true
 
             echo "${Y_TOKEN}" | docker login \
               --username oauth \
