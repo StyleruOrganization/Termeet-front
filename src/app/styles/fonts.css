@@ -13,7 +13,7 @@
   font-family: Manrope;
   font-style: normal;
   font-weight: 300; 
-  src: 
+  src: local("Manrope"),
   url('./fonts/Manrope-Light.ttf') format('truetype'),
   url('./fonts/Manrope-Light.woff2') format("woff2");
 }
