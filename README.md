@@ -8,7 +8,7 @@
 
 [![Deploy PR](https://github.com/StyleruOrganization/Termeet-front/actions/workflows/deploy-pre-prod.yml/badge.svg?branch=main)](https://github.com/StyleruOrganization/Termeet-front/actions/workflows/deploy-pre-prod.yml)
 
-Версия из main ветки доступна по [адресу](https://termeet-front.vercel.app/)
+Версия из main ветки доступна по [адресу](https://termeet-dev.ru)
 **_\* После мерджа нужно подождать немного пока пересоберется проект._**
 
 Также собирается тестовый стенд для каждого пулл реквеста ссылку на которую можно найти в комментариях.
