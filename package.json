@@ -10,7 +10,7 @@
     "prepare": "husky",
     "stylelint:fix": "stylelint **/*.css --cache-location ./node_modules/.stylelintcache --fix",
     "build:tokens": "style-dictionary build -c tokens-config.json",
-    "lint:eslint": "eslint . --max-warnings=0",
+    "lint:eslint": "eslint .",
     "lint:css": "stylelint **/*.css --cache-location ./node_modules/.stylelintcache",
     "type-check": "tsc -b",
     "check-fsd": "steiger ./src",

@@ -1,7 +1,9 @@
 .MeetPage {
   display: flex;
-  gap: 40px;
+  gap: 30px;
   flex-direction: column;
+
+  width: 90vw;
 }
 
 @media (width<=1024px) {

@@ -1,6 +1,6 @@
 .Button {
   overflow: hidden;
-  flex-basis: 350px;
+  flex-basis: 300px;
 
   padding: 16px 12px;
 
@@ -8,10 +8,10 @@
 
   transition: opacity 0.3s ease-in;
 
-  font-size: 5rem;
+  font-size: 4.5rem;
   font-weight: 600;
 
-  max-height: 60px;
+  max-height: 56px;
 
   min-width: 0;
   text-overflow: ellipsis;
@@ -39,7 +39,7 @@
   gap: 10px;
 
   h2 {
-    font-size: 12rem;
+    font-size: 9rem;
     font-weight: 700;
     overflow-wrap: break-word;
   }
@@ -56,11 +56,11 @@
   height: 37px;
   padding: 5px;
 
-  margin-top: 10px;
+  margin-top: 6px;
 }
 
 .MeetHeader__Info__Desc {
-  font-size: 6rem; 
+  font-size: 5rem; 
 }
 
 .MeetHeader__Info__Wrapper {
@@ -80,7 +80,7 @@
   background-color: var(--termeet-color-brand-light-100);
   border-radius: var(--termeet-border-16);
 
-  font-size: 5rem;
+  font-size: 4rem;
 
   svg {
     margin-right: 8px
@@ -107,7 +107,7 @@
   background-color: var(--termeet-color-brand-light-20);
 
   font-weight: 500;
-  min-width: 165px;
+  min-width: 135px;
 }
 
 .MeetHeader__Time {
@@ -116,9 +116,11 @@
 }
 
 .MeetHeader__Time__Title {
+  display: flex;
+  align-items: center;
   flex-shrink: 0;
 
-  font-size: 9rem;
+  font-size: 7rem;
   font-weight: 600;
 
   margin-right: auto
@@ -151,17 +153,21 @@
 /* Adaptive */
 @media (width <= 1024px) {
   .MeetHeader__Info__Title h2 {
-    font-size: 10rem
+    font-size: 8rem
   }
 
   .MeetHeader__Time__Title {
-    font-size: 7rem;
+    font-size: 6rem;
   } 
 }
 
 @media (width <= 768px) {
+  .Button {
+    font-size: 4rem;
+  }
+
   .MeetHeader {
-    gap: 10px;
+    gap: 18px;
   }
 
   .MeetHeader__Time {
@@ -189,12 +195,16 @@
     gap: 10px;
 
     h2 {
-      font-size: 8rem;
+      font-size: 7rem;
     }
   }
 
+  .MeetHeader__Info__DurationBadge {
+    font-size: 4rem;
+  }
+
   .MeetHeader__Time__Title {
-    font-size: 6rem;
+    font-size: 5rem;
     order: 1;
   } 
 
@@ -233,9 +243,13 @@
 
   .Button {
     padding: 13px 0;
+
+    max-height: 50px;
   }
 
   .MeetHeader__Info__DurationBadge {
     padding: 4px 8px;
+
+    font-size: 3.5rem;
   }
 }
