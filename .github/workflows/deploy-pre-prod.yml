@@ -12,6 +12,7 @@ jobs:
       REGISTRY: cr.yandex/${{ secrets.CONTAINER_REGISTRY }}
       DOMAIN: termeet-dev.ru
       EMAIL: ${{ secrets.EMAIL }}
+      IMAGE_TAG: ${{ github.sha }}
     runs-on: ubuntu-latest
     
     steps:
@@ -20,19 +21,20 @@ jobs:
 
       - name: Login to Yandex Container Registry
         run: |
-            echo "${Y_TOKEN}" | docker login \
-              --username oauth \
-              --password-stdin \
-              cr.yandex
+          echo "${Y_TOKEN}" | docker login \
+            --username oauth \
+            --password-stdin \
+            cr.yandex
 
       - name: Build Docker image
         run: |
           docker build \
-            -t cr.yandex/${{ secrets.CONTAINER_REGISTRY }}/termeet .
+            -t ${REGISTRY}/termeet:${IMAGE_TAG} \
+            -t ${REGISTRY}/termeet:latest .
 
       - name: Push Docker images
         run: |
-          docker push cr.yandex/${{ secrets.CONTAINER_REGISTRY }}/termeet
+          docker push ${REGISTRY}/termeet:${IMAGE_TAG}
 
       - name: Deploy to server
         uses: appleboy/ssh-action@v1.0.0
@@ -40,7 +42,7 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          envs: Y_TOKEN,REGISTRY,DOMAIN,EMAIL
+          envs: Y_TOKEN,REGISTRY,DOMAIN,EMAIL,IMAGE_TAG
           script: |
             # Останавливаем и удаляем старый контейнер
             docker stop termeet 2>/dev/null || true
@@ -51,6 +53,17 @@ jobs:
               --password-stdin \
               cr.yandex
             
+            # Скачиваем конкретный образ по SHA
+            docker pull ${REGISTRY}/termeet:${IMAGE_TAG}
+            
+            # Останавливаем и удаляем старый контейнер
+            docker stop termeet 2>/dev/null || true
+            docker rm termeet 2>/dev/null || true
+
+            # Удаляем контейнеры образы которые не используются
+            docker image prune --force
+            
+            # Запускаем новый контейнер с конкретным тегом
             docker run -d \
               --name termeet \
               -e VIRTUAL_HOST=${DOMAIN} \
@@ -58,4 +71,4 @@ jobs:
               -e LETSENCRYPT_HOST=${DOMAIN} \
               --network nginx-proxy \
               --restart unless-stopped \
-              ${REGISTRY}/termeet:latest
+              ${REGISTRY}/termeet:${IMAGE_TAG}
