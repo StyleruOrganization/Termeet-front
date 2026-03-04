@@ -52,6 +52,7 @@ export const createMeetSchema = z
       if (!data.time.duration) {
         return true;
       }
+
       const normalized = data.time.duration.toLowerCase().trim();
       let durationMinutes = 0;
 
