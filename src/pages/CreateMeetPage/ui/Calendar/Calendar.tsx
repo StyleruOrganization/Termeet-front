@@ -20,7 +20,7 @@ export const Calendar = forwardRef<HTMLDivElement, { minDate?: Date; value?: Dat
     const { onDateClick, formatClassName } = useCalendarData();
 
     return (
-      <>
+      <div className={styles.CalendarWrapper}>
         <ReactCalendar
           inputRef={ref}
           data-test-id='calendar'
@@ -58,7 +58,7 @@ export const Calendar = forwardRef<HTMLDivElement, { minDate?: Date; value?: Dat
             <span>{errors.date.message}</span>
           </div>
         )}
-      </>
+      </div>
     );
   },
 );

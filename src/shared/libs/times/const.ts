@@ -6,9 +6,10 @@ export const TIMES = generateTimeOptions("00:00", "23:30").map(
 export const DURATIONS = generateDurationOptions();
 
 function generateDurationOptions() {
-  return generateTimeOptions("00:00", "05:00", 15)
-    .slice(1)
-    .map(([hours, minutes]) => {
-      return `${hours ? hours + " ч " : ""}${minutes ? minutes + " мин" : ""}`;
-    });
+  const durationsOptions = generateTimeOptions("00:00", "05:00", 15).map(([hours, minutes], index) => {
+    if (index == 0) return " - ";
+    return `${hours ? hours + " ч " : ""}${minutes ? minutes + " мин" : ""}`;
+  });
+
+  return durationsOptions;
 }

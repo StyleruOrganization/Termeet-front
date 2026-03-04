@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { Outlet } from "react-router";
+import { ToastContainer } from "@/features/ToastContainer";
 import { Loader, Header } from "@/shared/ui";
 import styles from "./Layout.module.css";
 
@@ -16,6 +17,7 @@ export const Layout = () => (
       <Suspense fallback={<Loader />}>
         <Outlet />
       </Suspense>
+      <ToastContainer />
     </div>
   </>
 );

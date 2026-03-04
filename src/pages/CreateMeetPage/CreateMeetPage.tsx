@@ -14,7 +14,7 @@ export function CreateMeetPage() {
   });
   const { handleSubmit, reset } = methods;
   const { stepCreating, isTouch, calendarRef, setStepForm } = useTouchSelectDate(methods);
-  const { createMeet, isPending } = useCreateMeet({
+  const { createMeet } = useCreateMeet({
     onSuccess: () => {
       reset();
     },
@@ -23,14 +23,6 @@ export function CreateMeetPage() {
   const onSubmit: SubmitHandler<ICreateMeet> = async data => {
     createMeet(data);
   };
-
-  if (isPending) {
-    return (
-      <div className={styles.CreateMeetingPage__Content}>
-        <h1 className={styles.CreateMeetingPage__Content__Title}>Создание встречи...</h1>
-      </div>
-    );
-  }
 
   return (
     <div className={styles.CreateMeetingPage__Content}>
@@ -46,7 +38,12 @@ export function CreateMeetPage() {
             )}
           </div>
           {((isTouch && stepCreating === "form") || !isTouch) && (
-            <div className={styles.CreateMeetingPage__Content__FormWrapper}>
+            <div
+              style={{
+                minHeight: isTouch ? "100vh" : "",
+              }}
+              className={styles.CreateMeetingPage__Content__FormWrapper}
+            >
               <MeetingForm />
               <button data-test-id='create-meet' className={styles.CreateMeetingPage__CreateButton} type='submit'>
                 Создать встречу

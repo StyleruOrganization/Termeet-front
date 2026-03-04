@@ -14,6 +14,10 @@
   max-width: 575px;
 }
 
+.CalendarWrapper {
+  position: relative;
+}
+
 .Calendar__Wrapper {
   flex: 1 1 100%;
 }
@@ -83,15 +87,34 @@
 }
 
 .Calendar__ErrorField {
+  position: absolute;
+  bottom: 10px;
+  left: 24px;
+
   display: flex;
   gap: 4px;
 
   color: var(--termeet-color-accent-errors);
 
+  animation: fade-in 0.3s ease-in-out;
+
   font-size: 3rem;
   line-height: 18px;
-
   margin-top: 8px;
+}
+
+@keyframes fade-in {
+  0% {
+    transform: translateY(-10px);
+
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0);
+
+    opacity: 1;
+  }
 }
 
 .Calendar__Day:disabled {

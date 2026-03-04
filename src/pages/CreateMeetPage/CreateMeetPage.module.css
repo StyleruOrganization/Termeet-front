@@ -8,11 +8,13 @@
 }
 
 .CreateMeetingPage__Calendar {
+  position: relative;
+
   display: flex;
   flex: 1 1 310px;
   flex-direction: column;
 
-  max-width: 575px
+  max-width: 575px;
 } 
 
 .CreateMeetingPage__Content {

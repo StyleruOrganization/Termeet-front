@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
 import { apiClient } from "@/shared/api";
 import { meetCreateSchema, type MeetCreate, meetResponseSchema, type MeetResponse } from "@entities/Meet";
+import { useToastStore } from "@features/ToastContainer";
 import type { ICreateMeet } from "../model";
 
 function parseDuration(duration?: string): string | null {
@@ -41,6 +42,9 @@ const prepareDateRanges = (dates: string[], start_time: string, end_time: string
 
 export const useCreateMeet = ({ onSuccess: onSuccessExternal }: { onSuccess: () => void }) => {
   const navigate = useNavigate();
+  const addToast = useToastStore(store => store.addToast);
+  const removeToast = useToastStore(store => store.removeToast);
+
   const { mutate, isPending } = useMutation({
     mutationFn: (data: MeetCreate) => apiClient.post<MeetResponse, MeetCreate>("/meet/create", data, meetCreateSchema),
     onSuccess: (response: MeetResponse) => {
@@ -53,7 +57,31 @@ export const useCreateMeet = ({ onSuccess: onSuccessExternal }: { onSuccess: () 
         });
       }
       onSuccessExternal();
+      removeToast("create-meet-wait");
       navigate(`/meet/${response.hash}`);
+      setTimeout(() => {
+        addToast({
+          type: "success",
+          message: "Встреча успешно создана",
+          id: "create-meet-success",
+        });
+      }, 300);
+    },
+    onMutate: () => {
+      addToast({
+        type: "wait",
+        message: "Создание встречи...",
+        id: "create-meet-wait",
+      });
+    },
+    onError: (error: Error) => {
+      console.error("Ошибка при создании встречи:", error);
+      removeToast("create-meet-wait");
+      addToast({
+        type: "error",
+        message: "Ошибка при создании встречи",
+        id: "create-meet-error",
+      });
     },
   });
 

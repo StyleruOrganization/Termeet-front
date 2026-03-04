@@ -14,7 +14,7 @@
   border: 1px solid;
   border-radius: var(--termeet-border-16);
 
-  transition: border-color 0.2s ease;
+  transition: border-color 0.3s ease;
 
   border-color: var(--termeet-color-gray-main-10);
 
@@ -36,10 +36,21 @@
 
   color: var(--termeet-color-accent-errors);
 
+  animation: fade-in 0.3s ease-in-out;
+
   font-size: 3rem;
   line-height: 16px;
 
   margin-top: 8px;
+  
+  max-width: 80%;
+
+  svg {
+    flex-shrink: 0;
+
+    width: 16px;
+    height: 16px;
+  }
 }
 
 .Input__Label {
@@ -53,4 +64,18 @@
   line-height: 16px;
 
   text-overflow: ellipsis;
+}
+
+@keyframes fade-in {
+  0% {
+    transform: translateY(-10px);
+
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0);
+
+    opacity: 1;
+  }
 }

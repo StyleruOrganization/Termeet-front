@@ -3,12 +3,13 @@
   position: relative;
 
   width: 100%;
+  height: fit-content;
 }
 
 .TimeSelect__Toggle {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 1px;
+  right: 2px;
 
   display: flex;
   align-items: end;
@@ -27,15 +28,15 @@
   color: var(--termeet-color-gray-main-100);
 
   transition:
-    transform,
-    opacity 0.2s ease;
+    transform .3s ease,
+    opacity 3s ease;
 }
 
 .TimeSelect__OpenIcon:hover {
   opacity: 0.7;
 }
 
-.TimeSelect__OpenIcon_open {
+.TimeSelect__OpenIcon_Open {
   transform: rotate(180deg);
 }
 
@@ -45,6 +46,22 @@
   right: 60px;
 
   color: var(--termeet-color-accent-success);
+
+  animation: fade-in 0.3s ease-in-out;
+}
+
+@keyframes fade-in {
+  0% {
+    transform: translateY(-10px);
+
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0);
+
+    opacity: 1;
+  }
 }
 
 .TimeSelect__Dropdown {
@@ -55,22 +72,25 @@
   left: 0;
 
   /* Симметрия с местом для скроллбара */
-  padding-left: 10px;
+  padding: 10px 0 10px 10px;
 
   background-color: var(--termeet-color-always-white);
   border: 1px solid var(--termeet-color-gray-main-10);
   border-radius: var(--termeet-border-16);
   box-shadow: 0 4px 12px var(--termeet-color-shadow);
 
-  max-height: 240px;
+  max-height: 258px;
   overflow-y: auto;
 }
 
 .TimeSelect__List {
-  padding: 8px 2px;
-  padding-left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 
-  list-style: none;
+  padding-right: 2px;
+
+  list-style: none; 
 }
 
 .TimeSelect__Option {

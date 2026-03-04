@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useMeetContext, slotsUserSchema, MeetQueries } from "@/entities/Meet";
+import { useToastStore } from "@/features/ToastContainer";
 import { apiClient } from "@/shared/api";
 
 export const useSaveUserSelectedData = (meetHash: string, onMutate?: () => void) => {
@@ -7,6 +8,7 @@ export const useSaveUserSelectedData = (meetHash: string, onMutate?: () => void)
   const getNewSelectedSlots = useMeetContext(state => state.getNewSelectedSlots);
   const getPreparedNewSlots = useMeetContext(store => store.getPreparedNewSlots);
   const clearNewSelectedSlots = useMeetContext(store => store.clearNewSelectedSlots);
+  const addToast = useToastStore(state => state.addToast);
 
   return useMutation({
     mutationFn: async (userName: string) => {
@@ -136,6 +138,11 @@ export const useSaveUserSelectedData = (meetHash: string, onMutate?: () => void)
     onError: (_, _2, context) => {
       if (context?.previousData) {
         console.log("Rolling back changes due to error with data from context", context.previousData);
+        addToast({
+          type: "error",
+          message: "Ошибка при сохранении выбранных временных слотов",
+          id: "slots-update-error",
+        });
         // Откатываем React Query кеш
         queryClient.setQueryData(MeetQueries.meet(meetHash).queryKey, old => {
           if (!old) return old;
@@ -154,6 +161,11 @@ export const useSaveUserSelectedData = (meetHash: string, onMutate?: () => void)
       // queryClient.invalidateQueries({
       //   queryKey: MeetQueries.meet(meetHash).queryKey,
       // });
+      addToast({
+        type: "success",
+        message: "Выбранные временные слоты успешно сохранены",
+        id: "slots-updated",
+      });
 
       console.log("🎉 Slots updated successfully on the server");
     },

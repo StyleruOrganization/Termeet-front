@@ -16,6 +16,7 @@ export const useFocusTrap = <T extends HTMLElement>(
 
   useEffect(() => {
     if (isActive) {
+      console.log("isActive is true in useFocusTrap");
       const target = ref.current;
       if (!target) return;
 
@@ -31,8 +32,12 @@ export const useFocusTrap = <T extends HTMLElement>(
       const firstElement = focusableElems[0];
       const lastElement = focusableElems[numFocusableElems - 1];
 
+      firstElement.focus();
+
       const handleTab = (event: KeyboardEvent) => {
+        console.log("Handle key Tab in useFocusTrap");
         if (event.key === "Escape") {
+          console.log("Handle key Escape in useFocusTrap");
           onEscape?.();
         }
         if (event.key === "Tab") {
@@ -54,8 +59,6 @@ export const useFocusTrap = <T extends HTMLElement>(
 
       target.addEventListener("keydown", handleTab);
       return () => {
-        console.log("UNMOUNT");
-        // on unmount, focus the last focused elem outside of the target
         lastFocusedElem.current!.focus();
 
         target.removeEventListener("keydown", handleTab);
