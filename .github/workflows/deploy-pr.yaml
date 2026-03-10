@@ -25,6 +25,13 @@ jobs:
           echo $Y_TOKEN | docker login \
             --username oauth \
             --password-stdin cr.yandex
+      - name: 🔍 DEBUG - Show secret info (safe)
+        run: |
+          echo "=== SSH KEY DEBUG ==="
+          echo "Secret length: ${{ secrets.SSH_PRIVATE_KEY }}" | wc -c
+          echo "First 20 chars: ${{ secrets.SSH_PRIVATE_KEY }}..."
+          echo "Contains BEGIN? ${{ contains(secrets.SSH_PRIVATE_KEY, 'BEGIN') }}"
+          echo "Contains END? ${{ contains(secrets.SSH_PRIVATE_KEY, 'END') }}"
 
       - name: Build Docker image
         run: |
