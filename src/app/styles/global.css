@@ -24,17 +24,17 @@ html {
   /* Ограничиваем минимальные и максимальные значения через медиа-запросы */
   @media (width <= 375px) {
     :root {
-      --text-display-final: 24px;
-      --text-heading-final: 20px;
-      --text-body-final: 14px;
+      --text-display: 24px;
+      --text-heading: 20px;
+      --text-body: 14px;
     }
   }
   
   @media (width >= 1440px) {
     :root {
-      --text-display-final: 36px;
-      --text-heading-final: 24px;
-      --text-body-final: 16px;
+      --text-display: 36px;
+      --text-heading: 24px;
+      --text-body: 16px;
     }
   }
 }
