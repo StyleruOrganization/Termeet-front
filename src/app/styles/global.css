@@ -2,15 +2,16 @@ html {
   --min-viewport: 375px;
   --max-viewport: 1440px;
   font-size: 4px;
+  font-weight: 500;
   
   /* При 375px: 24px, при 1440px: 36px */
-  --text-display: clamp(24px, 1.47vw + 18.5px, 36px);
+  --text-display: clamp(6rem, 1.47vw + 4.625rem, 9rem);
 
   /* При 375px: 20px, при 1440px: 24px */
-  --text-heading: clamp(20px, 0.56vw + 17.9px, 24px);
+  --text-heading: clamp(5rem, 0.56vw + 4.5rem, 6rem);
 
     /* При 375px: 14px, при 1440px: 16px */
-  --text-body: clamp(14px, 0.38vw + 12.6px, 16px);
+  --text-body: clamp(3.5rem, 0.38vw + 3.125rem, 4rem);
   
 }
 

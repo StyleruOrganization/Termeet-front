@@ -31,7 +31,7 @@ export const createMeetSchema = z
         }),
       duration: z.string().optional(),
     }),
-    date: z.array(z.string(), "Нужно выбрать хотя бы один день").min(1, "Нужно выбрать хотя бы один день"),
+    dates: z.array(z.string(), "Нужно выбрать хотя бы один день").min(1, "Нужно выбрать хотя бы один день"),
   })
   .refine(
     data => {

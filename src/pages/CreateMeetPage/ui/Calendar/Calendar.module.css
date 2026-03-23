@@ -1,29 +1,31 @@
+.CalendarWrapper {
+  position: relative;
+
+  flex: 0 0 420px;
+}
+
 .Calendar {
-  --gap: 20px;
-  padding: 24px;
+  --cell-size: 40px;
+  --column-gap: 15px;
+  padding: 20px 24px;
 
   text-align: center;
 
-  color: var(--termeet-color-gray-main-100);
-  background-color: var(--termeet-color-bg-inputs);
-  border: 1px solid;
-  border-radius: var(--termeet-border-16);
+  color: var(--light-text-main);
+  background-color: var(--light-fill-controls);
+  border-radius: 16px;
 
-  border-color: var(--termeet-color-gray-main-10);
-
-  max-width: 575px;
-}
-
-.CalendarWrapper {
-  position: relative;
-}
-
-.Calendar__Wrapper {
-  flex: 1 1 100%;
+  max-width: calc(7 * var(--cell-size) + 48px + 6 * var(--column-gap))
 }
 
 .Calendar__Arrow, .Calendar__Arrow_Left {
-  color: var(--termeet-color-gray-main-100);
+  width: 16px;
+  height: 16px;
+  margin: 0;
+
+  color: var(--light-text-main);
+
+  transition: color 0.2s ease-in-out;
 }
 
 .Calendar__Arrow_Left {
@@ -31,59 +33,49 @@
 }
 
 .Calendar__Arrow:hover,  .Calendar__Arrow_Left:hover {
-  opacity: 0.8;
+  color: var(--light-text-disabled)
 }
 
 .Calendar__Day {
-  --local-bg: transparent;
   position: relative;
-  z-index: 100;
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  width: var(--cell-size);
+  height: var(--cell-size);
 
-  color: var(--termeet-color-gray-main-100);
-  border-radius: var(--termeet-border-circle);
+  color: var(--light-text-main);
+  border-radius: 8px;
 
-  aspect-ratio: 1 / 1;
-  outline-offset: calc((var(--gap) / 2) * -1);
+  transition: background-color 0.2s ease-in-out;
+
+  font-size: var(--text-body);
+}
+
+.Calendar__Day:disabled {
+  color: var(--light-text-disabled);
 }
 
 .Calendar__Day:hover {
-  --local-bg: var(--termeet-color-brand-light-20);
+  background-color: var(--light-components-hover);
 }
 
-.Calendar__Day::before {
-  position: absolute;
-
-  display: block;
-
-  width: calc(100% - var(--gap));
-  height: calc(100% - var(--gap));
-
-  background-color: var(--local-bg);
-  border-radius: var(--termeet-border-circle);
-
-  transition: background-color 0.2s ease;
-
-  content: "";
-} 
+.Calendar__Day:disabled:hover {
+  background-color: transparent;
+}
 
 .Calendar__Day_Weekend {
   color: var(--termeet-color-brand-light-100)
 }
 
-.Calendar__Day_Selected {
-  color: var(--termeet-color-always-white);
+.Calendar__Day.Calendar__Day_Selected {
+  color: var(--light-fill-bg);
+  background-color: var(--light-semantics-dark-blue-default);
 
-  opacity: 1;
-
-  --local-bg: var(--termeet-color-brand-main-dark);
+  opacity: 1
 }
 
-.Calendar__Day_Selected:hover {
-  --local-bg: var(--termeet-color-brand-main-dark);
+.Calendar__Day.Calendar__Day_Selected:hover {
+  background-color: var(--light-semantics-dark-blue-active);
+
 }
 
 .Calendar__ErrorField {
@@ -115,17 +107,6 @@
 
     opacity: 1;
   }
-}
-
-.Calendar__Day:disabled {
-  position: relative;
-
-  color: var(--termeet-color-gray-main-100);
-
-  cursor: not-allowed;
-
-  opacity: .4 !important;
-  pointer-events: none;
 }
 
 @media (width <= 992px) {

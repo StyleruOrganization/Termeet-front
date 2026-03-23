@@ -1,71 +1,64 @@
 /* Переопределение стилей с помощью классов из библы */
 
-.react-calendar * {
-  font-size: 5rem;
-  font-weight: 600;
-  line-height: 24px;
-}
-
 .react-calendar__month-view__weekdays {
-  position: relative;
-
   justify-content: space-between;
   align-items: center;
 
   padding: 12px 0;
 
-  margin-bottom: 16px;
+  font-size: var(--text-body);
+  line-height: 1.25;
+
+  margin-bottom: 8px;
 }
 
-.react-calendar__month-view__weekdays::after {
-  position: absolute;
-  bottom: -8px;
+.react-calendar__month-view__days {
+  /* ну а че как по другому, хочется же gap нормальный иметь */
+  display: grid !important;
+  gap: 8px 15px;
 
-  width: 100%;
-  height: 1px;
-
-  background-color: var(--termeet-color-gray-main-20);
-
-  content: "";
+  grid-template-columns: repeat(7, 1fr);
+  justify-items: center;
 }
 
-.react-calendar__month-view__weekdays__weekday--weekend {
-  color: var(--termeet-color-brand-light-100)
+.react-calendar__navigation__label__labelText {
+  font-size: 4rem;
+  line-height: 1.25;
+}
+
+.react-calendar__navigation__arrow {
+  display: flex;
+}
+
+.react-calendar__navigation__arrow:disabled svg{
+  color: var(--light-text-disabled);
+
+  cursor: not-allowed;
+
+  pointer-events: none;
 }
 
 abbr {
   text-decoration: none;
 }
 
-
-.react-calendar__month-view__days__day abbr {
-  z-index: 100;
-}
-
 .react-calendar__navigation {
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  margin-bottom: 16px;
 }
 
-.react-calendar__navigation__arrow {
-  height: 100%;
-
-  aspect-ratio: 1 / 1;
+.react-calendar__month-view__days__day--neighboringMonth {
+  color: var(--light-text-disabled)
 }
 
-.react-calendar__navigation__arrow:disabled {
-  cursor: not-allowed;
-  opacity: .4;
-  pointer-events: none;
+.react-calendar__tile--now {
+  background-color: var(--light-semantics-light-blue-hover);
 }
 
-.react-calendar .custom-month-year,
-.react-calendar .custom-month-year * {
-  font-size: 6rem !important;
-  line-height: 117%;
-}
 
-.custom-month-year .year {
-  color: var(--termeet-color-brand-light-100)
+.react-calendar__tile--now:hover {
+  background-color: var(--light-semantics-light-blue-active);
 }

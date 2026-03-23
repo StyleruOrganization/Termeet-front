@@ -17,7 +17,7 @@ export const useCalendarData = () => {
   const { control, setValue, trigger } = useFormContext<ICreateMeet>();
   const selectedDates = useWatch({
     control,
-    name: "date",
+    name: "dates",
     defaultValue: [],
   });
 
@@ -29,14 +29,14 @@ export const useCalendarData = () => {
     const formattedDate = formatDate(date);
     if (selectedDates.includes(formattedDate)) {
       setValue(
-        "date",
+        "dates",
         selectedDates.filter(d => d !== formattedDate),
       );
     } else {
-      setValue("date", [...selectedDates, formattedDate]);
+      setValue("dates", [...selectedDates, formattedDate]);
     }
 
-    trigger("date");
+    trigger("dates");
   };
 
   const formatClassName: TileClassNameFunc = ({ date, view }) => {

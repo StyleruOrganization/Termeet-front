@@ -28,4 +28,4 @@ export const MONTHS_GENITIVE = [
   "декабря",
 ];
 
-export const SHORT_DAYS = ["п", "в", "с", "ч", "п", "с", "в"];
+export const SHORT_DAYS = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
