@@ -6,13 +6,13 @@ import type { ICreateMeet } from "../../../model";
 export const CalendarWithForm = ({ error }: { error?: string }) => {
   const methods = useForm<ICreateMeet>({
     defaultValues: {
-      date: [],
+      dates: [],
     },
   });
 
   // Если передана ошибка, устанавливаем её вручную
   if (error) {
-    methods.setError("date", {
+    methods.setError("dates", {
       type: "manual",
       message: error,
     });

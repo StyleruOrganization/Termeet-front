@@ -22,12 +22,7 @@ export const Select = ({
   const [dropdownPosition, setDropdownPosition] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);
   const selectRef = useRef<HTMLDivElement>(null);
-  const {
-    setValue,
-    watch,
-    trigger,
-    formState: { isDirty },
-  } = useFormContext<ICreateMeet>();
+  const { setValue, watch, trigger } = useFormContext<ICreateMeet>();
   useFocusTrap(dropdownRef, isOpen, () => setIsOpen(false));
   const timeValues = watch("time");
   console.log("fieldValue in Select", timeValues);
@@ -73,14 +68,6 @@ export const Select = ({
     };
   }, []);
 
-  useEffect(() => {
-    if (!isDirty) {
-      setTimeout(() => {
-        setShowSuccess(false);
-      }, 0);
-    }
-  }, [isDirty]);
-
   const toggleDropdown = () => {
     setDropdownPosition("");
     setIsOpen(!isOpen);
@@ -88,7 +75,6 @@ export const Select = ({
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = formatValue(event.target.value as string);
-    setShowSuccess(formatted.isValid);
 
     setValue(name, formatted.value, {
       shouldValidate: true,
@@ -168,11 +154,6 @@ export const Select = ({
                         shouldTouch: true,
                       });
                       setIsOpen(false);
-                      if (option.trim() !== "-") {
-                        setShowSuccess(true);
-                      } else {
-                        setShowSuccess(false);
-                      }
                       trigger(triggeredValues);
                     }}
                   >

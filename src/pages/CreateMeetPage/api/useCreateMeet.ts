@@ -91,7 +91,7 @@ export const useCreateMeet = ({ onSuccess: onSuccessExternal }: { onSuccess: () 
       description: formData.description?.trim(),
       link: formData.link?.trim() || null,
       duration: parseDuration(formData.time.duration),
-      timeRange: prepareDateRanges(formData.date, formData.time.start, formData.time.end),
+      timeRange: prepareDateRanges(formData.dates, formData.time.start, formData.time.end),
     };
 
     mutate(preparedData);
