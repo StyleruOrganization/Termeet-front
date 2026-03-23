@@ -25,9 +25,11 @@
   --light-semantics-dark-blue-disabled: #bbbecb;
   --light-semantics-dark-blue-default: #1c2651;
   --light-semantics-dark-blue-active: #0d122d;
+  --light-semantics-dark-blue-hover: #253c83;
   --light-semantics-light-blue-default: #dceafd;
   --light-semantics-light-blue-hover: #c1dbfa;
   --light-semantics-light-blue-active: #96c3f5;
   --light-semantics-light-blue-disabled: #f0f5fe;
+  --light-semantics-black-main: #000;
   --dark-text-main: #f8f8f8;
 }
