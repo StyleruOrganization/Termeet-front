@@ -1,17 +1,37 @@
-.MainContainer {
+.container {
   display: flex;
   justify-content: center;
 
   padding-bottom: 40px;
-  padding-left: 120px;
   
   max-width: 90vw;
 }
 
+.container, .header {
+  padding-left: 8.5vw;
+}
+
+.header {
+  padding-top: 28px;
+  padding-bottom: 28px;
+
+  background-color: var(--light-text-inverted);
+
+  font-size: 4rem;
+  font-weight: 700;
+  line-height: 24px;
+
+  margin-bottom: 32px;
+}
+
 @media (width <= 768px) {
-  .MainContainer {
+  .container {
     padding: 16px;
 
     max-width: 100%;
+  }
+
+  .header {
+    margin-bottom: 20px;
   }
 }

@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { Outlet } from "react-router";
 import { ToastContainer } from "@/features/ToastContainer";
-import { Loader, Header } from "@/shared/ui";
+import { Loader } from "@/shared/ui";
 import styles from "./Layout.module.css";
 
 // Global Styles
@@ -12,8 +12,8 @@ import "../styles/variables.css";
 
 export const Layout = () => (
   <>
-    <Header />
-    <div className={styles.MainContainer}>
+    <h1 className={styles.header}>termeet</h1>
+    <div className={styles.container}>
       <Suspense fallback={<Loader />}>
         <Outlet />
       </Suspense>

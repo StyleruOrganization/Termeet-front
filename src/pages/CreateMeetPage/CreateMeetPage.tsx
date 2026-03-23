@@ -26,21 +26,7 @@ export function CreateMeetPage() {
 
   return (
     <div className={styles.CreateMeetingPage__Content}>
-      <h1 style={{ fontWeight: "500" }} className={styles.CreateMeetingPage__Content__Title}>
-        Настройте встречу
-      </h1>
-      <h1 style={{ fontWeight: "600" }} className={styles.CreateMeetingPage__Content__Title}>
-        Настройте встречу
-      </h1>
-      <h1 style={{ fontWeight: "700" }} className={styles.CreateMeetingPage__Content__Title}>
-        Настройте встречу
-      </h1>
-      <h1 style={{ fontWeight: "800" }} className={styles.CreateMeetingPage__Content__Title}>
-        Настройте встречу
-      </h1>
-      <h1 style={{ fontWeight: "900" }} className={styles.CreateMeetingPage__Content__Title}>
-        Настройте встречу
-      </h1>
+      <h1 className={styles.CreateMeetingPage__Content__Title}>Настройте встречу</h1>
       <FormProvider {...methods}>
         <form className={styles.CreateMeetingPage__Form} onSubmit={handleSubmit(onSubmit)}>
           <div className={styles.CreateMeetingPage__Calendar}>

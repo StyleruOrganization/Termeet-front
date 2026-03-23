@@ -1,4 +1,3 @@
-export { Header } from "./Header/Header";
 export { Input } from "./Input/Input";
 export type { IInputProps } from "./Input/Input.types";
 export { ModalWrapper } from "./ModalWrapper/ModalWrapper";

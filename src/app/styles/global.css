@@ -1,5 +1,42 @@
 html {
-    font-size: 4px;
+  --min-viewport: 375px;
+  --max-viewport: 1440px;
+  font-size: 4px;
+  
+  /* При 375px: 24px, при 1440px: 36px */
+  --text-display: clamp(24px, 1.47vw + 18.5px, 36px);
+
+  /* При 375px: 20px, при 1440px: 24px */
+  --text-heading: clamp(20px, 0.56vw + 17.9px, 24px);
+
+    /* При 375px: 14px, при 1440px: 16px */
+  --text-body: clamp(14px, 0.38vw + 12.6px, 16px);
+  
+}
+
+@supports not (font-size: clamp(1rem, 1vw, 2rem)) {
+  :root {
+    --text-display: calc(24px + (36 - 24) * ((100vw - 375px) / (1440 - 375)));
+    --text-heading: calc(20px + (24 - 20) * ((100vw - 375px) / (1440 - 375)));
+    --text-body: calc(14px + (16 - 14) * ((100vw - 375px) / (1440 - 375)));
+  }
+  
+  /* Ограничиваем минимальные и максимальные значения через медиа-запросы */
+  @media (width <= 375px) {
+    :root {
+      --text-display-final: 24px;
+      --text-heading-final: 20px;
+      --text-body-final: 14px;
+    }
+  }
+  
+  @media (width >= 1440px) {
+    :root {
+      --text-display-final: 36px;
+      --text-heading-final: 24px;
+      --text-body-final: 16px;
+    }
+  }
 }
 
 body {

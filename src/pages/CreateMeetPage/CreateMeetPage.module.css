@@ -25,9 +25,9 @@
 }
 
 .CreateMeetingPage__Content__Title {
-  font-size: 10rem;
-  font-weight: 600;
-  line-height: 48px;
+  font-size: var(--text-display);
+  font-weight: 800;
+  line-height: 1.2;
 
   margin-bottom: 40px
 }
