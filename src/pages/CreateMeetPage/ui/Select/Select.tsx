@@ -1,13 +1,13 @@
 import { useState, useRef, useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import { useFocusTrap } from "@/shared/libs";
-import { ChevronDown, Check } from "@assets/icons";
+import { ChevronDown } from "@assets/icons";
 import { InputForm } from "@features/InputForm";
 import styles from "./Select.module.css";
 import type { TimeSelectProps } from "./Select.types";
 import type { ICreateMeet } from "../../model";
 
-const DROPDOWN_HEIGHT = 258;
+const DROPDOWN_HEIGHT = 232;
 
 export const Select = ({
   label,
@@ -19,7 +19,6 @@ export const Select = ({
   readonly = false,
 }: TimeSelectProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
   const [dropdownPosition, setDropdownPosition] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);
   const selectRef = useRef<HTMLDivElement>(null);
@@ -43,11 +42,12 @@ export const Select = ({
 
     const spaceBelow = document.documentElement.clientHeight - positions.bottom;
 
+    console.log("spaceBelow", spaceBelow);
     setTimeout(() => {
       if (spaceBelow > DROPDOWN_HEIGHT + 8 + 5) {
-        setDropdownPosition("100% + 8px");
+        setDropdownPosition("100% + 3px");
       } else {
-        setDropdownPosition("-258px - 8px");
+        setDropdownPosition("-208px");
       }
     }, 0);
   }, [isOpen]);
@@ -132,7 +132,6 @@ export const Select = ({
         readOnly={readonly}
         error={error}
       />
-      {showSuccess && !error && <Check className={styles.TimeSelect__SuccessIcon} />}
       <button
         type='button'
         className={styles.TimeSelect__Toggle}

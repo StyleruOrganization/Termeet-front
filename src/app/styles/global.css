@@ -45,7 +45,7 @@ body {
 }
 
 button:focus, input:focus, textarea:focus {
-    outline: none;
+  outline: none;
 }
 
 button:focus-visible, input:focus-visible, textarea:focus-visible {

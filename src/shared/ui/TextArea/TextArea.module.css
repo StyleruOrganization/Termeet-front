@@ -1,53 +1,67 @@
 .TextArea {
     position: relative;
 
+    display: flex;
+    gap: 8px;
+    flex-direction: column;
+
     width: 100%;
-    height: fit-content;
+
+    min-width: 0
 }
 
 .TextArea__Field {
     width: 100%;
     height: 128px;
-    padding: 30px 16px 12px;
+    padding: 16px;
 
-    background-color: var(--termeet-color-bg-inputs);
-    border: 1px solid var(--termeet-color-gray-main-10);
-    border-radius: var(--termeet-border-16);
+    background-color: var(--light-fill-controls);
+    border: 1px solid transparent;
+    border-radius: 16px;
+
+    transition: border-color 0.2s ease;
 
     font-size: 4rem;
-    font-weight: 600;
-    line-height: 22px;
+    line-height: 1.25;
 
     resize: none;
 }
 
+.TextArea__Field:focus-visible {
+  outline: 2px solid var(--light-semantics-dark-blue-active);
+  outline-offset: 2px;
+}
+
+.TextArea__Field::placeholder {
+  color: var(--light-text-secondary);
+
+  transition: opacity 0.2s ease;
+}
+
+.TextArea__Field:focus::placeholder {
+  opacity: 0;
+}
+
 .TextArea__Error .TextArea__Field {
-    border-color: var(--termeet-color-accent-errors);
-    outline: none; /* Убого выглядят две обводки */
+  border-color: var(--light-semantics-red-main);
+  outline: none; /* Смотрится не очень две обводки */
 }
 
 .TextArea__Label {
-    position: absolute;
-    top: 12px;
-    left: 16px;
+  color: var(--light-text-main);
 
-    color: var(--termeet-color-gray-main-100);
-
-    font-size: 3rem;
-    line-height: 18px;
-
-    pointer-events: none;
+  font-size: 4rem;
+  line-height: 1.25;
+  margin-left: 6px;
 }
 
 .TextArea__ErrorField {
-    display: flex;
-    gap: 4px;
+  color: var(--light-semantics-red-main);
 
-    color: var(--termeet-color-accent-errors);
+  animation: fade-in 0.3s ease-in-out;
 
-    font-size: 3rem;
-    line-height: 18px;
-
-    margin-top: 4px;
+  font-size: 3rem;
+  line-height: 1.25;
+  margin-left: 6px;
 }
 

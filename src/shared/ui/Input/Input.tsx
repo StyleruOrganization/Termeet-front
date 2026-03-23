@@ -1,5 +1,4 @@
 import { forwardRef } from "react";
-import { ErrorIcon } from "@assets/icons";
 import styles from "./Input.module.css";
 import type { IInputProps } from "./Input.types";
 
@@ -24,10 +23,9 @@ export const Input = forwardRef<HTMLInputElement, IInputProps>(
           className={`${styles.Input__Field} ${className}`}
         />
         {error && (
-          <div data-test-id='error-field' className={styles.Input__ErrorField}>
-            <ErrorIcon />
-            <span>{error}</span>
-          </div>
+          <span data-test-id='error-field' className={styles.Input__ErrorField}>
+            {error}
+          </span>
         )}
       </div>
     );

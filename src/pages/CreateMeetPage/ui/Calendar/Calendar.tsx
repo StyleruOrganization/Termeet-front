@@ -1,6 +1,6 @@
 import { Calendar as ReactCalendar } from "react-calendar";
 import { useFormContext, useFormState } from "react-hook-form";
-import { Arrow, ErrorIcon } from "@assets/icons";
+import { Arrow } from "@assets/icons";
 import styles from "./Calendar.module.css";
 import { useCalendarData } from "../../lib";
 import { formatMonthYearHeading, formatWeekday } from "../../lib/formatting/calendarFormatters";
@@ -41,7 +41,6 @@ export const Calendar = ({ minDate = new Date(), value = new Date() }: { minDate
       />
       {errors.dates?.message && (
         <div data-test-id='error-field' className={styles.Calendar__ErrorField}>
-          <ErrorIcon />
           <span>{errors.dates.message}</span>
         </div>
       )}

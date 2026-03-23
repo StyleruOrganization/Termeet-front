@@ -8,6 +8,7 @@
   --cell-size: 40px;
   --column-gap: 15px;
   padding: 20px 24px;
+  padding-bottom: 35px;
 
   text-align: center;
 
@@ -32,6 +33,10 @@
   transform: rotate(180deg);
 }
 
+.Calendar__Arrow:focus-visible, .Calendar__Arrow_Left:focus-visible {
+  transform: rotate(90deg);
+}
+
 .Calendar__Arrow:hover,  .Calendar__Arrow_Left:hover {
   color: var(--light-text-disabled)
 }
@@ -44,10 +49,18 @@
 
   color: var(--light-text-main);
   border-radius: 8px;
+  border: 1px solid transparent;
 
   transition: background-color 0.2s ease-in-out;
 
   font-size: var(--text-body);
+}
+
+.Calendar__Day:focus-visible {
+  border-color: var(--light-fill-outline);
+
+  outline: 2px solid var(--light-semantics-dark-blue-active);
+  outline-offset: 2px
 }
 
 .Calendar__Day:disabled {
@@ -62,10 +75,6 @@
   background-color: transparent;
 }
 
-.Calendar__Day_Weekend {
-  color: var(--termeet-color-brand-light-100)
-}
-
 .Calendar__Day.Calendar__Day_Selected {
   color: var(--light-fill-bg);
   background-color: var(--light-semantics-dark-blue-default);
@@ -75,7 +84,10 @@
 
 .Calendar__Day.Calendar__Day_Selected:hover {
   background-color: var(--light-semantics-dark-blue-active);
+}
 
+.Calendar__Day_Selected:focus-visible {
+  border-color: var(--light-semantics-black-main);
 }
 
 .Calendar__ErrorField {
@@ -86,7 +98,7 @@
   display: flex;
   gap: 4px;
 
-  color: var(--termeet-color-accent-errors);
+  color: var(--light-semantics-red-main);
 
   animation: fade-in 0.3s ease-in-out;
 

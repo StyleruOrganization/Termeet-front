@@ -30,6 +30,10 @@
   display: flex;
 }
 
+.react-calendar__navigation__arrow:focus-visible{
+  outline: 2px solid var(--light-semantics-black-main);
+}
+
 .react-calendar__navigation__arrow:disabled svg{
   color: var(--light-text-disabled);
 
@@ -55,10 +59,18 @@ abbr {
 }
 
 .react-calendar__tile--now {
-  background-color: var(--light-semantics-light-blue-hover);
+  background-color: var(--light-semantics-light-blue-default);
+
+  border-color: var(--light-semantics-light-blue-active);
 }
 
 
 .react-calendar__tile--now:hover {
-  background-color: var(--light-semantics-light-blue-active);
+  background-color: var(--light-semantics-light-blue-hover);
+}
+
+.react-calendar__tile--now:focus-visible {
+  border-color: var(--light-semantics-light-blue-active);
+  outline: 2px solid var(--light-semantics-dark-blue-active);
+  outline-offset: 2px;
 }

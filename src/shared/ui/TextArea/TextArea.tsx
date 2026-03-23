@@ -1,4 +1,3 @@
-import { ErrorIcon } from "@assets/icons";
 import styles from "./TextArea.module.css";
 import type { ITextAreaProps } from "./TextArea.types";
 
@@ -16,12 +15,7 @@ export const TextArea = ({ name, placeholder, label, error, ...textAreaProps }: 
         placeholder={placeholder}
         autoComplete='off'
       />
-      {error && (
-        <div className={styles.TextArea__ErrorField}>
-          <ErrorIcon />
-          <span>{error}</span>
-        </div>
-      )}
+      {error && <span className={styles.TextArea__ErrorField}>{error}</span>}
     </div>
   );
 };
