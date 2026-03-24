@@ -47,12 +47,14 @@ export const Calendar = ({
         onClickDay={onDateClick}
         tileClassName={formatClassName}
       />
-      {errors.dates?.message ||
-        (suggestMessage && (
-          <div className={errors.dates?.message ? styles.Calendar__ErrorField : styles.Calendar__SuggestField}>
-            <span>{errors.dates?.message || suggestMessage}</span>
-          </div>
-        ))}
+      {(errors.dates?.message || suggestMessage) && (
+        <div
+          key={errors.dates?.message || suggestMessage}
+          className={errors.dates?.message ? styles.Calendar__ErrorField : styles.Calendar__SuggestField}
+        >
+          <span>{errors.dates?.message || suggestMessage}</span>
+        </div>
+      )}
     </div>
   );
 };

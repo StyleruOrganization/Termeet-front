@@ -28,6 +28,9 @@
 }
 
 .CreateMeetingPage__Content__FormWrapper {
+  position: relative;
+  top: -28px;
+
   display: flex;
   flex: 10 1 310px;
   gap: 20px;

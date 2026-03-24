@@ -22,7 +22,7 @@ export const Input = forwardRef<HTMLInputElement, IInputProps>(
           className={`${styles.Input__Field} ${className}`}
         />
         {(suggestMessage || error) && (
-          <span className={error ? styles.Input__ErrorField : styles.Input__SuggestField}>
+          <span key={error || suggestMessage} className={error ? styles.Input__ErrorField : styles.Input__SuggestField}>
             {error || suggestMessage}
           </span>
         )}
