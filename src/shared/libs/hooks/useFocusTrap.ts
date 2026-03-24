@@ -21,7 +21,7 @@ export const useFocusTrap = <T extends HTMLElement>(
       if (!target) return;
 
       lastFocusedElem.current = document.activeElement as HTMLElement;
-      lastFocusedElem.current.blur();
+      // lastFocusedElem.current.blur();
 
       const focusableElems = target.querySelectorAll(TABBABLE_ELEMS) as NodeListOf<HTMLElement>;
       const numFocusableElems = focusableElems.length;
@@ -32,14 +32,19 @@ export const useFocusTrap = <T extends HTMLElement>(
       const firstElement = focusableElems[0];
       const lastElement = focusableElems[numFocusableElems - 1];
 
-      firstElement.focus();
+      // firstElement.focus();
 
-      const handleTab = (event: KeyboardEvent) => {
-        console.log("Handle key Tab in useFocusTrap");
+      const handleEsc = (event: KeyboardEvent) => {
+        console.log("Handle key Escape in useFocusTrap");
         if (event.key === "Escape") {
-          console.log("Handle key Escape in useFocusTrap");
           onEscape?.();
         }
+      };
+
+      target.addEventListener("keydown", handleEsc);
+      const handleTab = (event: KeyboardEvent) => {
+        console.log("Handle key Tab in useFocusTrap");
+
         if (event.key === "Tab") {
           const focusedElement = document.activeElement as HTMLElement;
 
@@ -57,10 +62,12 @@ export const useFocusTrap = <T extends HTMLElement>(
         }
       };
 
+      window.addEventListener("keydown", handleEsc);
       target.addEventListener("keydown", handleTab);
       return () => {
         lastFocusedElem.current!.focus();
 
+        target.removeEventListener("keydown", handleEsc);
         target.removeEventListener("keydown", handleTab);
       };
     }

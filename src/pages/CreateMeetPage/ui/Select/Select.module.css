@@ -1,5 +1,4 @@
 .TimeSelect {
-  --dropdown-ofset: 100% + 3px;
   position: relative;
 
   width: 100%;
@@ -8,8 +7,8 @@
 
 .TimeSelect__Toggle {
   position: absolute;
+  top: 28px;
   right: 0;
-  bottom: 0;
 
   display: flex;
   align-items: center;
@@ -22,6 +21,7 @@
 
   background: none;
   cursor: pointer;
+  pointer-events: none;
 }
 
 .TimeSelect__Toggle:focus-visible {
@@ -52,18 +52,30 @@
 .TimeSelect__Dropdown {
   position: absolute;
   z-index: 100;
-  top: calc(var(--dropdown-ofset));
   right: 0;
   left: 0;
 
   /* Симметрия с местом для скроллбара */
   padding: 8px 2px 8px 8px;
 
-  background-color: var(--light-fill-controls);
+  background-color: var(--light-fill-bg);
   border-radius: 16px;
+  border: 1px solid var(--light-semantics-gray-active);
 
-  max-height: 232px;
+  animation: fade-in 0.3s ease-in-out;
+
+  max-height: 234px;
   overflow-y: auto;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .TimeSelect__List {
@@ -83,12 +95,12 @@
   text-align: left;
 
   color: var(--light-semantics-black-main);
+  background-color: var(--light-semantics-gray-default);
   border: none;
   border-radius: 16px;
 
   transition: background-color 0.2s ease;
 
-  background: none;
   cursor: pointer;
 
   font-size: 16px;
@@ -105,6 +117,10 @@
 }
 
 .TimeSelect__Option_selected {
+  background-color: var(--light-semantics-gray-active);
+}
+
+.TimeSelect__Option_selected:hover {
   background-color: var(--light-semantics-gray-active);
 }
 
