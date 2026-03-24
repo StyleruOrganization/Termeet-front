@@ -6,7 +6,6 @@
 
 .Calendar {
   --cell-size: 40px;
-  --column-gap: 15px;
   padding: 20px 24px;
   padding-bottom: 35px;
 
@@ -15,8 +14,6 @@
   color: var(--light-text-main);
   background-color: var(--light-fill-controls);
   border-radius: 16px;
-
-  max-width: calc(7 * var(--cell-size) + 48px + 6 * var(--column-gap))
 }
 
 .Calendar__Arrow, .Calendar__Arrow_Left {
@@ -90,21 +87,26 @@
   border-color: var(--light-semantics-black-main);
 }
 
-.Calendar__ErrorField {
+.Calendar__ErrorField, .Calendar__SuggestField {
   position: absolute;
   bottom: 10px;
-  left: 24px;
+  left: 50%;
 
   display: flex;
   gap: 4px;
 
   color: var(--light-semantics-red-main);
 
+  transform: translateX(-50%);
   animation: fade-in 0.3s ease-in-out;
 
-  font-size: 3rem;
-  line-height: 18px;
+  font-size: 3.5rem;
+  line-height: 1.25;
   margin-top: 8px;
+}
+
+.Calendar__SuggestField {
+  color: var(--light-text-secondary)
 }
 
 @keyframes fade-in {
@@ -121,9 +123,15 @@
   }
 }
 
-@media (width <= 992px) {
+@media (width <= 768px) {
   .Calendar {
-    --gap: 10px;
+    --cell-size: 32px;
+  }
+}
+
+@media (width <= 300px) {
+  .Calendar {
+    --cell-size: 24px;
   }
 }
 

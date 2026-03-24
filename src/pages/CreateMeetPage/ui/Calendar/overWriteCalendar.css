@@ -15,7 +15,7 @@
 .react-calendar__month-view__days {
   /* ну а че как по другому, хочется же gap нормальный иметь */
   display: grid !important;
-  gap: 8px 15px;
+  gap: 8px 0;
 
   grid-template-columns: repeat(7, 1fr);
   justify-items: center;

@@ -15,7 +15,13 @@ export const MeetingForm = () => {
   });
   return (
     <div data-test-id='meeting-form' className={styles.MeetingForm}>
-      <InputForm name='title' label='Название' placeholder='Название встречи' error={errors.title?.message} />
+      <InputForm
+        suggestMessage='Укажите название встречи'
+        name='title'
+        label='Название'
+        placeholder='Название встречи'
+        error={errors.title?.message}
+      />
       <TextAreaForm
         label='Описание'
         placeholder='Добавьте описание для вашей встречи'

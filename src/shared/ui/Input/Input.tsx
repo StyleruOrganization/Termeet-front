@@ -3,8 +3,7 @@ import styles from "./Input.module.css";
 import type { IInputProps } from "./Input.types";
 
 export const Input = forwardRef<HTMLInputElement, IInputProps>(
-  ({ label, placeholder, name, error, onChange, readOnly = false, className = "", inputRef, ...props }, ref) => {
-    const resolvedRef = inputRef ?? ref;
+  ({ label, placeholder, name, error, onChange, readOnly = false, className = "", suggestMessage, ...props }, ref) => {
     return (
       <div className={`${styles.Input} ${error ? styles.Input__Error : ""}`}>
         {label && (
@@ -14,7 +13,7 @@ export const Input = forwardRef<HTMLInputElement, IInputProps>(
         )}
         <input
           {...props}
-          ref={resolvedRef}
+          ref={ref}
           onChange={onChange}
           id={name}
           name={name}
@@ -22,9 +21,9 @@ export const Input = forwardRef<HTMLInputElement, IInputProps>(
           placeholder={placeholder}
           className={`${styles.Input__Field} ${className}`}
         />
-        {error && (
-          <span data-test-id='error-field' className={styles.Input__ErrorField}>
-            {error}
+        {(suggestMessage || error) && (
+          <span className={error ? styles.Input__ErrorField : styles.Input__SuggestField}>
+            {error || suggestMessage}
           </span>
         )}
       </div>

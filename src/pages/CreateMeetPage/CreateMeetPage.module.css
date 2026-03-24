@@ -10,18 +10,12 @@
 .CreateMeetingPage__Calendar {
   position: relative;
 
-  display: flex;
-  flex: 1 1 310px;
-  flex-direction: column;
-
-  max-width: 575px;
+  flex: 1 1 420px;
 } 
 
 .CreateMeetingPage__Content {
   display: flex;
   flex-direction: column;
-
-  max-width: 1530px;
 }
 
 .CreateMeetingPage__Content__Title {
@@ -29,18 +23,17 @@
   font-weight: 800;
   line-height: 1.2;
 
-  margin-bottom: 40px
+  margin-bottom: 40px;
+  margin-left: 6px
 }
 
 .CreateMeetingPage__Content__FormWrapper {
   display: flex;
-  flex: 1 1 310px;
+  flex: 10 1 310px;
   gap: 20px;
   flex-direction: column;
 
   font-size: 3rem;
-
-  max-width: 650px;
 }
 
 .CreateMeetingPage__CreateButton {
@@ -79,12 +72,8 @@
   color: var(--light-text-inverted);
 }
 
-@media (width <= 768px) {
+@media (width <= 1024px) {
   .CreateMeetingPage__Content__Title {
-    margin-bottom: 24px;
-  }
-
-  .CreateMeetingPage__Header {
-    margin-bottom: 32px;
+    margin-bottom: 20px;
   }
 }

@@ -1,4 +1,4 @@
-import type { InputHTMLAttributes, RefObject } from "react";
+import type { InputHTMLAttributes } from "react";
 
 export interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
   /** Имя поля ввода */
@@ -10,7 +10,7 @@ export interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
   readOnly?: boolean;
   /** Сообщение об ошибке */
   error?: string;
-  /** Ref на input (для императивного доступа) */
-  inputRef?: RefObject<HTMLInputElement | null>;
+  /** Ненавязывающее сообщение о заполении поля ввода */
+  suggestMessage?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }

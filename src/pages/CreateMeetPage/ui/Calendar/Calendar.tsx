@@ -8,7 +8,15 @@ import type { ICreateMeet } from "../../model";
 
 import "./overWriteCalendar.css";
 
-export const Calendar = ({ minDate = new Date(), value = new Date() }: { minDate?: Date; value?: Date }) => {
+export const Calendar = ({
+  minDate = new Date(),
+  value = new Date(),
+  suggestMessage,
+}: {
+  minDate?: Date;
+  value?: Date;
+  suggestMessage?: string;
+}) => {
   const { control } = useFormContext<ICreateMeet>();
   const { errors } = useFormState({
     control,
@@ -39,11 +47,12 @@ export const Calendar = ({ minDate = new Date(), value = new Date() }: { minDate
         onClickDay={onDateClick}
         tileClassName={formatClassName}
       />
-      {errors.dates?.message && (
-        <div data-test-id='error-field' className={styles.Calendar__ErrorField}>
-          <span>{errors.dates.message}</span>
-        </div>
-      )}
+      {errors.dates?.message ||
+        (suggestMessage && (
+          <div className={errors.dates?.message ? styles.Calendar__ErrorField : styles.Calendar__SuggestField}>
+            <span>{errors.dates?.message || suggestMessage}</span>
+          </div>
+        ))}
     </div>
   );
 };

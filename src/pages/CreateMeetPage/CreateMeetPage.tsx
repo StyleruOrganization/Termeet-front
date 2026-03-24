@@ -28,7 +28,7 @@ export function CreateMeetPage() {
       <FormProvider {...methods}>
         <form className={styles.CreateMeetingPage__Form} onSubmit={handleSubmit(onSubmit)}>
           <div className={styles.CreateMeetingPage__Calendar}>
-            <CalendarWidget />
+            <CalendarWidget suggestMessage='Выберите минимум один день' />
           </div>
 
           <div className={styles.CreateMeetingPage__Content__FormWrapper}>

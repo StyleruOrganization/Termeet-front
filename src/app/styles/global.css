@@ -1,29 +1,28 @@
 html {
-  --min-viewport: 375px;
+  --min-viewport: 768px;
   --max-viewport: 1440px;
   font-size: 4px;
   font-weight: 500;
   
-  /* При 375px: 24px, при 1440px: 36px */
-  --text-display: clamp(6rem, 1.47vw + 4.625rem, 9rem);
+  /* При 768px: 24px, при 1440px: 36px */
+  --text-display: clamp(6rem, 2.08vw + 3rem, 9rem);
 
-  /* При 375px: 20px, при 1440px: 24px */
-  --text-heading: clamp(5rem, 0.56vw + 4.5rem, 6rem);
+  /* При 768px: 20px, при 1440px: 24px */
+  --text-heading: clamp(5rem, 0.89vw + 4.125rem, 6rem);
 
-    /* При 375px: 14px, при 1440px: 16px */
-  --text-body: clamp(3.5rem, 0.38vw + 3.125rem, 4rem);
-  
+  /* При 768px: 14px, при 1440px: 16px */
+  --text-body: clamp(3.5rem, 0.59vw + 3.125rem, 4rem);
 }
 
 @supports not (font-size: clamp(1rem, 1vw, 2rem)) {
   :root {
-    --text-display: calc(24px + (36 - 24) * ((100vw - 375px) / (1440 - 375)));
-    --text-heading: calc(20px + (24 - 20) * ((100vw - 375px) / (1440 - 375)));
-    --text-body: calc(14px + (16 - 14) * ((100vw - 375px) / (1440 - 375)));
+    --text-display: calc(24px + (36 - 24) * ((100vw - 768px) / (1440 - 768)));
+    --text-heading: calc(20px + (24 - 20) * ((100vw - 768px) / (1440 - 768)));
+    --text-body: calc(14px + (16 - 14) * ((100vw - 768px) / (1440 - 768)));
   }
   
   /* Ограничиваем минимальные и максимальные значения через медиа-запросы */
-  @media (width <= 375px) {
+  @media (width <= 768px) {
     :root {
       --text-display: 24px;
       --text-heading: 20px;
@@ -41,15 +40,19 @@ html {
 }
 
 body {
-    font-family: Manrope, sans-serif;
+  font-family: Manrope, sans-serif;
 }
 
-button:focus, input:focus, textarea:focus {
+button:focus,
+input:focus,
+textarea:focus {
   outline: none;
 }
 
-button:focus-visible, input:focus-visible, textarea:focus-visible {
-    outline: 2px solid var(--termeet-color-gray-main-100);
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--termeet-color-gray-main-100);
 }
 
 * {

@@ -43,7 +43,7 @@
   outline: none; /* Смотрится не очень две обводки */
 }
 
-.Input__ErrorField {
+.Input__ErrorField, .Input__SuggestField {
   color: var(--light-semantics-red-main);
 
   animation: fade-in 0.3s ease-in-out;
@@ -51,6 +51,10 @@
   font-size: 3rem;
   line-height: 1.25;
   margin-left: 6px;
+}
+
+.Input__SuggestField {
+  color: var(--light-text-secondary)
 }
 
 .Input__Label {

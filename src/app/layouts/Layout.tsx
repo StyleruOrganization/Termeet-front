@@ -12,7 +12,9 @@ import "../styles/variables.css";
 
 export const Layout = () => (
   <>
-    <h1 className={styles.header}>termeet</h1>
+    <div className={styles.header}>
+      <h1>termeet</h1>
+    </div>
     <div className={styles.container}>
       <Suspense fallback={<Loader />}>
         <Outlet />

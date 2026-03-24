@@ -1,19 +1,12 @@
 .container {
-  display: flex;
-  justify-content: center;
+  padding: 0 100px 40px;
+  margin: 0 auto;
 
-  padding-bottom: 40px;
-  
-  max-width: 90vw;
-}
-
-.container, .header {
-  padding-left: 8.5vw;
+  max-width: 1400px;
 }
 
 .header {
-  padding-top: 28px;
-  padding-bottom: 28px;
+  padding: 28px 0;
 
   background-color: var(--light-text-inverted);
 
@@ -22,16 +15,26 @@
   line-height: 24px;
 
   margin-bottom: 32px;
+
+  h1 {
+    margin: 0 auto;
+    padding-left: 100px;
+
+    max-width: 1400px;
+  }
 }
 
-@media (width <= 768px) {
+@media (width <= 1024px) {
   .container {
-    padding: 16px;
-
-    max-width: 100%;
+     padding: 0 16px 40px;
   }
 
   .header {
     margin-bottom: 20px;
+
+    h1 {
+      padding-left: 20px;
+
+    }
   }
 }
