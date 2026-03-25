@@ -108,12 +108,16 @@ export const useCreateMeetStore = create<MeetingFormState>((set, get) => ({
     set({
       values: {
         title: "",
-        timeStart: "",
-        timeEnd: "",
+        timeStart: "10 : 00",
+        timeEnd: "19 : 00",
         dates: [],
         description: "",
         link: "",
         timeDuration: "",
+      },
+      lastCorrectedValues: {
+        timeStart: "10 : 00",
+        timeEnd: "19 : 00",
       },
       errors: {},
     }),
