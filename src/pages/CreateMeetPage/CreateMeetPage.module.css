@@ -39,7 +39,12 @@
   font-size: 3rem;
 }
 
+.CreateMeetingPage__CreateButtonWrapper {
+  width: 100%;
+}
+
 .CreateMeetingPage__CreateButton {
+  width: 100%;
   padding: 16px;
 
   text-align: center;
@@ -78,5 +83,25 @@
 @media (width <= 1024px) {
   .CreateMeetingPage__Content__Title {
     margin-bottom: 20px;
+  }
+}
+
+@media (width <= 768px) {
+  .CreateMeetingPage__CreateButtonWrapper {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+
+    padding: 10px 10px 32px;
+
+    background-color: var(--light-fill-bg);
+    box-shadow: 0 4px 24px rgb(0 0 0 / 12%);
+
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+  }
+
+  .CreateMeetingPage__Content__FormWrapper {
+    top: -4px;
   }
 }

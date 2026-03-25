@@ -1,10 +1,66 @@
 .MeetingForm {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 24px
 }
 
 .MeetingForm__InputsTimes {
+  align-items: start;
   display: flex;
-  gap: 16px;
+  gap: 4px;
+}
+
+.MeetingForm__InputsTimes__Separator {
+  position: relative;
+  top: 26px;
+
+  width: 9px;
+  height: 2px;
+
+  background-color: var(--light-text-main);
+}
+
+.MeetingForm__InputsTimes__Label {
+  color: var(--light-text-main);
+
+  font-size: 4rem;
+  line-height: 1.25;
+  margin-bottom: -12px;
+  margin-left: 6px;
+  max-width: fit-content;
+}
+
+.MeetingForm__InputDuration:focus-within::after {
+  position: absolute;
+  z-index: 1;
+  bottom: 18px;
+  left: 16px;
+
+  width: 2px;
+  height: 18px;
+
+  background-color: var(--light-semantics-dark-blue-default);
+
+  /* transform: translateY(-50%); */
+  animation: blink 1s step-end infinite;
+
+  content: '';
+  pointer-events: none;
+}
+
+/* Анимация мигания курсора */
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (width <= 768px) {
+  .MeetingForm {
+    padding-bottom: 95px;
+  }
 }

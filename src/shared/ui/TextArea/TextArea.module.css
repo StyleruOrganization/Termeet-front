@@ -53,9 +53,10 @@
   font-size: 4rem;
   line-height: 1.25;
   margin-left: 6px;
+  max-width: fit-content;
 }
 
-.TextArea__ErrorField {
+.TextArea__ErrorField, .TextArea__SuggestField {
   color: var(--light-semantics-red-main);
 
   animation: fade-in 0.3s ease-in-out;
@@ -64,4 +65,23 @@
   line-height: 1.25;
   margin-left: 6px;
 }
+
+.TextArea__SuggestField {
+  color: var(--light-text-secondary);
+}
+
+@keyframes fade-in {
+  0% {
+    transform: translateY(-10px);
+
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0);
+
+    opacity: 1;
+  }
+}
+
 

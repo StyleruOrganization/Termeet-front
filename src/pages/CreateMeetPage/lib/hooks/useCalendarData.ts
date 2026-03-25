@@ -1,6 +1,5 @@
-import { useFormContext, useWatch } from "react-hook-form";
+import { useCreateMeetStore } from "../../model/createMeetStore";
 import styles from "../../ui/Calendar/Calendar.module.css";
-import type { ICreateMeet } from "../../model";
 import type { TileClassNameFunc } from "react-calendar";
 
 const formatDate = (date: Date) => {
@@ -14,12 +13,10 @@ const formatDate = (date: Date) => {
 };
 
 export const useCalendarData = () => {
-  const { control, setValue, trigger } = useFormContext<ICreateMeet>();
-  const selectedDates = useWatch({
-    control,
-    name: "dates",
-    defaultValue: [],
-  });
+  const selectedDates = useCreateMeetStore(state => state.values.dates);
+  const setValue = useCreateMeetStore(state => state.setValue);
+  // const validateField = useCreateMeetStore(state => state.validateField);
+  const error = useCreateMeetStore(state => state.errors.dates);
 
   const onDateClick = (date: Date) => {
     if (date === null) {
@@ -35,8 +32,7 @@ export const useCalendarData = () => {
     } else {
       setValue("dates", [...selectedDates, formattedDate]);
     }
-
-    trigger("dates");
+    // validateField("dates");
   };
 
   const formatClassName: TileClassNameFunc = ({ date, view }) => {
@@ -58,5 +54,6 @@ export const useCalendarData = () => {
     onDateClick,
     selectedDates,
     formatClassName,
+    error,
   };
 };

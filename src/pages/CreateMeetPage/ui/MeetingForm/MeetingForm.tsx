@@ -1,61 +1,55 @@
-import { useFormState, useFormContext } from "react-hook-form";
 import { TIMES, DURATIONS } from "@/shared/libs";
-import { InputForm } from "@features/InputForm";
-import { TextAreaForm } from "@features/TextAreaForm";
+import { InputForm } from "../InputForm";
 import styles from "./MeetingForm.module.css";
-import { formatTime } from "../../lib";
+import { isDurationValid, isTimeBefore } from "../../lib";
+import { useCreateMeetStore } from "../../model";
 import { Select } from "../Select";
-import type { ICreateMeet } from "../../model";
+import { TextAreaForm } from "../TextAreaForm";
 
 export const MeetingForm = () => {
-  const { control } = useFormContext<ICreateMeet>();
-  const { errors } = useFormState({
-    control,
-    name: ["title", "description", "link", "time.start", "time.end", "time.duration"],
-  });
+  const timeStart = useCreateMeetStore(state => state.values.timeStart);
+  const timeEnd = useCreateMeetStore(state => state.values.timeEnd);
+
   return (
     <div data-test-id='meeting-form' className={styles.MeetingForm}>
       <InputForm
         suggestMessage='Укажите название встречи'
         name='title'
-        label='Название'
-        placeholder='Название встречи'
-        error={errors.title?.message}
+        label='Название встречи'
+        placeholder='«Лютый синк»'
       />
       <TextAreaForm
-        label='Описание'
-        placeholder='Добавьте описание для вашей встречи'
+        label='Описание встречи'
+        placeholder='Тут можно написать, о чем будет встреча'
         name='description'
-        error={errors.description?.message}
+        suggestMessage='Максимальное количество символов — 400.'
       />
-      <InputForm name='link' label='Ссылка на встречу' placeholder='Ссылка на встречу' error={errors.link?.message} />
+      <div className={styles.MeetingForm__InputsTimes__Label}>Когда хотите встретиться?</div>
       <div className={styles.MeetingForm__InputsTimes}>
         <Select
-          name='time.start'
-          label={"Начало"}
+          disabledFunc={time => !isTimeBefore(time, timeEnd)}
+          name='timeStart'
           placeholder='Выберите'
           options={TIMES}
-          formatValue={formatTime}
-          error={errors.time?.start?.message}
         />
+        <div className={styles.MeetingForm__InputsTimes__Separator} />
         <Select
-          name='time.end'
-          label={"Конец"}
+          disabledFunc={time => isTimeBefore(time, timeStart) || time == timeStart}
+          name='timeEnd'
           placeholder='Выберите'
           options={TIMES}
-          formatValue={formatTime}
-          error={errors.time?.end?.message}
         />
       </div>
       <Select
-        name='time.duration'
-        label={"Продолжительность"}
-        placeholder='Выберите'
+        disabledFunc={duration => !isDurationValid(duration, timeStart, timeEnd)}
+        name='timeDuration'
+        label='Продолжительность встречи'
+        placeholder='1 час'
         options={DURATIONS}
-        formatValue={(duration: string) => ({ isValid: true, value: duration })}
         readonly
-        error={errors.time?.duration?.message}
+        className={styles.MeetingForm__InputDuration}
       />
+      <InputForm name='link' label='Ссылка на встречу' placeholder='https://telemost.yandex.ru/j/122' />
     </div>
   );
 };

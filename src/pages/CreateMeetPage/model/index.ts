@@ -1,1 +1,2 @@
-export { createMeetSchema, type ICreateMeet, type MeetingFields } from "./createMeet.schema";
+export { type ICreateMeet, type CreateMeetFields } from "./createMeet.types";
+export { useCreateMeetStore } from "./createMeetStore";

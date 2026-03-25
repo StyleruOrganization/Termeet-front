@@ -1,16 +1,13 @@
-import type { MeetingFields } from "../../model";
+import type { CreateMeetFields } from "../../model";
 
 export interface TimeSelectProps {
+  name: Extract<CreateMeetFields, "timeStart" | "timeEnd" | "timeDuration">;
+  disabledFunc: (value: string) => boolean;
   /** Заголовок поля ввода */
-  label: string;
+  label?: string;
   placeholder: string;
   /** Варинаты которые можно выбрать */
   options: string[];
-  /** Сообщение об ошибке */
-  error?: string;
-  /** Текущее значение */
-  name: MeetingFields;
   readonly?: boolean;
-  onItemClick?: (value: string) => void;
-  formatValue: (value: string) => { isValid: boolean; value: string };
+  className?: string;
 }

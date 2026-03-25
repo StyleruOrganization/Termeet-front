@@ -1,10 +1,8 @@
 import { Calendar as ReactCalendar } from "react-calendar";
-import { useFormContext, useFormState } from "react-hook-form";
 import { Arrow } from "@assets/icons";
 import styles from "./Calendar.module.css";
 import { useCalendarData } from "../../lib";
 import { formatMonthYearHeading, formatWeekday } from "../../lib/formatting/calendarFormatters";
-import type { ICreateMeet } from "../../model";
 
 import "./overWriteCalendar.css";
 
@@ -17,13 +15,7 @@ export const Calendar = ({
   value?: Date;
   suggestMessage?: string;
 }) => {
-  const { control } = useFormContext<ICreateMeet>();
-  const { errors } = useFormState({
-    control,
-    name: ["dates"],
-  });
-
-  const { onDateClick, formatClassName } = useCalendarData();
+  const { onDateClick, formatClassName, error, selectedDates } = useCalendarData();
 
   return (
     <div className={styles.CalendarWrapper}>
@@ -47,12 +39,14 @@ export const Calendar = ({
         onClickDay={onDateClick}
         tileClassName={formatClassName}
       />
-      {(errors.dates?.message || suggestMessage) && (
-        <div
-          key={errors.dates?.message || suggestMessage}
-          className={errors.dates?.message ? styles.Calendar__ErrorField : styles.Calendar__SuggestField}
-        >
-          <span>{errors.dates?.message || suggestMessage}</span>
+      {suggestMessage && !selectedDates.length && !error && (
+        <div className={styles.Calendar__SuggestField}>
+          <span>{suggestMessage}</span>
+        </div>
+      )}
+      {error && (
+        <div className={styles.Calendar__ErrorField}>
+          <span>{error}</span>
         </div>
       )}
     </div>

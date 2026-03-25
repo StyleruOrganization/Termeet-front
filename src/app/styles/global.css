@@ -1,17 +1,18 @@
 html {
-  --min-viewport: 768px;
-  --max-viewport: 1440px;
   font-size: 4px;
   font-weight: 500;
   
-  /* При 768px: 24px, при 1440px: 36px */
-  --text-display: clamp(6rem, 2.08vw + 3rem, 9rem);
+  /* Формула: min + (max - min) * (100vw - min-vw) / (max-vw - min-vw) */
 
-  /* При 768px: 20px, при 1440px: 24px */
-  --text-heading: clamp(5rem, 0.89vw + 4.125rem, 6rem);
-
-  /* При 768px: 14px, при 1440px: 16px */
-  --text-body: clamp(3.5rem, 0.59vw + 3.125rem, 4rem);
+  /* 24px + (36-24) * (100vw - 768) / (1440-768) = 24 + 12 * (100vw - 768) / 672 */
+  --text-display: clamp(24px, 1.786vw + 10.29px, 36px);
+  --text-heading: clamp(20px, 0.595vw + 15.43px, 24px);
+  --text-body: clamp(14px, 0.298vw + 11.71px, 16px);
+  
+  /* Переводим в rem для использования */
+  --text-display-rem: calc(var(--text-display) / 4 * 1rem);
+  --text-heading-rem: calc(var(--text-heading) / 4 * 1rem);
+  --text-body-rem: calc(var(--text-body) / 4 * 1rem);
 }
 
 @supports not (font-size: clamp(1rem, 1vw, 2rem)) {
@@ -21,7 +22,6 @@ html {
     --text-body: calc(14px + (16 - 14) * ((100vw - 768px) / (1440 - 768)));
   }
   
-  /* Ограничиваем минимальные и максимальные значения через медиа-запросы */
   @media (width <= 768px) {
     :root {
       --text-display: 24px;

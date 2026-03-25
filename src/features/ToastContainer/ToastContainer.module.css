@@ -27,7 +27,7 @@
 
   padding: 12px 16px;
 
-  border-radius: var(--termeet-border-16);
+  border-radius: 16px;
 
   pointer-events: auto;
 
@@ -47,9 +47,7 @@
 }
 
 .Toast__Success {
-  background-color: var(--termeet-color-accent-success);
-
-  opacity: 0.8;
+  background-color: var(--light-semantics-green-active);
 }
 
 .Toast__Error {

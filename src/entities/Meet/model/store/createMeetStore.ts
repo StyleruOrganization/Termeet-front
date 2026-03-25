@@ -55,8 +55,6 @@ export const createMeetStore = (initProps?: Partial<IMeetContext>) => {
       // Сортируем по возрастанию даты и времени
       allSlots.sort((a, b) => a.getTime() - b.getTime());
 
-      console.log("allSlots", allSlots);
-
       // Группируем в непрерывные отрезки
       const slots: string[][] = [];
       let currentSegment: Date[] = [];

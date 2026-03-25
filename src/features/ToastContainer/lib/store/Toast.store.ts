@@ -4,7 +4,6 @@ import type { IToastStore } from "../../model/Toast.types";
 export const useToastStore = create<IToastStore>((set, get) => ({
   toasts: [],
   addToast: toast => {
-    console.log("ADD TOAST:", toast);
     set(state => ({ toasts: [...state.toasts, toast] }));
     // Автоудаление для не-wait тостов
     if (toast.type !== "wait") {
@@ -12,7 +11,6 @@ export const useToastStore = create<IToastStore>((set, get) => ({
         const currentToast = get().toasts.find(t => t.id === toast.id);
         // Удаляем только если тост еще существует и не в процессе анимации
         if (currentToast && !currentToast.isExiting) {
-          console.log("REMOVE TOAST IN TIMEOUT:", currentToast);
           get().removeToast(currentToast.id);
         }
       }, toast.duration || 3000);

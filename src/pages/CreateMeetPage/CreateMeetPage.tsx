@@ -1,44 +1,68 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, type SubmitHandler, FormProvider } from "react-hook-form";
-import { useCreateMeet } from "./api";
+import { useToastStore } from "@/features/ToastContainer";
 import styles from "./CreateMeetPage.module.css";
-import { createMeetSchema } from "./model";
+import { useCreateMeetStore } from "./model/createMeetStore";
 import { CalendarWidget } from "./ui/Calendar";
 import { MeetingForm } from "./ui/MeetingForm";
-import type { ICreateMeet } from "./CreateMeetPage.types";
+
+const CreateButton = () => {
+  const values = useCreateMeetStore(state => state.values);
+  const errors = useCreateMeetStore(state => state.errors);
+
+  console.log("formValues in CreateButton", values);
+  return (
+    <>
+      {/* Обертка для мобил там где fixed */}
+      <div className={styles.CreateMeetingPage__CreateButtonWrapper}>
+        <button
+          disabled={!values.title || values.dates.length == 0 || Object.values(errors).some(Boolean)}
+          data-test-id='create-meet'
+          className={styles.CreateMeetingPage__CreateButton}
+          type='submit'
+        >
+          Создать встречу
+        </button>
+      </div>
+    </>
+  );
+};
 
 export function CreateMeetPage() {
-  const methods = useForm<ICreateMeet>({
-    resolver: zodResolver(createMeetSchema),
-  });
-  const { handleSubmit, reset } = methods;
-  const { createMeet } = useCreateMeet({
-    onSuccess: () => {
-      reset();
-    },
-  });
+  const resetForm = useCreateMeetStore(state => state.resetForm);
+  const addToast = useToastStore(state => state.addToast);
 
-  const onSubmit: SubmitHandler<ICreateMeet> = async data => {
-    createMeet(data);
+  // const { createMeet } = useCreateMeet({
+  //   onSuccess: () => {
+  //     resetForm();
+  //   },
+  // });
+
+  const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const values = useCreateMeetStore.getState().values;
+
+    console.log("Submit data:", values);
+    addToast({
+      type: "success",
+      message: "Встреча успешно создана",
+      id: "create-meet-success",
+    });
+
+    resetForm();
   };
 
   return (
     <div className={styles.CreateMeetingPage__Content}>
-      <h1 className={styles.CreateMeetingPage__Content__Title}>Настройте встречу</h1>
-      <FormProvider {...methods}>
-        <form className={styles.CreateMeetingPage__Form} onSubmit={handleSubmit(onSubmit)}>
-          <div className={styles.CreateMeetingPage__Calendar}>
-            <CalendarWidget suggestMessage='Выберите минимум один день' />
-          </div>
-
-          <div className={styles.CreateMeetingPage__Content__FormWrapper}>
-            <MeetingForm />
-            <button data-test-id='create-meet' className={styles.CreateMeetingPage__CreateButton} type='submit'>
-              Создать встречу
-            </button>
-          </div>
-        </form>
-      </FormProvider>
+      <h1 className={styles.CreateMeetingPage__Content__Title}>Создайте встречу</h1>
+      <form className={styles.CreateMeetingPage__Form} onSubmit={handleSubmit}>
+        <div className={styles.CreateMeetingPage__Calendar}>
+          <CalendarWidget suggestMessage='Выберите минимум один день' />
+        </div>
+        <div className={styles.CreateMeetingPage__Content__FormWrapper}>
+          <MeetingForm />
+          <CreateButton />
+        </div>
+      </form>
     </div>
   );
 }

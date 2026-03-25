@@ -1,32 +1,90 @@
-let prevValue = "";
 /**
  * Форматирует ввод времени, автоматически добавляя двоеточие
  * @param value - текущее значение инпута
  * @returns отформатированное значение
  */
 export const formatTime = (value: string): { isValid: boolean; value: string } => {
-  console.log("formatTime", { value, prevValue });
-  if (value.length < prevValue.length && value.trim().split(" ").length == 2) {
-    return { isValid: false, value: value.trim().split(" ")[0] };
-  }
-  const regExpTime = /^([0-1][0-9]|2[0-3]) : [0-5][0-9]$/;
-  const result: { isValid: boolean; value: string } = {
-    isValid: false,
-    value: "",
-  };
+  // Удаляем все нецифровые символы
   const numbers = value.replace(/\D/g, "");
 
-  if (regExpTime.test(numbers) || value.length > 4) {
-    result.isValid = true;
+  if (numbers.length === 0) {
+    return { isValid: false, value: "" };
   }
 
+  let formatted = "";
+  let isValid = false;
+
+  // Форматируем
   if (numbers.length <= 2) {
-    result.value = numbers;
+    formatted = numbers;
   } else {
-    result.value = `${numbers.slice(0, 2)} : ${numbers.slice(2, 4)}`;
+    const hours = numbers.slice(0, 2);
+    const minutes = numbers.slice(2, 4);
+    formatted = `${hours} : ${minutes}`;
   }
 
-  prevValue = value;
+  // Проверяем валидность: должно быть 4 цифры, часы 00-23, минуты 00-59
+  if (numbers.length >= 4) {
+    const hours = parseInt(numbers.slice(0, 2));
+    const minutes = parseInt(numbers.slice(2, 4));
 
-  return result;
+    if (hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59) {
+      isValid = true;
+    }
+  }
+
+  return { isValid, value: formatted };
+};
+
+/**
+ * Сравнивает две строки времени в формате HH:MM
+ * @param time1 - первое время (например, "10:30")
+ * @param time2 - второе время (например, "14:15")
+ * @returns true если time1 < time2, иначе false
+ */
+export const isTimeBefore = (time1: string, time2: string): boolean => {
+  const [hours1, minutes1] = time1.split(":").map(Number);
+  const [hours2, minutes2] = time2.split(":").map(Number);
+
+  if (hours1 < hours2) return true;
+  if (hours1 > hours2) return false;
+  return minutes1 < minutes2;
+};
+
+/**
+ * Проверяет, что продолжительность не превышает разницу между timeStart и timeEnd
+ * @param duration - продолжительность из списка DURATIONS
+ * @param timeStart - время начала в формате HH:MM
+ * @param timeEnd - время окончания в формате HH:MM
+ * @returns true если продолжительность <= разнице между start и end
+ */
+export const isDurationValid = (duration: string, timeStart: string, timeEnd: string): boolean => {
+  const startMinutes = timeToMinutes(timeStart);
+  const endMinutes = timeToMinutes(timeEnd);
+  const durationMinutes = durationToMinutes(duration);
+
+  const availableMinutes = endMinutes - startMinutes;
+
+  return durationMinutes <= availableMinutes;
+};
+
+const timeToMinutes = (time: string): number => {
+  const [hours, minutes] = time.split(":").map(Number);
+  return hours * 60 + minutes;
+};
+
+const durationToMinutes = (duration: string): number => {
+  const normalized = duration.trim().toLowerCase();
+
+  if (normalized.includes("мин")) {
+    const value = parseFloat(normalized.replace("мин", "").trim());
+    return value;
+  }
+
+  if (normalized.includes("час")) {
+    const value = parseFloat(normalized.replace("часа", "").replace("час", "").trim().replace(",", "."));
+    return value * 60;
+  }
+
+  return 0;
 };

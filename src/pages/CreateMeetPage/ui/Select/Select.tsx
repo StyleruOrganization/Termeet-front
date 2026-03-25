@@ -1,118 +1,82 @@
 import { useRef } from "react";
-import { useFormContext } from "react-hook-form";
-import { ChevronDown } from "@assets/icons";
-import { InputForm } from "@features/InputForm";
+import { Input } from "@shared/ui";
 import styles from "./Select.module.css";
 import { useDropdownPosition } from "../../lib/hooks/useDropdownPosition";
+import { useCreateMeetStore } from "../../model";
 import type { TimeSelectProps } from "./Select.types";
-import type { ICreateMeet } from "../../model";
 
 export const Select = ({
   label,
   placeholder,
   options,
   name,
-  error,
-  formatValue,
   readonly = false,
+  className,
+  disabledFunc,
 }: TimeSelectProps) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLDivElement>(null);
-  const { setValue, watch, trigger } = useFormContext<ICreateMeet>();
+  const inputRef = useRef<HTMLInputElement>(null);
   const { isOpen, dropdownPosition, openDropdown, closeDropdown } = useDropdownPosition(inputRef, dropdownRef);
-
-  const timeValues = watch("time");
-  console.log("fieldValue in Select", timeValues);
-  console.log("name in Select", name);
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatValue(event.target.value as string);
-
-    setValue(name, formatted.value, {
-      shouldValidate: true,
-      shouldDirty: true,
-      shouldTouch: true,
-    });
-
-    const triggeredValues: ("time.start" | "time.end" | "time.duration")[] = [];
-    if (timeValues.duration) {
-      triggeredValues.push("time.duration");
-    }
-    if (timeValues.start) {
-      triggeredValues.push("time.start");
-    }
-    if (timeValues.end) {
-      triggeredValues.push("time.end");
-    }
-
-    console.log("triggered Values", triggeredValues);
-
-    trigger(triggeredValues);
-  };
-
-  const key = name.split(".")[1] as "start" | "end" | "duration";
+  const blurTimeField = useCreateMeetStore(state => state.blurTimeField);
+  const inputValue = useCreateMeetStore(state => state.values[name]);
+  const setTime = useCreateMeetStore(state => state.setTime);
 
   return (
-    <div className={styles.TimeSelect} ref={inputRef}>
-      <InputForm
+    <div className={styles.TimeSelect + " " + className}>
+      <Input
+        ref={inputRef}
+        value={inputValue}
         name={name}
-        onChange={handleChange}
+        onChange={event => {
+          setTime(name, event.target.value);
+        }}
         onClick={() => {
-          console.log("click in input");
           openDropdown();
+        }}
+        onFocus={() => {
+          if (name == "timeDuration") {
+            setTime("timeDuration", " час", false);
+          }
+        }}
+        onBlur={() => {
+          blurTimeField(name);
         }}
         label={label}
         placeholder={placeholder}
         readOnly={readonly}
-        error={error}
+        className={styles.TimeSelect__InputWrapper + (isOpen ? " " + styles.TimeSelect__InputWrapper_open : "")}
       />
-      <div className={styles.TimeSelect__Toggle}>
-        <ChevronDown className={`${styles.TimeSelect__OpenIcon} ${isOpen ? styles.TimeSelect__OpenIcon_Open : ""}`} />
+      <div
+        style={{
+          top: `${dropdownPosition?.top}px`,
+          left: `${dropdownPosition?.left}px`,
+          width: `${dropdownPosition?.width}px`,
+          visibility: isOpen ? "visible" : "hidden",
+        }}
+        className={styles.TimeSelect__Dropdown}
+        ref={dropdownRef}
+      >
+        <ul className={styles.TimeSelect__List}>
+          {options.map(option => {
+            if (disabledFunc(option)) return null;
+            return (
+              <li key={option}>
+                <button
+                  className={`${styles.TimeSelect__Option} ${inputValue === option ? styles.TimeSelect__Option_selected : ""}`}
+                  data-test-id={"select-option-" + name}
+                  onClick={event => {
+                    event.preventDefault();
+                    setTime(name, option);
+                    closeDropdown();
+                  }}
+                >
+                  {option}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
       </div>
-      {isOpen && dropdownPosition && (
-        <div
-          style={{
-            top: `${dropdownPosition}px`,
-          }}
-          className={styles.TimeSelect__Dropdown}
-          ref={dropdownRef}
-        >
-          <ul className={styles.TimeSelect__List}>
-            {options.map(option => {
-              return (
-                <li key={option}>
-                  <button
-                    type='button'
-                    className={`${styles.TimeSelect__Option} ${timeValues[key] === option ? styles.TimeSelect__Option_selected : ""}`}
-                    data-test-id={"select-option-" + name}
-                    onClick={() => {
-                      const triggeredValues: ("time.start" | "time.end" | "time.duration")[] = [];
-                      if (timeValues.duration) {
-                        triggeredValues.push("time.duration");
-                      }
-                      if (timeValues.start) {
-                        triggeredValues.push("time.start");
-                      }
-                      if (timeValues.end) {
-                        triggeredValues.push("time.end");
-                      }
-                      setValue(name, option, {
-                        shouldValidate: true,
-                        shouldDirty: true,
-                        shouldTouch: true,
-                      });
-                      closeDropdown();
-                      trigger(triggeredValues);
-                    }}
-                  >
-                    {option}
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      )}
     </div>
   );
 };

@@ -7,6 +7,8 @@ export interface ITextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaEleme
   placeholder?: string;
   /** Обязательно ли поле для заполнения */
   required?: boolean;
+  /** Сообщение о ненавязывающем заполнении поля */
+  suggestMessage?: string;
   /** Сообщение об ошибке */
   error?: string;
 }

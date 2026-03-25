@@ -7,8 +7,6 @@ export const ToastContainer = () => {
   const toasts = useToastStore(state => state.toasts);
   const removeToast = useToastStore(state => state.removeToast);
 
-  console.log("TPASTS:", toasts);
-
   return (
     <div className={style.ToastContainer}>
       {toasts.map(toast => (

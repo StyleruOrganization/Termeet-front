@@ -16,7 +16,6 @@ export const useFocusTrap = <T extends HTMLElement>(
 
   useEffect(() => {
     if (isActive) {
-      console.log("isActive is true in useFocusTrap");
       const target = ref.current;
       if (!target) return;
 
@@ -27,7 +26,9 @@ export const useFocusTrap = <T extends HTMLElement>(
       const numFocusableElems = focusableElems.length;
 
       if (numFocusableElems === 0)
-        throw "At least one tabbable element needs to be present within your target. If you feel this is a mistake and there is a tabbable element on your target, try adding your tabbable element within the optional tabbableElems parameter.";
+        console.log(
+          "At least one tabbable element needs to be present within your target. If you feel this is a mistake and there is a tabbable element on your target, try adding your tabbable element within the optional tabbableElems parameter.",
+        );
 
       const firstElement = focusableElems[0];
       const lastElement = focusableElems[numFocusableElems - 1];
@@ -35,16 +36,12 @@ export const useFocusTrap = <T extends HTMLElement>(
       // firstElement.focus();
 
       const handleEsc = (event: KeyboardEvent) => {
-        console.log("Handle key Escape in useFocusTrap");
         if (event.key === "Escape") {
           onEscape?.();
         }
       };
 
-      target.addEventListener("keydown", handleEsc);
       const handleTab = (event: KeyboardEvent) => {
-        console.log("Handle key Tab in useFocusTrap");
-
         if (event.key === "Tab") {
           const focusedElement = document.activeElement as HTMLElement;
 
@@ -65,10 +62,8 @@ export const useFocusTrap = <T extends HTMLElement>(
       window.addEventListener("keydown", handleEsc);
       target.addEventListener("keydown", handleTab);
       return () => {
-        lastFocusedElem.current!.focus();
-
-        target.removeEventListener("keydown", handleEsc);
         target.removeEventListener("keydown", handleTab);
+        window.removeEventListener("keydown", handleEsc);
       };
     }
     return;

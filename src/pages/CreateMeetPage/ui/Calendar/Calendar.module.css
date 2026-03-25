@@ -93,16 +93,21 @@
   left: 50%;
 
   display: flex;
-  gap: 4px;
+
+  width: 100%;
 
   color: var(--light-semantics-red-main);
 
   transform: translateX(-50%);
   animation: fade-in 0.3s ease-in-out;
 
-  font-size: 3.5rem;
+  font-size: var(--text-body);
   line-height: 1.25;
   margin-top: 8px;
+
+  span {
+    margin: 0 auto;
+  }
 }
 
 .Calendar__SuggestField {

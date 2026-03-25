@@ -3,7 +3,10 @@ import styles from "./Input.module.css";
 import type { IInputProps } from "./Input.types";
 
 export const Input = forwardRef<HTMLInputElement, IInputProps>(
-  ({ label, placeholder, name, error, onChange, readOnly = false, className = "", suggestMessage, ...props }, ref) => {
+  (
+    { label, placeholder, name, error, onChange, readOnly = false, className = "", suggestMessage, ...inputProps },
+    ref,
+  ) => {
     return (
       <div className={`${styles.Input} ${error ? styles.Input__Error : ""}`}>
         {label && (
@@ -11,21 +14,23 @@ export const Input = forwardRef<HTMLInputElement, IInputProps>(
             {label}
           </label>
         )}
-        <input
-          {...props}
-          ref={ref}
-          onChange={onChange}
-          id={name}
-          name={name}
-          readOnly={readOnly}
-          placeholder={placeholder}
-          className={`${styles.Input__Field} ${className}`}
-        />
-        {(suggestMessage || error) && (
-          <span key={error || suggestMessage} className={error ? styles.Input__ErrorField : styles.Input__SuggestField}>
-            {error || suggestMessage}
-          </span>
+        <div className={className}>
+          <input
+            {...inputProps}
+            ref={ref}
+            onChange={onChange}
+            id={name}
+            name={name}
+            readOnly={readOnly}
+            placeholder={placeholder}
+            className={`${styles.Input__Field}`}
+          />
+        </div>
+
+        {!inputProps.value && !error && suggestMessage && (
+          <span className={styles.Input__SuggestField}>{suggestMessage}</span>
         )}
+        {error && <span className={styles.Input__ErrorField}>{error}</span>}
       </div>
     );
   },
