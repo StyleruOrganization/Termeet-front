@@ -1,255 +1,123 @@
-.Button {
-  overflow: hidden;
-  flex-basis: 300px;
-
-  padding: 16px 12px;
-
-  border-radius: var(--termeet-border-16);
-
-  transition: opacity 0.3s ease-in;
-
-  font-size: 4.5rem;
-  font-weight: 600;
-
-  max-height: 56px;
-
-  min-width: 0;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 .MeetHeader {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 8px;
+
+  padding: 16px 16px 24px;
+
+  background-color: var(--light-fill-controls);
+  border-radius: 32px;
+
+  max-width: 450px;
 }
 
 .MeetHeader__Info {
-  position: relative;
-
   display: flex;
-  gap: 20px;
-  justify-content: space-between
+  gap: 8px;
+  align-items: center;
 }
 
 .MeetHeader__Info__Title {
-  display: flex;
-  justify-content: space-between;
-  align-items: start;
-  gap: 10px;
+  overflow: hidden;
+  flex: 1; /* Чтобы занимал оставшееся место */
 
-  h2 {
-    font-size: 9rem;
-    font-weight: 700;
-    overflow-wrap: break-word;
-  }
+  color: var(--light-text-main);
 
-  svg {
-    margin: 0 auto;
-
-    color:var(--termeet-color-brand-light-100);
-  }
+  font-size: var(--text-heading);
+  font-weight: 800;
+  line-height: 1.2;
+  min-width: 0;
+  text-overflow: ellipsis;
+  
+  white-space: nowrap; 
 }
 
-.MeetHeader__Info__Title__EditButton {
-  width: 37px;
-  height: 37px;
-  padding: 5px;
-
-  margin-top: 6px;
-}
-
-.MeetHeader__Info__Desc {
-  font-size: 5rem; 
-}
-
-.MeetHeader__Info__Wrapper {
-  display: flex;
-  gap: 20px;
-  flex-direction: column;
-}
-
-.MeetHeader__Info__DurationBadge {
-  display: flex;
-  align-items: center;
-
-  width: fit-content;
-  padding: 8px 6px;
-
-  color: var(--termeet-color-always-white);
-  background-color: var(--termeet-color-brand-light-100);
-  border-radius: var(--termeet-border-16);
-
-  font-size: 4rem;
-
-  svg {
-    margin-right: 8px
-  } 
-}
-
-.MeetHeader__Info__Buttons {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-
-  height: fit-content;
-
-  color: var(--termeet-color-brand-light-100);
-}
-
-.MeetHeader__Info__Share {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  align-items: center;
-
-  color: var(--termeet-color-brand-light-100);
-  background-color: var(--termeet-color-brand-light-20);
-
-  font-weight: 500;
-  min-width: 135px;
-}
-
-.MeetHeader__Time {
-  display: flex;
-  gap: 16px;
-}
-
-.MeetHeader__Time__Title {
-  display: flex;
-  align-items: center;
+.MeetHeader__Info__Duration {
   flex-shrink: 0;
 
-  font-size: 7rem;
-  font-weight: 600;
+  color: var(--light-text-secondary);
 
-  margin-right: auto
+  font-size: var(--text-heading);
+  white-space: nowrap;
+}
+
+.MeetHeader__Info__Button {
+    flex-shrink: 0;
+  display: flex;
+
+  padding: 16px;
   
-}
+  border-radius: 16px;
+  background-color: var(--light-fill-bg);
 
-.MeetHeader__Time__Choose {
-  color: var(--termeet-color-always-white);
-  background-color: var(--termeet-color-brand-main-dark);
-}
+  transition: background-color 0.3s ease-in-out; 
 
-.MeetHeader__Time__Choose:disabled {
-  cursor: auto;
-  opacity: .7;
-}
-
-.MeetHeader__Time__Final {
-  color: var(--termeet-color-brand-main-dark);
-  border: 2px solid var(--termeet-color-brand-main-dark);
-}
-
-.Button:hover{
-  opacity: .7;
-}
-
-.Button:active{
-  scale: .99;
-}
-
-/* Adaptive */
-@media (width <= 1024px) {
-  .MeetHeader__Info__Title h2 {
-    font-size: 8rem
-  }
-
-  .MeetHeader__Time__Title {
-    font-size: 6rem;
-  } 
-}
-
-@media (width <= 768px) {
-  .Button {
-    font-size: 4rem;
-  }
-
-  .MeetHeader {
-    gap: 18px;
-  }
-
-  .MeetHeader__Time {
-    flex-direction: column;
-    gap: 8px;
+  svg {
+    margin: 0;
+    width: 16px;
+    height: 16px;
 
   }
+}
 
-  .MeetHeader__Info {
-    flex-direction: column;
-    gap: 10px;
-  } 
+.MeetHeader__Info__Button:hover {
+  background-color: var(--light-components-hover)
+}
 
-  .MeetHeader__Info__EditButton {
-    position: absolute;
-    top: 5px;
-    right: 140px
+.MeetHeader__Info__Button:active {
+  background-color: var(--light-text-disabled)
+}
+
+.MeetHeader__Info__ExpandButton {
+  svg {  
+    transition: transform .3s ease-in-out;
+
+    rotate: 90deg;
   }
+}
+
+.MeetHeader__expanded .MeetHeader__Info__ExpandButton{
+  svg {
+    transform: rotate(180deg);
+  }
+}
+
+.MeetHeader__desc {
+  overflow: hidden;
+
+  padding: 0;
+
+  color: var(--light-text-main);
+
+  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
   
-  .MeetHeader__Info__Title__EditButton {
-    margin-top: 0
-  }
-
-  .MeetHeader__Info__Wrapper {
-    gap: 10px;
-
-    h2 {
-      font-size: 7rem;
-    }
-  }
-
-  .MeetHeader__Info__DurationBadge {
-    font-size: 4rem;
-  }
-
-  .MeetHeader__Time__Title {
-    font-size: 5rem;
-    order: 1;
-  } 
-
-  .MeetHeader__Time__Choose {
-    order: 2;
-  }
-
-  .MeetHeader__Time__Final{
-    order: 3;
-  }
+  font-size: 4rem;
+  line-height: 1.4;
+  max-height: 0;
+  opacity: 0;
 }
 
-@media (width <= 425px) {
-  .MeetHeader svg {
-    width: 20px;
-    height: 20px;
-  }
+.MeetHeader__expanded .MeetHeader__desc {
+  max-height: 350px; /* Достаточно большое значение */
+  opacity: 1;
+}
 
-  .MeetHeader__Info__Wrapper {
-    h2 {
-      font-size: 5rem;
-    }
-  }
+.MeetHeader__link {
+  width: fit-content;
 
-  .MeetHeader__Info__Wrapper button {
-    margin-left: 0;
-  }
+  color: var(--light-semantics-blue-main);
 
-  .Button, .MeetHeader__Info__DurationBadge, .MeetHeader__Time__Title, .MeetHeader__Info__Desc  {
-    font-size: 4rem;
-  }
+  transition: color 0.3s ease-in-out;
 
-  .MeetHeader__Info__EditButton {
-    right: 120px
-  }
+  cursor: pointer;
 
-  .Button {
-    padding: 13px 0;
+  font-size: var(--text-body)
+}
 
-    max-height: 50px;
-  }
+.MeetHeader__link:hover {
+  color: var(--light-semantics-blue-hover);
+}
 
-  .MeetHeader__Info__DurationBadge {
-    padding: 4px 8px;
-
-    font-size: 3.5rem;
-  }
+.MeetHeader__link:active {
+  color: var(--light-semantics-blue-active);
 }

@@ -1,5 +1,5 @@
 import { Calendar as ReactCalendar } from "react-calendar";
-import { Arrow } from "@assets/icons";
+import Arrrow from "@assets/icons/arrow.svg";
 import styles from "./Calendar.module.css";
 import { useCalendarData } from "../../lib";
 import { formatMonthYearHeading, formatWeekday } from "../../lib/formatting/calendarFormatters";
@@ -30,8 +30,8 @@ export const Calendar = ({
         value={value}
         next2Label={null}
         prev2Label={null}
-        nextLabel={<Arrow className={styles.Calendar__Arrow} />}
-        prevLabel={<Arrow className={styles.Calendar__Arrow_Left} />}
+        nextLabel={<Arrrow className={styles.Calendar__Arrow} />}
+        prevLabel={<Arrrow className={styles.Calendar__Arrow_Left} />}
         formatMonthYear={(_, date) => {
           return formatMonthYearHeading(date);
         }}

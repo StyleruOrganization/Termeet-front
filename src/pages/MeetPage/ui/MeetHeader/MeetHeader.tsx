@@ -1,89 +1,50 @@
-import { useShallow } from "zustand/shallow";
+import { useState } from "react";
 import { useToastStore } from "@/features/ToastContainer";
-import { ClockIcon, LinkIcon, PencilIcon } from "@assets/icons";
-import { useMeetContext } from "@entities/Meet";
+import Arrow from "@assets/icons/arrow.svg";
+import Pencil from "@assets/icons/pencil.svg";
 import styles from "./MeetHeader.module.css";
 import { getFormattedDuration } from "../../lib";
 import { copyTextToClipboard } from "../../lib/clipboard/copyToClipBoard";
 import type { MeetHeaderProps } from "./MeetHeader.types";
 
-export const MeetHeader = ({ duration, description, name }: MeetHeaderProps) => {
-  const setIsEditingMode = useMeetContext(store => store.setIsEditing);
-  const isEditing = useMeetContext(store => store.isEditing);
-  const clearNewSelectedSlots = useMeetContext(store => store.clearNewSelectedSlots);
-  const setIsModalOpen = useMeetContext(store => store.setIsModalOpen);
-  const newSelectedSlotsEmpty = useMeetContext(
-    useShallow(store => {
-      const newSelectedSlotsEntries = Array.from(store.newSelectedSlots.entries());
-      let isEmpty = true;
-      newSelectedSlotsEntries.forEach(entry => {
-        if (entry[1].length > 0) {
-          isEmpty = false;
-        }
-      });
-      return isEmpty;
-    }),
-  );
-  const addToast = useToastStore(store => store.addToast);
+export const MeetHeader = ({ duration, description, name, link }: MeetHeaderProps) => {
+  // isExpanded = true - описание раскрыто
+  const [isExpanded, setIsExpanded] = useState(false);
   const formattedDuration = getFormattedDuration(duration || "");
+  const addToast = useToastStore(store => store.addToast);
 
   return (
-    <>
-      <div className={styles.MeetHeader}>
-        <div className={styles.MeetHeader__Info}>
-          <div className={styles.MeetHeader__Info__Wrapper}>
-            <div className={styles.MeetHeader__Info__Title}>
-              <h2 data-test-id='meet-name'>{name}</h2>
-              <button className={styles.MeetHeader__Info__Title__EditButton}>
-                <PencilIcon />
-              </button>
-            </div>
-            <div className={styles.MeetHeader__Info__Desc} data-test-id='meet-description'>
-              {description}
-            </div>
-            <span className={styles.MeetHeader__Info__DurationBadge}>
-              <ClockIcon />
-              <span>{formattedDuration}</span>
-            </span>
-          </div>
+    <div className={`${styles.MeetHeader} ${isExpanded ? styles.MeetHeader__expanded : ""}`}>
+      <div className={styles.MeetHeader__Info}>
+        <span className={styles.MeetHeader__Info__Title}>{name}</span>
+        <span className={styles.MeetHeader__Info__Duration}>{formattedDuration}</span>
+        <button className={styles.MeetHeader__Info__Button}>
+          <Pencil />
+        </button>
+        {description && (
           <button
             onClick={() => {
-              copyTextToClipboard(window.location.href, addToast);
+              setIsExpanded(prev => !prev);
             }}
-            className={styles.Button + " " + styles.MeetHeader__Info__Share}
+            className={styles.MeetHeader__Info__Button + " " + styles.MeetHeader__Info__ExpandButton}
           >
-            <LinkIcon />
-            <span>Скопировать ссылку</span>
+            <Arrow />
           </button>
-        </div>
-        <div className={styles.MeetHeader__Time}>
-          <div className={styles.MeetHeader__Time__Title}>Выбор времени</div>
-          <button
-            onClick={() => {
-              setIsEditingMode(false);
-              clearNewSelectedSlots();
-            }}
-            className={styles.Button + " " + styles.MeetHeader__Time__Final}
-            data-test-id='cancel-meet-button'
-          >
-            {isEditing ? "Отмена" : "Выбрать итоговое время"}
-          </button>
-          <button
-            onClick={() => {
-              if (!isEditing) {
-                setIsEditingMode(true);
-              } else {
-                setIsModalOpen(true);
-              }
-            }}
-            disabled={isEditing && newSelectedSlotsEmpty}
-            className={styles.Button + " " + styles.MeetHeader__Time__Choose}
-            data-test-id='edit-mode-meet-button'
-          >
-            {isEditing ? "Сохранить" : "Выбрать время"}
-          </button>
-        </div>
+        )}
       </div>
-    </>
+      {description && <div className={styles.MeetHeader__desc}>{description}</div>}
+      {link && (
+        <a
+          className={styles.MeetHeader__link}
+          onClick={event => {
+            event.preventDefault();
+
+            copyTextToClipboard(link, addToast);
+          }}
+        >
+          Ссылка на встречу
+        </a>
+      )}
+    </div>
   );
 };

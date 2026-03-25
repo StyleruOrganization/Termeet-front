@@ -34,5 +34,8 @@
   --light-semantics-gray-default: #f8f8f8;
   --light-semantics-gray-hover: #ececec;
   --light-semantics-gray-active: #c9c9c9;
+  --light-semantics-blue-active: #2844a6;
+  --light-semantics-blue-main: #2c64dd;
+  --light-semantics-blue-hover: #2651cb;
   --dark-text-main: #f8f8f8;
 }

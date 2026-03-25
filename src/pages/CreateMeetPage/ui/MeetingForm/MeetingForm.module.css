@@ -23,7 +23,7 @@
 .MeetingForm__InputsTimes__Label {
   color: var(--light-text-main);
 
-  font-size: 4rem;
+  font-size: var(--text-body);
   line-height: 1.25;
   margin-bottom: -12px;
   margin-left: 6px;
