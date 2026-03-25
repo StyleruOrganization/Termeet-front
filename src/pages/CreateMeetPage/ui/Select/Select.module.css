@@ -73,7 +73,7 @@
   text-align: left;
 
   color: var(--light-semantics-black-main);
-  background-color: var(--light-semantics-gray-default);
+  background-color: var(--light-fill-bg);
   border: none;
   border-radius: 16px;
 
@@ -85,9 +85,13 @@
   line-height: 1.25;
 }
 
-.TimeSelect__Option:disabled {
+.TimeSelect__Option:focus-visible{
+  outline: 2px solid var(--light-semantics-dark-blue-active);
+  outline-offset: 2px;
+}
+
+.TimeSelect__Option:hover {
   background-color: var(--light-semantics-gray-default);
-  color: var(--light-text-disabled)
 }
 
 .TimeSelect__InputWrapper {
@@ -114,29 +118,16 @@
   pointer-events: none;
 }
 
-.TimeSelect__Option:hover .TimeSelect__InputWrapper::after {
-  display: none;
-}
-
 .TimeSelect__InputWrapper_open::after {
   transform: translateY(-50%) rotate(-180deg);
 }
 
-.TimeSelect__Option:focus-visible{
-  outline: 2px solid var(--light-semantics-dark-blue-active);
-  outline-offset: 2px;
-}
-
-.TimeSelect__Option:hover {
+.TimeSelect__Option_selected, .TimeSelect__Option:active {
   background-color: var(--light-semantics-gray-hover);
 }
 
-.TimeSelect__Option_selected {
-  background-color: var(--light-semantics-gray-active);
-}
-
 .TimeSelect__Option_selected:hover {
-  background-color: var(--light-semantics-gray-active);
+  background-color: var(--light-semantics-gray-hover);
 }
 
 /* Стили для скроллбара */
