@@ -88,9 +88,28 @@ export const useCreateMeetStore = create<MeetingFormState>((set, get) => ({
 
   blurTimeField: name => {
     const lastCorrectedTime = get().lastCorrectedValues[name];
+    if (!lastCorrectedTime) return;
+
+    const roundToHalfHour = (time: string): string => {
+      const [hours, minutes] = time.split(":").map(Number);
+
+      let newHours = hours;
+      let newMinutes: number;
+
+      if (minutes < 15) {
+        newMinutes = 0;
+      } else if (minutes < 45) {
+        newMinutes = 30;
+      } else {
+        newMinutes = 0;
+        newHours = (hours + 1) % 24;
+      }
+
+      return `${String(newHours).padStart(2, "0")} : ${String(newMinutes).padStart(2, "0")}`;
+    };
 
     set(state => ({
-      values: { ...state.values, [name]: lastCorrectedTime },
+      values: { ...state.values, [name]: roundToHalfHour(lastCorrectedTime) },
       errors: { ...state.errors, [name]: undefined },
     }));
     return;
