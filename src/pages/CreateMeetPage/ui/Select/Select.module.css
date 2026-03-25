@@ -106,7 +106,7 @@
   width: 16px;
   height: 16px;
 
-  transform: translateY(-50%);
+  transform: translateY(-50%) rotate(90deg);
   transition: transform 0.3s ease;
   
   background-image: url("./../../../../assets/icons/arrow.svg");
@@ -116,11 +116,10 @@
   content: '';
   
   pointer-events: none;
-  rotate: 90deg;
 }
 
 .TimeSelect__InputWrapper_open::after {
-  transform: translateY(-50%) rotate(180deg);
+  transform: translateY(-50%) rotate(270deg);
 }
 
 .TimeSelect__Option_selected, .TimeSelect__Option:active {

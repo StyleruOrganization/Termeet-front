@@ -113,7 +113,10 @@ export const useCreateMeetStore = create<MeetingFormState>((set, get) => ({
     };
 
     set(state => ({
-      values: { ...state.values, [name]: roundToHalfHour(lastCorrectedTime) },
+      values: {
+        ...state.values,
+        [name]: name != "timeDuration" ? roundToHalfHour(lastCorrectedTime) : lastCorrectedTime,
+      },
       errors: { ...state.errors, [name]: undefined },
     }));
     return;
