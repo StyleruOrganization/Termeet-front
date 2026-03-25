@@ -12,7 +12,8 @@ test.describe("Calendar Component", () => {
   });
 
   test("error state", async ({ mount }) => {
-    const component = await mount(<CalendarWithForm error='Поле обязательно для заполнения' />);
+    // const component = await mount(<CalendarWithForm error='Поле обязательно для заполнения' />);
+    const component = await mount(<CalendarWithForm />);
 
     await expect(component).toBeVisible();
     await expect(component.locator("[data-test-id='error-field']")).toBeVisible();

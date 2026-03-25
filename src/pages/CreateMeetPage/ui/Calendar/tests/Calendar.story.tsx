@@ -1,28 +1,10 @@
-import { FormProvider, useForm } from "react-hook-form";
 import { CalendarWidget } from "../index";
-import type { ICreateMeet } from "../../../model";
 
 // Обертка для компонента с react-hook-form
-export const CalendarWithForm = ({ error }: { error?: string }) => {
-  const methods = useForm<ICreateMeet>({
-    defaultValues: {
-      dates: [],
-    },
-  });
-
-  // Если передана ошибка, устанавливаем её вручную
-  if (error) {
-    methods.setError("dates", {
-      type: "manual",
-      message: error,
-    });
-  }
-
+export const CalendarWithForm = () => {
   return (
     <div style={{ padding: "10px", maxWidth: "650px" }}>
-      <FormProvider {...methods}>
-        <CalendarWidget minDate={new Date(2026, 0)} value={new Date(2026, 0, 1)} />
-      </FormProvider>
+      <CalendarWidget minDate={new Date(2026, 0)} value={new Date(2026, 0, 1)} />
     </div>
   );
 };
