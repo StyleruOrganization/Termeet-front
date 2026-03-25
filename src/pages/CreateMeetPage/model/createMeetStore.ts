@@ -98,8 +98,12 @@ export const useCreateMeetStore = create<MeetingFormState>((set, get) => ({
 
       if (minutes < 15) {
         newMinutes = 0;
+      } else if (minutes < 30) {
+        newMinutes = 15;
       } else if (minutes < 45) {
         newMinutes = 30;
+      } else if (minutes < 60) {
+        newMinutes = 45;
       } else {
         newMinutes = 0;
         newHours = (hours + 1) % 24;
