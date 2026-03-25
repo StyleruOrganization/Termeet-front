@@ -3,12 +3,12 @@
   flex-direction: column;
   gap: 8px;
 
-  padding: 16px 16px 24px;
+  padding: 22px 22px 24px;
 
   background-color: var(--light-fill-controls);
   border-radius: 32px;
 
-  max-width: 450px;
+  max-width: 100%;
 }
 
 .MeetHeader__Info {
@@ -42,7 +42,7 @@
 }
 
 .MeetHeader__Info__Button {
-    flex-shrink: 0;
+  flex-shrink: 0;
   display: flex;
 
   padding: 16px;
@@ -56,29 +56,27 @@
     margin: 0;
     width: 16px;
     height: 16px;
-
   }
-}
 
-.MeetHeader__Info__Button:hover {
-  background-color: var(--light-components-hover)
-}
+  &:hover {
+    background-color: var(--light-components-hover)
+  }
 
-.MeetHeader__Info__Button:active {
-  background-color: var(--light-text-disabled)
+  &:active {
+    background-color: var(--light-text-disabled)
+  }
 }
 
 .MeetHeader__Info__ExpandButton {
   svg {  
     transition: transform .3s ease-in-out;
-
-    rotate: 90deg;
+    transform: rotate(90deg);
   }
 }
 
 .MeetHeader__expanded .MeetHeader__Info__ExpandButton{
   svg {
-    transform: rotate(180deg);
+    transform: rotate(270deg);
   }
 }
 
@@ -111,13 +109,13 @@
 
   cursor: pointer;
 
-  font-size: var(--text-body)
-}
+  font-size: var(--text-body);
 
-.MeetHeader__link:hover {
-  color: var(--light-semantics-blue-hover);
-}
+  &:hover {
+    color: var(--light-semantics-blue-hover);
+  }
 
-.MeetHeader__link:active {
-  color: var(--light-semantics-blue-active);
+  &:active {
+    color: var(--light-semantics-blue-active);
+  }
 }

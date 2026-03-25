@@ -1,121 +1,115 @@
 .MeetPeoples {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 12px;
+
+  padding: 22px 22px 24px;
+
+  background-color: var(--light-fill-controls);
+  border-radius: 32px;
+
+  max-width: 450px;
+}
+
+.MeetPeoples__Title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
   h3 {
-    font-size: 7rem;
+    color: var(--light-text-main);
+
+    font-size: var(--text-heading);
+    font-weight: 800
   }
 }
 
 .MeetPeoples__Count {
-  color: var(--termeet-color-gray-main-60)
+  color: var(--light-text-secondary);
+
+  margin-left: 8px;
+}
+
+.MeetPeoples__ExpandButton {
+  flex-shrink: 0;
+  display: flex;
+
+  padding: 16px;
+  
+  border-radius: 16px;
+  background-color: var(--light-fill-bg);
+
+  transition: background-color 0.3s ease-in-out; 
+
+  svg {
+    margin: 0;
+    width: 16px;
+    height: 16px;
+
+    transition: transform .3s ease-in-out;
+    transform: rotate(90deg);
+  }
+
+  &:hover {
+    background-color: var(--light-components-hover)
+  }
+
+  &:active {
+    background-color: var(--light-text-disabled)
+  }
+}
+
+.MeetPeoples__expanded .MeetPeoples__ExpandButton{
+  svg {
+    transform: rotate(270deg);
+  }
 }
 
 .MeetPeoples__Users__Container {
-  display: grid;
-  justify-content: start;
-
-  column-gap: 20px;
-
-  grid-template-columns: repeat(3, auto);
-}
-
-.MeetPeoples__user {
-  position: relative;
-
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   overflow: hidden;
 
-  padding: 8px 12px;
+  padding: 0;
 
-  text-align: start;
+  color: var(--light-text-main);
 
-  color: var(--termeet-color-gray-main-60);
+  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  
+  font-size: 4rem;
+  line-height: 1.4;
+  max-height: 0;
+  opacity: 0;
 
+  span {
+    width: fit-content;
 
-  transition: all 0.2s ease;
+    transition: color 0.3s ease-in-out;
 
-  cursor: pointer;
-  font-size: 5rem;
-  font-weight: 600;
+    cursor: pointer;
 
-  max-width: 100%; /* ограничить ширину */
-  text-overflow: ellipsis; /* троеточие */
+    font-size: var(--text-body);
 
-  white-space: nowrap; /* запрет переноса */
+    line-height: 20px;
+  }
 
-  &:not(:nth-child(3n))::after {
-    position: absolute;
-    top: 0;
-    right: 0;
-
-    height: 100%;
-    width: 1px;
-
-    background-color: var(--termeet-color-gray-main-20);
-
-    content: "";
+  span:hover {
+    color: var(--light-text-main);
   }
 }
 
-.MeetPeoples__user_hovered, .MeetPeoples__user:hover {
-  color: var(--termeet-color-brand-light-100);
+.MeetPeoples__expanded .MeetPeoples__Users__Container {
+  max-height: var(--user-list-height, 350px); /* Достаточно большое значение */
+  opacity: 1;
 }
 
-@media (width <= 768px) {
-  .MeetPeoples {
-    gap: 12px;
-
-    h3 {
-      font-size: 6rem;
-    }
-  }
-
-  .MeetPeoples__Users__Container {
-    grid-template-columns: repeat(2, auto);
-  }
-
-  .MeetPeoples__user {
-    padding: 4px 6px;
-
-    &:not(:nth-child(2n))::after {
-       position: absolute;
-      top: 0;
-      right: 0;
-
-      height: 100%;
-      width: 1px;
-
-      background-color: var(--termeet-color-gray-main-20);
-
-      content: "";
-    }
-
-    &:nth-child(2n)::after {
-      height: 0;
-      width: 0;
-    }
-  }
+.MeetPeoples__Users__Container:has(span:hover) {
+  color: var(--light-text-disabled);
 }
 
-@media (width <= 425px) {
-  .MeetPeoples {
-    h3 {
-      font-size: 4rem;
-    }
-  }
-
-  .MeetPeoples__Users__Container {
-    grid-template-columns: repeat(1, auto);
-    justify-items: start;
-  }
-
-  .MeetPeoples__user {
-    &:nth-child(n)::after {
-      height: 0;
-      width: 0;
-    }
-
-    font-size: 3.5rem;
+@supports not (selector(:has(*))) {
+  .MeetPeoples__Users__Container span:hover {
+    color: var(--light-text-disabled);
   }
 }
