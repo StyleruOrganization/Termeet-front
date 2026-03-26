@@ -1,11 +1,9 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useParams } from "react-router";
-import { MeetProvider, MeetQueries } from "@/entities/Meet";
+import { MeetQueries } from "@/entities/Meet";
 import styles from "./MeetPage.module.css";
-// import { MeetHeader } from "./ui/MeetHeader";
-// import { MeetModal } from "./ui/MeetModal";
-import { MeetPeoples } from "./ui/MeetPeoples";
-// import { MeetTable } from "./ui/MeetTable/MeetTable";
+import { MeetInfo } from "./ui/MeetInfo/MeetInfo";
+import { MeetTable } from "./ui/MeetTable/MeetTable";
 
 export function MeetPage() {
   const { hash } = useParams();
@@ -19,13 +17,11 @@ export function MeetPage() {
   }
 
   return (
-    <MeetProvider>
-      <div data-test-id='meet-page' className={styles.MeetPage}>
-        {/* <MeetHeader duration={data.duration} description={data.description} name={data.name} link={data.link} /> */}
-        {/* <MeetTable meeting_days={data.meeting_days} timeRanges={data.timeRanges} /> */}
-        <MeetPeoples users={data.users} />
-        {/* <MeetModal /> */}
+    <div className={styles.MeetPage}>
+      <div className={styles.MeetPage__MeetInfoWrapper}>
+        <MeetInfo data={data} />
       </div>
-    </MeetProvider>
+      <MeetTable meeting_days={data.meeting_days} timeRanges={data.timeRanges} />
+    </div>
   );
 }

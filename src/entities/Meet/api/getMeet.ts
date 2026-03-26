@@ -9,7 +9,6 @@ export const getMeet = async (hash: string) => {
   const users = new Set<string>();
   const timeRanges: IMeet["timeRanges"] = [];
   const timeInfo: IMeet["timeInfo"] = new Map();
-  let maxSelectCount = 0;
 
   // Преобразуем в локальное время пользователя
   data.timeRange = data.timeRange.map(([startRange, endRange]) => [getLocalTime(startRange), getLocalTime(endRange)]);
@@ -104,20 +103,12 @@ export const getMeet = async (hash: string) => {
           const key = `${time[0].toString().padStart(2, "0")}:${time[1].toString().padStart(2, "0")}`;
           const oldSlots = oldTimeSlotsStart.get(key) || [];
           oldTimeSlotsStart.set(key, [...oldSlots, userInfo.name]);
-
-          if (oldSlots.length + 1 > maxSelectCount) {
-            maxSelectCount = oldSlots.length + 1;
-          }
         });
 
         secondRangeOptions.forEach(time => {
           const key = `${time[0].toString().padStart(2, "0")}:${time[1].toString().padStart(2, "0")}`;
           const oldSlots = oldTimeSlotsEnd.get(key) || [];
           oldTimeSlotsEnd.set(key, [...oldSlots, userInfo.name]);
-
-          if (oldSlots.length + 1 > maxSelectCount) {
-            maxSelectCount = oldSlots.length + 1;
-          }
         });
 
         timeInfo.set(startDate, {
@@ -142,10 +133,6 @@ export const getMeet = async (hash: string) => {
           const key = `${time[0].toString().padStart(2, "0")}:${time[1].toString().padStart(2, "0")}`;
           const oldSlots = oldTimeSlots.get(key) || [];
           oldTimeSlots.set(key, [...oldSlots, userInfo.name]);
-
-          if (oldSlots.length + 1 > maxSelectCount) {
-            maxSelectCount = oldSlots.length + 1;
-          }
         });
 
         timeInfo.set(startDate, {
@@ -172,7 +159,6 @@ export const getMeet = async (hash: string) => {
       return startA.localeCompare(startB);
     }),
     timeInfo,
-    maxSelectCount,
     users: Array.from(users),
   };
   return processedData;

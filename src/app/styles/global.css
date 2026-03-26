@@ -50,3 +50,99 @@ textarea:focus-visible {
 * {
   -webkit-tap-highlight-color: transparent;
 }
+
+.baseButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+
+  width: 100%;
+  padding: 16px 0;
+
+  border-radius: 16px;
+
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, opacity 0.3s ease-in-out;
+
+  font-size: var(--text-body);
+
+  svg {
+    width: 16px;
+    height: 16px;  
+  }
+}
+
+.mainButton {
+  color: var(--light-text-inverted);
+  background-color: var(--light-semantics-dark-blue-default);
+
+  /* Задавайте актив стейт после ховера и будет все кайф */
+  &:hover {
+    background-color: var(--light-semantics-dark-blue-active);
+  }
+
+  &:active {
+    background-color: var(--light-semantics-dark-blue-active);
+  }
+
+  &:disabled {
+    background-color: var(--light-semantics-dark-blue-disabled);
+    color: var(--light-text-inverted)
+  }
+}
+
+.secondaryButton {
+  color: var(--light-text-main);
+  background-color: var(--light-semantics-light-blue-default);
+
+  &:hover {
+    background-color: var(--light-semantics-light-blue-hover);
+  }
+
+  &:active {
+    background-color: var(--light-semantics-light-blue-active);
+  }
+
+  &:disabled {
+    background-color: var(--light-semantics-light-blue-disabled);
+    color: var(--light-text-inverted)
+  }
+}
+
+.cancelButton {
+  color: var(--light-semantics-red-main);
+  background-color: var(--light-semantics-red-secondary);
+
+  &:hover {
+    background-color: var(--light-semantics-red-hover);
+  }
+
+  &:active {
+    background-color: var(--light-semantics-red-active);
+  }
+
+  &:disabled {
+    background-color: var(--light-semantics-red-disabled);
+
+    opacity: 0.4;
+  }
+}
+
+.approveButton {
+  color: var(--light-semantics-green-main);
+  background-color: var(--light-semantics-green-secondary);
+
+  &:hover {
+    background-color: var(--light-semantics-green-hover);
+  }
+
+  &:active {
+    background-color: var(--light-semantics-green-active);
+  }
+
+  &:disabled {
+    background-color: var(--light-semantics-green-disabled);
+
+    opacity: 0.4;
+  }
+}

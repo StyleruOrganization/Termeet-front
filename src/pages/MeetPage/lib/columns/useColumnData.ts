@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { useParams } from "react-router";
 import { useShallow } from "zustand/shallow";
-import { MeetQueries, useMeetContext } from "@/entities/Meet";
+import { MeetQueries, useMeetStore } from "@/entities/Meet";
 import { isMoreThan30Min } from "@shared/libs";
 import { getCellIds } from "../cells/getCellsIds";
 
@@ -13,10 +13,10 @@ interface IFakeCells {
 
 export const useColumnData = (date: string) => {
   const { hash } = useParams();
-  const setSelectNewSell = useMeetContext(store => store.setSelectNewSell),
-    isEditing = useMeetContext(store => store.isEditing),
-    newSelectedSlots = useMeetContext(useShallow(store => store.newSelectedSlots.get(date))),
-    hoveredUser = useMeetContext(store => store.hoveredUser);
+  const setSelectNewSell = useMeetStore(store => store.setSelectNewSell),
+    isEditing = useMeetStore(store => store.isEditing),
+    newSelectedSlots = useMeetStore(useShallow(store => store.newSelectedSlots.get(date)));
+
   const { data: meetInfo } = useQuery(MeetQueries.meet(hash || ""));
   console.log("meetInfo in useColumnData", meetInfo, date);
   const columnData = meetInfo?.timeInfo.get(date);
@@ -88,22 +88,10 @@ export const useColumnData = (date: string) => {
       cellIds,
       setSelectNewSell,
       isEditing,
-      maxSelectCount: meetInfo?.maxSelectCount,
       newSelectedSlots,
-      hoveredUser,
       isShowBefore,
       isShowAfter,
     }),
-    [
-      columnData,
-      setSelectNewSell,
-      isEditing,
-      newSelectedSlots,
-      hoveredUser,
-      cellIds,
-      isShowBefore,
-      isShowAfter,
-      meetInfo?.maxSelectCount,
-    ],
+    [columnData, setSelectNewSell, isEditing, newSelectedSlots, cellIds, isShowBefore, isShowAfter],
   );
 };

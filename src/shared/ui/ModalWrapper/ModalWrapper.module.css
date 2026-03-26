@@ -5,15 +5,16 @@
   display: flex;
   visibility: hidden;
   justify-content: center;
-  align-items: flex-start;
 
   padding: 20px;
 
-  background-color: var(--termeet-color-gray-main-20);
+  background-color: rgb(0 0 0 / 30%);
 
   transition: 
     opacity var(--animation-duration, 300ms) ease,
     visibility var(--animation-duration, 300ms) ease;
+
+  backdrop-filter: blur(4px);
 
   inset: 0;
 
@@ -31,8 +32,10 @@
   display: flex;
   flex-direction: column;
 
-  background-color: var(--termeet-color-always-white);
-  border-radius: var(--termeet-border-16);
+  padding: 24px 24px 32px;
+
+  background-color: var(--light-fill-bg);
+  border-radius: 16px;
   box-shadow: 0 10px 40px var(--termeet-color-shadow);
 
   transform: translateY(-100px) scale(0.95);
@@ -40,9 +43,13 @@
     transform var(--animation-duration, 300ms) cubic-bezier(0.34, 1.56, 0.64, 1),
     opacity var(--animation-duration, 300ms) ease;
 
+  max-height: fit-content;
+
   max-width: calc(100vw - 70px);
 
   opacity: 0;
+
+  overflow-y: auto;
 }
 
 .ModalWrapper__ModalContainer_Opened {
@@ -51,48 +58,39 @@
   opacity: 1;
 }
 
-.ModalWrapper__ModalContent {
-  flex-grow: 1;
-
-  overflow-y: auto;
-}
-
 .ModalWrapper__CloseButton {
   position: absolute;
-  top: -30px;
-  right: -30px;
+  top: 15px;
+  right: 15px;
 
   display: flex;
   justify-content: center;
   align-items: center;
 
-  padding: 5px;
+  padding: 10px;
 
-  color: var(--termeet-color-gray-main-100);
-  border-radius: var(--termeet-border-circle);
-  background-color: var(--termeet-color-always-white);
+  color: var(--light-text-main); 
+  background-color: var(--light-fill-controls);
+  border-radius: 50%;
 
-  transition: opacity 0.2s ease;
+  transition: background-color 0.3s ease-in-out;
 
-  cursor: pointer; 
-  rotate: 45deg;
+
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--light-components-hover)
+  }
+
+  &:active {
+    background-color: var(--light-text-disabled)
+  }
 
   svg {
-    width: 24px;
-    height: 24px;
-  }
-}
+    width: 16px;
+    height: 16px;
 
-.ModalWrapper__CloseButton:hover {
-  opacity: .7;
-}
-
-@media (width <= 425px) {
-  .ModalWrapper__CloseButton {
-    svg {
-      width: 20px;
-      height: 20px;
-    }
+    transform: rotate(45deg);
   }
 }
 

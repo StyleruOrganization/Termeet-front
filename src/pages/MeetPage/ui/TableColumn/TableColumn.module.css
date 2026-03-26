@@ -16,20 +16,21 @@
 
 .TableColumnActiveRange {
   width: 100%;
-  margin: 0 -1px 0 0;
 }
 
 .TableColumnTitle {
-  overflow: hidden; /* скрыть переполнение */
+  display: flex;
+  overflow: hidden;
+  align-items: center;
 
   line-height: 100%;
-  margin-left: 3px;
-  max-width: 100%; /* ограничить ширину */
+  margin-top: 4px;
+  max-width: 100%;
 
-  min-height: 24px;
-  text-overflow: ellipsis; /* троеточие */
+  min-height: 40px;
+  text-overflow: ellipsis;
 
-  white-space: nowrap; /* запрет переноса */
+  white-space: nowrap;
 }
 
 .TableColumnSeparator {

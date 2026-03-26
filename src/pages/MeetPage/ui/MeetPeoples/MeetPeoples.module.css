@@ -1,14 +1,17 @@
 .MeetPeoples {
   display: flex;
   flex-direction: column;
-  gap: 12px;
 
   padding: 22px 22px 24px;
 
   background-color: var(--light-fill-controls);
   border-radius: 32px;
 
-  max-width: 450px;
+  max-width: 100%;
+}
+
+.MeetPeoples.MeetPeoples__expanded {
+  gap: 12px;
 }
 
 .MeetPeoples__Title {
@@ -104,6 +107,14 @@
   opacity: 1;
 }
 
+.MeetPeoples__Users__Container:has(.MeetPeoples__user_hovered) {
+  color: var(--light-text-disabled);
+}
+
+.MeetPeoples__user_hovered {
+  color: var(--light-text-main);
+}
+
 .MeetPeoples__Users__Container:has(span:hover) {
   color: var(--light-text-disabled);
 }
@@ -111,5 +122,17 @@
 @supports not (selector(:has(*))) {
   .MeetPeoples__Users__Container span:hover {
     color: var(--light-text-disabled);
+  }
+}
+
+@media (width < 768px) {
+  .MeetPeoples {
+    padding: 12px;
+  }
+
+  .MeetPeoples__ExpandButton {
+    padding: 8px;
+
+    border-radius: 8px;
   }
 }

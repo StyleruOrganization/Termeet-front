@@ -31,9 +31,11 @@
   --light-semantics-light-blue-active: #96c3f5;
   --light-semantics-light-blue-disabled: #f0f5fe;
   --light-semantics-black-main: #000;
-  --light-semantics-gray-default: #f8f8f8;
+  --light-semantics-gray-default: #f4f4f4;
   --light-semantics-gray-hover: #ececec;
   --light-semantics-gray-active: #c9c9c9;
+  --light-semantics-blue-400: #599dee;
+  --light-semantics-blue-500: #3e81e9;
   --light-semantics-blue-active: #2844a6;
   --light-semantics-blue-main: #2c64dd;
   --light-semantics-blue-hover: #2651cb;

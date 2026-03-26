@@ -1,15 +1,20 @@
 .MeetPage {
   display: flex;
-  gap: 30px;
-  flex-direction: column;
-
-  width: 90vw;
+  gap: 32px;
 }
 
-@media (width<=1024px) {
-  .MeetPage {
-    gap: 20px;
+.MeetPage__MeetInfoWrapper {
+  flex: 1 1 35%;
 
-    max-width: 100%
+  min-width: 0;
+}
+
+@media (width < 768px) {
+  .MeetPage {
+    flex-direction: column-reverse;
+
+    padding-top: 83px;
+    padding-bottom: 100px;
   }
+ 
 }

@@ -1,10 +1,40 @@
 .MeetTable {
   display: flex;
-  gap: 6px;
+
+  /* Вычитаем ебучий gap */
+  flex: 1 1 calc(65% - 32px);
   align-items: center;
 
-  font-size: 18px;
-  font-weight: 500;
+  width: 100%;
+  height: fit-content;
+  padding-right: 10px;
+
+  background-color: var(--light-fill-controls);
+  border-radius: 32px;
+
+  font-size: 3rem;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.MeetTable__TimesPeriodsContainer {
+  display: flex;
+  flex-direction: column;
+
+  padding-top: 44px;
+  width: 64px
+}
+
+.MeetTable__TimesPeriod {
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+
+  span{
+    height: 20px;
+
+    text-align: center;
+  }
 }
 
 .MeetTable__ColumnsWrapper {
@@ -17,13 +47,12 @@
 
 .MeetTable__Columns {
   display: flex;
+  overflow: auto hidden;
 
   width: 100%;
 
   /* Для IE и Edge */
   -ms-overflow-style: none;
-
-  overflow-x: auto;
 
   /* Для Firefox */
   scrollbar-width: none;
@@ -40,31 +69,8 @@
 .MeetTable__ColumnWrapper{
   display: flex;
   flex-direction: column;
-  gap: 20px;
 
   width: 100%
-}
-
-.MeetTable__TimesPeriod {
-  display: flex;
-  gap: 44px;
-  flex-direction: column;
-
-  align-self: start;
-  margin-right: 20px;
-
-  span{
-    line-height: 100%;
-  }
-}
-
-.MeetTable__TimesContainer {
-  display: flex;
-  flex-direction: column;
-
-  padding-top: 45px;
-
-  align-self: start;
 }
 
 .MeetTable__TimesPeriodSeparator {
@@ -110,77 +116,3 @@
 .MeetTable__Arrow_active {
   color: var(--termeet-always-black)
 }
-
-/* Самому нижнему слоту в столбце убираем отступ */
-[data-column-id] [data-id]:last-child {
-  margin-bottom: 0;
-}
-
-/* В первом столбце всем убираем слева */
-[data-column-id]:first-child [data-id] {
-  margin-left: 0;
-}
-
-[data-column-id]:first-child [data-id][data-disabled="true"] {
-  margin-left: 1px;
-}
-
-[data-column-id]:first-child [data-id]:first-child[data-show-before="false"] {
-  border-top-left-radius: var(--termeet-border-16);
-}
-
-[data-column-id]:first-child [data-id]:last-child[data-disabled="false"] {
-  border-bottom-left-radius: var(--termeet-border-16);
-}
-
-[data-column-id]:last-child [data-id]:first-child[data-disabled="false"] {
-  border-top-right-radius: var(--termeet-border-16);
-}
-
-[data-column-id]:last-child [data-id]:last-child[data-show-after="false"] {
-  border-bottom-right-radius: var(--termeet-border-16);
-}
-
-@media (width<= 768px){
-  .MeetTable {
-    font-size: 4rem;
-  }
-
-  .MeetTable__TimesPeriod_beforeSepate {
-    --size-cell: 32px;
-  }
-
-  .MeetTable__TimesPeriodSeparator {
-    height: 36px;
-  }
-  
-  .MeetTable__TimesPeriod {
-    gap: 46px;
-
-    margin-right: 0;
-  }
-}
-
-@media (width<= 425px) {
-  .MeetTable {
-    font-size: 4rem;
-  }
-    
-  .MeetTable__TimesPeriod {
-    gap: 46px;
-
-    margin-right: 0
-  }
-
-  .MeetTable__Arrows {
-    svg {
-      width: 20px;
-      height: 20px;
-    }
-
-    button {
-      padding: 2px;
-      width: 20px;
-      height: 20px;
-    }
-}}

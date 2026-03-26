@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, memo } from "react";
-import { MONTHS_GENITIVE, isMoreThan30Min } from "@/shared/libs";
+import { MONTHS_GENITIVE } from "@/shared/libs";
 import styles from "./TableColumn.module.css";
 import { getCellIds, useColumnData } from "../../lib";
 import { TableCell } from "../TableCell/TableCell";
@@ -9,17 +9,8 @@ export const TableColumn = memo(({ columnId, columnWidth, timeRanges }: TableCol
   const [isSelecting, setIsSelecting] = useState(false);
   const [isRemoving, setIsRemoving] = useState(false);
   const columnRef = useRef<HTMLDivElement>(null);
-  const {
-    cellIds,
-    userSlots,
-    newSelectedSlots,
-    isEditing,
-    setSelectNewSell,
-    maxSelectCount,
-    hoveredUser,
-    isShowAfter,
-    isShowBefore,
-  } = useColumnData(columnId);
+  const { cellIds, userSlots, newSelectedSlots, isEditing, setSelectNewSell, isShowAfter, isShowBefore } =
+    useColumnData(columnId);
 
   const date = useMemo(() => {
     const partsOfDate = columnId.split("-").map(Number);
@@ -28,6 +19,7 @@ export const TableColumn = memo(({ columnId, columnWidth, timeRanges }: TableCol
     return day + " " + MONTHS_GENITIVE.at(month - 1);
   }, [columnId]);
 
+  // предотвращаем багулю с завершением выделения за пределами таблицы
   useEffect(() => {
     const handleEndSelection = () => {
       setIsSelecting(false);
@@ -71,9 +63,9 @@ export const TableColumn = memo(({ columnId, columnWidth, timeRanges }: TableCol
     e.preventDefault();
     if (!isSelecting) return;
 
-    const element = document.elementFromPoint(e.clientX, e.clientY);
-    const dataId = element?.getAttribute("data-id")?.split("T")[1];
-    if (!element || !dataId) return;
+    const cell = document.elementFromPoint(e.clientX, e.clientY);
+    const dataId = cell?.getAttribute("data-id")?.split("T")[1];
+    if (!dataId) return;
 
     if (isRemoving && newSelectedSlots?.includes(dataId)) {
       setSelectNewSell(columnId, dataId, true);
@@ -118,45 +110,13 @@ export const TableColumn = memo(({ columnId, columnWidth, timeRanges }: TableCol
               onPointerDown={handlePointerDown}
               onPointerMove={handlePointerMove}
               onPointerUp={handlePointerUp}
-              style={{
-                marginBottom:
-                  indexRanges < cellIds.length - 1 &&
-                  isMoreThan30Min(cellIds[indexRanges][cellIds[indexRanges].length - 1], cellIds[indexRanges + 1]?.[0])
-                    ? ""
-                    : "-1px",
-              }}
             >
               {cellsRange.map(cell => {
                 const key = cell.split("T")[1];
                 const selectedPersons = userSlots?.get(key) || [];
-                return (
-                  <TableCell
-                    id={cell}
-                    key={key}
-                    isShowBefore={isShowBefore.isShow}
-                    isShowAfter={isShowAfter.isShow}
-                    opacityPercent={
-                      hoveredUser
-                        ? selectedPersons.includes(hoveredUser)
-                          ? 100
-                          : 0
-                        : newSelectedSlots?.includes(key)
-                          ? 100
-                          : ((selectedPersons.length || 0) / (maxSelectCount || 1)) * 100
-                    }
-                    users={selectedPersons}
-                    isSelected={
-                      (Boolean(selectedPersons) && !isEditing) ||
-                      Boolean(newSelectedSlots?.includes(key) || selectedPersons.includes(hoveredUser))
-                    }
-                  />
-                );
+                return <TableCell id={cell} key={key} users={selectedPersons} />;
               })}
-              {indexRanges < cellIds.length - 1 &&
-                isMoreThan30Min(
-                  cellIds[indexRanges][cellIds[indexRanges].length - 1],
-                  cellIds[indexRanges + 1]?.[0],
-                ) && <div className={styles.TableColumnSeparator}>...</div>}
+              {indexRanges < cellIds.length - 1 && <div className={styles.TableColumnSeparator}>...</div>}
             </div>
           ))}
 

@@ -1,0 +1,78 @@
+.MeetInfo {
+  position: sticky;
+  top: 15px;
+
+  display: flex;
+  gap: 16px;
+  flex-direction: column
+}
+
+.MeetInfo__Buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.MeetInfo__ButtonsEdit {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+}
+
+.MeetInfo__ShareButton {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  align-items: center;
+
+  width: fit-content;
+  padding: 18px;
+
+  background-color: var(--light-fill-controls);
+  border-radius: 16px;
+
+  transition: background-color 0.3s ease-in-out;
+
+  font-size: var(--text-body);
+
+  &:hover {
+    background-color: var(--light-components-hover)
+  }
+
+  &:active {
+    background-color: var(--light-text-disabled)
+  }
+
+  svg {
+    width: 16px;
+    height: 16px
+  }
+}
+
+.MeetInfo__CancelIcon {
+  transform: rotate(45deg);
+}
+
+@media (width < 768px) {
+  .MeetInfo__ButtonsEdit {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    padding: 10px 10px 32px;
+
+    background-color: var(--light-fill-bg);
+    box-shadow: 0 4px 24px rgb(0 0 0 / 12%);
+
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+  }
+
+  .MeetInfo__Buttons {
+    order: -1;
+  }
+
+  .MeetInfo__ShareButton {
+    width: 100%;
+  }
+}

@@ -1,0 +1,81 @@
+import { useMeetStore } from "@/entities/Meet";
+import { useToastStore } from "@/features/ToastContainer";
+import ApproveIcon from "@assets/icons/approve.svg";
+import CancelIcon from "@assets/icons/cross.svg";
+import LinkIcon from "@assets/icons/link.svg";
+import { copyTextToClipboard } from "@shared/libs";
+import { MeetHeader } from "../MeetHeader";
+import { MeetModal } from "../MeetModal";
+import { MeetPeoples } from "../MeetPeoples";
+import styles from "./MeetInfo.module.css";
+import type { IMeetInfoProps } from "./MeetInfo.types";
+
+const WINDOW_WIDTH = window.innerWidth;
+
+export const MeetInfo = ({ data }: IMeetInfoProps) => {
+  const isEditingMode = useMeetStore(store => store.isEditing),
+    setIsEditing = useMeetStore(store => store.setIsEditing),
+    newSelectedSlots = useMeetStore(store => store.newSelectedSlots),
+    setIsModalOpen = useMeetStore(store => store.setIsModalOpen);
+  console.log("NEW selectedSlots in MeetInfo", newSelectedSlots);
+  const addToast = useToastStore(store => store.addToast);
+
+  return (
+    <>
+      <div className={styles.MeetInfo}>
+        <div className={styles.MeetInfo__HeaderWrapper}>
+          <MeetHeader duration={data.duration} description={data.description} name={data.name} link={data.link} />
+        </div>
+        <MeetPeoples users={data.users} />
+        <div className={styles.MeetInfo__Buttons}>
+          <button
+            onClick={() => {
+              copyTextToClipboard(window.location.href, addToast);
+            }}
+            className={styles.MeetInfo__ShareButton}
+          >
+            <LinkIcon />
+            {WINDOW_WIDTH < 768 ? "Поделиться встречей" : ""}
+          </button>
+          <div className={styles.MeetInfo__ButtonsEdit}>
+            {isEditingMode ? (
+              <>
+                <button
+                  onClick={() => {
+                    setIsEditing(false);
+                  }}
+                  className='baseButton cancelButton'
+                >
+                  <CancelIcon className={styles.MeetInfo__CancelIcon} /> <span>Отменить</span>
+                </button>
+                <button
+                  disabled={!newSelectedSlots.size}
+                  onClick={() => {
+                    setIsModalOpen(true);
+                  }}
+                  className='baseButton approveButton'
+                >
+                  <ApproveIcon />
+                  <span>Сохранить</span>
+                </button>
+              </>
+            ) : (
+              <>
+                <button className={"baseButton secondaryButton"}>Назначить встречу</button>
+                <button
+                  onClick={() => {
+                    setIsEditing(true);
+                  }}
+                  className={"baseButton mainButton"}
+                >
+                  Добавить время
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+      <MeetModal />
+    </>
+  );
+};

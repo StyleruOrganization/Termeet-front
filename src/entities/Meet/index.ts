@@ -1,6 +1,4 @@
-export { useMeetContext } from "./lib/useMeetContext";
 export type { IMeet } from "./model/Meet.types";
-export { MeetProvider } from "./model/provider/MeetProvider";
 export {
   meetCreateSchema,
   type MeetCreate,
@@ -9,3 +7,4 @@ export {
   slotsUserSchema,
 } from "./model/Meet.schema";
 export { MeetQueries } from "./api/Meet.query";
+export { useMeetStore } from "./model/store/useMeetStore";

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
+import { createPortal } from "react-dom";
 import { CrossIcon } from "@assets/icons/cross";
 import styles from "./ModalWrapper.module.css";
 import { useFocusTrap } from "../../libs/hooks/useFocusTrap";
@@ -52,32 +53,41 @@ export const ModalWrapper = ({
   );
 
   useEffect(() => {
-    let prev = document.body.style.overflow;
-    if (isOpen) {
-      prev = document.body.style.overflow;
+    const previousOverflow = document.body.style.overflow;
+
+    if (isOpen && !isAnimating) {
       document.body.style.overflow = "hidden";
     }
 
     return () => {
-      document.body.style.overflow = prev;
+      document.body.style.overflow = previousOverflow;
     };
   }, [isOpen, isAnimating]);
 
+  // Управление видимостью для анимации
   useEffect(() => {
-    setTimeout(() => {
-      if (isOpen) {
+    if (isOpen) {
+      // Небольшая задержка для корректной анимации
+      const timer = setTimeout(() => {
         setVisible(true);
-      } else {
-        handleClose();
-      }
-    });
-  }, [isOpen, handleClose]);
+      }, 10);
+      return () => clearTimeout(timer);
+    } else {
+      const timer = setTimeout(() => {
+        setVisible(true);
+      }, 0);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
 
   if (!isOpen && !isAnimating && !isVisible) {
     return null;
   }
 
-  return (
+  // Получаем контейнер для портала
+  const container = document.body;
+
+  const modalContent = (
     <div
       className={`${styles.ModalWrapper__Overlay} ${isOpen && isVisible ? styles.ModalWrapper__Overlay_visible : ""} ${className}`}
       onClick={handleOverlayClick}
@@ -92,13 +102,21 @@ export const ModalWrapper = ({
         className={`${styles.ModalWrapper__ModalContainer} ${isOpen && isVisible ? styles.ModalWrapper__ModalContainer_Opened : ""}`}
         role='dialog'
         aria-modal='true'
+        aria-hidden={!isOpen}
       >
-        <button data-test-id='close-modal' className={styles.ModalWrapper__CloseButton} onClick={handleClose}>
+        <button
+          data-test-id='close-modal'
+          className={styles.ModalWrapper__CloseButton}
+          onClick={handleClose}
+          aria-label='Закрыть модальное окно'
+        >
           <CrossIcon />
         </button>
 
-        <div className={styles.ModalWrapper__ModalContent}>{children}</div>
+        {children}
       </div>
     </div>
   );
+
+  return createPortal(modalContent, container);
 };

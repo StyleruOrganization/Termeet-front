@@ -1,13 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useMeetContext, slotsUserSchema, MeetQueries } from "@/entities/Meet";
+import { useMeetStore, slotsUserSchema, MeetQueries } from "@/entities/Meet";
 import { useToastStore } from "@/features/ToastContainer";
 import { apiClient } from "@/shared/api";
 
 export const useSaveUserSelectedData = (meetHash: string, onMutate?: () => void) => {
   const queryClient = useQueryClient();
-  const getNewSelectedSlots = useMeetContext(state => state.getNewSelectedSlots);
-  const getPreparedNewSlots = useMeetContext(store => store.getPreparedNewSlots);
-  const clearNewSelectedSlots = useMeetContext(store => store.clearNewSelectedSlots);
+  const getNewSelectedSlots = useMeetStore(state => state.getNewSelectedSlots);
+  const getPreparedNewSlots = useMeetStore(store => store.getPreparedNewSlots);
+  const clearNewSelectedSlots = useMeetStore(store => store.clearNewSelectedSlots);
   const addToast = useToastStore(state => state.addToast);
 
   return useMutation({
@@ -57,7 +57,6 @@ export const useSaveUserSelectedData = (meetHash: string, onMutate?: () => void)
       const previousState = {
         users: [...(previousData?.users || [])],
         timeInfo: oldTimeInfo,
-        maxSelectCount: previousData?.maxSelectCount || 0,
       };
 
       console.log("Previous data from cache before optimistic update:", previousState);
@@ -83,7 +82,6 @@ export const useSaveUserSelectedData = (meetHash: string, onMutate?: () => void)
         });
       }
 
-      let maxSelectCountNew = previousState.maxSelectCount;
       const newSelectedEntries = Array.from(getNewSelectedSlots().entries());
 
       if (previousData) {
@@ -102,12 +100,7 @@ export const useSaveUserSelectedData = (meetHash: string, onMutate?: () => void)
             if (!oldDateInfo.userSlots?.has(time)) {
               oldDateInfo.userSlots?.set(time, []);
             }
-            const oldCountPople = oldDateInfo.userSlots?.get(time)?.length || 0;
             oldDateInfo.userSlots?.set(time, [...(oldDateInfo.userSlots?.get(time) || []), userName]);
-
-            if (oldCountPople + 1 > maxSelectCountNew) {
-              maxSelectCountNew = oldCountPople + 1;
-            }
           }
         }
       }
@@ -115,7 +108,6 @@ export const useSaveUserSelectedData = (meetHash: string, onMutate?: () => void)
       // Обновляем кеш React Query
       console.log("Updating React Query cache with new user and slots", {
         timeInfo: newTimeInfo,
-        maxSelectCount: maxSelectCountNew,
       });
 
       queryClient.setQueryData(MeetQueries.meet(meetHash).queryKey, old => {
@@ -125,7 +117,6 @@ export const useSaveUserSelectedData = (meetHash: string, onMutate?: () => void)
           ...old,
           users: [...old.users, userName],
           timeInfo: newTimeInfo,
-          maxSelectCount: maxSelectCountNew,
         };
       });
 

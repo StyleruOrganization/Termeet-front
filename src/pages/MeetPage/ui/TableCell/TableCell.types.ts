@@ -3,20 +3,13 @@ export interface TableCellProps {
    * data-id для каждой ячейки
    */
   id: string;
-  isSelected?: boolean;
   /**
-   * Насколько прозрачной делаем клетку
-   */
-  opacityPercent?: number;
-  /**
-   * Люди которые выбрали это время
+   * Люди которые выбрали этот слот
    */
   users?: string[];
 
   /**
-   * Показываем как неактивную ячейку
+   * Показываем как неактивную ячейку(В случаях переходов из-за часовых поясов)
    */
   isDisabled?: boolean;
-  isShowBefore?: boolean;
-  isShowAfter?: boolean;
 }

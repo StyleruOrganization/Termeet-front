@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useToastStore } from "@/features/ToastContainer";
+import { ModalWrapper } from "@/shared/ui";
+import AccordeonIcon from "@assets/icons/accordeon.svg";
 import Arrow from "@assets/icons/arrow.svg";
 import Pencil from "@assets/icons/pencil.svg";
 import styles from "./MeetHeader.module.css";
@@ -7,14 +9,39 @@ import { getFormattedDuration } from "../../lib";
 import { copyTextToClipboard } from "../../lib/clipboard/copyToClipBoard";
 import type { MeetHeaderProps } from "./MeetHeader.types";
 
+const WINDOW_WIDTH = window.innerWidth;
+
 export const MeetHeader = ({ duration, description, name, link }: MeetHeaderProps) => {
   // isExpanded = true - описание раскрыто
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isDescPopupOpen, setIsDescPopupOpen] = useState(false);
   const formattedDuration = getFormattedDuration(duration || "");
   const addToast = useToastStore(store => store.addToast);
+  const [scrollY, setScrollY] = useState(() => window.scrollY);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY < 50) {
+        setScrollY(window.scrollY);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    // Очистка
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  console.log("isDescPopupOpen", isDescPopupOpen);
   return (
-    <div className={`${styles.MeetHeader} ${isExpanded ? styles.MeetHeader__expanded : ""}`}>
+    <div
+      style={{
+        transform: WINDOW_WIDTH < 768 ? `translateY(-${Math.min(scrollY, 46)}px)` : "",
+      }}
+      className={`${styles.MeetHeader} ${isExpanded ? styles.MeetHeader__expanded : ""}`}
+    >
       <div className={styles.MeetHeader__Info}>
         <span className={styles.MeetHeader__Info__Title}>{name}</span>
         <span className={styles.MeetHeader__Info__Duration}>{formattedDuration}</span>
@@ -24,11 +51,15 @@ export const MeetHeader = ({ duration, description, name, link }: MeetHeaderProp
         {description && (
           <button
             onClick={() => {
-              setIsExpanded(prev => !prev);
+              if (WINDOW_WIDTH < 768) {
+                setIsDescPopupOpen(true);
+              } else {
+                setIsExpanded(prev => !prev);
+              }
             }}
             className={styles.MeetHeader__Info__Button + " " + styles.MeetHeader__Info__ExpandButton}
           >
-            <Arrow />
+            {WINDOW_WIDTH < 768 ? <AccordeonIcon className={styles.MeetHeader__Info__AccordeonIcon} /> : <Arrow />}
           </button>
         )}
       </div>
@@ -45,6 +76,18 @@ export const MeetHeader = ({ duration, description, name, link }: MeetHeaderProp
           Ссылка на встречу
         </a>
       )}
+
+      <ModalWrapper
+        isAnimate
+        animationDuration={300}
+        isOpen={isDescPopupOpen}
+        onClose={() => setIsDescPopupOpen(false)}
+      >
+        <div className={styles.MeetHeader__modalWrapper}>
+          <div className={styles.MeetHeader__modalTitle}>Описание встречи</div>
+          <p>{description}</p>
+        </div>
+      </ModalWrapper>
     </div>
   );
 };

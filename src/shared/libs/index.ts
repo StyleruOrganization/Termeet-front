@@ -7,3 +7,4 @@ export { isTouchDevice } from "./devices/isTouchDevice";
 export { throttle, debounce } from "./func/functionWrappers";
 export { mergeRefs } from "./reactUtils/mergeRefs";
 export { useFocusTrap } from "./hooks/useFocusTrap";
+export { copyTextToClipboard } from "./clipboard/copyToClipBoard";

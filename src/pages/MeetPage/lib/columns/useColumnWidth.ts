@@ -1,14 +1,13 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { debounce } from "@/shared/libs";
 
 const BREAKPOINT_MOBILE = 768;
-const PERCENT_MIN_WIDTH_COLUMN = 15;
-const PERCENT_MIN_WIDTH_COLUMN_MOBILE = 30;
+const MIN_WIDTH_COLUMN = 92;
+const MIN_WIDTH_COLUMN_MOBILE = 72;
 
 function getMinColumnWidth(containerWidth: number): number {
   const isMobile = containerWidth <= BREAKPOINT_MOBILE;
-  const percent = isMobile ? PERCENT_MIN_WIDTH_COLUMN_MOBILE : PERCENT_MIN_WIDTH_COLUMN;
-  return Math.floor((containerWidth * percent) / 100);
+  return isMobile ? MIN_WIDTH_COLUMN_MOBILE : MIN_WIDTH_COLUMN;
 }
 
 function computeColumnWidth(containerWidth: number, daysCount: number) {
@@ -18,10 +17,16 @@ function computeColumnWidth(containerWidth: number, daysCount: number) {
       daysVisible: 0,
     };
   const minWidth = getMinColumnWidth(containerWidth);
-  const countVisible = Math.min(Math.floor(containerWidth / minWidth) || 1, daysCount);
+  let columnWidth = 0;
+  if (containerWidth / daysCount < minWidth) {
+    // Хотим чтобы пол дня которые не убираются были видны
+    const countVisible = Math.min(daysCount, Math.floor(containerWidth / minWidth));
+    columnWidth = (containerWidth - minWidth / 2) / countVisible;
+  } else {
+    columnWidth = containerWidth / daysCount;
+  }
   return {
-    columnWidth: Math.floor(containerWidth / countVisible),
-    daysVisible: countVisible,
+    columnWidth,
   };
 }
 
@@ -30,27 +35,27 @@ export function useColumnWidth(meeting_days: string[]) {
   const [columnWidth, setColumnWidth] = useState(() =>
     daysCount > 0 ? computeColumnWidth(document.documentElement.clientWidth, daysCount).columnWidth : 0,
   );
-  const [daysVisible, setDaysVisible] = useState(0);
-  const columnContainerRef = useRef<HTMLDivElement>(null);
   const measureContainerRef = useRef<HTMLDivElement>(null);
 
   const calculateColumnWidth = useCallback(() => {
+    console.log("Calculate column width");
     const el = measureContainerRef.current;
     if (!el) return;
     const w = el.clientWidth;
     if (w <= 0) return;
-    const { columnWidth: cw, daysVisible: dv } = computeColumnWidth(w, daysCount);
-    setColumnWidth(cw);
-    setDaysVisible(dv);
+    const { columnWidth } = computeColumnWidth(w, daysCount);
+    setColumnWidth(columnWidth);
   }, [daysCount]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const el = measureContainerRef.current;
+    console.log(`${el ? el : "Ref на таблицу не инициализирован еще"}`);
     if (!el) return;
 
     const debouncedCalc = debounce(calculateColumnWidth, 150);
 
     const observer = new ResizeObserver(entries => {
+      console.log("changeWidth ColumnContainer");
       const entry = entries[0];
       if (!entry) return;
       const w = entry.contentRect.width;
@@ -67,9 +72,7 @@ export function useColumnWidth(meeting_days: string[]) {
 
   return {
     calculateColumnWidth,
-    columnContainerRef,
     measureContainerRef,
     columnWidth,
-    daysVisible,
   };
 }

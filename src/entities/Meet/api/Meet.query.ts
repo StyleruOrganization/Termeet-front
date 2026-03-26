@@ -2,7 +2,7 @@ import { queryOptions } from "@tanstack/react-query";
 import { getMeet } from "./getMeet";
 
 export const MeetQueries = {
-  generallKey: ["posts"],
+  generallKey: ["meet"],
   meet: (hash: string) =>
     queryOptions({
       queryKey: [...MeetQueries.generallKey, hash],
