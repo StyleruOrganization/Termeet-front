@@ -28,15 +28,13 @@
 }
 
 .CreateMeetingPage__Content__FormWrapper {
-  position: relative;
-  top: -28px;
-
   display: flex;
   flex: 10 1 310px;
   gap: 20px;
   flex-direction: column;
 
   font-size: 3rem;
+  margin-top: 6px;
 }
 
 .CreateMeetingPage__CreateButtonWrapper {
