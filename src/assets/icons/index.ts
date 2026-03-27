@@ -6,3 +6,4 @@ export { PencilIcon } from "./pencil";
 export { ClockIcon } from "./clock";
 export { CrossIcon } from "./cross";
 export { RefreshIcon } from "./refresh";
+export { LogoIcon } from "./logo";
