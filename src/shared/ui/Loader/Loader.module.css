@@ -1,38 +1,99 @@
-.PulseLoader {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  align-items: center;
+.loader {
+    position: relative;
+
+    overflow: hidden;
+
+    width: 100%;
+
+    background-color: var(--light-fill-controls);
+    border: 2px solid var(--light-fill-outline);
+    border-radius: 16px;
+
+    max-width: 336px;
 }
 
-.dot {
-  width: 12px;
-  height: 12px;
+.pill {
+    height: 12px;
 
-  border-radius: var(--termeet-border-circle);
-  background-color: var(--termeet-color-brand-main);
-
-  animation: pulse 1.5s ease-in-out infinite;
+    background-color: var(--light-components-hover);
+    border-radius: 100px;
 }
 
-.dot:nth-child(2) {
-  animation-delay: 0.2s;
+.header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+
+    padding: 0 10px;
+    height: 32px;
 }
 
-.dot:nth-child(3) {
-  animation-delay: 0.4s;
+.pillLeft {
+    width: 82px;
 }
 
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(0.8);
+.pillSmall {
+    width: 10%;
+}
 
-    opacity: 0.5;
-  }
+.logo {
+    display: flex;
+    align-items: center;
 
-  50% {
-    transform: scale(1.2);
+    transform: translateX(-50%);
 
-    opacity: 1;
-  }
+    margin-left: auto ;
+    margin-right: auto;
+}
+
+.gridContainer {
+    display: grid;
+    overflow: hidden; 
+
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(5, 20px);
+}
+
+.cell {
+    background-color: var(--light-fill-bg);
+    border: 1px solid var(--light-fill-outline);
+
+    animation: flash 7s ease-in-out infinite;
+
+    animation-delay: calc((var(--row) * 1.4s) + (var(--col) * 0.2s));
+}
+
+.cell:nth-child(7n){
+    margin-right: -1px;
+}
+
+.cell:nth-child(7n + 1){
+    margin-left: -1px;
+}
+
+.cell:nth-child(n+29) {
+    margin-bottom: -1px;
+}
+
+
+
+@keyframes flash {
+2.85%, 14.29% { 
+    background-color: var(--light-semantics-light-blue-disabled); 
+    
+    border-color: var(--light-semantics-light-blue-disabled); 
+}
+
+5.71%, 8.57%, 11.4% { 
+    background-color: var(--light-semantics-light-blue-default); 
+
+    border-color: var(--light-semantics-light-blue-default); 
+}
+
+17.14% {
+    background-color: var(--light-fill-bg);
+
+    border-color: var(--light-fill-outline);
+}
 }
