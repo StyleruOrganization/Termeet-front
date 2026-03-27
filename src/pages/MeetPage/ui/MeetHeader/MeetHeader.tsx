@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router";
 import { useToastStore } from "@/features/ToastContainer";
 import { ModalWrapper } from "@/shared/ui";
 import AccordeonIcon from "@assets/icons/accordeon.svg";
 import Arrow from "@assets/icons/arrow.svg";
 import Pencil from "@assets/icons/pencil.svg";
 import styles from "./MeetHeader.module.css";
-import { getFormattedDuration } from "../../lib";
 import { copyTextToClipboard } from "../../lib/clipboard/copyToClipBoard";
 import type { MeetHeaderProps } from "./MeetHeader.types";
 
@@ -15,8 +15,9 @@ export const MeetHeader = ({ duration, description, name, link }: MeetHeaderProp
   // isExpanded = true - описание раскрыто
   const [isExpanded, setIsExpanded] = useState(false);
   const [isDescPopupOpen, setIsDescPopupOpen] = useState(false);
-  const formattedDuration = getFormattedDuration(duration || "");
   const addToast = useToastStore(store => store.addToast);
+  const navigate = useNavigate();
+  const { hash = "" } = useParams();
   const [scrollY, setScrollY] = useState(() => window.scrollY);
 
   useEffect(() => {
@@ -44,8 +45,13 @@ export const MeetHeader = ({ duration, description, name, link }: MeetHeaderProp
     >
       <div className={styles.MeetHeader__Info}>
         <span className={styles.MeetHeader__Info__Title}>{name}</span>
-        <span className={styles.MeetHeader__Info__Duration}>{formattedDuration}</span>
-        <button className={styles.MeetHeader__Info__Button}>
+        <span className={styles.MeetHeader__Info__Duration}>{duration}</span>
+        <button
+          onClick={() => {
+            navigate(`/meet/edit/${hash}`);
+          }}
+          className={styles.MeetHeader__Info__Button}
+        >
           <Pencil />
         </button>
         {description && (

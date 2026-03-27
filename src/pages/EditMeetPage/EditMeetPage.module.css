@@ -1,0 +1,86 @@
+.EditMeetPage {
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+.EditMeetPage__MeetingForm {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  width: 70%;
+
+  h1 {
+    font-size: var(--text-display);
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+}
+
+.EditMeetPage__InputsTimesWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.EditMeetPage__InputsTimes {
+  display: flex;
+  gap: 4px;
+
+}
+
+.EditMeetPage__InputsTimes__Label {
+  color: var(--light-text-main);
+
+  font-size: var(--text-body);
+  line-height: 1.25;
+  margin-left: 6px;
+  max-width: fit-content;
+}
+
+.EditMeetPage__InputsTimes__Separator {
+  position: relative;
+  top: 26px;
+
+  width: 20px;
+  height: 2px;
+
+  background-color: var(--light-text-main);
+}
+
+.EditMeetPage__Buttons{
+  display: flex;
+  gap: 8px;
+
+  align-self: start;
+}
+
+.EditMeetPage__CancelIcon{
+  transform: rotate(45deg);
+}
+
+@media (width < 768px) {
+  .EditMeetPage__Buttons{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+
+    width: 100%;
+    padding: 10px 10px 32px;
+
+    background-color: var(--light-fill-bg);
+    box-shadow: 0 4px 24px rgb(0 0 0 / 12%);
+
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+  }
+
+  .EditMeetPage__MeetingForm{
+    width: 100%;  
+  }
+
+  .EditMeetPage {
+    padding-bottom: 60px;
+  }
+}

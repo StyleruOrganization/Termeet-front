@@ -143,11 +143,18 @@ export const getMeet = async (hash: string) => {
     });
   });
 
+  let formattedDuration = "";
+
+  if (data.duration) {
+    const [hours, minutes] = data.duration.split(":").map(Number);
+    formattedDuration = `${hours}${minutes ? ".5" : ""} час${minutes ? "а" : ""}`;
+  }
+
   const processedData: IMeet = {
     name: data.name,
     description: data.description || undefined,
     link: data.link || undefined,
-    duration: data.duration || undefined,
+    duration: formattedDuration,
     meeting_days: Array.from(meetingDays).sort((a, b) => a.localeCompare(b)),
     timeRanges: timeRanges.sort((a, b) => {
       const startA = a[0];

@@ -1,4 +1,5 @@
 import { Route, Routes as ReactRoutes } from "react-router";
+import { EditMeetPage } from "@/pages/EditMeetPage";
 import { CreateMeetPage } from "@pages/CreateMeetPage";
 import { MeetPage } from "@pages/MeetPage";
 import { Layout } from "../layouts/Layout";
@@ -9,6 +10,7 @@ export const Routes = () => {
       <Route path='/' element={<Layout />}>
         <Route index element={<CreateMeetPage />} />
         <Route path='/meet/:hash?' element={<MeetPage />} />
+        <Route path='/meet/edit/:hash' element={<EditMeetPage />} />
       </Route>
     </ReactRoutes>
   );

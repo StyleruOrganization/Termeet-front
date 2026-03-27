@@ -1,4 +1,4 @@
-import { useActionState, useState } from "react";
+import { useActionState, useReducer } from "react";
 import { useParams } from "react-router";
 import { ModalWrapper, Input } from "@/shared/ui";
 import { useMeetStore } from "@entities/Meet";
@@ -11,7 +11,7 @@ type FormState = {
 
 export const MeetModal = () => {
   const { hash } = useParams();
-  const [userName, setUserName] = useState("");
+  const [userName, onChangeUserName] = useReducer((_, e) => e.target.value, "");
   const isOpen = useMeetStore(state => state.isModalOpen);
   const setIsModalOpen = useMeetStore(state => state.setIsModalOpen);
   const setIsEditingMode = useMeetStore(store => store.setIsEditing);
@@ -48,14 +48,7 @@ export const MeetModal = () => {
       <ModalWrapper isAnimate animationDuration={300} isOpen={isOpen} onClose={() => setIsModalOpen(false)}>
         <form action={formAction} data-test-id='meet-modal' className={styles.MeetModal}>
           <div className={styles.MeetModal__Heading}>Введите ваше имя</div>
-          <Input
-            placeholder='Иван Иванов'
-            name='userName'
-            autoComplete='given-name'
-            onChange={e => {
-              setUserName(e.target.value);
-            }}
-          />
+          <Input placeholder='Иван Иванов' name='userName' autoComplete='given-name' onChange={onChangeUserName} />
           <div className={styles.MeetModal__Buttons}>
             <button
               onClick={() => {

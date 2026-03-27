@@ -42,6 +42,10 @@
   opacity: 0;
 }
 
+.Input__Field:disabled {
+  color: var(--light-text-disabled)
+}
+
 .Input__Error .Input__Field {
   border-color: var(--light-semantics-red-main);
   outline: none; /* Смотрится не очень две обводки */
