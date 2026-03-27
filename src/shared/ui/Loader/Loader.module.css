@@ -59,9 +59,9 @@
     background-color: var(--light-fill-bg);
     border: 1px solid var(--light-fill-outline);
 
-    animation: flash 7s ease-in-out infinite;
+    animation: flash 3.5s ease-in-out infinite;
 
-    animation-delay: calc((var(--row) * 1.4s) + (var(--col) * 0.2s));
+    animation-delay: calc((var(--row) * 0.7s) + (var(--col) * 0.1s));
 }
 
 .cell:nth-child(7n){
