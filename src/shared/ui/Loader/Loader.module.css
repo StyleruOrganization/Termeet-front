@@ -1,38 +1,132 @@
-.PulseLoader {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  align-items: center;
+.loader {
+    width: 100%;
+
+    background-color: var(--light-fill-controls);
+    border: 2px solid var(--light-fill-outline);
+    border-radius: 16px;
+
+    animation: fade-in-scale 0.5s ease-in-out;
 }
 
-.dot {
-  width: 12px;
-  height: 12px;
+.loader__wrapper {
+    display: flex;
+    gap: 16px;
+    flex-direction: column;
+    align-items: center;
 
-  border-radius: var(--termeet-border-circle);
-  background-color: var(--termeet-color-brand-main);
+    animation: fade-in  0.5s ease-in;
 
-  animation: pulse 1.5s ease-in-out infinite;
+    max-width: 336px;
 }
 
-.dot:nth-child(2) {
-  animation-delay: 0.2s;
+.pill {
+    height: 12px;
+
+    background-color: var(--light-components-hover);
+    border-radius: 100px;
 }
 
-.dot:nth-child(3) {
-  animation-delay: 0.4s;
+.header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+
+    padding: 0 10px;
+    height: 32px;
 }
 
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(0.8);
+.pillLeft {
+    width: 82px;
+}
 
-    opacity: 0.5;
-  }
+.pillSmall {
+    width: 10%;
+}
 
-  50% {
-    transform: scale(1.2);
+.logo {
+    display: flex;
+    align-items: center;
 
-    opacity: 1;
-  }
+    transform: translateX(-50%);
+
+    margin-left: auto ;
+    margin-right: auto;
+}
+
+.gridContainer {
+    display: grid;
+    overflow: hidden; 
+
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(5, 20px);
+}
+
+.cell {
+    background-color: var(--light-fill-bg);
+    border: 1px solid var(--light-fill-outline);
+
+    animation: flash 3.5s ease-in-out infinite;
+
+    animation-delay: calc((var(--row) * 0.7s) + (var(--col) * 0.1s) + 0.5s);
+}
+
+.cell:nth-child(7n){
+    margin-right: -1px;
+}
+
+.cell:nth-child(7n + 1){
+    margin-left: -1px;
+}
+
+.cell:nth-child(n+29) {
+    margin-bottom: -1px;
+}
+
+.loader__message {
+    font-size: var(--text-body);
+}
+
+
+@keyframes fade-in-scale {
+    from {
+        opacity: 0;
+        scale: 0.8
+    }
+
+    to {
+        opacity: 1;
+        scale: 1;
+    }  
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }  
+}
+
+
+@keyframes flash {
+2.85%, 14.29% { 
+    background-color: var(--light-semantics-light-blue-disabled); 
+    
+    border-color: var(--light-semantics-light-blue-disabled); 
+}
+
+5.71%, 8.57%, 11.4% { 
+    background-color: var(--light-semantics-light-blue-default); 
+
+    border-color: var(--light-semantics-light-blue-default); 
+}
+
+17.14% {
+    background-color: var(--light-fill-bg);
+
+    border-color: var(--light-fill-outline);
+}
 }
