@@ -16,7 +16,8 @@ export const MeetInfo = ({ data }: IMeetInfoProps) => {
   const isEditingMode = useMeetStore(store => store.isEditing),
     setIsEditing = useMeetStore(store => store.setIsEditing),
     newSelectedSlots = useMeetStore(store => store.newSelectedSlots),
-    setIsModalOpen = useMeetStore(store => store.setIsModalOpen);
+    setIsModalOpen = useMeetStore(store => store.setIsModalOpen),
+    clearNewSelectedSlots = useMeetStore(store => store.clearNewSelectedSlots);
   console.log("NEW selectedSlots in MeetInfo", newSelectedSlots);
   const addToast = useToastStore(store => store.addToast);
 
@@ -28,21 +29,24 @@ export const MeetInfo = ({ data }: IMeetInfoProps) => {
         </div>
         <MeetPeoples users={data.users} />
         <div className={styles.MeetInfo__Buttons}>
-          <button
-            onClick={() => {
-              copyTextToClipboard(window.location.href, addToast);
-            }}
-            className={styles.MeetInfo__ShareButton}
-          >
-            <LinkIcon />
-            {WINDOW_WIDTH < 768 ? "Поделиться встречей" : ""}
-          </button>
+          {!isEditingMode ? (
+            <button
+              onClick={() => {
+                copyTextToClipboard(window.location.href, addToast);
+              }}
+              className={styles.MeetInfo__ShareButton}
+            >
+              <LinkIcon />
+              {WINDOW_WIDTH < 768 ? "Поделиться встречей" : ""}
+            </button>
+          ) : null}
           <div className={styles.MeetInfo__ButtonsEdit}>
             {isEditingMode ? (
               <>
                 <button
                   onClick={() => {
                     setIsEditing(false);
+                    clearNewSelectedSlots();
                   }}
                   className='baseButton cancelButton'
                 >

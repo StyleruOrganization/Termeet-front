@@ -103,3 +103,42 @@
     top: -4px;
   }
 }
+
+
+
+.HeaderBg {
+  position: relative;
+
+  overflow: hidden;
+  
+  min-height: 750px;
+
+  min-width: 750px
+}
+
+.HeaderBg::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+
+  background-image: radial-gradient(circle at 6px 6px, rgb(180 210 255 / 35%) 2px, transparent 2px);
+  background-size: 8px 8px;  
+
+  content: "";
+  pointer-events: none;
+}
+
+.HeaderBg__SmallIcon {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.HeaderBg__BigIcon {
+  position: absolute;
+  bottom:0;
+  right: 0;
+}

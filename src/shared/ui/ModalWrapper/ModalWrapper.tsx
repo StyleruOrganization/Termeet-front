@@ -12,6 +12,7 @@ export const ModalWrapper = ({
   className = "",
   isAnimate = false,
   animationDuration = 300,
+  scrollbarWidth,
 }: IModalWrapperProps) => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [isVisible, setVisible] = useState(false);
@@ -57,17 +58,19 @@ export const ModalWrapper = ({
 
     if (isOpen && !isAnimating) {
       document.body.style.overflow = "hidden";
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+    } else {
+      document.body.style.paddingRight = "0";
     }
 
     return () => {
       document.body.style.overflow = previousOverflow;
     };
-  }, [isOpen, isAnimating]);
+  }, [isOpen, isAnimating, scrollbarWidth]);
 
   // Управление видимостью для анимации
   useEffect(() => {
     if (isOpen) {
-      // Небольшая задержка для корректной анимации
       const timer = setTimeout(() => {
         setVisible(true);
       }, 10);

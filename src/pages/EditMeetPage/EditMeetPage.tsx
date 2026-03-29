@@ -1,10 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
 import { useLayoutEffect, useReducer } from "react";
 import { useParams, useNavigate } from "react-router";
-import { MeetQueries } from "@/entities/Meet";
 import ApproveIcon from "@assets/icons/approve.svg";
 import CancelIcon from "@assets/icons/cross.svg";
 import { Input, TextArea } from "@shared/ui";
+import { useGetMeetInfo } from "./api/useGetMeetInfo";
 import styles from "./EditMeetPage.module.css";
 import type { IMeet } from "@entities/Meet";
 
@@ -76,11 +75,11 @@ const reducer = (state: State, action: Action): State => {
 export const EditMeetPage = () => {
   const { hash = "" } = useParams();
   const navigate = useNavigate();
-  const { data } = useQuery(MeetQueries.meet(hash));
+  const meetData = useGetMeetInfo();
   const [formState, dispatch] = useReducer(reducer, {
-    description: data?.description,
-    name: data?.name || "",
-    link: data?.link,
+    description: meetData.description,
+    name: meetData.name,
+    link: meetData.link,
     errors: {
       name: undefined,
       description: undefined,
@@ -91,12 +90,12 @@ export const EditMeetPage = () => {
   console.log("FORM_STATE", formState);
 
   useLayoutEffect(() => {
-    dispatch({ type: "change", payload: { fieldName: "name", value: data?.name } });
-    dispatch({ type: "change", payload: { fieldName: "description", value: data?.description } });
-    dispatch({ type: "change", payload: { fieldName: "link", value: data?.link } });
-  }, [data]);
+    dispatch({ type: "change", payload: { fieldName: "name", value: meetData.name } });
+    dispatch({ type: "change", payload: { fieldName: "description", value: meetData.description || "" } });
+    dispatch({ type: "change", payload: { fieldName: "link", value: meetData.link || "" } });
+  }, [meetData.name, meetData.description, meetData.link]);
 
-  console.log("DATA IN EDIT MEET PAGE", data);
+  console.log("DATA IN EDIT MEET PAGE", meetData);
 
   const isSumbitButtonDisabled = !formState.name || Object.values(formState.errors).some(error => error);
 
@@ -139,7 +138,7 @@ export const EditMeetPage = () => {
         <div className={styles.EditMeetPage__InputsTimesWrapper}>
           <div className={styles.EditMeetPage__InputsTimes__Label}>Когда хотите встретиться?</div>
           {/* Пусть пока будет так если есть смещения по времени в часовых поясах */}
-          {data?.timeRanges.map(([startPeriodTime, endPeriodTime]) => (
+          {meetData.timeRanges.map(([startPeriodTime, endPeriodTime]) => (
             <div key={`${startPeriodTime}-${endPeriodTime}`} className={styles.EditMeetPage__InputsTimes}>
               <Input name='timeStart' disabled value={startPeriodTime.split(":").slice(0, 2).join(":")} />
               <div className={styles.EditMeetPage__InputsTimes__Separator} />
@@ -147,19 +146,18 @@ export const EditMeetPage = () => {
             </div>
           ))}
         </div>
-        {data?.duration ? (
+        {meetData?.duration ? (
           <Input
             name='timeDuration'
             label='Продолжительность встречи'
             className={styles.MeetingForm__InputDuration}
             disabled
-            value={data.duration}
+            value={meetData.duration}
           />
         ) : null}
         <Input
           name='link'
           label='Ссылка на встречу'
-          placeholder='https://telemost.yandex.ru/j/122'
           value={formState.link}
           onChange={e => {
             dispatch({ type: "change", payload: { fieldName: "link", value: e.target.value } });

@@ -1,10 +1,10 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { launchWorker } from "@shared/mocks";
+// import { launchWorker } from "@shared/mocks";
 import { App } from "../App";
 
 async function startApp() {
-  await launchWorker();
+  // await launchWorker();
 
   createRoot(document.getElementById("root")!).render(
     <StrictMode>

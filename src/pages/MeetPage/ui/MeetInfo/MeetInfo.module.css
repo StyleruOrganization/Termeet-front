@@ -53,6 +53,10 @@
 }
 
 @media (width < 768px) {
+  .MeetInfo {
+    gap: 8px;
+  }
+
   .MeetInfo__ButtonsEdit {
     position: fixed;
     bottom: 0;

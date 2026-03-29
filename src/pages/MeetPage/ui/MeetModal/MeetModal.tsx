@@ -1,69 +1,82 @@
-import { useActionState, useReducer } from "react";
+import { useState } from "react";
 import { useParams } from "react-router";
 import { ModalWrapper, Input } from "@/shared/ui";
+import BigIcon from "@assets/icons/bigShadow.svg";
+import PrintIcon from "@assets/icons/print.svg";
+import SmallIcon from "@assets/icons/smallShadow.svg";
 import { useMeetStore } from "@entities/Meet";
-import { useSaveUserSelectedData } from "./../../api";
+import { useSaveUserSelectedSlots } from "./../../api";
 import styles from "./MeetModal.module.css";
 
-type FormState = {
-  isDisabled: boolean;
-};
+const WINDOW_HEIGHT = window.innerHeight;
 
 export const MeetModal = () => {
   const { hash } = useParams();
-  const [userName, onChangeUserName] = useReducer((_, e) => e.target.value, "");
+  const [userName, setUserName] = useState("");
   const isOpen = useMeetStore(state => state.isModalOpen);
   const setIsModalOpen = useMeetStore(state => state.setIsModalOpen);
   const setIsEditingMode = useMeetStore(store => store.setIsEditing);
-  const { mutate } = useSaveUserSelectedData(hash || "", () => {
+  const { mutate: saveSelectesSlots } = useSaveUserSelectedSlots(hash || "", () => {
     setIsEditingMode(false);
     setIsModalOpen(false);
   });
-  const [state, formAction, isPending] = useActionState<FormState, FormData>(
-    (prevState, formData) => {
-      console.log("call useActionState", prevState, formData);
-
-      const userName = formData.get("userName")?.toString().trim() || "";
-      if (!userName)
-        return {
-          isDisabled: true,
-        };
-      mutate(userName);
-
-      return {
-        isDisabled: false,
-      };
-    },
-    {
-      isDisabled: false,
-    },
-  );
 
   const isValidName = userName.trim().length > 0;
-  console.log(isPending, !isValidName, state.isDisabled);
-  const isButtonDisabled = isPending || !isValidName || state.isDisabled;
+  const isButtonDisabled = !isValidName;
 
   return (
     <>
       <ModalWrapper isAnimate animationDuration={300} isOpen={isOpen} onClose={() => setIsModalOpen(false)}>
-        <form action={formAction} data-test-id='meet-modal' className={styles.MeetModal}>
-          <div className={styles.MeetModal__Heading}>Введите ваше имя</div>
-          <Input placeholder='Иван Иванов' name='userName' autoComplete='given-name' onChange={onChangeUserName} />
-          <div className={styles.MeetModal__Buttons}>
-            <button
-              onClick={() => {
-                setIsModalOpen(false);
+        <div className={styles.MeetModal__Wrapper}>
+          {WINDOW_HEIGHT > 600 ? (
+            <>
+              <div className={styles.MeetModal__Header}>
+                <div className={styles.MeetModal__HeaderBg}>
+                  <SmallIcon className={styles.MeetModal__HeaderBg__SmallIcon} />
+                  <BigIcon className={styles.MeetModal__HeaderBg__BigIcon} />
+                </div>
+              </div>
+              <PrintIcon className={styles.MeetModal__PrintIcon} />
+            </>
+          ) : null}
+
+          <form
+            onSubmit={event => {
+              event.preventDefault();
+              const formValues = new FormData(event.target);
+              const username = formValues.get("userName")?.toString() || "";
+              console.log("NAME FOR SAVING", username);
+              saveSelectesSlots(username);
+              setUserName("");
+            }}
+            data-test-id='meet-modal'
+            className={styles.MeetModal__Form}
+          >
+            <div className={styles.MeetModal__Heading}>Слоты заполнены! Осталось заполнить информацию о себе</div>
+            <Input
+              label='Как тебя зовут?'
+              placeholder='Иван Иванов'
+              name='userName'
+              autoComplete='given-name'
+              onChange={e => {
+                setUserName(e.target.value);
               }}
-              disabled={isPending}
-              className={"baseButton secondaryButton"}
-            >
-              Изменить слоты
-            </button>
-            <button disabled={isButtonDisabled} className={"baseButton mainButton"}>
-              Сохранить слоты
-            </button>
-          </div>
-        </form>
+            />
+            <div className={styles.MeetModal__Buttons}>
+              <button type='submit' disabled={isButtonDisabled} className={"baseButton mainButton"}>
+                Сохранить слоты
+              </button>
+              <button
+                onClick={() => {
+                  setIsModalOpen(false);
+                }}
+                className={"baseButton secondaryButton"}
+              >
+                Отменить
+              </button>
+            </div>
+          </form>
+        </div>
       </ModalWrapper>
     </>
   );

@@ -1,8 +1,11 @@
 .TableCell {
+  position: relative;
+
   width: 100%;
   height: 20px;
   
-  border: 1px solid var(--light-semantics-gray-default);
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-color);
 
   transition: background-color 0.2s ease, border-color 0.2s ease;
 
@@ -10,17 +13,26 @@
 }
 
 .TableCell:hover {
-  /* Хз потом исравлю если */
-  border-color: var(--hover-color, --light-semantics-light-blue-disabled) !important;
+  border-color: var(--hover-color);
 }
 
 .TableCell_disabled {
-  background-image: repeating-linear-gradient(
-    45deg,                    /* угол наклона */
-    var(--light-semantics-gray-default),                  /* цвет полоски */
-    var(--light-semantics-gray-default) 8px,              /* полоска шириной 8px */
-    transparent 8px,          /* начало прозрачного промежутка */
-    transparent 16px          /* ширина промежутка 8px */
+  background: repeating-linear-gradient(
+    -45deg,           /* угол наклона 45 градусов */
+    var(--light-semantics-gray-default) 0,                  /* цвет полоски */
+    var(--light-semantics-gray-default) 2px,                  /* цвет полоски */
+    var(--light-fill-bg) 2px,                             /* начало прозрачного промежутка */
+    var(--light-fill-bg) 8px  
   );
   cursor: not-allowed;
+}
+
+.TableCell_disabled:hover {
+  border-color: var(--light-semantics-light-blue-disabled) !important;
+}
+
+.cellTooltip {
+  position: absolute;
+  top: 0;
+  left: 0;
 }

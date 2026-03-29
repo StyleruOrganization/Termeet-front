@@ -1,37 +1,30 @@
-import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
-import { useParams } from "react-router";
 import { useShallow } from "zustand/shallow";
-import { MeetQueries, useMeetStore } from "@/entities/Meet";
-import { isMoreThan30Min } from "@shared/libs";
+import { useMeetStore } from "@/entities/Meet";
 import { getCellIds } from "../cells/getCellsIds";
 
 interface IFakeCells {
   isShow: boolean;
-  isShowSeparator: boolean;
 }
 
 export const useColumnData = (date: string) => {
-  const { hash } = useParams();
   const setSelectNewSell = useMeetStore(store => store.setSelectNewSell),
     isEditing = useMeetStore(store => store.isEditing),
-    newSelectedSlots = useMeetStore(useShallow(store => store.newSelectedSlots.get(date)));
-
-  const { data: meetInfo } = useQuery(MeetQueries.meet(hash || ""));
-  console.log("meetInfo in useColumnData", meetInfo, date);
-  const columnData = meetInfo?.timeInfo.get(date);
+    newSelectedSlots = useMeetStore(useShallow(store => store.newSelectedSlots.get(date))),
+    columnData = useMeetStore(useShallow(store => store.timeInfo.get(date))),
+    timeRanges = useMeetStore(useShallow(store => store.timeRanges));
 
   const cellIds = columnData?.timeRanges?.map(([startTime, endTime]) => {
     return getCellIds({ startTime, endTime, date });
   });
 
   const isShowBefore: IFakeCells = useMemo(() => {
-    if (meetInfo?.timeRanges.length == (columnData?.timeRanges || []).length) {
-      return { isShow: false, isShowSeparator: false };
+    if (timeRanges.length == (columnData?.timeRanges || []).length) {
+      return { isShow: false };
     }
-    const timeFirstRangeStart = meetInfo?.timeRanges[0]?.[0];
-    const timeFirstRangeEnd = meetInfo?.timeRanges[0]?.[1];
-    const res = { isShow: false, isShowSeparator: false };
+    const timeFirstRangeStart = timeRanges[0]?.[0];
+    const timeFirstRangeEnd = timeRanges[0]?.[1];
+    const res = { isShow: false };
 
     if (timeFirstRangeStart && timeFirstRangeEnd) {
       if (
@@ -40,26 +33,18 @@ export const useColumnData = (date: string) => {
         )
       ) {
         res.isShow = true;
-
-        if (
-          columnData?.timeRanges.some(
-            ([startTime]) => startTime !== timeFirstRangeEnd && isMoreThan30Min(timeFirstRangeEnd, startTime),
-          )
-        ) {
-          res.isShowSeparator = true;
-        }
       }
     }
     return res;
-  }, [meetInfo?.timeRanges, columnData?.timeRanges]);
+  }, [timeRanges, columnData?.timeRanges]);
 
   const isShowAfter: IFakeCells = useMemo(() => {
-    if (meetInfo?.timeRanges.length == (columnData?.timeRanges || []).length) {
-      return { isShow: false, isShowSeparator: false };
+    if (timeRanges.length == (columnData?.timeRanges || []).length) {
+      return { isShow: false };
     }
-    const timeSecondRangeStart = meetInfo?.timeRanges[1]?.[0];
-    const timeSecondRangeEnd = meetInfo?.timeRanges[1]?.[1];
-    const res = { isShow: false, isShowSeparator: false };
+    const timeSecondRangeStart = timeRanges[1]?.[0];
+    const timeSecondRangeEnd = timeRanges[1]?.[1];
+    const res = { isShow: false };
 
     if (timeSecondRangeStart && timeSecondRangeEnd) {
       if (
@@ -68,19 +53,11 @@ export const useColumnData = (date: string) => {
         )
       ) {
         res.isShow = true;
-
-        if (
-          columnData?.timeRanges.some(
-            period => period[1] !== timeSecondRangeStart && isMoreThan30Min(period[1], timeSecondRangeStart),
-          )
-        ) {
-          res.isShowSeparator = true;
-        }
       }
     }
 
     return res;
-  }, [meetInfo?.timeRanges, columnData?.timeRanges]);
+  }, [timeRanges, columnData?.timeRanges]);
 
   return useMemo(
     () => ({

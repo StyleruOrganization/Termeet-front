@@ -22,8 +22,9 @@ export const meetHandlers = [
   http.get("https://termeet.tech/api/meet/:hash", async ({ params }) => {
     console.log("Received request for meeting info with hash:", params.hash);
     const { hash } = params;
-    // await delay(2000); // Симулируем задержку сети
+    await delay(500); // Симулируем задержку сети
     if (hash == uid) {
+      console.log("mockMeetingInfoWithUserSlots", mockMeetingInfoWithUserSlots);
       return HttpResponse.json(mockMeetingInfoWithUserSlots, { status: 200 });
     }
     if (hash == timeZoneUid) {

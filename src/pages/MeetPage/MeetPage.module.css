@@ -3,18 +3,37 @@
   gap: 32px;
 }
 
-.MeetPage__MeetInfoWrapper {
+.MeetPage__InfoWrapper {
   flex: 1 1 35%;
+
+  min-width: 0;
+}
+
+.MeetPage__TableWrapper {
+  display: flex;
+  flex-direction: column;
+
+  /* Вычитаем ебучий gap */
+  flex: 1 1 calc(65% - 32px);
+  gap: 24px;
+
+  width: 100%;
+
+  max-width: 100%;
 
   min-width: 0;
 }
 
 @media (width < 768px) {
   .MeetPage {
+    gap: 16px;
     flex-direction: column-reverse;
 
     padding-top: 83px;
-    padding-bottom: 100px;
+    padding-bottom: 100px
   }
- 
+
+  .MeetPage__TableWrapper {
+    gap: 16px
+  }
 }

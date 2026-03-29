@@ -1,20 +1,16 @@
 .MeetTable {
   display: flex;
-
-  /* Вычитаем ебучий gap */
-  flex: 1 1 calc(65% - 32px);
   align-items: center;
 
   width: 100%;
   height: fit-content;
   padding-right: 10px;
+  padding-bottom: 10px;
 
   background-color: var(--light-fill-controls);
   border-radius: 32px;
 
   font-size: 3rem;
-  max-width: 100%;
-  min-width: 0;
 }
 
 .MeetTable__TimesPeriodsContainer {
@@ -22,7 +18,9 @@
   flex-direction: column;
 
   padding-top: 44px;
-  width: 64px
+  width: 64px;
+
+  align-self: start;
 }
 
 .MeetTable__TimesPeriod {
@@ -77,7 +75,7 @@
   display: flex;
   justify-content: center;
 
-  height: 46px;
+  height: 20px;
 }
 
 .MeetTable__TimesPeriod_beforeSepate {
@@ -85,34 +83,23 @@
   margin-bottom: calc(calc(var(--size-cell) - 2px) - 1em + calc(var(--size-cell) * var(--size-factor, 0)));
 }
 
-.MeetTable__Arrows {
-  display: flex;
-  align-items: center;
-
-  svg {
-    width: 32px;
-    height: 32px;
-  }
-
-  button {
-    padding: 4px;
-    width: 40px;
-    height: 40px;
-
-    cursor: pointer;
-  }
-
-  button:first-child{
-    svg {
-      rotate: -180deg;
-    }
-  }
+.MeetTable__TimeZonesToogleWrapper {
+  position: absolute;
 }
 
-.MeetTable__Arrow {
-  color: var(--termeet-color-gray-main-10)
+/* Делаем скругленными уголки таблицы */
+.MeetTable__Columns [data-column-id]:first-child [data-first-cell="true"] {
+  border-top-left-radius: 32px;
 }
 
-.MeetTable__Arrow_active {
-  color: var(--termeet-always-black)
+.MeetTable__Columns [data-column-id]:last-child [data-first-cell="true"] {
+  border-top-right-radius: 32px;
+}
+
+.MeetTable__Columns [data-column-id]:first-child [data-last-cell="true"] {
+  border-bottom-left-radius: 32px;
+}
+
+.MeetTable__Columns [data-column-id]:last-child [data-last-cell="true"] {
+  border-bottom-right-radius: 32px;
 }

@@ -19,6 +19,22 @@ export const TableColumn = memo(({ columnId, columnWidth, timeRanges }: TableCol
     return day + " " + MONTHS_GENITIVE.at(month - 1);
   }, [columnId]);
 
+  const disabledBeforeCells = useMemo(() => {
+    return getCellIds({
+      startTime: timeRanges[0][0],
+      endTime: timeRanges[0][1],
+      date: columnId,
+    });
+  }, [timeRanges, columnId]);
+
+  const disabledAfterCells = useMemo(() => {
+    return getCellIds({
+      startTime: timeRanges[1]?.[0],
+      endTime: timeRanges[1]?.[1],
+      date: columnId,
+    });
+  }, [columnId, timeRanges]);
+
   // предотвращаем багулю с завершением выделения за пределами таблицы
   useEffect(() => {
     const handleEndSelection = () => {
@@ -83,7 +99,6 @@ export const TableColumn = memo(({ columnId, columnWidth, timeRanges }: TableCol
 
   const justifyContent = cellIds?.length == 0 ? (isShowBefore.isShow ? "start" : isShowAfter.isShow ? "end" : "") : "";
 
-  console.log(cellIds, columnId);
   return (
     <>
       <span className={styles.TableColumnTitle}>{date}</span>
@@ -92,14 +107,15 @@ export const TableColumn = memo(({ columnId, columnWidth, timeRanges }: TableCol
           {/* Фейковые слоты перед основным диапазона */}
           {isShowBefore.isShow && (
             <>
-              {getCellIds({
-                startTime: timeRanges[0][0],
-                endTime: timeRanges[0][1],
-                date: columnId,
-              }).map(cellId => (
-                <TableCell id={cellId} key={cellId} isDisabled />
+              {disabledBeforeCells.map((cellId, cellIndex) => (
+                <TableCell isLastCell={false} isFirstCell={cellIndex == 0} id={cellId} key={cellId} isDisabled />
               ))}
-              {isShowBefore.isShowSeparator && <div className={styles.TableColumnSeparator}>...</div>}
+              <TableCell
+                isLastCell={cellIds?.length == 0 && isShowAfter.isShow == false}
+                isFirstCell={disabledBeforeCells.length == 0}
+                id={"disabled-cell"}
+                isDisabled
+              />
             </>
           )}
 
@@ -111,25 +127,41 @@ export const TableColumn = memo(({ columnId, columnWidth, timeRanges }: TableCol
               onPointerMove={handlePointerMove}
               onPointerUp={handlePointerUp}
             >
-              {cellsRange.map(cell => {
+              {cellsRange.map((cell, cellIndex) => {
                 const key = cell.split("T")[1];
                 const selectedPersons = userSlots?.get(key) || [];
-                return <TableCell id={cell} key={key} users={selectedPersons} />;
+                return (
+                  <TableCell
+                    isFirstCell={!isShowBefore.isShow && indexRanges == 0 && cellIndex == 0}
+                    isLastCell={
+                      indexRanges == cellIds.length - 1 &&
+                      cellIndex == cellsRange.length - 1 &&
+                      isShowAfter.isShow == false
+                    }
+                    id={cell}
+                    key={cell}
+                    users={selectedPersons}
+                  />
+                );
               })}
-              {indexRanges < cellIds.length - 1 && <div className={styles.TableColumnSeparator}>...</div>}
+              {indexRanges < cellIds.length - 1 && (
+                <TableCell isLastCell={false} isFirstCell={false} id={"disabled-cell"} isDisabled />
+              )}
             </div>
           ))}
 
           {/* Фейковые слоты после активного диапазона */}
           {isShowAfter.isShow && (
             <>
-              {isShowAfter.isShowSeparator && <div className={styles.TableColumnSeparator}>...</div>}
-              {getCellIds({
-                startTime: timeRanges[1]?.[0],
-                endTime: timeRanges[1]?.[1],
-                date: columnId,
-              }).map(cellId => (
-                <TableCell id={cellId} key={cellId} isDisabled />
+              <TableCell isLastCell={false} isFirstCell={false} id={"disabled-cell"} isDisabled />
+              {disabledAfterCells.map((cellId, cellIndex) => (
+                <TableCell
+                  isFirstCell={false}
+                  isLastCell={cellIndex == disabledAfterCells.length - 1}
+                  id={cellId}
+                  key={cellId}
+                  isDisabled
+                />
               ))}
             </>
           )}

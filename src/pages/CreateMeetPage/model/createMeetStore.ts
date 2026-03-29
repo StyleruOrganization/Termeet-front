@@ -30,6 +30,7 @@ export const useCreateMeetStore = create<MeetingFormState>((set, get) => ({
   lastCorrectedValues: {
     timeStart: "10 : 00",
     timeEnd: "19 : 00",
+    timeDuration: "",
   },
   errors: {},
 
@@ -88,7 +89,7 @@ export const useCreateMeetStore = create<MeetingFormState>((set, get) => ({
 
   blurTimeField: name => {
     const lastCorrectedTime = get().lastCorrectedValues[name];
-    if (!lastCorrectedTime) return;
+    if (lastCorrectedTime == undefined) return;
 
     const roundToHalfHour = (time: string): string => {
       const [hours, minutes] = time.split(":").map(Number);

@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from "react";
-import { generateTimeOptions } from "@/shared/libs";
+import { generateTimeOptions, isMoreThan30Min } from "@/shared/libs";
 import { useMeetStore } from "@entities/Meet";
 import styles from "./MeetTable.module.css";
 import { useColumnWidth } from "../../lib";
@@ -44,20 +44,18 @@ export const MeetTable = ({ timeRanges, meeting_days }: MeetTableProps) => {
         {timeOptions.map((timePeriodOpitions, indexPeriods) => (
           <div key={indexPeriods}>
             <div
-              className={
-                styles.MeetTable__TimesPeriod +
-                (indexPeriods < timeOptions.length - 1 ? " " + styles.MeetTable__TimesPeriod_beforeSepate : "")
-              }
+              style={{
+                marginBottom: `${isMoreThan30Min(timePeriodOpitions[timePeriodOpitions.length - 1], timeRanges[indexPeriods][1]) ? 20 : 0}px`,
+              }}
+              className={styles.MeetTable__TimesPeriod}
               key={`period-${indexPeriods}`}
             >
-              {timePeriodOpitions.map(timeOption => (
-                <span key={timeOption}>{timeOption}</span>
-              ))}
+              {timePeriodOpitions.map(timeOption => {
+                console.log("DEBUG", timePeriodOpitions[timePeriodOpitions.length - 1], timeRanges[indexPeriods][1]);
+                return <span key={timeOption}>{timeOption}</span>;
+              })}
             </div>
-            {indexPeriods < timeOptions.length - 1 &&
-              Number(timeOptions[indexPeriods][timePeriodOpitions.length - 1].split(":")[0]) -
-                Number(timeRanges[indexPeriods + 1][0].split(":")[0]) !=
-                -1 && <div className={styles.MeetTable__TimesPeriodSeparator}>...</div>}
+            {indexPeriods < timeOptions.length - 1 && <div className={styles.MeetTable__TimesPeriodSeparator}>...</div>}
           </div>
         ))}
       </div>

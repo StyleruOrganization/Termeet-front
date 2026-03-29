@@ -220,7 +220,6 @@ export const mockMeetingInfoWithUserSlots = {
     ["2026-02-03T21:00:00Z", "2026-02-04T20:30:00Z"],
     ["2026-02-04T21:00:00Z", "2026-02-05T20:30:00Z"],
   ],
-
   slots: [
     {
       name: "Алексей Петров",

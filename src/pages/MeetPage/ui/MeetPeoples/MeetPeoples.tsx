@@ -7,7 +7,7 @@ export const MeetPeoples = ({ users }: { users: string[] }) => {
   const newSelectedSlots = useMeetStore(store => store.newSelectedSlots),
     setHoveredUser = useMeetStore(store => store.setHoveredUser),
     hoveredUsers = useMeetStore(store => store.hoveredUsers);
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(users.length ? true : false);
 
   const handlePeersonChoose = (user: string) => {
     if (newSelectedSlots.size) return;
@@ -35,6 +35,7 @@ export const MeetPeoples = ({ users }: { users: string[] }) => {
               setIsExpanded(prev => !prev);
             }}
             className={styles.MeetPeoples__ExpandButton + " " + styles.MeetHeader__Info__ExpandButton}
+            disabled={users.length == 0}
           >
             <Arrow />
           </button>
@@ -55,14 +56,14 @@ export const MeetPeoples = ({ users }: { users: string[] }) => {
                 onPointerLeave={() => {
                   handlePeersonChoose("");
                 }}
-                className={`${styles.MeetPeoples__user} ${hoveredUsers.includes(user) ? styles.MeetPeoples__user_hovered : ""}`}
+                className={`${hoveredUsers.includes(user) ? styles.MeetPeoples__user_hovered : ""}`}
               >
                 {user}
               </span>
             ))}
           </div>
         ) : (
-          <span>Пока никто не проголосовал !</span>
+          <span className={styles.StubMessage}>Пока никто не проголосовал</span>
         )}
       </div>
     </>

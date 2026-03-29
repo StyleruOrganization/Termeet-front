@@ -51,9 +51,7 @@
 }
 
 .Toast__Error {
-  background-color: var(--termeet-color-accent-errors);
-
-  opacity: 0.8;
+  background-color: var(--light-semantics-red-active);
 }
 
 .Toast__Wait {

@@ -31,24 +31,22 @@
 .ModalWrapper__ModalContainer {
   display: flex;
   flex-direction: column;
+  align-items: center;
 
-  padding: 24px 24px 32px;
+  width: 100%;
+  height: fit-content;
 
   background-color: var(--light-fill-bg);
   border-radius: 16px;
   box-shadow: 0 10px 40px var(--termeet-color-shadow);
 
   transform: translateY(-100px) scale(0.95);
-  transition: 
-    transform var(--animation-duration, 300ms) cubic-bezier(0.34, 1.56, 0.64, 1),
-    opacity var(--animation-duration, 300ms) ease;
+  transition: transform var(--animation-duration, 300ms) cubic-bezier(0.34, 1.56, 0.64, 1), opacity var(--animation-duration, 300ms) ease;
 
-  max-height: fit-content;
-
-  max-width: calc(100vw - 70px);
-
+  align-self: start;
+  max-height: calc(100vh - 80px);
+  max-width: 745px;
   opacity: 0;
-
   overflow-y: auto;
 }
 
@@ -60,8 +58,9 @@
 
 .ModalWrapper__CloseButton {
   position: absolute;
-  top: 15px;
-  right: 15px;
+  z-index: 100;
+  top: 16px;
+  right: 16px;
 
   display: flex;
   justify-content: center;

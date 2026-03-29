@@ -9,4 +9,6 @@ export interface IModalWrapperProps extends React.PropsWithChildren {
   animationDuration?: number;
   /** Делаем ли анимацию при закрытии/открытии */
   isAnimate?: boolean;
+  /** Ширина скроллбара, хз меняется ли она, но так надежнее будет */
+  scrollbarWidth: number;
 }

@@ -59,13 +59,13 @@ export const useCreateMeet = ({ onSuccess: onSuccessExternal }: { onSuccess: () 
       onSuccessExternal();
       removeToast("create-meet-wait");
       navigate(`/meet/${response.hash}`);
-      setTimeout(() => {
-        addToast({
-          type: "success",
-          message: "Встреча успешно создана",
-          id: "create-meet-success",
-        });
-      }, 300);
+      // setTimeout(() => {
+      //   addToast({
+      //     type: "success",
+      //     message: "Встреча успешно создана",
+      //     id: "create-meet-success",
+      //   });
+      // }, 300);
     },
     onMutate: () => {
       addToast({
@@ -91,8 +91,10 @@ export const useCreateMeet = ({ onSuccess: onSuccessExternal }: { onSuccess: () 
       description: formData.description?.trim(),
       link: formData.link?.trim() || null,
       duration: parseDuration(formData.timeDuration),
-      timeRange: prepareDateRanges(formData.dates, formData.timeStart, formData.timeEnd),
+      dataRange: prepareDateRanges(formData.dates, formData.timeStart, formData.timeEnd),
     };
+
+    console.log("preparedData for create Meet", preparedData);
 
     mutate(preparedData);
   };

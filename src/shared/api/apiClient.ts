@@ -1,4 +1,4 @@
-const BASE_URL = "https://termeet.tech/api";
+const BASE_URL = "https://backend.termeet-dev.ru/api";
 
 import type { ZodSchema } from "zod";
 
@@ -16,6 +16,8 @@ class ApiClient {
 
     try {
       const result = await response.json();
+
+      console.log("result in handle response", result);
 
       if (validationSchema) {
         const validationRes = validationSchema.safeParse(result);
@@ -46,7 +48,7 @@ class ApiClient {
       });
     }
 
-    const response = await fetch(url, {
+    const response = await fetch(`/api${endpoint}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -71,10 +73,39 @@ class ApiClient {
         });
       }
     }
-    const response = await fetch(`${this.baseUrl}${endpoint}`, {
+    const response = await fetch(`/api${endpoint}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Accept": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+
+    return this.handleResponse<TResult>(response);
+  }
+
+  public async patch<TResult = unknown, TData = Record<string, unknown>>(
+    endpoint: string,
+    body: TData,
+    validationSchema?: ZodSchema<TData>,
+  ): Promise<TResult> {
+    if (validationSchema) {
+      const validationRes = validationSchema.safeParse(body);
+      if (!validationRes.success) {
+        console.error("❌ Ошибка валидации данных:", {
+          error: validationRes.error.issues[0].message,
+          path: validationRes.error.issues[0].path,
+          timestamp: new Date().toISOString(),
+        });
+      }
+    }
+
+    const response = await fetch(`/api${endpoint}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
       },
       body: JSON.stringify(body),
     });

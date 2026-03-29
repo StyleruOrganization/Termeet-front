@@ -1,6 +1,5 @@
 .MeetHeader {
   display: flex;
-  gap: 8px;
   flex-direction: column;
 
   padding: 22px 22px 24px;
@@ -89,16 +88,17 @@
 
   color: var(--light-text-main);
 
-  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out, padding 0.3s ease-in-out;
   
   font-size: 4rem;
   line-height: 1.4;
+
   max-height: 0;
   opacity: 0;
 }
 
 .MeetHeader__expanded .MeetHeader__desc {
-  max-height: 350px; /* Достаточно большое значение */
+  max-height: 350px;
   opacity: 1;
 }
 
@@ -127,12 +127,16 @@
 }
 
 .MeetHeader__modalWrapper {
+  padding: 16px 16px 32px;
+
   p {
     font-size: 3.5rem;
   }
 }
 
 .MeetHeader__modalTitle {
+  padding-right: 40px;
+
   font-size: 5rem;
   font-weight: 800;
   margin-bottom: 12px;

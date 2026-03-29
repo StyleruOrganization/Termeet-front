@@ -46,8 +46,10 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "https://termeet.tech",
+        target: "https://backend.termeet-dev.ru",
         changeOrigin: true,
+        // Важно: не переписываем путь
+        rewrite: path => path,
         secure: true,
         configure: proxy => {
           proxy.on("error", err => {
@@ -63,7 +65,7 @@ export default defineConfig({
       },
     },
     cors: true,
-    port: 8080,
+    port: 5173,
     open: true,
   },
 });

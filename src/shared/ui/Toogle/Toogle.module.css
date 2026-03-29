@@ -1,0 +1,49 @@
+.ToogleContainer {
+  position: relative;
+
+  display: inline-flex;
+
+  padding: 4px;
+
+  background-color: var(--light-fill-controls);
+  border-radius: 32px;
+}
+
+.Toogle__Option {
+  padding: 10px;
+
+  border-radius: 32px;
+
+  transition: background-color 0.3s ease-in-out,  color 0.3s ease-in-out;
+
+  cursor: pointer;
+
+  font-size: var(--text-body);
+}
+
+.Toogle__Option:hover {
+  background-color: var(--light-semantics-gray-hover)
+}
+
+.Toogle__Option_active {
+  z-index: 100;
+
+  color: var(--light-semantics-blue-main);
+}
+
+.Toogle__Option_active:hover {
+  background-color: var(--light-semantics-light-blue-default)
+}
+
+.Toogle__Slider {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+
+  height: calc(100% - 8px);
+
+  background-color: var(--light-semantics-light-blue-default);
+  border-radius: 32px;
+
+  transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
+}

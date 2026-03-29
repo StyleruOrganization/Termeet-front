@@ -65,6 +65,7 @@ export default [
           },
         },
       ],
+      "react-hooks/set-state-in-effect": "off",
       "import/no-cycle": "error",
       // Enforces FSD layer import rules (e.g., features cannot import pages)
       "fsd/forbidden-imports": "error",

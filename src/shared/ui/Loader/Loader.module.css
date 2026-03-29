@@ -1,3 +1,16 @@
+.loader__wrapper {
+    display: flex;
+    gap: 16px;
+    flex-direction: column;
+    align-items: center;
+
+    margin: 0 auto;
+
+    animation: fade-in  0.5s ease-in;
+
+    max-width: 336px;
+}
+
 .loader {
     width: 100%;
 
@@ -8,16 +21,6 @@
     animation: fade-in-scale 0.5s ease-in-out;
 }
 
-.loader__wrapper {
-    display: flex;
-    gap: 16px;
-    flex-direction: column;
-    align-items: center;
-
-    animation: fade-in  0.5s ease-in;
-
-    max-width: 336px;
-}
 
 .pill {
     height: 12px;

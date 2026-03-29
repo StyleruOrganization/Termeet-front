@@ -33,17 +33,4 @@
   white-space: nowrap;
 }
 
-.TableColumnSeparator {
-  height: 46px;
-
-  text-align: center;
-}
-
-@media(width<=768px){
-  .TableColumnSeparator {
-    height: 36px;
-  }
-}
-
-
 

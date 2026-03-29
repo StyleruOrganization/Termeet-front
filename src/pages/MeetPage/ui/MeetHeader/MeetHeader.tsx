@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams, useSearchParams } from "react-router";
 import { useToastStore } from "@/features/ToastContainer";
 import { ModalWrapper } from "@/shared/ui";
 import AccordeonIcon from "@assets/icons/accordeon.svg";
 import Arrow from "@assets/icons/arrow.svg";
 import Pencil from "@assets/icons/pencil.svg";
+import { copyTextToClipboard } from "@shared/libs";
 import styles from "./MeetHeader.module.css";
-import { copyTextToClipboard } from "../../lib/clipboard/copyToClipBoard";
 import type { MeetHeaderProps } from "./MeetHeader.types";
 
 const WINDOW_WIDTH = window.innerWidth;
@@ -15,6 +15,8 @@ export const MeetHeader = ({ duration, description, name, link }: MeetHeaderProp
   // isExpanded = true - описание раскрыто
   const [isExpanded, setIsExpanded] = useState(false);
   const [isDescPopupOpen, setIsDescPopupOpen] = useState(false);
+  const [searchParams] = useSearchParams(); // Получаем текущие query-параметры
+
   const addToast = useToastStore(store => store.addToast);
   const navigate = useNavigate();
   const { hash = "" } = useParams();
@@ -35,6 +37,13 @@ export const MeetHeader = ({ duration, description, name, link }: MeetHeaderProp
     };
   }, []);
 
+  // Функция для навигации с сохранением query-параметров
+  const navigateWithParams = (path: string) => {
+    const queryString = searchParams.toString();
+    const newPath = queryString ? `${path}?${queryString}` : path;
+    navigate(newPath);
+  };
+
   console.log("isDescPopupOpen", isDescPopupOpen);
   return (
     <div
@@ -48,7 +57,7 @@ export const MeetHeader = ({ duration, description, name, link }: MeetHeaderProp
         <span className={styles.MeetHeader__Info__Duration}>{duration}</span>
         <button
           onClick={() => {
-            navigate(`/meet/edit/${hash}`);
+            navigateWithParams(`/meet/edit/${hash}`);
           }}
           className={styles.MeetHeader__Info__Button}
         >
@@ -88,6 +97,7 @@ export const MeetHeader = ({ duration, description, name, link }: MeetHeaderProp
         animationDuration={300}
         isOpen={isDescPopupOpen}
         onClose={() => setIsDescPopupOpen(false)}
+        scrollbarWidth={window.innerWidth - document.documentElement.clientWidth}
       >
         <div className={styles.MeetHeader__modalWrapper}>
           <div className={styles.MeetHeader__modalTitle}>Описание встречи</div>

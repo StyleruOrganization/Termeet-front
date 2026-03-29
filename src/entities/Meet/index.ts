@@ -7,4 +7,5 @@ export {
   slotsUserSchema,
 } from "./model/Meet.schema";
 export { MeetQueries } from "./api/Meet.query";
-export { useMeetStore } from "./model/store/useMeetStore";
+export { useMeetStore } from "./lib/useMeetStore";
+export { MeetProvider } from "./provider/MeetProvider";

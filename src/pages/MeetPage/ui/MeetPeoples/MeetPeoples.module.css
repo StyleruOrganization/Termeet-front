@@ -10,10 +10,6 @@
   max-width: 100%;
 }
 
-.MeetPeoples.MeetPeoples__expanded {
-  gap: 12px;
-}
-
 .MeetPeoples__Title {
   display: flex;
   justify-content: space-between;
@@ -117,6 +113,10 @@
 
 .MeetPeoples__Users__Container:has(span:hover) {
   color: var(--light-text-disabled);
+}
+
+.StubMessage {
+  font-size: var(--text-body);
 }
 
 @supports not (selector(:has(*))) {
