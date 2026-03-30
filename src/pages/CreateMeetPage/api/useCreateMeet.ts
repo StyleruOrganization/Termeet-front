@@ -58,14 +58,13 @@ export const useCreateMeet = ({ onSuccess: onSuccessExternal }: { onSuccess: () 
       }
       onSuccessExternal();
       removeToast("create-meet-wait");
-      navigate(`/meet/${response.hash}`);
-      // setTimeout(() => {
-      //   addToast({
-      //     type: "success",
-      //     message: "Встреча успешно создана",
-      //     id: "create-meet-success",
-      //   });
-      // }, 300);
+      navigate(`/meet/${response.hash}`, {
+        state: {
+          showToast: true,
+          toastMessage: "Встреча успешно создана",
+          toastId: "create-meet-success",
+        },
+      });
     },
     onMutate: () => {
       addToast({

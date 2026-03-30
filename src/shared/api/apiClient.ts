@@ -1,14 +1,6 @@
-const BASE_URL = "https://backend.termeet-dev.ru/api";
-
 import type { ZodSchema } from "zod";
 
 class ApiClient {
-  private baseUrl: string;
-
-  constructor(url: string) {
-    this.baseUrl = url;
-  }
-
   async handleResponse<TResult>(response: Response, validationSchema?: ZodSchema<TResult>): Promise<TResult> {
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -35,19 +27,7 @@ class ApiClient {
     }
   }
 
-  public async get<TResult = unknown>(
-    endpoint: string,
-    queryParams?: Record<string, string | number>,
-    validationSchema?: ZodSchema<TResult>,
-  ): Promise<TResult> {
-    const url = new URL(`${this.baseUrl}${endpoint}`);
-
-    if (queryParams) {
-      Object.entries(queryParams).forEach(([key, value]) => {
-        url.searchParams.append(key, value.toString());
-      });
-    }
-
+  public async get<TResult = unknown>(endpoint: string, validationSchema?: ZodSchema<TResult>): Promise<TResult> {
     const response = await fetch(`/api${endpoint}`, {
       method: "GET",
       headers: {
@@ -114,4 +94,4 @@ class ApiClient {
   }
 }
 
-export const apiClient = new ApiClient(BASE_URL);
+export const apiClient = new ApiClient();

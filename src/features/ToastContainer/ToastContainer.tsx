@@ -1,4 +1,6 @@
-import { RefreshIcon, Check, CrossIcon } from "@/assets/icons";
+import CheckIcon from "@assets/icons/approve.svg";
+import CrossIcon from "@assets/icons/cross.svg";
+import RefreshIcon from "@assets/icons/refresh.svg";
 import { getToastClassName } from "./lib/getters/getClassName";
 import { useToastStore } from "./lib/store/Toast.store";
 import style from "./ToastContainer.module.css";
@@ -19,7 +21,7 @@ export const ToastContainer = () => {
           }
           key={toast.id}
         >
-          {toast.type === "success" && <Check />}
+          {toast.type === "success" && <CheckIcon />}
           {toast.type === "error" && <></>}
           {toast.type === "wait" && <RefreshIcon className={style.Toast__IconWait} />}
           <p>{toast.message}</p>

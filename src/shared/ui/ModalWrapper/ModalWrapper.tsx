@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
-import { CrossIcon } from "@assets/icons/cross";
+import CrossIcon from "@assets/icons/cross.svg";
 import styles from "./ModalWrapper.module.css";
 import { useFocusTrap } from "../../libs/hooks/useFocusTrap";
 import type { IModalWrapperProps } from "./ModalWrapper.types";

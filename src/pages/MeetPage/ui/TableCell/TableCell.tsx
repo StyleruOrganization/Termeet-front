@@ -47,7 +47,7 @@ export const TableCell = ({ id, users, isDisabled, isFirstCell, isLastCell, colu
 
     const cellRect = cellRef.current.getBoundingClientRect();
     const columnRect = columnRef.current.getBoundingClientRect();
-    const cellWidth = cellRect.right - cellRect.left;
+    const cellWidth = cellRect.width;
     const TOOLTIP_HEIGHT = isDisabled ? TOOLTIP_DISABLED_HEIGHT : TOOLTIP_USUAL_HEIGHT;
     const WINDOW_WIDTH = window.innerWidth;
     console.log(cellRect, columnRect);
@@ -55,42 +55,51 @@ export const TableCell = ({ id, users, isDisabled, isFirstCell, isLastCell, colu
     // Базовая позиция: над ячейкой
     const spaceAbowCell = cellRect.top - columnRect.top;
 
-    console.log("columnRect.top > TOOLTIP_HEIGHT", columnRect.top, TOOLTIP_HEIGHT);
-    console.log("WINDOW_WIDTH > остаток от ячейки", WINDOW_WIDTH - cellRect.left, TOOLTIP_WIDTH);
-
     if (columnRect.top > TOOLTIP_HEIGHT && spaceAbowCell > TOOLTIP_HEIGHT) {
       const poistions = {
         top: cellRect.y - TOOLTIP_HEIGHT,
-        left: cellRect.x - Math.abs(TOOLTIP_WIDTH - cellWidth) / 2,
+        left:
+          TOOLTIP_WIDTH > cellWidth
+            ? cellRect.x + (cellWidth - TOOLTIP_WIDTH) / 2
+            : cellRect.x - (TOOLTIP_WIDTH - cellWidth) / 2,
         arrowDirection: "up",
       };
 
-      if (WINDOW_WIDTH - cellRect.right < TOOLTIP_WIDTH) {
+      if (TOOLTIP_WIDTH > cellWidth && WINDOW_WIDTH - cellRect.right < TOOLTIP_WIDTH - cellWidth / 2) {
         console.log("не хватает места справа", TOOLTIP_WIDTH - cellWidth);
-        poistions.left = cellRect.x - Math.abs(TOOLTIP_WIDTH - cellWidth);
+        poistions.left = cellRect.x - (TOOLTIP_WIDTH - cellWidth);
       }
 
-      if (cellRect.left < TOOLTIP_WIDTH) {
+      if (TOOLTIP_WIDTH > cellWidth && cellRect.left < TOOLTIP_WIDTH - cellWidth / 2) {
+        console.log("не хватает места слева", TOOLTIP_WIDTH - cellWidth);
         poistions.left = cellRect.x;
       }
       console.log("spspaceAbowCell up", spaceAbowCell);
+      console.log("positions", poistions, "cellRect", cellRect, "TOOLTIP_WIDTH", TOOLTIP_WIDTH);
+
       setTooltipPosition(poistions);
     } else {
       console.log("spspaceAbowCell down", spaceAbowCell);
       const poistions = {
         top: cellRect.y + 20 + OFFSET_Y,
-        left: cellRect.x - Math.abs(TOOLTIP_WIDTH - cellWidth) / 2,
+        left:
+          TOOLTIP_WIDTH > cellWidth
+            ? cellRect.x + (cellWidth - TOOLTIP_WIDTH) / 2
+            : cellRect.x - (TOOLTIP_WIDTH - cellWidth) / 2,
         arrowDirection: "down",
       };
 
-      if (WINDOW_WIDTH - cellRect.right < TOOLTIP_WIDTH) {
+      if (TOOLTIP_WIDTH > cellWidth && WINDOW_WIDTH - cellRect.right < TOOLTIP_WIDTH - cellWidth / 2) {
         console.log("не хватает места справа", TOOLTIP_WIDTH - cellWidth);
-        poistions.left = cellRect.x - Math.abs(TOOLTIP_WIDTH - cellWidth);
+        poistions.left = cellRect.x - (TOOLTIP_WIDTH - cellWidth);
       }
 
-      if (cellRect.left < TOOLTIP_WIDTH) {
+      if (TOOLTIP_WIDTH > cellWidth && cellRect.left < TOOLTIP_WIDTH - cellWidth / 2) {
+        console.log("не хватает места слева", TOOLTIP_WIDTH - cellWidth);
         poistions.left = cellRect.x;
       }
+
+      console.log("positions", poistions, "cellRect", cellRect);
       setTooltipPosition(poistions);
     }
   }, [columnRef, cellRef, isDisabled]);
@@ -131,6 +140,7 @@ export const TableCell = ({ id, users, isDisabled, isFirstCell, isLastCell, colu
         window.removeEventListener("resize", handleCloseTooltip);
       };
     }
+    return;
   }, [isTooltipVisible, users, id, calculateTooltipPosition]);
 
   // Без такой страшилищи хз как

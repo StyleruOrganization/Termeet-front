@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { Outlet } from "react-router";
+import { Outlet, useNavigate } from "react-router";
 import { ToastContainer } from "@/features/ToastContainer";
 import { Loader } from "@/shared/ui";
 import styles from "./Layout.module.css";
@@ -10,16 +10,25 @@ import "../styles/global.css";
 import "../styles/fonts.css";
 import "../styles/variables.css";
 
-export const Layout = () => (
-  <>
-    <div className={styles.header}>
-      <h1>termeet</h1>
-    </div>
-    <div className={styles.container}>
-      <Suspense fallback={<Loader />}>
-        <Outlet />
-      </Suspense>
-      <ToastContainer />
-    </div>
-  </>
-);
+export const Layout = () => {
+  const navigate = useNavigate();
+  return (
+    <>
+      <div className={styles.header}>
+        <button
+          onClick={() => {
+            navigate("/");
+          }}
+        >
+          <h1 className={styles.header__title}>termeet</h1>
+        </button>
+      </div>
+      <div className={styles.container}>
+        <Suspense fallback={<Loader />}>
+          <Outlet />
+        </Suspense>
+        <ToastContainer />
+      </div>
+    </>
+  );
+};

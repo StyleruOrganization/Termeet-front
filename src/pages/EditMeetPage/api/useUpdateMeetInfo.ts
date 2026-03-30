@@ -33,7 +33,8 @@ export const useUpdateMeetInfo = (hash: string) => {
       navigate(`/meet/${hash}`, {
         state: {
           showToast: true,
-          toastMessage: "Встреча успешно обновлена!",
+          toastMessage: "Информация о встрече успешно обновлена!",
+          toastId: "update-meet-success",
         },
       });
     },

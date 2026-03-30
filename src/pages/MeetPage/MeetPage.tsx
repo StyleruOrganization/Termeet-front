@@ -25,8 +25,8 @@ export function MeetPage() {
     if (location.state?.showToast) {
       addToast({
         type: "success",
-        message: "Информация о встрече успешно обновлена",
-        id: "update-meet-success",
+        message: location.state.toastMessage,
+        id: location.state.toastId,
       });
 
       window.history.replaceState({}, document.title);
