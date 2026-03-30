@@ -64,15 +64,11 @@ export const useCreateMeetStore = create<MeetingFormState>((set, get) => ({
       [name]: isSaveAsLast ? value : get().lastCorrectedValues[name],
     };
 
-    console.log("actualValues", actualValues);
-
     let isDurationValueValid = true;
 
     if (actualValues.timeDuration && actualValues.timeStart && actualValues.timeEnd) {
       isDurationValueValid = isDurationValid(actualValues.timeDuration, actualValues.timeStart, actualValues.timeEnd);
     }
-
-    console.log("isDurationValueValid", isDurationValueValid);
 
     set(state => ({
       values: {

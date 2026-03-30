@@ -6,8 +6,8 @@ export const getTimeZone = () => {
       utcString: `(UTC${timeZoneOffset > 0 ? "+" : "-"}${timeZoneOffset / 60})`,
     },
     moscow: {
-      timeZoneOffset: 3,
-      utcString: "(UTC+3)",
+      timeZoneOffset: 12,
+      utcString: "(UTC+12)",
     },
   };
 };

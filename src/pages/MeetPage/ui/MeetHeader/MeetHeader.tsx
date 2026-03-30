@@ -45,7 +45,6 @@ export const MeetHeader = ({ duration, description, name, link }: MeetHeaderProp
     navigate(newPath);
   };
 
-  console.log("isDescPopupOpen", isDescPopupOpen);
   return (
     <div
       style={{

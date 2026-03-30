@@ -47,6 +47,8 @@ export const TableColumn = memo(({ columnId, columnWidth, timeRanges }: TableCol
     };
   }, []);
 
+  console.log("cellId in column", cellIds, columnId);
+
   useEffect(() => {
     const columnEl = columnRef.current;
     if (!columnEl) return;

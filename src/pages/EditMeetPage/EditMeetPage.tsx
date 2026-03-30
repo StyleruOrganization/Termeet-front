@@ -78,15 +78,11 @@ export const EditMeetPage = () => {
   });
   const { mutate: updateMeetInfo } = useUpdateMeetInfo(hash);
 
-  console.log("FORM_STATE", formState);
-
   useLayoutEffect(() => {
     dispatch({ type: "change", payload: { fieldName: "name", value: meetData.name } });
     dispatch({ type: "change", payload: { fieldName: "description", value: meetData.description || "" } });
     dispatch({ type: "change", payload: { fieldName: "link", value: meetData.link || "" } });
   }, [meetData.name, meetData.description, meetData.link]);
-
-  console.log("DATA IN EDIT MEET PAGE", meetData);
 
   const isChangedFields =
     meetData.link !== formState.link ||

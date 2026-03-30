@@ -35,11 +35,8 @@ export const createMeetStore = (initialState?: Partial<IMeetStore>) => {
 
         const currentSelectedTimes = newSelectedSlots.get(date) || [];
 
-        console.log("currentSelectedTimes", currentSelectedTimes);
-
         if (isRemove) {
           if (currentSelectedTimes.length == 1) {
-            console.log("delete date from new map newSelectedSlots");
             newSelectedSlots.delete(date);
           } else {
             newSelectedSlots.set(date, currentSelectedTimes.filter(timeValue => timeValue != time) || []);

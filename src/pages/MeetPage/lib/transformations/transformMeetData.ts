@@ -12,7 +12,7 @@ export const transformMeetData = (meetData: MeetResponse, isLocal: boolean): IMe
   const timeRanges: IMeet["timeRanges"] = [];
   const timeInfo: IMeet["timeInfo"] = new Map();
 
-  const timeZoneOffset = isLocal ? -new Date().getTimezoneOffset() / 60 : 9;
+  const timeZoneOffset = isLocal ? -new Date().getTimezoneOffset() / 60 : 12;
   // Переводим UTC в нужное время - это дни в которые проходит встреча
   const preparedMeetDataDataRanges = meetData.dataRange.map(([startTime, endTime]) => [
     convertUTCToTimezone(startTime, timeZoneOffset),
@@ -58,7 +58,7 @@ export const transformMeetData = (meetData: MeetResponse, isLocal: boolean): IMe
       newTimeRangesStartDate = oldTimeRangesStartDate.map(([startTimeOldRange, endTimeOldRange]) => {
         if (getMinutes(processedStartTime) - getMinutes(endTimeOldRange) == 30) {
           isMergingInStartTimeRange = true;
-          return [startTimeOldRange, "23:30"];
+          return [startTimeOldRange, "23:00"];
         } else {
           return [startTimeOldRange, endTimeOldRange];
         }
@@ -68,17 +68,29 @@ export const transformMeetData = (meetData: MeetResponse, isLocal: boolean): IMe
       newTimeRangesEndDate = oldTimeRangesEndDate.map(([startTimeOldRange, endTimeOldRange]) => {
         if (getMinutes(startTimeOldRange) - getMinutes(processedEndTime) == 30) {
           isMergingInEndTimeRange = true;
-          return ["00:00", endTimeOldRange];
+          const newEndTime = getMinutes(endTimeOldRange) - 30;
+          return [
+            "00:00",
+            `${Math.floor(newEndTime / 60)
+              .toString()
+              .padStart(2, "0")}:${(newEndTime % 60).toString().padStart(2, "0")}`,
+          ];
         } else {
           return [startTimeOldRange, endTimeOldRange];
         }
       });
 
       if (!isMergingInStartTimeRange) {
-        newTimeRangesStartDate.push([processedStartTime, "23:30"]);
+        newTimeRangesStartDate.push([processedStartTime, "23:00"]);
       }
       if (!isMergingInEndTimeRange) {
-        newTimeRangesEndDate.push(["00:00", processedEndTime]);
+        const newEndTime = getMinutes(processedEndTime) - 30;
+        newTimeRangesEndDate.push([
+          "00:00",
+          `${Math.floor(newEndTime / 60)
+            .toString()
+            .padStart(2, "0")}:${(newEndTime % 60).toString().padStart(2, "0")}`,
+        ]);
       }
 
       timeInfo.set(startDate, {
@@ -95,23 +107,42 @@ export const transformMeetData = (meetData: MeetResponse, isLocal: boolean): IMe
       if (timeRanges.length === 0) {
         // А здесь можно вот так вот смерджить
         if (isMergingInEndTimeRange || isMergingInStartTimeRange) {
-          timeRanges.push(["00:00", "23:30"]);
+          timeRanges.push(["00:00", "23:00"]);
         } else {
-          timeRanges.push([processedStartTime, "23:30"]);
-          timeRanges.push(["00:00", processedEndTime]);
+          const newEndTime = getMinutes(processedEndTime) - 30;
+          timeRanges.push([processedStartTime, "23:00"]);
+          timeRanges.push([
+            "00:00",
+            `${Math.floor(newEndTime / 60)
+              .toString()
+              .padStart(2, "0")}:${(newEndTime % 60).toString().padStart(2, "0")}`,
+          ]);
         }
       }
     }
     // Еще важно, что если есть переход то он есть абсолютно во всех днях
     else {
+      const newEndTime = getMinutes(processedEndTime) - 30;
       if (timeRanges.length === 0) {
-        timeRanges.push([processedStartTime, processedEndTime]);
+        timeRanges.push([
+          processedStartTime,
+          `${Math.floor(newEndTime / 60)
+            .toString()
+            .padStart(2, "0")}:${(newEndTime % 60).toString().padStart(2, "0")}`,
+        ]);
       }
       meetingDays.add(startDate);
       timeInfo.set(startDate, {
         ...timeInfo.get(startDate),
         userSlots: new Map(),
-        timeRanges: [[processedStartTime, processedEndTime]],
+        timeRanges: [
+          [
+            processedStartTime,
+            `${Math.floor(newEndTime / 60)
+              .toString()
+              .padStart(2, "0")}:${(newEndTime % 60).toString().padStart(2, "0")}`,
+          ],
+        ],
       });
     }
   });

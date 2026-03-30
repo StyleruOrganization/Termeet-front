@@ -22,6 +22,7 @@ export const useToastStore = create<IToastStore>((set, get) => ({
       set(state => ({ toasts: state.toasts.filter(toast => toast.id !== id) }));
     }, 300);
   },
+  hasIdToast: id => get().toasts.some(toast => toast.id === id),
   updateAnimateState: id =>
     set(state => ({
       toasts: state.toasts.map(toast => (toast.id === id ? { ...toast, isExiting: true } : toast)),

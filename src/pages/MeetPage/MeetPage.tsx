@@ -16,6 +16,7 @@ export function MeetPage() {
   const isLocalTime = searchParams.get("localTime") === "true" || searchParams.get("localTime") == null;
   const { meetData } = useGetMeetInfo(hash, isLocalTime);
   const addToast = useToastStore(state => state.addToast);
+  const hasIdToast = useToastStore(state => state.hasIdToast);
 
   const timeZones = useMemo(() => {
     return getTimeZone();
@@ -23,22 +24,24 @@ export function MeetPage() {
 
   useEffect(() => {
     if (location.state?.showToast) {
-      addToast({
-        type: "success",
-        message: location.state.toastMessage,
-        id: location.state.toastId,
-      });
+      if (!hasIdToast(location.state.toastId)) {
+        addToast({
+          type: "success",
+          message: location.state.toastMessage,
+          id: location.state.toastId,
+        });
+      }
 
       window.history.replaceState({}, document.title);
     }
-  }, [location.state, addToast]);
+  }, [location.state, addToast, hasIdToast]);
 
   if (!hash || !meetData) {
     return <h1>Необходим идентификатор встречи</h1>;
   }
 
   const handleToggleChange = (dir: "left" | "right") => {
-    // if (timeZones.local.timeZoneOffset == timeZones.moscow.timeZoneOffset) return;
+    if (timeZones.local.timeZoneOffset == timeZones.moscow.timeZoneOffset) return;
     const newValue = dir === "left";
 
     setSearchParams({ localTime: newValue.toString() }, { replace: true });
@@ -58,7 +61,7 @@ export function MeetPage() {
           />
           <Toggle
             leftLabel={"По местному " + timeZones.local.utcString}
-            rightLabel={"По Москве " + timeZones.moscow.utcString}
+            rightLabel={"По Камчатскому времени " + timeZones.moscow.utcString}
             defaultActive={isLocalTime ? "left" : "right"}
             onChange={handleToggleChange}
           />

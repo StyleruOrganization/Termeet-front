@@ -13,9 +13,11 @@ const WINDOW_HEIGHT = window.innerHeight;
 export const MeetModal = () => {
   const { hash } = useParams();
   const [userName, setUserName] = useState("");
+  const [error, setError] = useState("");
   const isOpen = useMeetStore(state => state.isModalOpen);
   const setIsModalOpen = useMeetStore(state => state.setIsModalOpen);
   const setIsEditingMode = useMeetStore(store => store.setIsEditing);
+  const users = useMeetStore(store => store.users);
   const { mutate: saveSelectesSlots } = useSaveUserSelectedSlots(hash || "", () => {
     setIsEditingMode(false);
     setIsModalOpen(false);
@@ -64,8 +66,15 @@ export const MeetModal = () => {
               placeholder='Иван Иванов'
               name='userName'
               autoComplete='given-name'
+              error={error}
               onChange={e => {
                 setUserName(e.target.value);
+
+                if (users.includes(e.target.value)) {
+                  setError("Пользователь с таким именем уже существует!");
+                } else {
+                  setError("");
+                }
               }}
               value={userName}
             />

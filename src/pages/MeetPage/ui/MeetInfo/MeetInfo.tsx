@@ -20,12 +20,9 @@ export const MeetInfo = ({ data }: IMeetInfoProps) => {
     setIsModalOpen = useMeetStore(store => store.setIsModalOpen),
     clearNewSelectedSlots = useMeetStore(store => store.clearNewSelectedSlots);
 
-  console.log("NEW selectedSlots in MeetInfo", newSelectedSlots);
   const addToast = useToastStore(store => store.addToast);
   // Состояние для управления transition
   const [disableTransition, setDisableTransition] = useState(false);
-
-  console.log("disableTransition", disableTransition);
 
   // Отключаем transition при входе в режим редактирования
   useEffect(() => {

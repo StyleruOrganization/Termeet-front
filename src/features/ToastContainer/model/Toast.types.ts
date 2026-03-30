@@ -9,6 +9,7 @@ export interface Toast {
 export interface IToastStore {
   addToast: (toast: Toast) => void;
   removeToast: (id: string) => void;
+  hasIdToast: (id: string) => boolean;
   updateAnimateState: (id: string) => void;
   toasts: Toast[];
 }

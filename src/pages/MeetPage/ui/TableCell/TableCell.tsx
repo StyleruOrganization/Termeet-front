@@ -66,20 +66,14 @@ export const TableCell = ({ id, users, isDisabled, isFirstCell, isLastCell, colu
       };
 
       if (TOOLTIP_WIDTH > cellWidth && WINDOW_WIDTH - cellRect.right < TOOLTIP_WIDTH - cellWidth / 2) {
-        console.log("не хватает места справа", TOOLTIP_WIDTH - cellWidth);
         poistions.left = cellRect.x - (TOOLTIP_WIDTH - cellWidth);
       }
 
       if (TOOLTIP_WIDTH > cellWidth && cellRect.left < TOOLTIP_WIDTH - cellWidth / 2) {
-        console.log("не хватает места слева", TOOLTIP_WIDTH - cellWidth);
         poistions.left = cellRect.x;
       }
-      console.log("spspaceAbowCell up", spaceAbowCell);
-      console.log("positions", poistions, "cellRect", cellRect, "TOOLTIP_WIDTH", TOOLTIP_WIDTH);
-
       setTooltipPosition(poistions);
     } else {
-      console.log("spspaceAbowCell down", spaceAbowCell);
       const poistions = {
         top: cellRect.y + 20 + OFFSET_Y,
         left:
@@ -90,16 +84,13 @@ export const TableCell = ({ id, users, isDisabled, isFirstCell, isLastCell, colu
       };
 
       if (TOOLTIP_WIDTH > cellWidth && WINDOW_WIDTH - cellRect.right < TOOLTIP_WIDTH - cellWidth / 2) {
-        console.log("не хватает места справа", TOOLTIP_WIDTH - cellWidth);
         poistions.left = cellRect.x - (TOOLTIP_WIDTH - cellWidth);
       }
 
       if (TOOLTIP_WIDTH > cellWidth && cellRect.left < TOOLTIP_WIDTH - cellWidth / 2) {
-        console.log("не хватает места слева", TOOLTIP_WIDTH - cellWidth);
         poistions.left = cellRect.x;
       }
 
-      console.log("positions", poistions, "cellRect", cellRect);
       setTooltipPosition(poistions);
     }
   }, [columnRef, cellRef, isDisabled]);

@@ -42,7 +42,6 @@ export function CreateMeetPage() {
     const values = useCreateMeetStore.getState().values;
     createMeet(values);
 
-    console.log("Submit data:", values);
     addToast({
       type: "success",
       message: "Встреча успешно создана",
