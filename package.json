@@ -57,7 +57,6 @@
     "globals": "^16.5.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
-    "msw": "^2.12.10",
     "prettier": "^3.7.4",
     "react-calendar": "^6.0.0",
     "steiger": "^0.5.11",
@@ -71,10 +70,5 @@
     "typescript-eslint": "^8.46.4",
     "vite": "^7.3.1",
     "vite-plugin-svgr": "^4.5.0"
-  },
-  "msw": {
-    "workerDirectory": [
-      "src/shared/mocks"
-    ]
   }
 }

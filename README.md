@@ -1,7 +1,7 @@
 # Termeet-frontend
 
 <div align="center">
-  <img src="termeet.jpg" alt="Termeet" width=200 height=200/>
+  <img src="./src/assets/img/logo.png" alt="Termeet" width=200 height=200/>
 </div>
 
 ## Фронтенд-часть проекта Termeet
