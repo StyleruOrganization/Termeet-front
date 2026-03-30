@@ -22,6 +22,7 @@
     var(--light-fill-bg) 2px,                             /* начало прозрачного промежутка */
     var(--light-fill-bg) 8px  
   );
+  cursor: default;
 }
 
 .TableCell_disabled:hover {
