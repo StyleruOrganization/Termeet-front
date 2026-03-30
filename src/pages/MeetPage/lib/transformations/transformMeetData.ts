@@ -200,19 +200,11 @@ export const transformMeetData = (meetData: MeetResponse, isLocal: boolean): IMe
     });
   });
 
-  let formattedDuration = "";
-
-  if (meetData.duration) {
-    console.log("MeetDataDuration", meetData.duration);
-    const [hours, minutes] = meetData.duration.split(":").map(Number);
-    formattedDuration = `${hours}${minutes ? ".5" : ""} час${minutes ? "а" : ""}`;
-  }
-
   const processedData: IMeet = {
     name: meetData.name,
     description: meetData.description || undefined,
     link: meetData.link || undefined,
-    duration: formattedDuration,
+    duration: meetData.duration || undefined,
     meeting_days: Array.from(meetingDays).sort((a, b) => a.localeCompare(b)),
     timeRanges: timeRanges.sort((a, b) => {
       const startA = a[0];
@@ -226,8 +218,6 @@ export const transformMeetData = (meetData: MeetResponse, isLocal: boolean): IMe
     timeInfo,
     users: Array.from(users),
   };
-
-  console.log("processedData in transformMeetData", processedData);
 
   return processedData;
 };

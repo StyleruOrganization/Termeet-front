@@ -15,7 +15,7 @@ export const EntryPage = () => {
             <h1>termeet</h1>
           </div>
           <p className={styles.EntryPage__Content__Description}>
-            Термит помогает небольшим командам быстро организовывать встречи без чатов в Телеграме
+            Термит помогает небольшим командам быстро организовывать встречи без чатов в&nbsp;Телеграме
           </p>
           <button
             className={`baseButton mainButton ${styles.EntryPage__Content__Button}`}

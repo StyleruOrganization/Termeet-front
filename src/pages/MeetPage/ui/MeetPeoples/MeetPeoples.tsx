@@ -23,7 +23,7 @@ export const MeetPeoples = ({ users }: { users: string[] }) => {
     setIsExpanded(users.length ? true : false);
   }, [users]);
 
-  const hasHoveredUser = hoveredUsers.length > 0;
+  const hasHoveredUser = hoveredUsers.users.length > 0;
 
   return (
     <>
@@ -53,9 +53,10 @@ export const MeetPeoples = ({ users }: { users: string[] }) => {
         {users.length ? (
           <div className={styles.MeetPeoples__Users__Container}>
             {users.map(user => {
-              const isHovered = hoveredUsers.includes(user);
+              const isHovered = hoveredUsers.users.includes(user);
               // Если есть hovered пользователь и текущий не hovered, то затемняем или если есть ховер и это не ткущий пользователь
-              const shouldDim = (hasHoveredUser && !isHovered) || (hoveredUser && hoveredUser !== user);
+              const shouldDim =
+                (hasHoveredUser && !isHovered) || (hoveredUser && hoveredUser !== user) || hoveredUsers.isEmptySlot;
 
               return (
                 <span

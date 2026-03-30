@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { ModalWrapper, Input } from "@/shared/ui";
 import BigIcon from "@assets/icons/bigShadow.svg";
@@ -23,8 +23,15 @@ export const MeetModal = () => {
     setIsModalOpen(false);
   });
 
+  useEffect(() => {
+    if (isOpen) {
+      setUserName("");
+      setError("");
+    }
+  }, [isOpen]);
+
   const isValidName = userName.trim().length > 0;
-  const isButtonDisabled = !isValidName;
+  const isButtonDisabled = !isValidName || !!error;
 
   return (
     <>

@@ -5,7 +5,10 @@ export const createMeetStore = (initialState?: Partial<IMeetStore>) => {
   const DEFAULT_PROPS: IMeetStore = {
     newSelectedSlots: new Map(),
     isEditing: false,
-    hoveredUsers: [],
+    hoveredUsers: {
+      users: [],
+      isEmptySlot: false,
+    },
     hoveredUser: "",
     isModalOpen: false,
     timeInfo: new Map(),
@@ -102,15 +105,15 @@ export const createMeetStore = (initialState?: Partial<IMeetStore>) => {
         hoveredUser,
       }));
     },
-    setHoveredUsers: hoveredUsers => {
+    setHoveredUsers: (hoveredUsers: string[], isEmptySlot: boolean) => {
       set(state => {
         let isChanged = false;
         const oldHoveredUsers = state.hoveredUsers;
-        if (hoveredUsers.length !== oldHoveredUsers.length) {
+        if (hoveredUsers.length !== oldHoveredUsers.users.length || isEmptySlot !== oldHoveredUsers.isEmptySlot) {
           isChanged = true;
         }
         for (const user of hoveredUsers) {
-          if (!oldHoveredUsers.includes(user)) {
+          if (!oldHoveredUsers.users.includes(user)) {
             isChanged = true;
             break;
           }
@@ -118,7 +121,10 @@ export const createMeetStore = (initialState?: Partial<IMeetStore>) => {
 
         if (isChanged) {
           return {
-            hoveredUsers,
+            hoveredUsers: {
+              users: hoveredUsers,
+              isEmptySlot,
+            },
           };
         }
 

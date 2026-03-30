@@ -6,31 +6,6 @@ import { meetCreateSchema, type MeetCreate, meetResponseSchema, type MeetRespons
 import { useToastStore } from "@features/ToastContainer";
 import type { ICreateMeet } from "../model";
 
-function parseDuration(duration?: string): string | null {
-  if (!duration) {
-    return null;
-  }
-  const cleanText = duration.toLowerCase().trim();
-
-  let hours = 0;
-  let minutes = 0;
-
-  const hoursMatch = cleanText.match(/(\d+)\s*ч/);
-  if (hoursMatch) {
-    hours = parseInt(hoursMatch[1], 10);
-  }
-
-  const minutesMatch = cleanText.match(/(\d+)\s*мин/);
-  if (minutesMatch) {
-    minutes = parseInt(minutesMatch[1], 10);
-  }
-
-  const formattedHours = hours.toString().padStart(2, "0");
-  const formattedMinutes = minutes.toString().padStart(2, "0");
-
-  return `${formattedHours}:${formattedMinutes}`;
-}
-
 const prepareDateRanges = (dates: string[], start_time: string, end_time: string) => {
   start_time = start_time.replace(/\s/g, "");
   end_time = end_time.replace(/\s/g, "");
@@ -185,9 +160,11 @@ export const useCreateMeet = ({ onSuccess: onSuccessExternal }: { onSuccess: () 
       name: formData.title.trim(),
       description: formData.description?.trim(),
       link: formData.link?.trim() || null,
-      duration: parseDuration(formData.timeDuration),
+      duration: formData.timeDuration,
       dataRange: prepareDateRanges(formData.dates, formData.timeStart, formData.timeEnd),
     };
+
+    console.log(preparedData);
 
     mutate(preparedData);
   };

@@ -100,13 +100,13 @@ export const TableCell = ({ id, users, isDisabled, isFirstCell, isLastCell, colu
     e.preventDefault();
     if (isEditingMode || hoveredUser) return;
 
-    setHoveredUsers(users || []);
+    setHoveredUsers(users || [], users?.length == 0 ? true : false);
     setIsTooltipVisible(true);
   };
 
   const handlePointerLeave: React.PointerEventHandler = e => {
     e.preventDefault();
-    setHoveredUsers([]);
+    setHoveredUsers([], false);
     setIsTooltipVisible(false);
     setTooltipPosition({ top: 0, left: 0, arrowDirection: "" });
   };

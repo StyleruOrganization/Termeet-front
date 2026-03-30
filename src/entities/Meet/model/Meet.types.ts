@@ -34,7 +34,7 @@ export interface IMeetStore {
   /**
    * Сохраняем юзеров которых нужно подсветить при наведении на слот
    */
-  setHoveredUsers: (users: string[]) => void;
+  setHoveredUsers: (users: string[], isEmptySlot: boolean) => void;
   /**
    * Сохраняем юзера чьи слоты нужно подсветить
    */
@@ -86,7 +86,10 @@ export interface IMeetStore {
   /**
    * Пользователи которых нужно выделить при наведении на слот
    */
-  hoveredUsers: string[];
+  hoveredUsers: {
+    users: string[];
+    isEmptySlot: boolean;
+  };
   /**
    * Чьи слоты подсветить
    */
