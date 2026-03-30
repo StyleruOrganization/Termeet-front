@@ -67,7 +67,6 @@
 .MeetPeoples__Users__Container {
   display: flex;
   flex-direction: column;
-  gap: 8px;
   overflow: hidden;
 
   padding: 0;
@@ -83,14 +82,13 @@
 
   span {
     overflow: hidden;
-
-    width: fit-content;
     
     transition: color 0.3s ease-in-out;
 
     cursor: pointer;
 
     font-size: var(--text-body);
+    line-height: 1.8;
 
     line-height: 20px;
     text-overflow: ellipsis;

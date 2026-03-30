@@ -194,7 +194,7 @@ export const TableCell = ({ id, users, isDisabled, isFirstCell, isLastCell, colu
           <div className={styles.cellTooltipContent}>
             {isDisabled ? (
               <>
-                <span className={styles.cellTooltipDisabled}>Это время недоступно, из-за смены часовых поясов</span>
+                <span className={styles.cellTooltipDisabled}>Это время недоступно из-за смены часовых поясов</span>
               </>
             ) : (
               <>

@@ -95,7 +95,7 @@
 
   max-height: 0;
   opacity: 0;
-  word-break: break-all;
+  overflow-wrap: anywhere;
 }
 
 .MeetHeader__expanded .MeetHeader__desc {

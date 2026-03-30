@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import { ModalWrapper, Input } from "@/shared/ui";
 import BigIcon from "@assets/icons/bigShadow.svg";
@@ -22,11 +22,16 @@ export const MeetModal = () => {
     setIsEditingMode(false);
     setIsModalOpen(false);
   });
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (isOpen) {
       setUserName("");
       setError("");
+
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 100);
     }
   }, [isOpen]);
 
@@ -67,8 +72,9 @@ export const MeetModal = () => {
             data-test-id='meet-modal'
             className={styles.MeetModal__Form}
           >
-            <div className={styles.MeetModal__Heading}>Слоты заполнены! Осталось заполнить информацию о себе</div>
+            <div className={styles.MeetModal__Heading}>Слоты заполнены! Осталось заполнить информацию о&nbsp;себе</div>
             <Input
+              ref={inputRef}
               label='Как тебя зовут?'
               placeholder='Иван Иванов'
               name='userName'
