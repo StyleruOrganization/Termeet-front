@@ -94,6 +94,7 @@ export const MeetModal = () => {
                   setIsModalOpen(false);
                 }}
                 className={"baseButton secondaryButton"}
+                type='button'
               >
                 Отменить
               </button>
