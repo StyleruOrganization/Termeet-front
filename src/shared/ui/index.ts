@@ -4,4 +4,4 @@ export { ModalWrapper } from "./ModalWrapper/ModalWrapper";
 export { TextArea } from "./TextArea/TextArea";
 export type { ITextAreaProps } from "./TextArea/TextArea.types";
 export { Loader } from "./Loader/Loader";
-export { Toggle } from "./Toogle/Toogle";
+export { Toggle } from "./Toogle/Toggle";

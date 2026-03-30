@@ -5,19 +5,10 @@ import { useDropdownPosition } from "../../lib/hooks/useDropdownPosition";
 import { useCreateMeetStore } from "../../model";
 import type { TimeSelectProps } from "./Select.types";
 
-export const Select = ({
-  label,
-  placeholder,
-  options,
-  name,
-  readonly = false,
-  className,
-  disabledFunc,
-}: TimeSelectProps) => {
+export const Select = ({ label, placeholder, options, name, className, disabledFunc }: TimeSelectProps) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const { isOpen, dropdownPosition, openDropdown, closeDropdown } = useDropdownPosition(inputRef, dropdownRef);
-  const blurTimeField = useCreateMeetStore(state => state.blurTimeField);
+  const { isOpen, dropdownPosition, openDropdown, closeDropdown } = useDropdownPosition(inputRef, dropdownRef, name);
   const inputValue = useCreateMeetStore(state => state.values[name]);
   const setTime = useCreateMeetStore(state => state.setTime);
 
@@ -27,9 +18,6 @@ export const Select = ({
         ref={inputRef}
         value={inputValue}
         name={name}
-        onChange={event => {
-          setTime(name, event.target.value);
-        }}
         onClick={() => {
           openDropdown();
         }}
@@ -37,13 +25,11 @@ export const Select = ({
           if (name == "timeDuration") {
             setTime("timeDuration", " час", false);
           }
-        }}
-        onBlur={() => {
-          blurTimeField(name);
+          setTime(name, "", false);
         }}
         label={label}
         placeholder={placeholder}
-        readOnly={readonly}
+        readOnly
         className={styles.TimeSelect__InputWrapper + (isOpen ? " " + styles.TimeSelect__InputWrapper_open : "")}
       />
       <div

@@ -8,6 +8,5 @@ export interface TimeSelectProps {
   placeholder: string;
   /** Варинаты которые можно выбрать */
   options: string[];
-  readonly?: boolean;
   className?: string;
 }

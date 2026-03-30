@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect, useCallback } from "react";
-import styles from "./Toogle.module.css";
+import { useState, useRef } from "react";
+import styles from "./Toggle.module.css";
 
 interface ToggleProps {
   leftLabel: string;
@@ -10,27 +10,26 @@ interface ToggleProps {
 
 export const Toggle: React.FC<ToggleProps> = ({ leftLabel, rightLabel, onChange, defaultActive = "left" }) => {
   const [active, setActive] = useState<"left" | "right">(defaultActive);
-  const [sliderStyle, setSliderStyle] = useState({ left: 0, width: 0 });
 
   const containerRef = useRef<HTMLDivElement>(null);
   const leftRef = useRef<HTMLButtonElement>(null);
   const rightRef = useRef<HTMLButtonElement>(null);
 
   // Обновление позиции слайдера
-  const updateSliderPosition = useCallback(() => {
-    const activeElement = active === "left" ? leftRef.current : rightRef.current;
-    const container = containerRef.current;
+  // const updateSliderPosition = useCallback(() => {
+  //   const activeElement = active === "left" ? leftRef.current : rightRef.current;
+  //   const container = containerRef.current;
 
-    if (activeElement && container) {
-      const containerRect = container.getBoundingClientRect();
-      const activeRect = activeElement.getBoundingClientRect();
+  //   if (activeElement && container) {
+  //     const containerRect = container.getBoundingClientRect();
+  //     const activeRect = activeElement.getBoundingClientRect();
 
-      setSliderStyle({
-        left: activeRect.left - containerRect.left,
-        width: activeRect.width,
-      });
-    }
-  }, [active]);
+  //     setSliderStyle({
+  //       left: activeRect.left - containerRect.left,
+  //       width: activeRect.width,
+  //     });
+  //   }
+  // }, [active]);
 
   const setActiveValue = (value: "left" | "right") => {
     setActive(value);
@@ -42,14 +41,14 @@ export const Toggle: React.FC<ToggleProps> = ({ leftLabel, rightLabel, onChange,
   };
 
   // Обновляем позицию при изменении active или ресайзе
-  useEffect(() => {
-    updateSliderPosition();
-  }, [active, leftLabel, rightLabel, updateSliderPosition]);
+  // useEffect(() => {
+  //   updateSliderPosition();
+  // }, [active, leftLabel, rightLabel, updateSliderPosition]);
 
-  useEffect(() => {
-    window.addEventListener("resize", updateSliderPosition);
-    return () => window.removeEventListener("resize", updateSliderPosition);
-  }, [updateSliderPosition]);
+  // useEffect(() => {
+  //   window.addEventListener("resize", updateSliderPosition);
+  //   return () => window.removeEventListener("resize", updateSliderPosition);
+  // }, [updateSliderPosition]);
 
   return (
     <div className={styles.ToogleContainer} ref={containerRef}>
@@ -67,13 +66,6 @@ export const Toggle: React.FC<ToggleProps> = ({ leftLabel, rightLabel, onChange,
       >
         {rightLabel}
       </button>
-      <div
-        className={styles.Toogle__Slider}
-        style={{
-          transform: `translateX(${sliderStyle.left - 4}px)`,
-          width: `${sliderStyle.width}px`,
-        }}
-      />
     </div>
   );
 };

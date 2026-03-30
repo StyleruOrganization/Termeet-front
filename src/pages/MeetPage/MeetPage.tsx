@@ -1,6 +1,7 @@
-import { useMemo } from "react";
-import { useParams, useSearchParams } from "react-router";
+import { useEffect, useMemo } from "react";
+import { useLocation, useParams, useSearchParams } from "react-router";
 import { MeetProvider } from "@/entities/Meet";
+import { useToastStore } from "@/features/ToastContainer";
 import { Toggle } from "@/shared/ui";
 import { useGetMeetInfo } from "./api/useGetMeetInfo";
 import { getTimeZone } from "./lib/timezones/getTimezone";
@@ -11,12 +12,26 @@ import { MeetTable } from "./ui/MeetTable/MeetTable";
 export function MeetPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { hash = "" } = useParams();
+  const location = useLocation();
   const isLocalTime = searchParams.get("localTime") === "true" || searchParams.get("localTime") == null;
   const { meetData } = useGetMeetInfo(hash, isLocalTime);
+  const addToast = useToastStore(state => state.addToast);
 
   const timeZones = useMemo(() => {
     return getTimeZone();
   }, []);
+
+  useEffect(() => {
+    if (location.state?.showToast) {
+      addToast({
+        type: "success",
+        message: "Информация о встрече успешно обновлена",
+        id: "update-meet-success",
+      });
+
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state, addToast]);
 
   if (!hash || !meetData) {
     return <h1>Необходим идентификатор встречи</h1>;
@@ -41,14 +56,12 @@ export function MeetPage() {
             meeting_days={meetData.meeting_days}
             timeRanges={meetData.timeRanges}
           />
-          <div className={styles.MeetPage__ToggleWrapper}>
-            <Toggle
-              leftLabel={"По местному " + timeZones.local.utcString}
-              rightLabel={"По Москве " + timeZones.moscow.utcString}
-              defaultActive={isLocalTime ? "left" : "right"}
-              onChange={handleToggleChange}
-            />
-          </div>
+          <Toggle
+            leftLabel={"По местному " + timeZones.local.utcString}
+            rightLabel={"По Москве " + timeZones.moscow.utcString}
+            defaultActive={isLocalTime ? "left" : "right"}
+            onChange={handleToggleChange}
+          />
         </div>
       </div>
     </MeetProvider>

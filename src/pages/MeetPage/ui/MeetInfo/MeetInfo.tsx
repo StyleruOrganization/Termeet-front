@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useMeetStore } from "@/entities/Meet";
 import { useToastStore } from "@/features/ToastContainer";
 import ApproveIcon from "@assets/icons/approve.svg";
@@ -18,8 +19,44 @@ export const MeetInfo = ({ data }: IMeetInfoProps) => {
     newSelectedSlots = useMeetStore(store => store.newSelectedSlots),
     setIsModalOpen = useMeetStore(store => store.setIsModalOpen),
     clearNewSelectedSlots = useMeetStore(store => store.clearNewSelectedSlots);
+
   console.log("NEW selectedSlots in MeetInfo", newSelectedSlots);
   const addToast = useToastStore(store => store.addToast);
+  // Состояние для управления transition
+  const [disableTransition, setDisableTransition] = useState(false);
+
+  console.log("disableTransition", disableTransition);
+
+  // Отключаем transition при входе в режим редактирования
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+
+    if (isEditingMode) {
+      // Сбрасываем предыдущий таймер если есть
+      setDisableTransition(true);
+
+      timer = setTimeout(() => {
+        setDisableTransition(false);
+      }, 300);
+    } else {
+      // При выходе из режима редактирования сразу включаем transition обратно
+      setDisableTransition(true);
+
+      timer = setTimeout(() => {
+        setDisableTransition(false);
+      }, 300);
+    }
+
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
+  }, [isEditingMode]);
+
+  const transitionStyle = disableTransition
+    ? "none"
+    : "background-color 0.3s ease-in-out, color 0.3s ease-in-out, opacity 0.3s ease-in-out";
 
   return (
     <>
@@ -48,7 +85,10 @@ export const MeetInfo = ({ data }: IMeetInfoProps) => {
                     setIsEditing(false);
                     clearNewSelectedSlots();
                   }}
-                  className='baseButton cancelButton'
+                  className={`baseButton cancelButton`}
+                  style={{
+                    transition: transitionStyle,
+                  }}
                 >
                   <CancelIcon className={styles.MeetInfo__CancelIcon} /> <span>Отменить</span>
                 </button>
@@ -57,7 +97,10 @@ export const MeetInfo = ({ data }: IMeetInfoProps) => {
                   onClick={() => {
                     setIsModalOpen(true);
                   }}
-                  className='baseButton approveButton'
+                  className={`baseButton approveButton`}
+                  style={{
+                    transition: transitionStyle,
+                  }}
                 >
                   <ApproveIcon />
                   <span>Сохранить</span>
@@ -65,12 +108,15 @@ export const MeetInfo = ({ data }: IMeetInfoProps) => {
               </>
             ) : (
               <>
-                <button className={"baseButton secondaryButton"}>Назначить встречу</button>
+                {/* <button className={"baseButton secondaryButton"}>Назначить встречу</button> */}
                 <button
                   onClick={() => {
                     setIsEditing(true);
                   }}
-                  className={"baseButton mainButton"}
+                  className={`baseButton mainButton ${styles.MeetInfo__AddTimeButton}`}
+                  style={{
+                    transition: transitionStyle,
+                  }}
                 >
                   Добавить время
                 </button>

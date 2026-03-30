@@ -4,19 +4,9 @@ import ApproveIcon from "@assets/icons/approve.svg";
 import CancelIcon from "@assets/icons/cross.svg";
 import { Input, TextArea } from "@shared/ui";
 import { useGetMeetInfo } from "./api/useGetMeetInfo";
+import { useUpdateMeetInfo } from "./api/useUpdateMeetInfo";
 import styles from "./EditMeetPage.module.css";
-import type { IMeet } from "@entities/Meet";
-
-interface State extends Pick<IMeet, "description" | "name" | "link"> {
-  errors: Partial<Pick<IMeet, "description" | "name" | "link">>;
-}
-type Action = {
-  type: "validate" | "change" | "clearError";
-  payload: {
-    value?: string;
-    fieldName?: keyof Omit<State, "errors">;
-  };
-};
+import type { State, Action } from "./model/EditMeetPage.types";
 
 const validators: Record<keyof Omit<State, "errors">, (value: string) => string | null> = {
   description: description => {
@@ -86,6 +76,7 @@ export const EditMeetPage = () => {
       link: undefined,
     },
   });
+  const { mutate: updateMeetInfo } = useUpdateMeetInfo(hash);
 
   console.log("FORM_STATE", formState);
 
@@ -97,7 +88,12 @@ export const EditMeetPage = () => {
 
   console.log("DATA IN EDIT MEET PAGE", meetData);
 
-  const isSumbitButtonDisabled = !formState.name || Object.values(formState.errors).some(error => error);
+  const isChangedFields =
+    meetData.link !== formState.link ||
+    meetData.name !== formState.name ||
+    meetData.description !== formState.description;
+  const isSumbitButtonDisabled =
+    !formState.name || Object.values(formState.errors).some(error => error) || !isChangedFields;
 
   return (
     <form
@@ -176,7 +172,18 @@ export const EditMeetPage = () => {
         >
           <CancelIcon className={styles.EditMeetPage__CancelIcon} /> <span>Отменить</span>
         </button>
-        <button type='submit' className='baseButton approveButton' disabled={isSumbitButtonDisabled}>
+        <button
+          onClick={() => {
+            updateMeetInfo({
+              name: formState.name,
+              description: formState.description,
+              link: formState.link,
+            });
+          }}
+          type='submit'
+          className='baseButton approveButton'
+          disabled={isSumbitButtonDisabled}
+        >
           <ApproveIcon />
           <span>Сохранить</span>
         </button>

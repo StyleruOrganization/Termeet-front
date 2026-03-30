@@ -30,7 +30,7 @@
   max-width: fit-content;
 }
 
-.MeetingForm__InputDuration:focus-within::after {
+.MeetingForm__InputTimes__Input:focus-within::after {
   position: absolute;
   z-index: 1;
   bottom: 18px;

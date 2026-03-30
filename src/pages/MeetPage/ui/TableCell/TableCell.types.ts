@@ -20,4 +20,8 @@ export interface TableCellProps {
    * true если ячейка ластовая в колонке
    */
   isLastCell: boolean;
+  /**
+   * ссылка на колонку, чтобы тултипчик норм показывать
+   */
+  columnRef: React.RefObject<HTMLDivElement | null>;
 }

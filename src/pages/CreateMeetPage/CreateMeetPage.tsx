@@ -1,7 +1,7 @@
 import { useToastStore } from "@/features/ToastContainer";
 import { useCreateMeet } from "./api";
 import styles from "./CreateMeetPage.module.css";
-import { useCreateMeetStore } from "./model/createMeetStore";
+import { useCreateMeetStore } from "./model/useCreateMeetStore";
 import { CalendarWidget } from "./ui/Calendar";
 import { MeetingForm } from "./ui/MeetingForm";
 

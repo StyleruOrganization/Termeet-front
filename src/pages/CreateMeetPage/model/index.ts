@@ -1,2 +1,2 @@
 export { type ICreateMeet, type CreateMeetFields } from "./createMeet.types";
-export { useCreateMeetStore } from "./createMeetStore";
+export { useCreateMeetStore } from "./useCreateMeetStore";

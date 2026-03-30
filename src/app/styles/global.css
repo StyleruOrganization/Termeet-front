@@ -62,8 +62,6 @@ textarea:focus-visible {
 
   border-radius: 16px;
 
-  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, opacity 0.3s ease-in-out;
-
   font-size: var(--text-body);
 
   svg {
@@ -75,6 +73,9 @@ textarea:focus-visible {
 .mainButton {
   color: var(--light-text-inverted);
   background-color: var(--light-semantics-dark-blue-default);
+
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, opacity 0.3s ease-in-out;
+
 
   /* Задавайте актив стейт после ховера и будет все кайф */
   &:hover {
@@ -95,6 +96,8 @@ textarea:focus-visible {
   color: var(--light-text-main);
   background-color: var(--light-semantics-light-blue-default);
 
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, opacity 0.3s ease-in-out;
+
   &:hover {
     background-color: var(--light-semantics-light-blue-hover);
   }
@@ -112,8 +115,11 @@ textarea:focus-visible {
 .cancelButton {
   padding: 16px;
 
+
   color: var(--light-semantics-red-main);
   background-color: var(--light-semantics-red-secondary);
+
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, opacity 0.3s ease-in-out;
 
   &:hover {
     background-color: var(--light-semantics-red-hover);
@@ -135,6 +141,8 @@ textarea:focus-visible {
 
   color: var(--light-semantics-green-main);
   background-color: var(--light-semantics-green-secondary);
+
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, opacity 0.3s ease-in-out;
 
   &:hover {
     background-color: var(--light-semantics-green-hover);

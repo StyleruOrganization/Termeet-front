@@ -1,5 +1,4 @@
-import { useMemo } from "react";
-import { TIMES, DURATIONS, isTouchDevice } from "@/shared/libs";
+import { TIMES, DURATIONS } from "@/shared/libs";
 import { InputForm } from "../InputForm";
 import styles from "./MeetingForm.module.css";
 import { isDurationValid, isTimeBefore } from "../../lib";
@@ -10,10 +9,6 @@ import { TextAreaForm } from "../TextAreaForm";
 export const MeetingForm = () => {
   const timeStart = useCreateMeetStore(state => state.values.timeStart);
   const timeEnd = useCreateMeetStore(state => state.values.timeEnd);
-
-  const isTouch = useMemo(() => {
-    return isTouchDevice();
-  }, []);
 
   return (
     <div data-test-id='meeting-form' className={styles.MeetingForm}>
@@ -35,26 +30,25 @@ export const MeetingForm = () => {
           name='timeStart'
           placeholder='Выберите'
           options={TIMES}
+          className={styles.MeetingForm__InputTimes__Input}
           disabledFunc={time => !isTimeBefore(time, timeEnd)}
-          readonly={isTouch}
         />
         <div className={styles.MeetingForm__InputsTimes__Separator} />
         <Select
           name='timeEnd'
           placeholder='Выберите'
           options={TIMES}
+          className={styles.MeetingForm__InputTimes__Input}
           disabledFunc={time => isTimeBefore(time, timeStart) || time == timeStart}
-          readonly={isTouch}
         />
       </div>
       <Select
         name='timeDuration'
         label='Продолжительность встречи'
-        className={styles.MeetingForm__InputDuration}
+        className={styles.MeetingForm__InputTimes__Input}
         placeholder='1 час'
         options={DURATIONS}
         disabledFunc={duration => !isDurationValid(duration, timeStart, timeEnd)}
-        readonly
       />
       <InputForm name='link' label='Ссылка на встречу' placeholder='https://telemost.yandex.ru/j/122' />
     </div>

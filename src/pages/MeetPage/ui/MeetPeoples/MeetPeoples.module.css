@@ -82,8 +82,10 @@
   opacity: 0;
 
   span {
-    width: fit-content;
+    overflow: hidden;
 
+    width: fit-content;
+    
     transition: color 0.3s ease-in-out;
 
     cursor: pointer;
@@ -91,6 +93,8 @@
     font-size: var(--text-body);
 
     line-height: 20px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   span:hover {
@@ -103,16 +107,8 @@
   opacity: 1;
 }
 
-.MeetPeoples__Users__Container:has(.MeetPeoples__user_hovered) {
-  color: var(--light-text-disabled);
-}
-
 .MeetPeoples__user_hovered {
   color: var(--light-text-main);
-}
-
-.MeetPeoples__Users__Container:has(span:hover) {
-  color: var(--light-text-disabled);
 }
 
 .StubMessage {

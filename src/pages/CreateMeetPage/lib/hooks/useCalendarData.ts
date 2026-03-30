@@ -1,4 +1,4 @@
-import { useCreateMeetStore } from "../../model/createMeetStore";
+import { useCreateMeetStore } from "../../model/useCreateMeetStore";
 import styles from "../../ui/Calendar/Calendar.module.css";
 import type { TileClassNameFunc } from "react-calendar";
 

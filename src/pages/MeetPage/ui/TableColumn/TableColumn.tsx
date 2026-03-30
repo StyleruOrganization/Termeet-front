@@ -108,13 +108,21 @@ export const TableColumn = memo(({ columnId, columnWidth, timeRanges }: TableCol
           {isShowBefore.isShow && (
             <>
               {disabledBeforeCells.map((cellId, cellIndex) => (
-                <TableCell isLastCell={false} isFirstCell={cellIndex == 0} id={cellId} key={cellId} isDisabled />
+                <TableCell
+                  columnRef={columnRef}
+                  isLastCell={false}
+                  isFirstCell={cellIndex == 0}
+                  id={cellId}
+                  key={cellId}
+                  isDisabled
+                />
               ))}
               <TableCell
                 isLastCell={cellIds?.length == 0 && isShowAfter.isShow == false}
                 isFirstCell={disabledBeforeCells.length == 0}
                 id={"disabled-cell"}
                 isDisabled
+                columnRef={columnRef}
               />
             </>
           )}
@@ -132,6 +140,7 @@ export const TableColumn = memo(({ columnId, columnWidth, timeRanges }: TableCol
                 const selectedPersons = userSlots?.get(key) || [];
                 return (
                   <TableCell
+                    columnRef={columnRef}
                     isFirstCell={!isShowBefore.isShow && indexRanges == 0 && cellIndex == 0}
                     isLastCell={
                       indexRanges == cellIds.length - 1 &&
@@ -145,7 +154,13 @@ export const TableColumn = memo(({ columnId, columnWidth, timeRanges }: TableCol
                 );
               })}
               {indexRanges < cellIds.length - 1 && (
-                <TableCell isLastCell={false} isFirstCell={false} id={"disabled-cell"} isDisabled />
+                <TableCell
+                  columnRef={columnRef}
+                  isLastCell={false}
+                  isFirstCell={false}
+                  id={"disabled-cell"}
+                  isDisabled
+                />
               )}
             </div>
           ))}
@@ -153,9 +168,10 @@ export const TableColumn = memo(({ columnId, columnWidth, timeRanges }: TableCol
           {/* Фейковые слоты после активного диапазона */}
           {isShowAfter.isShow && (
             <>
-              <TableCell isLastCell={false} isFirstCell={false} id={"disabled-cell"} isDisabled />
+              <TableCell columnRef={columnRef} isLastCell={false} isFirstCell={false} id={"disabled-cell"} isDisabled />
               {disabledAfterCells.map((cellId, cellIndex) => (
                 <TableCell
+                  columnRef={columnRef}
                   isFirstCell={false}
                   isLastCell={cellIndex == disabledAfterCells.length - 1}
                   id={cellId}

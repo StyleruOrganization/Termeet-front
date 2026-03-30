@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useFocusTrap } from "@/shared/libs";
+import { useCreateMeetStore } from "../../model";
 
 const DROPDOWN_MARGIN = 8;
 interface DropdownPosition {
@@ -11,9 +12,11 @@ interface DropdownPosition {
 export const useDropdownPosition = (
   inputRef: React.RefObject<HTMLDivElement | null>,
   dropdownRef: React.RefObject<HTMLDivElement | null>,
+  name: "timeStart" | "timeEnd" | "timeDuration",
 ) => {
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownPosition, setDropdownPosition] = useState<DropdownPosition>();
+  const blurTimeField = useCreateMeetStore(state => state.blurTimeField);
 
   // Измеряем высоту дропдауна перед открытием
   const measureDropdownHeight = useCallback((): Promise<number> => {
@@ -95,6 +98,7 @@ export const useDropdownPosition = (
 
       if (!isClickInsideInput && !isClickInsideDropdown) {
         closeDropdown();
+        blurTimeField(name);
       }
     };
 
@@ -102,7 +106,7 @@ export const useDropdownPosition = (
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
-  }, [isOpen, closeDropdown, inputRef, dropdownRef]);
+  }, [isOpen, closeDropdown, inputRef, dropdownRef, blurTimeField, name]);
 
   useEffect(() => {
     if (!isOpen) return;

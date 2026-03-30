@@ -1,6 +1,4 @@
 .TableCell {
-  position: relative;
-
   width: 100%;
   height: 20px;
   
@@ -24,7 +22,6 @@
     var(--light-fill-bg) 2px,                             /* начало прозрачного промежутка */
     var(--light-fill-bg) 8px  
   );
-  cursor: not-allowed;
 }
 
 .TableCell_disabled:hover {
@@ -33,6 +30,45 @@
 
 .cellTooltip {
   position: absolute;
+  z-index: 100;
   top: 0;
   left: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 118px;
+
+  pointer-events: none
+}
+
+.cellTooltipContent {
+  display: flex;
+  gap: 0;
+  flex-direction: column;
+
+  padding: 6px 12px;
+
+  color: var(--light-fill-bg);
+  background-color: var(--light-semantics-dark-blue-active);
+  border-radius: 16px;
+
+  font-size: 3rem;
+  line-height: 1.25;
+}
+
+.cellTooltipTime {
+  color: var(--light-text-disabled)
+}
+
+.cellTooltipCount {
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cellTooltipArrow__Up {
+  transform: rotate(180deg);
 }

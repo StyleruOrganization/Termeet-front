@@ -5,8 +5,8 @@ import BigIcon from "@assets/icons/bigShadow.svg";
 import PrintIcon from "@assets/icons/print.svg";
 import SmallIcon from "@assets/icons/smallShadow.svg";
 import { useMeetStore } from "@entities/Meet";
-import { useSaveUserSelectedSlots } from "./../../api";
 import styles from "./MeetModal.module.css";
+import { useSaveUserSelectedSlots } from "../../api";
 
 const WINDOW_HEIGHT = window.innerHeight;
 
@@ -26,7 +26,13 @@ export const MeetModal = () => {
 
   return (
     <>
-      <ModalWrapper isAnimate animationDuration={300} isOpen={isOpen} onClose={() => setIsModalOpen(false)}>
+      <ModalWrapper
+        scrollbarWidth={window.innerWidth - document.documentElement.clientWidth}
+        isAnimate
+        animationDuration={300}
+        isOpen={isOpen}
+        onClose={() => setIsModalOpen(false)}
+      >
         <div className={styles.MeetModal__Wrapper}>
           {WINDOW_HEIGHT > 600 ? (
             <>
@@ -61,6 +67,7 @@ export const MeetModal = () => {
               onChange={e => {
                 setUserName(e.target.value);
               }}
+              value={userName}
             />
             <div className={styles.MeetModal__Buttons}>
               <button type='submit' disabled={isButtonDisabled} className={"baseButton mainButton"}>

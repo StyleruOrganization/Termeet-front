@@ -17,7 +17,8 @@ export const MeetHeader = ({ duration, description, name, link }: MeetHeaderProp
   const [isDescPopupOpen, setIsDescPopupOpen] = useState(false);
   const [searchParams] = useSearchParams(); // Получаем текущие query-параметры
 
-  const addToast = useToastStore(store => store.addToast);
+  const addToast = useToastStore(store => store.addToast),
+    removeToast = useToastStore(store => store.removeToast);
   const navigate = useNavigate();
   const { hash = "" } = useParams();
   const [scrollY, setScrollY] = useState(() => window.scrollY);
@@ -68,6 +69,7 @@ export const MeetHeader = ({ duration, description, name, link }: MeetHeaderProp
             onClick={() => {
               if (WINDOW_WIDTH < 768) {
                 setIsDescPopupOpen(true);
+                removeToast("update-meet-success");
               } else {
                 setIsExpanded(prev => !prev);
               }

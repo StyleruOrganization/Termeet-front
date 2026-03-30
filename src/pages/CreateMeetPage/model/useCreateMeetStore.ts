@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { formatTime, isDurationValid } from "../lib/formatting/timeFormatters";
+import { isDurationValid } from "../lib/formatting/timeFormatters";
 import type { MeetingFormState, ICreateMeet } from "./createMeet.types";
 
 const validators: {
@@ -43,47 +43,50 @@ export const useCreateMeetStore = create<MeetingFormState>((set, get) => ({
   setTime: (name, value, isSaveAsLast = true) => {
     if (name == "timeDuration") {
       set(state => ({
-        values: { ...state.values, [name]: value || state.lastCorrectedValues[name] },
+        values: {
+          ...state.values,
+          [name]: value,
+        },
         lastCorrectedValues: isSaveAsLast
           ? {
               ...state.lastCorrectedValues,
-              [name]: value.length ? value : state.lastCorrectedValues[name],
+              [name]: value,
             }
           : { ...state.lastCorrectedValues },
       }));
       return;
     }
-    const resultValidation = formatTime(value);
-    const times = {
-      timeStart: get().values.timeStart,
-      timeEnd: get().values.timeEnd,
+    // ХЗ успеет ли стор обновится поэтому делаю так
+    const actualValues = {
+      timeStart: get().lastCorrectedValues.timeStart,
+      timeEnd: get().lastCorrectedValues.timeEnd,
+      timeDuration: get().lastCorrectedValues.timeDuration,
+      [name]: isSaveAsLast ? value : get().lastCorrectedValues[name],
     };
 
-    if (resultValidation.isValid) {
-      times[name] = resultValidation.value;
-    }
+    console.log("actualValues", actualValues);
 
-    const durationValue = get().values.timeDuration;
     let isDurationValueValid = true;
 
-    if (durationValue) {
-      isDurationValueValid = isDurationValid(durationValue, times["timeStart"], times["timeEnd"]);
+    if (actualValues.timeDuration && actualValues.timeStart && actualValues.timeEnd) {
+      isDurationValueValid = isDurationValid(actualValues.timeDuration, actualValues.timeStart, actualValues.timeEnd);
     }
+
+    console.log("isDurationValueValid", isDurationValueValid);
 
     set(state => ({
       values: {
         ...state.values,
-        [name]: resultValidation.value,
+        [name]: value,
         ["timeDuration"]: !isDurationValueValid ? "" : state.values.timeDuration,
       },
       lastCorrectedValues: isSaveAsLast
         ? {
             ...state.lastCorrectedValues,
-            [name]: resultValidation.isValid ? resultValidation.value : state.lastCorrectedValues[name],
+            [name]: value,
             ["timeDuration"]: !isDurationValueValid ? "" : state.lastCorrectedValues.timeDuration,
           }
         : { ...state.lastCorrectedValues },
-      errors: { ...state.errors, [name]: !resultValidation.isValid ? "Ошибочка имеется со временем" : undefined },
     }));
   },
 
@@ -91,32 +94,10 @@ export const useCreateMeetStore = create<MeetingFormState>((set, get) => ({
     const lastCorrectedTime = get().lastCorrectedValues[name];
     if (lastCorrectedTime == undefined) return;
 
-    const roundToHalfHour = (time: string): string => {
-      const [hours, minutes] = time.split(":").map(Number);
-
-      let newHours = hours;
-      let newMinutes: number;
-
-      if (minutes < 15) {
-        newMinutes = 0;
-      } else if (minutes < 30) {
-        newMinutes = 15;
-      } else if (minutes < 45) {
-        newMinutes = 30;
-      } else if (minutes < 60) {
-        newMinutes = 45;
-      } else {
-        newMinutes = 0;
-        newHours = (hours + 1) % 24;
-      }
-
-      return `${String(newHours).padStart(2, "0")} : ${String(newMinutes).padStart(2, "0")}`;
-    };
-
     set(state => ({
       values: {
         ...state.values,
-        [name]: name != "timeDuration" ? roundToHalfHour(lastCorrectedTime) : lastCorrectedTime,
+        [name]: lastCorrectedTime,
       },
       errors: { ...state.errors, [name]: undefined },
     }));

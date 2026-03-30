@@ -1,8 +1,7 @@
 .ToogleContainer {
-  position: relative;
-
   display: inline-flex;
 
+  width: fit-content;
   padding: 4px;
 
   background-color: var(--light-fill-controls);
@@ -26,24 +25,10 @@
 }
 
 .Toogle__Option_active {
-  z-index: 100;
-
   color: var(--light-semantics-blue-main);
+  background-color: var(--light-semantics-light-blue-default);
 }
 
 .Toogle__Option_active:hover {
   background-color: var(--light-semantics-light-blue-default)
-}
-
-.Toogle__Slider {
-  position: absolute;
-  top: 4px;
-  left: 4px;
-
-  height: calc(100% - 8px);
-
-  background-color: var(--light-semantics-light-blue-default);
-  border-radius: 32px;
-
-  transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
 }
