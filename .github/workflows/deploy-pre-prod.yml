@@ -30,12 +30,12 @@ jobs:
       - name: Build Docker image
         run: |
           docker build \
-            -t ${REGISTRY}/termeet:${IMAGE_TAG} \
-            -t ${REGISTRY}/termeet:latest .
+            -t ${REGISTRY}/frontend:${IMAGE_TAG} \
+            -t ${REGISTRY}/frontend:latest .
 
       - name: Push Docker images
         run: |
-          docker push ${REGISTRY}/termeet:${IMAGE_TAG}
+          docker push ${REGISTRY}/frontend:${IMAGE_TAG}
 
       - name: Deploy to server
         uses: appleboy/ssh-action@v1.0.0
@@ -46,8 +46,8 @@ jobs:
           envs: Y_TOKEN,REGISTRY,DOMAIN,EMAIL,IMAGE_TAG
           script: |
             # Останавливаем и удаляем старый контейнер
-            docker stop termeet 2>/dev/null || true
-            docker rm termeet 2>/dev/null || true
+            docker stop frontend 2>/dev/null || true
+            docker rm frontend 2>/dev/null || true
 
             echo "${Y_TOKEN}" | docker login \
               --username oauth \
@@ -55,21 +55,21 @@ jobs:
               cr.yandex
             
             # Скачиваем конкретный образ по SHA
-            docker pull ${REGISTRY}/termeet:${IMAGE_TAG}
+            docker pull ${REGISTRY}/frontend:${IMAGE_TAG}
             
             # Останавливаем и удаляем старый контейнер
-            docker stop termeet 2>/dev/null || true
-            docker rm termeet 2>/dev/null || true
+            docker stop frontend 2>/dev/null || true
+            docker rm frontend 2>/dev/null || true
 
             # Удаляем контейнеры образы которые не используются
             docker image prune --force
             
             # Запускаем новый контейнер с конкретным тегом
             docker run -d \
-              --name termeet \
+              --name frontend \
               -e VIRTUAL_HOST=${DOMAIN} \
               -e LETSENCRYPT_EMAIL=${EMAIL} \
               -e LETSENCRYPT_HOST=${DOMAIN} \
               --network nginx-proxy \
               --restart unless-stopped \
-              ${REGISTRY}/termeet:${IMAGE_TAG}
+              ${REGISTRY}/frontend:${IMAGE_TAG}
