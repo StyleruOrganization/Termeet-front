@@ -9,8 +9,6 @@ class ApiClient {
     try {
       const result = await response.json();
 
-      console.log("result in handle response", result);
-
       if (validationSchema) {
         const validationRes = validationSchema.safeParse(result);
         if (!validationRes.success) {

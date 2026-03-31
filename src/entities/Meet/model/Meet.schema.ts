@@ -20,11 +20,7 @@ export const meetResponseSchema = z.strictObject({
   /** Прикрепленная к встрече ссылка @example "https://telemost.360.yandex.ru/j/6694975853" */
   link: z.string().nullable().optional(),
   /** Продолжительность встречи @example "01:30" */
-  duration: z
-    .string()
-    .regex(/^(0[1-5]):([0-5][0-9])$/)
-    .nullable()
-    .optional(),
+  duration: z.string().nullable().optional(),
   /** Все слоты для встречи в формате UTC+0. Совпадать не могут. @example [["2026-12-21T22:00:00Z","2026-12-22T02:00:00Z"],["2026-12-22T22:00:00Z","2026-12-23T02:00:00Z"],["2026-12-24T22:00:00Z","2026-12-25T02:00:00Z"]] */
   dataRange: z.array(z.tuple([z.iso.datetime(), z.iso.datetime()])),
   /** Идентификатор встречи @example "f47ac10b-58cc-4372-a567-0e02b2c3d479" */
@@ -42,11 +38,7 @@ export const meetCreateSchema = z.strictObject({
   /** Прикрепленная к встрече ссылка @example "https://telemost.360.yandex.ru/j/6694975853" */
   link: z.string().nullable().optional(),
   /** Продолжительность встречи @example "01:30" */
-  duration: z
-    .string()
-    .regex(/^(0[1-5]):([0-5][0-9])$/)
-    .nullable()
-    .optional(),
+  duration: z.string().nullable().optional(),
   /** Все слоты для встречи в формате UTC+0. Совпадать не могут. @example [["2026-12-21Т22:00:00Z","2026-12-22Т02:00:00Z"],["2026-12-22Т22:00:00Z","2026-12-23Т02:00:00Z"],["2026-12-24Т22:00:00Z","2026-12-25Т02:00:00Z"]] */
   dataRange: z.array(z.array(z.iso.datetime())),
 });

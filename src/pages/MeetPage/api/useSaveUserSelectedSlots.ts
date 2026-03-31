@@ -19,7 +19,6 @@ export const useSaveUserSelectedSlots = (meetHash: string, onMutate?: () => void
     mutationFn: async (userName: string) => {
       const preparedSlots = getPreparedNewSlots();
       clearNewSelectedSlots();
-      console.log("Saving user selected slots to server", { userName, preparedSlots });
 
       return await apiClient.patch(
         `/meet/${meetHash}/slots`,
@@ -29,10 +28,6 @@ export const useSaveUserSelectedSlots = (meetHash: string, onMutate?: () => void
     },
     // Оптимистичное обновление
     onMutate: async userName => {
-      console.log("🚀 Optimistically updating slots for user in onMutate:", userName);
-      console.log("newSelectedSlots", getNewSelectedSlots());
-      console.log("oldTimeInfo", oldTimeInfo);
-
       await queryClient.cancelQueries({
         queryKey: MeetQueries.meet(meetHash).queryKey,
       });
@@ -56,14 +51,10 @@ export const useSaveUserSelectedSlots = (meetHash: string, onMutate?: () => void
         });
       }
 
-      console.log("oldTimeInfoCopy", oldTimeInfoCopy);
-
       const previousState = {
         users: [...(oldUsers || [])],
         timeInfo: oldTimeInfoCopy,
       };
-
-      console.log("Previous data from cache before optimistic update:", previousState);
 
       // Создаем новую timeInfo для обновления
       const newTimeInfo: Map<
@@ -108,14 +99,8 @@ export const useSaveUserSelectedSlots = (meetHash: string, onMutate?: () => void
         newTimeInfo.set(date, dateInfo);
       }
 
-      // Обновляем стор
-      console.log("Updating React Query cache with new user and slots", {
-        timeInfo: newTimeInfo,
-      });
       setUsers([...(oldUsers || []), userName]);
       setTimeInfo(newTimeInfo);
-
-      console.log("Execute callback after optimistic update from props");
       onMutate?.();
 
       return { previousData: previousState };
@@ -123,7 +108,6 @@ export const useSaveUserSelectedSlots = (meetHash: string, onMutate?: () => void
 
     onError: (_, _2, context) => {
       if (context?.previousData) {
-        console.log("Rolling back changes due to error with data from context", context.previousData);
         addToast({
           type: "error",
           message: "Ошибка при сохранении выбранных временных слотов",
@@ -137,7 +121,6 @@ export const useSaveUserSelectedSlots = (meetHash: string, onMutate?: () => void
 
     // При успехе - инвалидируем кеш React Query для синхронизации с сервером
     onSuccess: () => {
-      console.log("invalidateQueries in onSuccess to refetch updated data from server");
       queryClient.invalidateQueries({
         queryKey: MeetQueries.meet(meetHash).queryKey,
       });
@@ -146,8 +129,6 @@ export const useSaveUserSelectedSlots = (meetHash: string, onMutate?: () => void
         message: "Выбранные временные слоты успешно сохранены",
         id: "slots-updated",
       });
-
-      console.log("🎉 Slots updated successfully on the server");
     },
   });
 };

@@ -10,9 +10,6 @@ export const MeetTable = ({ timeRanges, meeting_days }: MeetTableProps) => {
   const { measureContainerRef, columnWidth, calculateColumnWidth } = useColumnWidth(meeting_days);
   const setHoveredUsers = useMeetStore(store => store.setHoveredUsers);
   const setHoveredUser = useMeetStore(store => store.setHoveredUser);
-  const hoveredUsers = useMeetStore(state => state.hoveredUsers);
-
-  console.log("hoveredUsers", hoveredUsers);
 
   const timeOptions = useMemo(() => {
     return timeRanges.map(([startTime, endTime]) => {

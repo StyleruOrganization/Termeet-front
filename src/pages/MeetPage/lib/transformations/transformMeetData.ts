@@ -32,8 +32,6 @@ export const transformMeetData = (meetData: MeetResponse, isLocal: boolean): IMe
     };
   });
 
-  console.log("MEET DATA AFTER Convertion", preparedMeetDataDataRanges, preparedMeetDataTimeSlots);
-
   // Определяем промежутки времени общие для всех, для отображения времени слева, а также промежутки для каждого дня - инициализируем мапу, ту страшную
   preparedMeetDataDataRanges.forEach(([startTimeRange, endTimeRange]) => {
     const [startDate, startTime] = startTimeRange.split("T");

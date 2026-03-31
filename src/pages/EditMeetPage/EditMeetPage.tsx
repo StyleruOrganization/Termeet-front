@@ -96,7 +96,6 @@ export const EditMeetPage = () => {
       className={styles.EditMeetPage}
       onSubmit={e => {
         e.preventDefault();
-        console.log("Changed dataabout meet", formState);
       }}
     >
       <div className={styles.EditMeetPage__MeetingForm}>

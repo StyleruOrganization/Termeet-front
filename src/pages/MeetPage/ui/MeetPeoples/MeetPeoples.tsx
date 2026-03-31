@@ -14,7 +14,6 @@ export const MeetPeoples = ({ users }: { users: string[] }) => {
   const handlePersonChoose = (user: string) => {
     if (newSelectedSlots.size) return;
     setHoveredUser(user);
-    console.log(user);
   };
 
   const isTouch = useMemo(() => isTouchDevice(), []);

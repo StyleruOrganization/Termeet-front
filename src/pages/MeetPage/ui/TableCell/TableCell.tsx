@@ -50,7 +50,6 @@ export const TableCell = ({ id, users, isDisabled, isFirstCell, isLastCell, colu
     const cellWidth = cellRect.width;
     const TOOLTIP_HEIGHT = isDisabled ? TOOLTIP_DISABLED_HEIGHT : TOOLTIP_USUAL_HEIGHT;
     const WINDOW_WIDTH = window.innerWidth;
-    console.log(cellRect, columnRect);
 
     // Базовая позиция: над ячейкой
     const spaceAbowCell = cellRect.top - columnRect.top;

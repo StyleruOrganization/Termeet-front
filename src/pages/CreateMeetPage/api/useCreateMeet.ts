@@ -101,8 +101,6 @@ export const useCreateMeet = ({ onSuccess: onSuccessExternal }: { onSuccess: () 
       dataRange: prepareDateRanges(formData.dates, formData.timeStart, formData.timeEnd),
     };
 
-    console.log(preparedData);
-
     mutate(preparedData);
   };
 

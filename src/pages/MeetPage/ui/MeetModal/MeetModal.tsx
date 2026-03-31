@@ -65,7 +65,6 @@ export const MeetModal = () => {
               event.preventDefault();
               const formValues = new FormData(event.target);
               const username = formValues.get("userName")?.toString() || "";
-              console.log("NAME FOR SAVING", username);
               saveSelectesSlots(username);
               setUserName("");
             }}

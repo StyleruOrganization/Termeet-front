@@ -38,7 +38,6 @@ export function useColumnWidth(meeting_days: string[]) {
   const measureContainerRef = useRef<HTMLDivElement>(null);
 
   const calculateColumnWidth = useCallback(() => {
-    console.log("Calculate column width");
     const el = measureContainerRef.current;
     if (!el) return;
     const w = el.clientWidth;
@@ -49,13 +48,11 @@ export function useColumnWidth(meeting_days: string[]) {
 
   useLayoutEffect(() => {
     const el = measureContainerRef.current;
-    console.log(`${el ? el : "Ref на таблицу не инициализирован еще"}`);
     if (!el) return;
 
     const debouncedCalc = debounce(calculateColumnWidth, 150);
 
     const observer = new ResizeObserver(entries => {
-      console.log("changeWidth ColumnContainer");
       const entry = entries[0];
       if (!entry) return;
       const w = entry.contentRect.width;

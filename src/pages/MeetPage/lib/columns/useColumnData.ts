@@ -14,8 +14,6 @@ export const useColumnData = (date: string) => {
     columnData = useMeetStore(useShallow(store => store.timeInfo.get(date))),
     timeRanges = useMeetStore(useShallow(store => store.timeRanges));
 
-  console.log("columnData?.timeRanges", columnData?.timeRanges);
-
   const cellIds = columnData?.timeRanges?.map(([startTime, endTime]) => {
     return getCellIds({ startTime, endTime, date });
   });

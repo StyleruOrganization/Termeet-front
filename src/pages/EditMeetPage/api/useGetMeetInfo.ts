@@ -36,18 +36,11 @@ export const useGetMeetInfo = (): Pick<IMeet, "name" | "description" | "link" | 
     }
   });
 
-  let formattedDuration = "";
-
-  if (meetData.duration) {
-    const [hours, minutes] = meetData.duration.split(":").map(Number);
-    formattedDuration = `${hours}${minutes ? ".5" : ""} час${minutes ? "а" : ""}`;
-  }
-
   return {
     name: meetData.name,
     description: meetData.description || "",
     link: meetData.link || "",
     timeRanges,
-    duration: formattedDuration,
+    duration: meetData.duration || "",
   };
 };
