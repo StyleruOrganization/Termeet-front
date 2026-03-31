@@ -34,14 +34,30 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           envs: VERSION,EMAIL,DOMAIN
           script: |
-            cd /home/${{ secrets.SERVER_USER }}/infra/deploy-prod
+            # Создаем директорию если не существует
+            mkdir -p /termeet-prod
             
-            # Передаем версию в скрипт
+            # Переходим в директорию
+            cd /termeet-prod
+            
+            # Получаем актуальный код
+            if [ -d ".git" ]; then
+              # Если уже есть репозиторий, обновляем
+              git pull origin main
+            else
+              # Если нет, клонируем
+              git clone https://github.com/${{ github.repository }}.git .
+            fi
+            
+            # Переходим в папку с деплоем
+            cd infra/deploy-prod
+            
+            # Экспортируем переменные
             export VERSION="${{ inputs.version }}"
             export EMAIL="${{ secrets.EMAIL }}"
             export DOMAIN="termeet.tech"
             
-            # Запускаем деплой
+            # Делаем скрипт исполняемым и запускаем
             chmod +x prod-deploy.sh
             ./prod-deploy.sh
 
