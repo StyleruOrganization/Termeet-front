@@ -1,0 +1,141 @@
+name: Deploy production
+run-name: "Build and Deploy Production - v${{ inputs.version }}"
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version (e.g., 1.2.3)'
+        required: true
+        type: string
+
+jobs:
+  build-and-deploy:
+    env:
+      Y_TOKEN: ${{ secrets.Y_TOKEN }}
+      REGISTRY: cr.yandex/${{ secrets.CONTAINER_REGISTRY }}
+      DOMAIN: termeet.tech
+      EMAIL: ${{ secrets.EMAIL }}
+      VERSION: ${{ github.event.inputs.version }}
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate version format
+        run: |
+          if ! [[ "${VERSION}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Error: Version must follow semver format (e.g., 1.2.3)"
+            exit 1
+          fi
+
+      - name: Login to Yandex Container Registry
+        run: |
+          echo "${Y_TOKEN}" | docker login \
+            --username oauth \
+            --password-stdin \
+            cr.yandex
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            -t ${REGISTRY}/frontend:${VERSION} \
+            -t ${REGISTRY}/frontend:prod-latest \
+            -t ${REGISTRY}/frontend:prod-${VERSION} \
+            .
+
+      - name: Push Docker images
+        run: |
+          docker push ${REGISTRY}/frontend:${VERSION}
+          docker push ${REGISTRY}/frontend:prod-latest
+          docker push ${REGISTRY}/frontend:prod-${VERSION}
+
+      - name: Deploy to production server
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          envs: Y_TOKEN,REGISTRY,DOMAIN,EMAIL,VERSION
+          script: |
+            # Останавливаем и удаляем старый контейнер
+            docker stop frontend-prod 2>/dev/null || true
+            docker rm frontend-prod 2>/dev/null || true
+            
+            echo "${Y_TOKEN}" | docker login \
+              --username oauth \
+              --password-stdin \
+              cr.yandex
+            
+            # Скачиваем конкретный образ по версии
+            docker pull ${REGISTRY}/frontend:${VERSION}
+            
+            # Удаляем неиспользуемые образы
+            docker image prune --force
+            
+            # Запускаем новый контейнер с конкретной версией
+            docker run -d \
+              --name frontend-prod \
+              -e VIRTUAL_HOST=${DOMAIN} \
+              -e LETSENCRYPT_EMAIL=${EMAIL} \
+              -e LETSENCRYPT_HOST=${DOMAIN} \
+              --network nginx-proxy \
+              --restart unless-stopped \
+              ${REGISTRY}/frontend:${VERSION}
+            
+            # Проверяем, что контейнер запустился успешно
+            sleep 5
+            if [ "$(docker ps -q -f name=frontend-prod)" ]; then
+              echo "✅ Container started successfully"
+            else
+              echo "❌ Container failed to start"
+              exit 1
+            fi
+
+      - name: Generate CHANGELOG and create tag
+        if: success()
+        run: |
+          # Получаем последний тег
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          
+          # Создаем или обновляем CHANGELOG.md
+          if [ ! -f CHANGELOG.md ]; then
+            echo "# Changelog" > CHANGELOG.md
+            echo "" >> CHANGELOG.md
+            echo "All notable changes to this project will be documented in this file." >> CHANGELOG.md
+            echo "" >> CHANGELOG.md
+          fi
+          
+          # Получаем коммиты с предыдущего тега
+          if [ -n "${LAST_TAG}" ]; then
+            COMMITS=$(git log ${LAST_TAG}..HEAD --pretty=format:"- %s" --reverse)
+          else
+            COMMITS=$(git log --pretty=format:"- %s" --reverse)
+          fi
+          
+          RELEASE_DATE=$(date '+%Y-%m-%d')
+          
+          # Формируем запись о релизе
+          CHANGELOG_ENTRY="## [${VERSION}] - ${RELEASE_DATE}\n\n"
+          
+          if [ -n "${COMMITS}" ]; then
+            CHANGELOG_ENTRY+="### Changes\n${COMMITS}\n\n"
+          else
+            CHANGELOG_ENTRY+="### Changes\n- Production deployment\n\n"
+          fi
+          
+          # Добавляем новую версию в CHANGELOG (после заголовка)
+          sed -i "2i ${CHANGELOG_ENTRY}" CHANGELOG.md
+          
+          # Коммитим CHANGELOG
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add CHANGELOG.md
+          git commit -m "docs: update CHANGELOG for v${VERSION}"
+          
+          # Создаем тег
+          git tag -a "v${VERSION}" -m "Release version ${VERSION}"
+          git push origin main --tags
