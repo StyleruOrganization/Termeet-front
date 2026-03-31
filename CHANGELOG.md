@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.1] - 2026-03-31
+
+### Changes
+- add blue green deploy for production
+- correct path to Dockerfile
+- correct path to nginx.conf
+- correct deploy flow
+- correct place for code in server
+
+
+All notable changes to this project will be documented in this file.
+
 ## [1.0.0] - 2026-03-31
 
 ### Changes
