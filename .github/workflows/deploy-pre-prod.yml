@@ -30,6 +30,7 @@ jobs:
       - name: Build Docker image
         run: |
           docker build \
+            -f infra/Dockerfile \
             -t ${REGISTRY}/frontend:${IMAGE_TAG} \
             -t ${REGISTRY}/frontend:latest .
 
