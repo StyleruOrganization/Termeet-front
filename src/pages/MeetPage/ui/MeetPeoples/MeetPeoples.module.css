@@ -76,7 +76,6 @@
   transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
   
   font-size: 4rem;
-  line-height: 1.4;
   max-height: 0;
   opacity: 0;
 
@@ -88,9 +87,8 @@
     cursor: pointer;
 
     font-size: var(--text-body);
-    line-height: 1.8;
 
-    line-height: 20px;
+    line-height: 25px;
     text-overflow: ellipsis;
     white-space: nowrap;
   }

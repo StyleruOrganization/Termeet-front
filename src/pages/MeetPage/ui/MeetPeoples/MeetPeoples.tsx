@@ -30,7 +30,7 @@ export const MeetPeoples = ({ users }: { users: string[] }) => {
         style={
           // Анимирую max-height поэтому надо посчитать
           {
-            "--user-list-height": `${users.length * 28 - 8}px`,
+            "--user-list-height": `${users.length * 25}px`,
           } as React.CSSProperties
         }
         className={`${styles.MeetPeoples} ${isExpanded ? styles.MeetPeoples__expanded : ""}`}
