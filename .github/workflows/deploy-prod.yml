@@ -118,17 +118,34 @@ jobs:
           
           RELEASE_DATE=$(date '+%Y-%m-%d')
           
-          # Формируем запись о релизе
-          CHANGELOG_ENTRY="## [${VERSION}] - ${RELEASE_DATE}\n\n"
+          # Создаем временный файл с новым CHANGELOG
+          TMP_FILE=$(mktemp)
+          
+          # Записываем заголовок
+          echo "# Changelog" > "${TMP_FILE}"
+          echo "" >> "${TMP_FILE}"
+          echo "All notable changes to this project will be documented in this file." >> "${TMP_FILE}"
+          echo "" >> "${TMP_FILE}"
+          
+          # Добавляем новую запись о релизе
+          echo "## [${VERSION}] - ${RELEASE_DATE}" >> "${TMP_FILE}"
+          echo "" >> "${TMP_FILE}"
           
           if [ -n "${COMMITS}" ]; then
-            CHANGELOG_ENTRY+="### Changes\n${COMMITS}\n\n"
+            echo "### Changes" >> "${TMP_FILE}"
+            echo "${COMMITS}" >> "${TMP_FILE}"
+            echo "" >> "${TMP_FILE}"
           else
-            CHANGELOG_ENTRY+="### Changes\n- Production deployment\n\n"
+            echo "### Changes" >> "${TMP_FILE}"
+            echo "- Production deployment" >> "${TMP_FILE}"
+            echo "" >> "${TMP_FILE}"
           fi
           
-          # Добавляем новую версию в CHANGELOG (после заголовка)
-          sed -i "2i ${CHANGELOG_ENTRY}" CHANGELOG.md
+          # Добавляем остальной CHANGELOG (без первой строки заголовка)
+          tail -n +2 CHANGELOG.md >> "${TMP_FILE}"
+          
+          # Заменяем старый CHANGELOG новым
+          mv "${TMP_FILE}" CHANGELOG.md
           
           # Коммитим CHANGELOG
           git config user.name "github-actions[bot]"

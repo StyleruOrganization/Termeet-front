@@ -28,5 +28,5 @@
   font-weight: 800;
   src: local("Manrope"),
   url('./fonts/Manrope-ExtraBold.woff2') format("woff2"),
-  url('./fonts/Manope-ExtraBold.woff') format('woff');
+  url('./fonts/Manrope-ExtraBold.woff') format('woff');
 }
