@@ -34,11 +34,11 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           envs: VERSION,EMAIL,DOMAIN
           script: |
-            # Создаем директорию если не существует
-            mkdir -p /termeet-prod
+            # Создаем директорию в домашней папке
+            mkdir -p /home/${{ secrets.SERVER_USER }}/termeet-prod
             
             # Переходим в директорию
-            cd /termeet-prod
+            cd /home/${{ secrets.SERVER_USER }}/termeet-prod
             
             # Получаем актуальный код
             if [ -d ".git" ]; then
