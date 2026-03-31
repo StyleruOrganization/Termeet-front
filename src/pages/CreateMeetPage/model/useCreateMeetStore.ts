@@ -8,11 +8,20 @@ const validators: {
     : (value: string) => string | undefined;
 } = {
   description: (value: string) => {
-    if (value.length > 400) return "Описание не должно превышать 400 символов";
+    if (value.trim().length > 400) return "Описание не должно превышать 400 символов";
+    return undefined;
+  },
+  title: value => {
+    if (value.trim().length > 128) return "Название не должно превышать 128 символов";
     return undefined;
   },
   link: (value: string) => {
+    if (value.trim().length > 128) return "Размер ссылки не должен превышать 128 символов";
     if (value && !/^https?:\/\/.+/.test(value)) return "Введите корректную ссылку (http:// или https://)";
+    return undefined;
+  },
+  dates: (value: string[]) => {
+    if (value.length > 30) return "Максимум можно выбрать 30 дней";
     return undefined;
   },
 };
@@ -135,11 +144,15 @@ export const useCreateMeetStore = create<MeetingFormState>((set, get) => ({
       },
     })),
   validateField: name => {
+    console.log("validate Field", name);
     const value = get().values[name];
     const setError = get().setError;
     const validator = validators[name];
 
-    if (!validator) return null;
+    if (!validator) {
+      console.log("validator not found", name);
+      return;
+    }
 
     if (Array.isArray(value)) {
       const result = (validator as (value: string[]) => string | undefined)(value);

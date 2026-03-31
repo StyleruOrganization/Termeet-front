@@ -47,8 +47,6 @@ export function CreateMeetPage() {
       message: "Встреча успешно создана",
       id: "create-meet-success",
     });
-
-    // resetForm();
   };
 
   return (

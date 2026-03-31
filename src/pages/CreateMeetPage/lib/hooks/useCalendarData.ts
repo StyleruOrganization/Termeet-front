@@ -15,7 +15,7 @@ const formatDate = (date: Date) => {
 export const useCalendarData = () => {
   const selectedDates = useCreateMeetStore(state => state.values.dates);
   const setValue = useCreateMeetStore(state => state.setValue);
-  // const validateField = useCreateMeetStore(state => state.validateField);
+  const validateField = useCreateMeetStore(state => state.validateField);
   const error = useCreateMeetStore(state => state.errors.dates);
 
   const onDateClick = (date: Date) => {
@@ -32,7 +32,7 @@ export const useCalendarData = () => {
     } else {
       setValue("dates", [...selectedDates, formattedDate]);
     }
-    // validateField("dates");
+    validateField("dates");
   };
 
   const formatClassName: TileClassNameFunc = ({ date, view }) => {
