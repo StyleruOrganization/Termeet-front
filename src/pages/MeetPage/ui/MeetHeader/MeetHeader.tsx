@@ -101,8 +101,14 @@ export const MeetHeader = ({ duration, description, name, link }: MeetHeaderProp
         scrollbarWidth={window.innerWidth - document.documentElement.clientWidth}
       >
         <div className={styles.MeetHeader__modalWrapper}>
-          <div className={styles.MeetHeader__modalTitle}>Описание встречи</div>
-          <p>{description}</p>
+          <div>
+            <div className={styles.MeetHeader__modalTitle}>Название встречи</div>
+            <p>{name}</p>
+          </div>
+          <div>
+            <div className={styles.MeetHeader__modalTitle}>Описание встречи</div>
+            <p>{description}</p>
+          </div>
         </div>
       </ModalWrapper>
     </div>

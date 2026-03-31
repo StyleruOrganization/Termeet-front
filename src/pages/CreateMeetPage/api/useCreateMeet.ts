@@ -20,19 +20,14 @@ export const useCreateMeet = ({ onSuccess: onSuccessExternal }: { onSuccess: () 
   const navigate = useNavigate();
   const addToast = useToastStore(store => store.addToast);
   const removeToast = useToastStore(store => store.removeToast);
-  const toastTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const toastShowTimeRef = useRef<number | null>(null);
-  const pendingResponseRef = useRef<{ response?: MeetResponse; error?: Error } | null>(null);
-  const hideToastTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const toastTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Очистка таймаутов при размонтировании
   useEffect(() => {
     return () => {
-      if (toastTimeoutRef.current) {
-        clearTimeout(toastTimeoutRef.current);
-      }
-      if (hideToastTimeoutRef.current) {
-        clearTimeout(hideToastTimeoutRef.current);
+      if (toastTimerRef.current) {
+        clearTimeout(toastTimerRef.current);
+        toastTimerRef.current = null;
       }
     };
   }, []);
@@ -65,97 +60,39 @@ export const useCreateMeet = ({ onSuccess: onSuccessExternal }: { onSuccess: () 
     });
   };
 
-  const processPendingResponse = () => {
-    if (pendingResponseRef.current) {
-      const { response, error } = pendingResponseRef.current;
-      if (response) {
-        handleSuccess(response);
-      } else if (error) {
-        handleError(error);
-      }
-      pendingResponseRef.current = null;
-    }
-    toastShowTimeRef.current = null;
-  };
-
   const { mutate, isPending } = useMutation({
     mutationFn: (data: MeetCreate) => apiClient.post<MeetResponse, MeetCreate>("/meet/create", data, meetCreateSchema),
     onSuccess: (response: MeetResponse) => {
-      if (!toastShowTimeRef.current) {
-        handleSuccess(response);
-      } else {
-        pendingResponseRef.current = { response };
-
-        const elapsed = Date.now() - toastShowTimeRef.current;
-        const remaining = Math.max(0, 500 - elapsed);
-
-        if (remaining > 0) {
-          if (hideToastTimeoutRef.current) {
-            clearTimeout(hideToastTimeoutRef.current);
-          }
-          hideToastTimeoutRef.current = setTimeout(() => {
-            removeToast("create-meet-wait");
-            processPendingResponse();
-            hideToastTimeoutRef.current = null;
-          }, remaining);
-        } else {
-          removeToast("create-meet-wait");
-          processPendingResponse();
-        }
+      // Очищаем таймаут если он был
+      if (toastTimerRef.current) {
+        clearTimeout(toastTimerRef.current);
+        toastTimerRef.current = null;
       }
+      removeToast("create-meet-wait");
+      handleSuccess(response);
     },
     onMutate: () => {
-      toastTimeoutRef.current = setTimeout(() => {
+      toastTimerRef.current = setTimeout(() => {
         addToast({
           type: "wait",
           message: "Создание встречи...",
           id: "create-meet-wait",
         });
-        toastShowTimeRef.current = Date.now();
-        toastTimeoutRef.current = null;
-
-        hideToastTimeoutRef.current = setTimeout(() => {
-          removeToast("create-meet-wait");
-          processPendingResponse();
-          hideToastTimeoutRef.current = null;
-        }, 500);
       }, 300);
     },
     onError: (error: Error) => {
-      if (!toastShowTimeRef.current) {
-        if (toastTimeoutRef.current) {
-          clearTimeout(toastTimeoutRef.current);
-          toastTimeoutRef.current = null;
-        }
-        handleError(error);
-      } else {
-        pendingResponseRef.current = { error };
-
-        if (hideToastTimeoutRef.current) {
-          clearTimeout(hideToastTimeoutRef.current);
-        }
-
-        hideToastTimeoutRef.current = setTimeout(() => {
-          removeToast("create-meet-wait");
-          processPendingResponse();
-          hideToastTimeoutRef.current = null;
-        }, 0);
+      // Очищаем таймаут если он был
+      if (toastTimerRef.current) {
+        clearTimeout(toastTimerRef.current);
+        toastTimerRef.current = null;
       }
+
+      removeToast("create-meet-wait");
+      handleError(error);
     },
   });
 
   const createMeet = (formData: ICreateMeet) => {
-    if (toastTimeoutRef.current) {
-      clearTimeout(toastTimeoutRef.current);
-      toastTimeoutRef.current = null;
-    }
-    if (hideToastTimeoutRef.current) {
-      clearTimeout(hideToastTimeoutRef.current);
-      hideToastTimeoutRef.current = null;
-    }
-    toastShowTimeRef.current = null;
-    pendingResponseRef.current = null;
-
     const preparedData: MeetCreate = {
       name: formData.title.trim(),
       description: formData.description?.trim(),

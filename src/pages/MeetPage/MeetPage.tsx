@@ -61,7 +61,7 @@ export function MeetPage() {
           />
           <Toggle
             leftLabel={"По местному " + timeZones.local.utcString}
-            rightLabel={"По Камчатскому времени " + timeZones.moscow.utcString}
+            rightLabel={"По Москве " + timeZones.moscow.utcString}
             defaultActive={isLocalTime ? "left" : "right"}
             onChange={handleToggleChange}
           />

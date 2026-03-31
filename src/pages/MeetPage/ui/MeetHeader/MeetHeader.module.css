@@ -7,9 +7,7 @@
   background-color: var(--light-fill-controls);
   border-radius: 32px;
 
-  transition: transform 0.2s ease-in-out;
-
-  max-width: 100%
+  max-width: 100%;
 }
 
 .MeetHeader__Info {
@@ -19,18 +17,25 @@
 }
 
 .MeetHeader__Info__Title {
+  /* Для двух строк с многоточием */
+  display: -webkit-box;
   overflow: hidden;
   flex: 1; /* Чтобы занимал оставшееся место */
-
+  
   color: var(--light-text-main);
 
+  -webkit-box-orient: vertical;
+  
   font-size: var(--text-heading);
   font-weight: 800;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
   line-height: 1.2;
   min-width: 0;
-  text-overflow: ellipsis;
   
-  white-space: nowrap; 
+  /* Убираем white-space: nowrap, так как он запрещает перенос строк */
+  overflow-wrap: break-word;
+  text-overflow: ellipsis;
 }
 
 .MeetHeader__Info__Duration {
@@ -128,6 +133,10 @@
 }
 
 .MeetHeader__modalWrapper {
+  display: flex;
+  gap: 16px;
+  flex-direction: column;
+
   padding: 16px 16px 32px;
 
   p {
