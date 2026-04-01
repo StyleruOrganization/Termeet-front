@@ -1,0 +1,12 @@
+.NoMeetPage {
+  margin: 0 auto;
+
+  max-width: 450px;
+
+  h1 {
+    text-align: center;
+
+    font-size: var(--text-display);
+    margin-bottom: 32px;
+  }
+}

@@ -1,10 +1,13 @@
-export { MONTHS, MONTHS_GENITIVE, SHORT_DAYS } from "./dates/const";
-export { TIMES, DURATIONS } from "./times/const";
+export { MONTHS, MONTHS_GENITIVE, SHORT_DAYS } from "../consts/dates/const";
 export { generateTimeOptions } from "./times/generateTimeOptions";
 export { isMoreOrEqThan30Min } from "./times/isMoreOrEqThan30Min";
 export { convertUTCToTimezone } from "./times/convertUTCToTimezone";
+export { isTimeBefore } from "./times/isTimeBefore";
+export { timeToMinutes } from "./times/timeToMinutes";
 export { isTouchDevice } from "./devices/isTouchDevice";
-export { throttle, debounce } from "./func/functionWrappers";
+export { debounce } from "./funcWrappers/debounce";
+export { throttle } from "./funcWrappers/throttle";
 export { mergeRefs } from "./reactUtils/mergeRefs";
 export { useFocusTrap } from "./hooks/useFocusTrap";
+export { useScrollToTop } from "./hooks/useScrollToTop";
 export { copyTextToClipboard } from "./clipboard/copyToClipBoard";

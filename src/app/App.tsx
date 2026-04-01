@@ -1,8 +1,11 @@
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { Suspense } from "react";
 import { BrowserRouter as Router } from "react-router";
+import { Loader } from "@/shared/ui";
 import { queryClient } from "@shared/api";
-import { Routes } from "./routes/routes";
+import { ScrollRestoration } from "./providers/ScrollRestoration";
+import { Routing } from "./routes/routes";
 
 import "./styles/reset.css";
 import "./styles/global.css";
@@ -11,9 +14,12 @@ import "./styles/variables.css";
 export const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <Router>
-        <Routes />
-      </Router>
+      <Suspense fallback={<Loader message='Загрузка ...' />}>
+        <Router>
+          <ScrollRestoration />
+          <Routing />
+        </Router>
+      </Suspense>
       <ReactQueryDevtools />
     </QueryClientProvider>
   );

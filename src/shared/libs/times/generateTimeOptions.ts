@@ -4,20 +4,6 @@
  * @param to - конечное время в формате "HH:MM" или "HH:MM:SS" (включается)
  * @param intervalMinutes - интервал в минутах (по умолчанию 30)
  * @returns массив [часы, минуты] для каждого интервала
- *
- * @example
- * // Интервал с 09:00 до 18:00 с шагом 30 минут
- * generateTimeOptions("09:00", "18:00", 30)
- * // Вернет: [[9,0], [9,30], [10,0], ..., [18,0]]
- *
- * @example
- * // Одинаковое время - возвращает только это время
- * generateTimeOptions("00:00", "00:00", 30) // [[0,0]]
- *
- * @example
- * // Переход через полночь
- * generateTimeOptions("23:00", "01:00", 30)
- * // Вернет: [[23,0], [23,30], [0,0], [0,30], [1,0]]
  */
 export function generateTimeOptions(from: string, to: string, intervalMinutes: number = 30) {
   const [startHour, startMinutes] = from.split(":").map(Number);

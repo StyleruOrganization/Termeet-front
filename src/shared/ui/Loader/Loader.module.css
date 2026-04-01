@@ -3,104 +3,37 @@
     gap: 16px;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
 
     margin: 0 auto;
 
-    animation: fade-in  0.5s ease-in;
-
-    max-width: 336px;
-}
-
-.loader {
-    width: 100%;
-
-    background-color: var(--light-fill-controls);
-    border: 2px solid var(--light-fill-outline);
-    border-radius: 16px;
-
-    animation: fade-in-scale 0.5s ease-in-out;
-}
-
-
-.pill {
-    height: 12px;
-
-    background-color: var(--light-components-hover);
-    border-radius: 100px;
-}
-
-.header{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 4px;
-
-    padding: 0 10px;
-    height: 32px;
-}
-
-.pillLeft {
-    width: 82px;
-}
-
-.pillSmall {
-    width: 10%;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-
-    transform: translateX(-50%);
-
-    margin-left: auto ;
-    margin-right: auto;
-}
-
-.gridContainer {
-    display: grid;
-    overflow: hidden; 
-
-    grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: repeat(5, 20px);
-}
-
-.cell {
-    background-color: var(--light-fill-bg);
-    border: 1px solid var(--light-fill-outline);
-
-    animation: flash 3.5s ease-in-out infinite;
-
-    animation-delay: calc((var(--row) * 0.7s) + (var(--col) * 0.1s) + 0.5s);
-}
-
-.cell:nth-child(7n){
-    margin-right: -1px;
-}
-
-.cell:nth-child(7n + 1){
-    margin-left: -1px;
-}
-
-.cell:nth-child(n+29) {
-    margin-bottom: -1px;
+    animation: fade-in  0.3s ease-in;
 }
 
 .loader__message {
     font-size: var(--text-body);
 }
 
+/* Анимация через clip-path от нижней части */
+.loader__logo {
+    height: 56px;
+    width: 44px;
 
-@keyframes fade-in-scale {
-    from {
-        opacity: 0;
-        scale: 0.8
+    color: var(--light-semantics-dark-blue-default);
+
+    animation: reveal-fill 1.3s ease-out infinite;
+
+    clip-path: inset(100% 0 0 0);
+}
+
+@keyframes reveal-fill {
+    0% {
+        clip-path: inset(100% 0 0 0);
     }
 
-    to {
-        opacity: 1;
-        scale: 1;
-    }  
+    100% {
+        clip-path: inset(0 0 0 0);
+    }
 }
 
 @keyframes fade-in {
@@ -110,26 +43,5 @@
 
     to {
         opacity: 1;
-    }  
-}
-
-
-@keyframes flash {
-2.85%, 14.29% { 
-    background-color: var(--light-semantics-light-blue-disabled); 
-    
-    border-color: var(--light-semantics-light-blue-disabled); 
-}
-
-5.71%, 8.57%, 11.4% { 
-    background-color: var(--light-semantics-light-blue-default); 
-
-    border-color: var(--light-semantics-light-blue-default); 
-}
-
-17.14% {
-    background-color: var(--light-fill-bg);
-
-    border-color: var(--light-fill-outline);
-}
+    }
 }
