@@ -1,7 +1,5 @@
-import { Suspense } from "react";
 import { Outlet, useNavigate } from "react-router";
 import { ToastContainer } from "@/features/ToastContainer";
-import { Loader } from "@/shared/ui";
 import styles from "./Layout.module.css";
 
 // Global Styles
@@ -24,9 +22,7 @@ export const Layout = () => {
         </button>
       </div>
       <div className={styles.container}>
-        <Suspense fallback={<Loader />}>
-          <Outlet />
-        </Suspense>
+        <Outlet />
         <ToastContainer />
       </div>
     </>

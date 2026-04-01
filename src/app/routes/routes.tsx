@@ -18,7 +18,7 @@ const withSuspense = (Component: React.LazyExoticComponent<() => React.JSX.Eleme
 export const Routing = () => {
   return (
     <ReactRoutes>
-      <Route index element={withSuspense(EntryPage, "Загрузка...")} />
+      <Route index element={withSuspense(EntryPage, "Загружаем страницу...")} />
       <Route path='/' element={<Layout />}>
         <Route path='/create' element={withSuspense(CreateMeetPage, "Загружаем страницу...")} />
         <Route path='/meet/:hash' element={withSuspense(MeetPage, "Загружаем слоты...")} />

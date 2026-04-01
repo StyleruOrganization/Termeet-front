@@ -6,8 +6,10 @@
     justify-content: center;
 
     margin: 0 auto;
+    width: 100%;
+    height: calc(100vh - 104px);
 
-    animation: fade-in  0.3s ease-in;
+    animation: fade-in  0.2s ease-in;
 }
 
 .loader__message {
@@ -20,20 +22,6 @@
     width: 44px;
 
     color: var(--light-semantics-dark-blue-default);
-
-    animation: reveal-fill 1.3s ease-out infinite;
-
-    clip-path: inset(100% 0 0 0);
-}
-
-@keyframes reveal-fill {
-    0% {
-        clip-path: inset(100% 0 0 0);
-    }
-
-    100% {
-        clip-path: inset(0 0 0 0);
-    }
 }
 
 @keyframes fade-in {
