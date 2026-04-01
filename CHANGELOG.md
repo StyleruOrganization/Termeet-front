@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.3] - 2026-04-01
+
+### Changes
+- migrate on Vite8 and some optimizations for build
+- returned old nginx conf
+
+
+All notable changes to this project will be documented in this file.
+
 ## [1.0.2] - 2026-03-31
 
 ### Changes
