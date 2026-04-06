@@ -26,7 +26,7 @@ export const MeetHeader = ({ duration, description, name, link }: MeetHeaderProp
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY < 50) {
+      if (scrollY < 50 || window.scrollY < 50) {
         setScrollY(window.scrollY);
       }
     };
@@ -36,7 +36,7 @@ export const MeetHeader = ({ duration, description, name, link }: MeetHeaderProp
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [scrollY]);
 
   // Функция для навигации с сохранением query-параметров
   const navigateWithParams = (path: string) => {
@@ -44,6 +44,8 @@ export const MeetHeader = ({ duration, description, name, link }: MeetHeaderProp
     const newPath = queryString ? `${path}?${queryString}` : path;
     navigate(newPath);
   };
+
+  console.log("ScrollY", scrollY);
 
   return (
     <div
