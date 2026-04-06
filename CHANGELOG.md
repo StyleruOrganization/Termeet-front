@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.5] - 2026-04-06
+
+### Changes
+- attempt for improving animationX2
+- attempt for improving animationX3
+- added sticky position for mobile header
+
+
+All notable changes to this project will be documented in this file.
+
 ## [1.0.4] - 2026-04-01
 
 ### Changes
