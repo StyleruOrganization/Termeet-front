@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router";
 import { useToastStore } from "@/features/ToastContainer";
 import { useScrollToTop, copyTextToClipboard } from "@/shared/libs";
@@ -22,21 +22,6 @@ export const MeetHeader = ({ duration, description, name, link }: MeetHeaderProp
     removeToast = useToastStore(store => store.removeToast);
   const navigate = useNavigate();
   const { hash = "" } = useParams();
-  const [scrollY, setScrollY] = useState(() => window.scrollY);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (scrollY < 50 || window.scrollY < 50) {
-        setScrollY(window.scrollY);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [scrollY]);
 
   // Функция для навигации с сохранением query-параметров
   const navigateWithParams = (path: string) => {
@@ -45,15 +30,8 @@ export const MeetHeader = ({ duration, description, name, link }: MeetHeaderProp
     navigate(newPath);
   };
 
-  console.log("ScrollY", scrollY);
-
   return (
-    <div
-      style={{
-        transform: WINDOW_WIDTH < 768 ? `translateY(-${Math.min(scrollY, 46)}px)` : "",
-      }}
-      className={`${styles.MeetHeader} ${isExpanded ? styles.MeetHeader__expanded : ""}`}
-    >
+    <div className={`${styles.MeetHeader} ${isExpanded ? styles.MeetHeader__expanded : ""}`}>
       <div className={styles.MeetHeader__Info}>
         <span className={styles.MeetHeader__Info__Title}>{name}</span>
         <span className={styles.MeetHeader__Info__Duration}>{duration}</span>

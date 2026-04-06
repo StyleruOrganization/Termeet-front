@@ -24,12 +24,34 @@
   min-width: 0;
 }
 
+.MeetInfo__ButtonsEdit {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  padding: 10px 10px 32px;
+
+  background-color: var(--light-fill-bg);
+  box-shadow: 0 4px 24px rgb(0 0 0 / 12%);
+
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+.MeetPage__HeaderWrapper_Mobile {
+  position: sticky;
+  top: 10px;
+
+  order: 1
+}
+
+
 @media (width < 768px) {
   .MeetPage {
     gap: 16px;
     flex-direction: column-reverse;
 
-    padding-top: 83px;
     padding-bottom: 70px
   }
 

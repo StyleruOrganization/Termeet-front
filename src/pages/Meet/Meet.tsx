@@ -6,8 +6,11 @@ import { Toggle } from "@/shared/ui";
 import { useGetMeetInfo } from "./api/useGetMeetInfo";
 import { getTimeZone } from "./lib";
 import styles from "./Meet.module.css";
+import { MeetHeader } from "./ui/MeetHeader/MeetHeader";
 import { MeetInfo } from "./ui/MeetInfo/MeetInfo";
 import { MeetTable } from "./ui/MeetTable/MeetTable";
+
+const WINDOW_WIDTH = window.innerWidth;
 
 export function Meet() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -50,6 +53,16 @@ export function Meet() {
   return (
     <MeetProvider timeInfo={meetData.timeInfo} timeRanges={meetData.timeRanges} users={meetData.users}>
       <div className={styles.MeetPage}>
+        {WINDOW_WIDTH < 768 ? (
+          <div className={styles.MeetPage__HeaderWrapper_Mobile}>
+            <MeetHeader
+              duration={meetData.duration}
+              description={meetData.description}
+              name={meetData.name}
+              link={meetData.link}
+            />
+          </div>
+        ) : null}
         <div className={styles.MeetPage__InfoWrapper}>
           <MeetInfo data={meetData} />
         </div>

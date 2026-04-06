@@ -59,7 +59,9 @@ export const MeetInfo = ({ data }: IMeetInfoProps) => {
     <>
       <div className={styles.MeetInfo}>
         <div className={styles.MeetInfo__HeaderWrapper}>
-          <MeetHeader duration={data.duration} description={data.description} name={data.name} link={data.link} />
+          {WINDOW_WIDTH >= 768 ? (
+            <MeetHeader duration={data.duration} description={data.description} name={data.name} link={data.link} />
+          ) : null}
         </div>
         <MeetPeoples users={data.users} />
         <div className={styles.MeetInfo__Buttons}>
