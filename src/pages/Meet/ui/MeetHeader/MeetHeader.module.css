@@ -160,4 +160,8 @@
 
     border-radius: 50%;
   }
+
+  .MeetHeader {
+    border-radius: 20px;
+  }
 }

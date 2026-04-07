@@ -103,3 +103,9 @@
 .MeetTable__Columns [data-column-id]:last-child [data-last-cell="true"] {
   border-bottom-right-radius: 32px;
 }
+
+@media (width < 768px) {
+  .MeetTable {
+    border-radius: 20px;
+  }
+}
