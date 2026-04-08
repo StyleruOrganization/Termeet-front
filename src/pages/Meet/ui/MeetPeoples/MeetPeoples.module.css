@@ -120,6 +120,8 @@
 @media (width < 768px) {
   .MeetPeoples {
     padding: 12px;
+
+    border-radius: 20px;
   }
 
   .MeetPeoples__ExpandButton {
