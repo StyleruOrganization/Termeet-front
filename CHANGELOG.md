@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.6] - 2026-04-08
+
+### Changes
+- attempt for improving animationX2
+- attempt for improving animationX3
+- added sticky position for mobile header
+- correct border-radius for mobile devices
+- corrections for border-radius and added new logo icon
+
+
+All notable changes to this project will be documented in this file.
+
 ## [1.0.4] - 2026-04-01
 
 ### Changes
