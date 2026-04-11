@@ -1,8 +1,11 @@
 {
   "extends": "./ts-base.json",
   "compilerOptions": {
+    "module": "node20",
+    "moduleResolution": "node16",
+    "resolveJsonModule": true,
     "types": ["node"],
     "lib": ["ES2023"]
   },
-  "include": ["../vite.config.ts"] // Путь относительно текущего файла
+  "include": ["../infra/**/*.ts", "../infra/generate-vars/generateTokens.js"] // Путь относительно текущего файла
 }

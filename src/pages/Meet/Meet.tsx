@@ -73,8 +73,8 @@ export function Meet() {
             timeRanges={meetData.timeRanges}
           />
           <Toggle
-            leftLabel={"По местному " + timeZones.local.utcString}
-            rightLabel={"По Москве " + timeZones.moscow.utcString}
+            LeftLabel={"По местному " + timeZones.local.utcString}
+            RightLabel={"По Москве " + timeZones.moscow.utcString}
             defaultActive={isLocalTime ? "left" : "right"}
             onChange={handleToggleChange}
           />

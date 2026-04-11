@@ -32,7 +32,7 @@
 
   padding: 10px 10px 32px;
 
-  background-color: var(--light-fill-bg);
+  background-color: var(--fill-bg);
   box-shadow: 0 4px 24px rgb(0 0 0 / 12%);
 
   border-top-left-radius: 16px;

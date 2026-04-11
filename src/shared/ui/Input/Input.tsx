@@ -3,10 +3,7 @@ import styles from "./Input.module.css";
 import type { IInputProps } from "./Input.types";
 
 export const Input = forwardRef<HTMLInputElement, IInputProps>(
-  (
-    { label, placeholder, name, error, onChange, readOnly = false, className = "", suggestMessage, ...inputProps },
-    ref,
-  ) => {
+  ({ label, placeholder, name, error, onChange, readOnly = false, className, suggestMessage, ...inputProps }, ref) => {
     return (
       <div className={`${styles.Input} ${error ? styles.Input__Error : ""}`}>
         {label && (

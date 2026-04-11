@@ -4,28 +4,9 @@
   width: 100%;
   height: 100%;
 
-  align-self: end;
+  align-self: end
 }
 
-.TimeSelect__OpenIcon {
-  width: 16px;
-  height: 16px;
-
-  color: var(--light-text-main);
-
-  transition:
-    transform .3s ease,
-    color 3s ease;
-  
-}
-
-.TimeSelect__OpenIcon:hover {
-  color: var(--light-components-hover);
-}
-
-.TimeSelect__OpenIcon_Open {
-  transform: rotate(180deg);
-}
 
 .TimeSelect__Dropdown {
   position: fixed;
@@ -36,9 +17,9 @@
   /* Симметрия с местом для скроллбара */
   padding: 8px 2px 8px 8px;
 
-  background-color: var(--light-fill-bg);
+  background-color: var(--fill-bg);
   border-radius: 16px;
-  border: 1px solid var(--light-semantics-gray-active);
+  border: 1px solid var(--semantics-gray-active);
 
   animation: fade-in 0.3s ease-in-out;
 
@@ -58,12 +39,12 @@
 
 .TimeSelect__List {
   display: flex;
-  flex-direction: column;
   gap: 4px;
+  flex-direction: column;
 
-  padding-right: 2px;
+  padding-right: 2px; 
 
-  list-style: none; 
+  list-style: none
 }
 
 .TimeSelect__Option {
@@ -72,8 +53,8 @@
 
   text-align: left;
 
-  color: var(--light-semantics-black-main);
-  background-color: var(--light-fill-bg);
+  color: var(--text-main);
+  background-color: var(--fill-bg);
   border: none;
   border-radius: 16px;
 
@@ -86,12 +67,12 @@
 }
 
 .TimeSelect__Option:focus-visible{
-  outline: 2px solid var(--light-semantics-dark-blue-active);
+  outline: 2px solid var(--semantics-blue-800);
   outline-offset: 2px;
 }
 
 .TimeSelect__Option:hover {
-  background-color: var(--light-semantics-gray-default);
+  background-color: var(--semantics-gray-default);
 }
 
 .TimeSelect__InputWrapper {
@@ -106,6 +87,8 @@
   width: 16px;
   height: 16px;
 
+  color: var(--text-main);
+
   transform: translateY(-50%) rotate(90deg);
   transition: transform 0.3s ease;
   
@@ -118,16 +101,20 @@
   pointer-events: none;
 }
 
+[data-theme="dark"] .TimeSelect__InputWrapper::after {
+  background-image: url("./../../../../assets/icons/dark_arrow.svg");
+}
+
 .TimeSelect__InputWrapper_open::after {
   transform: translateY(-50%) rotate(270deg);
 }
 
 .TimeSelect__Option_selected, .TimeSelect__Option:active {
-  background-color: var(--light-semantics-gray-hover);
+  background-color: var(--semantics-gray-hover);
 }
 
 .TimeSelect__Option_selected:hover {
-  background-color: var(--light-semantics-gray-hover);
+  background-color: var(--semantics-gray-hover);
 }
 
 /* Стили для скроллбара */

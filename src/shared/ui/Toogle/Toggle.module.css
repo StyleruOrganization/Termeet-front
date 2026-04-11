@@ -4,13 +4,14 @@
   width: fit-content;
   padding: 4px;
 
-  background-color: var(--light-fill-controls);
+  background-color: var(--fill-controls);
   border-radius: 32px;
 }
 
 .Toogle__Option {
   padding: 10px;
 
+  color: var(--text-main);
   border-radius: 32px;
 
   transition: background-color 0.3s ease-in-out,  color 0.3s ease-in-out;
@@ -18,17 +19,22 @@
   cursor: pointer;
 
   font-size: var(--text-body);
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
 }
 
 .Toogle__Option:hover {
-  background-color: var(--light-semantics-gray-hover)
+  background-color: var(--components-hover)
 }
 
 .Toogle__Option_active {
-  color: var(--light-semantics-blue-main);
-  background-color: var(--light-semantics-light-blue-default);
+  color: var(--semantics-blue-600);
+  background-color: var(--semantics-blue-200);
 }
 
 .Toogle__Option_active:hover {
-  background-color: var(--light-semantics-light-blue-default)
+  background-color: var(--semantics-blue-300)
 }

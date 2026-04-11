@@ -17,16 +17,16 @@
 .TableCell_disabled {
   background: repeating-linear-gradient(
     -45deg,           /* угол наклона 45 градусов */
-    var(--light-semantics-gray-default) 0,                  /* цвет полоски */
-    var(--light-semantics-gray-default) 2px,                  /* цвет полоски */
-    var(--light-fill-bg) 2px,                             /* начало прозрачного промежутка */
-    var(--light-fill-bg) 8px  
+    var(--semantics-gray-default) 0,                  /* цвет полоски */
+    var(--semantics-gray-default) 2px,                  /* цвет полоски */
+    var(--fill-bg) 2px,                             /* начало прозрачного промежутка */
+    var(--fill-bg) 8px  
   );
   cursor: default;
 }
 
 .TableCell_disabled:hover {
-  border-color: var(--light-semantics-light-blue-disabled) !important;
+  border-color: var(--semantics-blue-50) !important;
 }
 
 .cellTooltip {
@@ -41,7 +41,9 @@
 
   width: 118px;
 
-  pointer-events: none
+  svg {
+    color: var(--semantics-blue-950);
+  }
 }
 
 .cellTooltipContent {
@@ -51,8 +53,8 @@
 
   padding: 6px 12px;
 
-  color: var(--light-fill-bg);
-  background-color: var(--light-semantics-dark-blue-active);
+  color: var(--text-inverted);
+  background-color: var(--semantics-blue-950);
   border-radius: 16px;
 
   font-size: 3rem;
@@ -60,7 +62,7 @@
 }
 
 .cellTooltipTime {
-  color: var(--light-text-disabled)
+  opacity: .5;
 }
 
 .cellTooltipCount {

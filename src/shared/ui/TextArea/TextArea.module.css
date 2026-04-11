@@ -15,7 +15,8 @@
   height: 150px;
   padding: 16px;
 
-  background-color: var(--light-fill-controls);
+  background-color: var(--fill-controls);
+  color: var(--text-main);
   border: 1px solid transparent;
   border-radius: 16px;
 
@@ -27,13 +28,8 @@
   resize: none;
 }
 
-.TextArea__Field:focus-visible {
-  outline: 2px solid var(--light-semantics-dark-blue-active);
-  outline-offset: 2px;
-}
-
 .TextArea__Field::placeholder {
-  color: var(--light-text-secondary);
+  color: var(--text-secondary);
 
   transition: opacity 0.2s ease;
 }
@@ -43,12 +39,12 @@
 }
 
 .TextArea__Error .TextArea__Field {
-  border-color: var(--light-semantics-red-main);
+  border-color: var(--semantics-red-main);
   outline: none; /* Смотрится не очень две обводки */
 }
 
 .TextArea__Label {
-  color: var(--light-text-main);
+  color: var(--text-main);
 
   font-size: 4rem;
   line-height: 1.25;
@@ -57,7 +53,7 @@
 }
 
 .TextArea__ErrorField, .TextArea__SuggestField {
-  color: var(--light-semantics-red-main);
+  color: var(--semantics-red-main);
 
   animation: fade-in 0.3s ease-in-out;
 
@@ -67,7 +63,7 @@
 }
 
 .TextArea__SuggestField {
-  color: var(--light-text-secondary);
+  color: var(--text-secondary);
 }
 
 @keyframes fade-in {

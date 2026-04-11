@@ -67,7 +67,7 @@ export const MeetPeoples = ({ users }: { users: string[] }) => {
                     if (!isTouch) handlePersonChoose("");
                   }}
                   style={{
-                    color: shouldDim ? "var(--light-text-disabled)" : "var(--light-text-main)",
+                    color: shouldDim ? "var(--text-disabled)" : "var(--text-main)",
                   }}
                   className={isHovered ? styles.MeetPeoples__user_hovered : ""}
                 >

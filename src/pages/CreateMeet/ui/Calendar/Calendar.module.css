@@ -11,8 +11,8 @@
 
   text-align: center;
 
-  color: var(--light-text-main);
-  background-color: var(--light-fill-controls);
+  color: var(--text-main);
+  background-color: var(--fill-controls);
   border-radius: 16px;
 }
 
@@ -21,7 +21,7 @@
   height: 16px;
   margin: 0;
 
-  color: var(--light-text-main);
+  color: var(--text-main);
 
   transition: color 0.2s ease-in-out;
 }
@@ -35,7 +35,7 @@
 }
 
 .Calendar__Arrow:hover,  .Calendar__Arrow_Left:hover {
-  color: var(--light-text-disabled)
+  color: var(--text-disabled)
 }
 
 .Calendar__Day {
@@ -44,7 +44,7 @@
   width: var(--cell-size);
   height: var(--cell-size);
 
-  color: var(--light-text-main);
+  color: var(--text-main);
   border-radius: 8px;
   border: 1px solid transparent;
 
@@ -54,18 +54,16 @@
 }
 
 .Calendar__Day:focus-visible {
-  border-color: var(--light-fill-outline);
-
-  outline: 2px solid var(--light-semantics-dark-blue-active);
+  outline: 2px solid var(--semantics-blue-800);
   outline-offset: 2px
 }
 
 .Calendar__Day:disabled {
-  color: var(--light-text-disabled);
+  color: var(--text-disabled);
 }
 
 .Calendar__Day:hover {
-  background-color: var(--light-components-hover);
+  background-color: var(--components-hover);
 }
 
 .Calendar__Day:disabled:hover {
@@ -73,18 +71,18 @@
 }
 
 .Calendar__Day.Calendar__Day_Selected {
-  color: var(--light-fill-bg);
-  background-color: var(--light-semantics-dark-blue-default);
+  color: var(--fill-bg);
+  background-color: var(--semantics-blue-950);
 
   opacity: 1
 }
 
 .Calendar__Day.Calendar__Day_Selected:hover {
-  background-color: var(--light-semantics-dark-blue-active);
+  background-color: var(--semantics-blue-800);
 }
 
 .Calendar__Day_Selected:focus-visible {
-  border-color: var(--light-semantics-black-main);
+  border-color: var(--semantics-black-main);
 }
 
 .Calendar__ErrorField, .Calendar__SuggestField {
@@ -96,7 +94,7 @@
 
   width: 100%;
 
-  color: var(--light-semantics-red-main);
+  color: var(--semantics-red-main);
 
   transform: translateX(-50%);
   animation: fade-in 0.3s ease-in-out;
@@ -111,7 +109,7 @@
 }
 
 .Calendar__SuggestField {
-  color: var(--light-text-secondary);
+  color: var(--text-secondary);
 }
 
 @keyframes fade-in {

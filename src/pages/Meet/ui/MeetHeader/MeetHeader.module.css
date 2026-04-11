@@ -4,7 +4,7 @@
 
   padding: 22px 22px 24px;
 
-  background-color: var(--light-fill-controls);
+  background-color: var(--fill-controls);
   border-radius: 32px;
 
   transition: transform 0.14s ease-in-out;
@@ -24,7 +24,7 @@
   overflow: hidden;
   flex: 1; /* Чтобы занимал оставшееся место */
   
-  color: var(--light-text-main);
+  color: var(--text-main);
 
   -webkit-box-orient: vertical;
   
@@ -43,9 +43,10 @@
 .MeetHeader__Info__Duration {
   flex-shrink: 0;
 
-  color: var(--light-text-secondary);
+  color: var(--text-main);
 
   font-size: var(--text-heading);
+  opacity: .3;
   white-space: nowrap;
 }
 
@@ -56,7 +57,7 @@
   padding: 16px;
   
   border-radius: 16px;
-  background-color: var(--light-fill-bg);
+  background-color: var(--fill-bg);
 
   transition: background-color 0.3s ease-in-out; 
 
@@ -64,14 +65,16 @@
     margin: 0;
     width: 16px;
     height: 16px;
+
+    color: var(--text-main);
   }
 
   &:hover {
-    background-color: var(--light-components-hover)
+    background-color: var(--components-hover)
   }
 
   &:active {
-    background-color: var(--light-text-disabled)
+    background-color: var(--text-disabled)
   }
 }
 
@@ -93,7 +96,7 @@
 
   padding: 0;
 
-  color: var(--light-text-main);
+  color: var(--text-main);
 
   transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out, padding 0.3s ease-in-out;
   
@@ -113,7 +116,7 @@
 .MeetHeader__link {
   width: fit-content;
 
-  color: var(--light-semantics-blue-main);
+  color: var(--semantics-blue-600);
 
   transition: color 0.3s ease-in-out;
 
@@ -122,11 +125,11 @@
   font-size: var(--text-body);
 
   &:hover {
-    color: var(--light-semantics-blue-hover);
+    color: var(--semantics-blue-500);
   }
 
   &:active {
-    color: var(--light-semantics-blue-active);
+    color: var(--semantics-blue-400);
   }
 }
 

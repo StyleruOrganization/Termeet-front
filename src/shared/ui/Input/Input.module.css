@@ -16,7 +16,8 @@
   width: 100%;
   padding: 16px;
 
-  background-color: var(--light-fill-controls);
+  background-color: var(--fill-controls);
+  color: var(--text-main);
   border-radius: 16px;
   border: 1px solid transparent;
 
@@ -27,13 +28,8 @@
   line-height: 1.25;
 }
 
-.Input__Field:focus-visible {
-  outline: 2px solid var(--light-semantics-dark-blue-active);
-  outline-offset: 2px;
-}
-
 .Input__Field::placeholder {
-  color: var(--light-text-secondary);
+  color: var(--text-secondary);
 
   transition: opacity 0.2s ease;
 }
@@ -43,16 +39,16 @@
 }
 
 .Input__Field:disabled {
-  color: var(--light-text-disabled)
+  color: var(--text-disabled)
 }
 
 .Input__Error .Input__Field {
-  border-color: var(--light-semantics-red-main);
+  border-color: var(--semantics-red-main);
   outline: none; /* Смотрится не очень две обводки */
 }
 
 .Input__ErrorField, .Input__SuggestField {
-  color: var(--light-semantics-red-main);
+  color: var(--semantics-red-main);
 
   animation: fade-in 0.3s ease-in-out;
 
@@ -62,11 +58,11 @@
 }
 
 .Input__SuggestField {
-  color: var(--light-text-secondary)
+  color: var(--text-secondary)
 }
 
 .Input__Label {
-  color: var(--light-text-main);
+  color: var(--text-main);
 
   font-size: var(--text-body);
   line-height: 1.25;

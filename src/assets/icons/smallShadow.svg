@@ -1,6 +1,5 @@
-<svg width="395" height="433" viewBox="0 0 395 433" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="395" height="433" viewBox="0 0 395 433" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
 <g filter="url(#filter0_f_2729_3746)">
-<path d="M-212 -3.37805C-3.56772 140.348 465.402 140.346 95.3745 -242C682.349 56.7081 -212 743.229 -212 -3.37805Z" fill="url(#paint0_linear_2729_3746)"/>
 </g>
 <defs>
 <filter id="filter0_f_2729_3746" x="-312" y="-342" width="707" height="775" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
@@ -9,7 +8,7 @@
 <feGaussianBlur stdDeviation="50" result="effect1_foregroundBlur_2729_3746"/>
 </filter>
 <linearGradient id="paint0_linear_2729_3746" x1="-39.1079" y1="-194.706" x2="369.682" y2="124.806" gradientUnits="userSpaceOnUse">
-<stop stop-color="#599DEE"/>
+<stop stop-color="#currentColor"/>
 <stop offset="1" stop-color="white"/>
 </linearGradient>
 </defs>

@@ -36,9 +36,9 @@
   width: 100%;
   height: fit-content;
 
-  background-color: var(--light-fill-bg);
+  background-color: var(--fill-bg);
   border-radius: 16px;
-  box-shadow: 0 10px 40px var(--termeet-color-shadow);
+  box-shadow: 0 10px 40px var(--fill-controls);
 
   transform: translateY(-100px) scale(0.95);
   transition: transform var(--animation-duration, 300ms) cubic-bezier(0.34, 1.56, 0.64, 1), opacity var(--animation-duration, 300ms) ease;
@@ -68,8 +68,8 @@
 
   padding: 10px;
 
-  color: var(--light-text-main); 
-  background-color: var(--light-fill-controls);
+  color: var(--text-main); 
+  background-color: var(--fill-controls);
   border-radius: 50%;
 
   transition: background-color 0.3s ease-in-out;
@@ -78,11 +78,11 @@
   cursor: pointer;
 
   &:hover {
-    background-color: var(--light-components-hover)
+    background-color: var(--components-hover)
   }
 
   &:active {
-    background-color: var(--light-text-disabled)
+    background-color: var(--text-disabled)
   }
 
   svg {

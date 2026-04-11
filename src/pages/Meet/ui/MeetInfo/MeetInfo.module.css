@@ -27,7 +27,8 @@
   width: fit-content;
   padding: 18px;
 
-  background-color: var(--light-fill-controls);
+  color: var(--text-main);
+  background-color: var(--fill-controls);
   border-radius: 16px;
 
   transition: background-color 0.3s ease-in-out;
@@ -35,11 +36,11 @@
   font-size: var(--text-body);
 
   &:hover {
-    background-color: var(--light-components-hover)
+    background-color: var(--components-hover)
   }
 
   &:active {
-    background-color: var(--light-text-disabled)
+    background-color: var(--text-disabled)
   }
 
   svg {
@@ -65,7 +66,7 @@
 
     padding: 10px 10px 32px;
 
-    background-color: var(--light-fill-bg);
+    background-color: var(--fill-bg);
     box-shadow: 0 4px 24px rgb(0 0 0 / 12%);
 
     border-top-left-radius: 16px;

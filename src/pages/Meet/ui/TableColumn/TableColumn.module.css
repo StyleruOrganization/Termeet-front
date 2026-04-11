@@ -23,6 +23,8 @@
   overflow: hidden;
   align-items: center;
 
+  color: var(--text-main);
+
   line-height: 100%;
   margin-top: 4px;
   max-width: 100%;

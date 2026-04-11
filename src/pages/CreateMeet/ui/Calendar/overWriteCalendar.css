@@ -31,11 +31,11 @@
 }
 
 .react-calendar__navigation__arrow:focus-visible{
-  outline: 2px solid var(--light-semantics-black-main);
+  outline: 2px solid var(--fill-outline);
 }
 
 .react-calendar__navigation__arrow:disabled svg{
-  color: var(--light-text-disabled);
+  color: var(--text-disabled);
 
   cursor: not-allowed;
 
@@ -55,22 +55,22 @@ abbr {
 }
 
 .react-calendar__month-view__days__day--neighboringMonth {
-  color: var(--light-text-disabled)
+  color: var(--text-disabled)
 }
 
 .react-calendar__tile--now {
-  background-color: var(--light-semantics-light-blue-default);
+  background-color: var(--semantics-blue-100);
 
-  border-color: var(--light-semantics-light-blue-active);
+  border-color: var(--semantics-blue-300);
 }
 
 
 .react-calendar__tile--now:hover {
-  background-color: var(--light-semantics-light-blue-hover);
+  background-color: var(--semantics-blue-200);
 }
 
 .react-calendar__tile--now:focus-visible {
-  border-color: var(--light-semantics-light-blue-active);
-  outline: 2px solid var(--light-semantics-dark-blue-active);
+  border-color: var(--semantics-blue-300);
+  outline: 2px solid var(--semantics-blue-800);
   outline-offset: 2px;
 }

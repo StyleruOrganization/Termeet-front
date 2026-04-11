@@ -136,26 +136,26 @@ export const TableCell = ({ id, users, isDisabled, isFirstCell, isLastCell, colu
   // Без такой страшилищи хз как
   const colorCell = useMemo(() => {
     return users?.includes(hoveredUser) || (isEditingMode && newSelectedSlots?.includes(id.split("T")[1]))
-      ? "var(--light-semantics-dark-blue-default)"
+      ? "var(--semantics-blue-950)"
       : users?.length && !isEditingMode && !hoveredUser && variableColors?.color
         ? variableColors?.color
-        : "var(--light-fill-bg)";
+        : "var(--fill-bg)";
   }, [id, isEditingMode, newSelectedSlots, users, variableColors, hoveredUser]);
 
   const colorBorder = useMemo(() => {
     return users?.includes(hoveredUser) || (isEditingMode && newSelectedSlots?.includes(id.split("T")[1]))
-      ? "var(--light-semantics-dark-blue-default)"
+      ? "var(--semantics-blue-950)"
       : users?.length && !isEditingMode && !hoveredUser && variableColors?.color
         ? variableColors?.color
-        : "var(--light-semantics-gray-default)";
+        : "var(--semantics-gray-default)";
   }, [id, isEditingMode, newSelectedSlots, users, variableColors, hoveredUser]);
 
   const hoverColor = useMemo(() => {
     return isEditingMode && newSelectedSlots?.includes(id.split("T")[1])
-      ? "var(--light-semantics-light-blue-disabled)"
+      ? "var(--semantics-blue-50)"
       : users?.length
         ? variableColors?.hoverColor
-        : "var(--light-semantics-dark-blue-default)";
+        : "var(--semantics-blue-950)";
   }, [isEditingMode, newSelectedSlots, users, variableColors, id]);
 
   return (

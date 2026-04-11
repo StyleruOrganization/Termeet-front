@@ -18,7 +18,7 @@ const CreateButton = () => {
         <button
           disabled={!values.title || values.dates.length == 0 || Object.values(errors).some(Boolean)}
           data-test-id='create-meet'
-          className={styles.CreateMeetingPage__CreateButton}
+          className={`baseButton mainButton ${styles.CreateMeetingPage__CreateButton}`}
           type='submit'
           onClick={() => {
             scrollToTop();

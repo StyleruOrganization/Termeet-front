@@ -13,15 +13,16 @@
 }
 
 .loader__message {
+    color: var(--text-main);
+
     font-size: var(--text-body);
 }
 
-/* Анимация через clip-path от нижней части */
 .loader__logo {
     height: 56px;
     width: 44px;
 
-    color: var(--light-semantics-dark-blue-default);
+    color: var(--semantics-blue-950);
 }
 
 @keyframes fade-in {

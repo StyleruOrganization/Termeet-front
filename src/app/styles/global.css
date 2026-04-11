@@ -32,7 +32,9 @@ html {
 }
 
 body {
-  font-family: Manrope, sans-serif;
+  background-color: var(--fill-bg);
+
+  font-family: Manrope, sans-serif
 }
 
 button:focus,
@@ -44,7 +46,8 @@ textarea:focus {
 button:focus-visible,
 input:focus-visible,
 textarea:focus-visible {
-  outline: 2px solid var(--termeet-color-gray-main-100);
+  outline: 2px solid var(--fill-outline);
+  outline-offset: 2px;
 }
 
 * {
@@ -71,44 +74,44 @@ textarea:focus-visible {
 }
 
 .mainButton {
-  color: var(--light-text-inverted);
-  background-color: var(--light-semantics-dark-blue-default);
+  color: var(--text-inverted);
+  background-color: var(--semantics-blue-950);
 
   transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, opacity 0.3s ease-in-out;
 
 
   /* Задавайте актив стейт после ховера и будет все кайф */
   &:hover {
-    background-color: var(--light-semantics-dark-blue-active);
+    background-color: var(--semantics-blue-800);
   }
 
   &:active {
-    background-color: var(--light-semantics-dark-blue-active);
+    background-color: var(--semantics-blue-800);
   }
 
   &:disabled {
-    background-color: var(--light-semantics-dark-blue-disabled);
-    color: var(--light-text-inverted)
+    background-color: var(--semantics-gray-active);
+    color: var(--text-disabled);
   }
 }
 
 .secondaryButton {
-  color: var(--light-text-main);
-  background-color: var(--light-semantics-light-blue-default);
+  color: var(--text-main);
+  background-color: var(--semantics-blue-100);
 
   transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, opacity 0.3s ease-in-out;
 
   &:hover {
-    background-color: var(--light-semantics-light-blue-hover);
+    background-color: var(--semantics-blue-200);
   }
 
   &:active {
-    background-color: var(--light-semantics-light-blue-active);
+    background-color: var(--semantics-blue-300);
   }
 
   &:disabled {
-    background-color: var(--light-semantics-light-blue-disabled);
-    color: var(--light-text-inverted)
+    background-color: var(--semantics-blue-50);
+    color: var(--text-disabled)
   }
 }
 
@@ -116,21 +119,21 @@ textarea:focus-visible {
   padding: 16px;
 
 
-  color: var(--light-semantics-red-main);
-  background-color: var(--light-semantics-red-secondary);
+  color: var(--semantics-red-main);
+  background-color: var(--semantics-red-secondary);
 
   transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, opacity 0.3s ease-in-out;
 
   &:hover {
-    background-color: var(--light-semantics-red-hover);
+    background-color: var(--semantics-red-hover);
   }
 
   &:active {
-    background-color: var(--light-semantics-red-active);
+    background-color: var(--semantics-red-active);
   }
 
   &:disabled {
-    background-color: var(--light-semantics-red-disabled);
+    background-color: var(--semantics-red-disabled);
 
     opacity: 0.4;
   }
@@ -139,21 +142,21 @@ textarea:focus-visible {
 .approveButton {
   padding: 16px;
 
-  color: var(--light-semantics-green-main);
-  background-color: var(--light-semantics-green-secondary);
+  color: var(--semantics-green-main);
+  background-color: var(--semantics-green-secondary);
 
   transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, opacity 0.3s ease-in-out;
 
   &:hover {
-    background-color: var(--light-semantics-green-hover);
+    background-color: var(--semantics-green-hover);
   }
 
   &:active {
-    background-color: var(--light-semantics-green-active);
+    background-color: var(--semantics-green-active);
   }
 
   &:disabled {
-    background-color: var(--light-semantics-green-disabled);
+    background-color: var(--semantics-green-disabled);
 
     opacity: 0.4;
   }

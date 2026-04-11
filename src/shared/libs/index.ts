@@ -10,4 +10,5 @@ export { throttle } from "./funcWrappers/throttle";
 export { mergeRefs } from "./reactUtils/mergeRefs";
 export { useFocusTrap } from "./hooks/useFocusTrap";
 export { useScrollToTop } from "./hooks/useScrollToTop";
+export { useTheme } from "./hooks/useTheme";
 export { copyTextToClipboard } from "./clipboard/copyToClipBoard";

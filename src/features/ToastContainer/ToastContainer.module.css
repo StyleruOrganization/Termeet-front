@@ -47,22 +47,11 @@
 }
 
 .Toast__Success {
-  background-color: var(--light-semantics-green-active);
+  background-color: var(--semantics-green-active);
 }
 
 .Toast__Error {
-  background-color: var(--light-semantics-red-active);
-}
-
-.Toast__Wait {
-  --termeet-color-accent-wait: #e6c312;
-  background-color: var(--termeet-color-accent-wait);
-
-  opacity: 0.8;
-}
-
-.Toast__IconWait {
-  animation: rotate 2s linear infinite;
+  background-color: var(--semantics-red-active);
 }
 
 .Toast__Close {
@@ -110,7 +99,3 @@
     transform: rotate(360deg);
   }
 }
-
-/* .Toast__Info {
-
-} */

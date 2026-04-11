@@ -4,7 +4,7 @@
 
   padding: 22px 22px 24px;
 
-  background-color: var(--light-fill-controls);
+  background-color: var(--fill-controls);
   border-radius: 32px;
 
   max-width: 100%;
@@ -16,7 +16,7 @@
   align-items: center;
 
   h3 {
-    color: var(--light-text-main);
+    color: var(--text-main);
 
     font-size: var(--text-heading);
     font-weight: 800
@@ -24,7 +24,7 @@
 }
 
 .MeetPeoples__Count {
-  color: var(--light-text-secondary);
+  color: var(--semantics-gray-active);
 
   margin-left: 8px;
 }
@@ -36,7 +36,7 @@
   padding: 16px;
   
   border-radius: 16px;
-  background-color: var(--light-fill-bg);
+  background-color: var(--fill-bg);
 
   transition: background-color 0.3s ease-in-out; 
 
@@ -45,16 +45,18 @@
     width: 16px;
     height: 16px;
 
+    color: var(--text-main);
+
     transition: transform .3s ease-in-out;
     transform: rotate(90deg);
   }
 
   &:hover {
-    background-color: var(--light-components-hover)
+    background-color: var(--components-hover)
   }
 
   &:active {
-    background-color: var(--light-text-disabled)
+    background-color: var(--text-disabled)
   }
 }
 
@@ -71,7 +73,7 @@
 
   padding: 0;
 
-  color: var(--light-text-main);
+  color: var(--text-main);
 
   transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
   
@@ -94,7 +96,7 @@
   }
 
   span:hover {
-    color: var(--light-text-main);
+    color: var(--text-main);
   }
 }
 
@@ -104,16 +106,19 @@
 }
 
 .MeetPeoples__user_hovered {
-  color: var(--light-text-main);
+  color: var(--text-main);
 }
 
 .StubMessage {
+  color: var(--text-main);
+
   font-size: var(--text-body);
+  opacity: .3;
 }
 
 @supports not (selector(:has(*))) {
   .MeetPeoples__Users__Container span:hover {
-    color: var(--light-text-disabled);
+    color: var(--text-disabled);
   }
 }
 

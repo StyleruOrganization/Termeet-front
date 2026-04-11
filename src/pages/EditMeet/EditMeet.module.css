@@ -12,6 +12,8 @@
   width: 70%;
 
   h1 {
+    color: var(--text-main);
+
     font-size: var(--text-display);
     font-weight: 800;
     margin-bottom: 8px;
@@ -31,7 +33,7 @@
 }
 
 .EditMeetPage__InputsTimes__Label {
-  color: var(--light-text-main);
+  color: var(--text-main);
 
   font-size: var(--text-body);
   line-height: 1.25;
@@ -46,7 +48,7 @@
   width: 20px;
   height: 2px;
 
-  background-color: var(--light-text-main);
+  background-color: var(--text-main);
 }
 
 .EditMeetPage__Buttons{
@@ -69,7 +71,7 @@
     width: 100%;
     padding: 10px 10px 32px;
 
-    background-color: var(--light-fill-bg);
+    background-color: var(--fill-bg);
     box-shadow: 0 4px 24px rgb(0 0 0 / 12%);
 
     border-top-left-radius: 16px;

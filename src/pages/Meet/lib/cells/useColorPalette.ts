@@ -2,49 +2,49 @@ import { useMeetStore } from "@/entities/Meet";
 
 const variablesColors = [
   {
-    color: "var(--light-semantics-dark-blue-default)",
-    hoverColor: "var(--light-semantics-light-blue-disabled)",
+    color: "var(--semantics-blue-950)",
+    hoverColor: "var(--semantics-blue-50)",
   },
   {
-    color: "var(--light-semantics-dark-blue-hover)",
-    hoverColor: "var(--light-semantics-light-blue-disabled)",
+    color: "var(--semantics-blue-900)",
+    hoverColor: "var(--semantics-blue-50)",
   },
   {
-    color: "var(--light-semantics-blue-active)",
-    hoverColor: "var(--light-semantics-light-blue-disabled)",
+    color: "var(--semantics-blue-800)",
+    hoverColor: "var(--semantics-blue-50)",
   },
   {
-    color: "var(--light-semantics-blue-hover)",
-    hoverColor: "var(--light-semantics-light-blue-disabled)",
+    color: "var(--semantics-blue-700)",
+    hoverColor: "var(--semantics-blue-50)",
   },
   {
-    color: "var(--light-semantics-blue-main)",
-    hoverColor: "var(--light-semantics-light-blue-disabled)",
+    color: "var(--semantics-blue-600)",
+    hoverColor: "var(--semantics-blue-50)",
   },
   {
-    color: "var(--light-semantics-blue-500)",
-    hoverColor: "var(--light-semantics-light-blue-disabled)",
+    color: "var(--semantics-blue-500)",
+    hoverColor: "var(--semantics-blue-50)",
   },
 
   {
-    color: "var(--light-semantics-blue-400)",
-    hoverColor: "var(--light-semantics-dark-blue-default)",
+    color: "var(--semantics-blue-400)",
+    hoverColor: "var(--semantics-blue-950)",
   },
   {
-    color: "var(--light-semantics-light-blue-active)",
-    hoverColor: "var(--light-semantics-dark-blue-default)",
+    color: "var(--semantics-blue-300)",
+    hoverColor: "var(--semantics-blue-950)",
   },
   {
-    color: "var(--light-semantics-light-blue-hover)",
-    hoverColor: "var(--light-semantics-dark-blue-default)",
+    color: "var(--semantics-blue-200)",
+    hoverColor: "var(--semantics-blue-950)",
   },
   {
-    color: "var(--light-semantics-light-blue-default)",
-    hoverColor: "var(--light-semantics-dark-blue-default)",
+    color: "var(--semantics-blue-100)",
+    hoverColor: "var(--semantics-blue-950)",
   },
   {
-    color: "var(--light-semantics-light-blue-disabled)",
-    hoverColor: "var(--light-semantics-dark-blue-default)",
+    color: "var(--semantics-blue-50)",
+    hoverColor: "var(--semantics-blue-950)",
   },
 ];
 

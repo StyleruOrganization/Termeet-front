@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "prepare": "husky",
     "stylelint:fix": "stylelint **/*.css --cache-location ./node_modules/.stylelintcache --fix",
-    "build:tokens": "style-dictionary build -c tokens-config.json",
+    "build:tokens": "node ./infra/generate-vars/generateTokens.js",
     "lint:eslint": "eslint .",
     "lint:css": "stylelint **/*.css --cache-location ./node_modules/.stylelintcache",
     "type-check": "tsc -b",

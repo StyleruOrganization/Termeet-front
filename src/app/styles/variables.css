@@ -1,43 +1,165 @@
-/**
- * Do not edit directly, this file was auto-generated.
- */
+/* Auto-generated theme variables */
 
-:root {
-  --light-text-main: #2f2f2f;
-  --light-text-secondary: #9f9f9f;
-  --light-text-disabled: #d9d9d9;
-  --light-text-inverted: #f8f8f8;
-  --light-components-hover: #ececec;
-  --light-fill-bg: #fff;
-  --light-fill-controls: #f8f8f8;
-  --light-fill-outline: #f4f4f4;
-  --light-semantics-green-main: #009400;
-  --light-semantics-green-secondary: #d9ffd4;
-  --light-semantics-green-disabled: #f0ffee;
-  --light-semantics-green-hover: #b4ffab;
-  --light-semantics-green-active: #6dff5f;
-  --light-semantics-red-main: #ff1a00;
-  --light-semantics-red-secondary: #ffe1d2;
-  --light-semantics-red-disabled: #fff2ec;
-  --light-semantics-red-hover: #ffbfa4;
-  --light-semantics-red-active: #ff8f6a;
-  --light-semantics-yellow-main: #f8eb00;
-  --light-semantics-dark-blue-disabled: #bbbecb;
-  --light-semantics-dark-blue-default: #1c2651;
-  --light-semantics-dark-blue-active: #0d122d;
-  --light-semantics-dark-blue-hover: #253c83;
-  --light-semantics-light-blue-default: #dceafd;
-  --light-semantics-light-blue-hover: #c1dbfa;
-  --light-semantics-light-blue-active: #96c3f5;
-  --light-semantics-light-blue-disabled: #f0f5fe;
-  --light-semantics-black-main: #000;
-  --light-semantics-gray-default: #f4f4f4;
-  --light-semantics-gray-hover: #ececec;
-  --light-semantics-gray-active: #c9c9c9;
-  --light-semantics-blue-400: #599dee;
-  --light-semantics-blue-500: #3e81e9;
-  --light-semantics-blue-active: #2844a6;
-  --light-semantics-blue-main: #2c64dd;
-  --light-semantics-blue-hover: #2651cb;
-  --dark-text-main: #f8f8f8;
+/* Do not edit directly, this file was auto-generated */
+
+/* System preference detection */
+@media (prefers-color-scheme: light) {
+  :root {
+    --text-main: #2f2f2f;
+    --text-secondary: #9f9f9f;
+    --text-disabled: #d9d9d9;
+    --text-inverted: #f8f8f8;
+    --components-hover: #ececec;
+    --fill-bg: #fff;
+    --fill-controls: #f8f8f8;
+    --fill-outline: #000;
+    --semantics-green-main: #009400;
+    --semantics-green-secondary: #d9ffd4;
+    --semantics-green-disabled: #f0ffee;
+    --semantics-green-hover: #b4ffab;
+    --semantics-green-active: #6dff5f;
+    --semantics-red-main: #ff1a00;
+    --semantics-red-secondary: #ffe1d2;
+    --semantics-red-disabled: #fff2ec;
+    --semantics-red-hover: #ffbfa4;
+    --semantics-red-active: #ff8f6a;
+    --semantics-yellow-main: #f8eb00;
+    --semantics-dark-blue-disabled: #bbbecb;
+    --semantics-dark-blue-default: #1c2651;
+    --semantics-dark-blue-active: #0d122d;
+    --semantics-dark-blue-hover: #253c83;
+    --semantics-light-blue-default: #dceafd;
+    --semantics-light-blue-hover: #c1dbfa;
+    --semantics-light-blue-active: #96c3f5;
+    --semantics-light-blue-disabled: #f0f5fe;
+    --semantics-black-main: #000;
+    --semantics-gray-default: #f8f8f8;
+    --semantics-gray-hover: #ececec;
+    --semantics-gray-active: #c9c9c9;
+    --semantics-blue-50: #f0f5fe;
+    --semantics-blue-100: #dceafd;
+    --semantics-blue-200: #c1dbfa;
+    --semantics-blue-300: #96c3f5;
+    --semantics-blue-400: #599dee;
+    --semantics-blue-500: #3e81e9;
+    --semantics-blue-600: #2c64dd;
+    --semantics-blue-700: #2651cb;
+    --semantics-blue-800: #2844a6;
+    --semantics-blue-900: #253c83;
+    --semantics-blue-950: #1c2651;
+  }
 }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-main: #ececec;
+    --text-inverted: #2f2f2f;
+    --text-disabled: #5d5d5d;
+    --text-secondary: #3d4049;
+    --semantics-red-main: #f43;
+    --semantics-red-active: #ff6b5c;
+    --semantics-red-hover: #cc3628;
+    --semantics-red-disabled: #2e0f08;
+    --semantics-red-secondary: #4a1508;
+    --semantics-blue-50: #0b0d12;
+    --semantics-blue-100: #171b24;
+    --semantics-blue-200: #222a3a;
+    --semantics-blue-300: #2d3952;
+    --semantics-blue-400: #394a6b;
+    --semantics-blue-500: #475a84;
+    --semantics-blue-600: #566c99;
+    --semantics-blue-700: #697faa;
+    --semantics-blue-800: #7f92b7;
+    --semantics-blue-900: #96a5c2;
+    --semantics-blue-950: #aeb8cd;
+    --semantics-green-active: #00e660;
+    --semantics-green-main: #00c94d;
+    --semantics-green-disabled: #0a2618;
+    --semantics-green-hover: #00a340;
+    --semantics-green-secondary: #003d1a;
+    --semantics-gray-default: #212121;
+    --fill-outline: #fff;
+    --fill-bg: #1c1c1c;
+    --fill-controls: #1f1f1f;
+    --components-hover: #5d5d5d;
+  }
+}
+
+:root, [data-theme="light"] {
+  --text-main: #2f2f2f;
+  --text-secondary: #9f9f9f;
+  --text-disabled: #d9d9d9;
+  --text-inverted: #f8f8f8;
+  --components-hover: #ececec;
+  --fill-bg: #fff;
+  --fill-controls: #f8f8f8;
+  --fill-outline: #000;
+  --semantics-green-main: #009400;
+  --semantics-green-secondary: #d9ffd4;
+  --semantics-green-disabled: #f0ffee;
+  --semantics-green-hover: #b4ffab;
+  --semantics-green-active: #6dff5f;
+  --semantics-red-main: #ff1a00;
+  --semantics-red-secondary: #ffe1d2;
+  --semantics-red-disabled: #fff2ec;
+  --semantics-red-hover: #ffbfa4;
+  --semantics-red-active: #ff8f6a;
+  --semantics-yellow-main: #f8eb00;
+  --semantics-dark-blue-disabled: #bbbecb;
+  --semantics-dark-blue-default: #1c2651;
+  --semantics-dark-blue-active: #0d122d;
+  --semantics-dark-blue-hover: #253c83;
+  --semantics-light-blue-default: #dceafd;
+  --semantics-light-blue-hover: #c1dbfa;
+  --semantics-light-blue-active: #96c3f5;
+  --semantics-light-blue-disabled: #f0f5fe;
+  --semantics-black-main: #000;
+  --semantics-gray-default: #f8f8f8;
+  --semantics-gray-hover: #ececec;
+  --semantics-gray-active: #c9c9c9;
+  --semantics-blue-50: #f0f5fe;
+  --semantics-blue-100: #dceafd;
+  --semantics-blue-200: #c1dbfa;
+  --semantics-blue-300: #96c3f5;
+  --semantics-blue-400: #599dee;
+  --semantics-blue-500: #3e81e9;
+  --semantics-blue-600: #2c64dd;
+  --semantics-blue-700: #2651cb;
+  --semantics-blue-800: #2844a6;
+  --semantics-blue-900: #253c83;
+  --semantics-blue-950: #1c2651;
+}
+
+[data-theme="dark"] {
+  --text-main: #ececec;
+  --text-inverted: #2f2f2f;
+  --text-disabled: #5d5d5d;
+  --text-secondary: #3d4049;
+  --semantics-red-main: #f43;
+  --semantics-red-active: #ff6b5c;
+  --semantics-red-hover: #cc3628;
+  --semantics-red-disabled: #2e0f08;
+  --semantics-red-secondary: #4a1508;
+  --semantics-blue-50: #0b0d12;
+  --semantics-blue-100: #171b24;
+  --semantics-blue-200: #222a3a;
+  --semantics-blue-300: #2d3952;
+  --semantics-blue-400: #394a6b;
+  --semantics-blue-500: #475a84;
+  --semantics-blue-600: #566c99;
+  --semantics-blue-700: #697faa;
+  --semantics-blue-800: #7f92b7;
+  --semantics-blue-900: #96a5c2;
+  --semantics-blue-950: #aeb8cd;
+  --semantics-green-active: #00e660;
+  --semantics-green-main: #00c94d;
+  --semantics-green-disabled: #0a2618;
+  --semantics-green-hover: #00a340;
+  --semantics-green-secondary: #003d1a;
+  --semantics-gray-default: #212121;
+  --fill-outline: #fff;
+  --fill-bg: #1c1c1c;
+  --fill-controls: #1f1f1f;
+  --components-hover: #5d5d5d;
+}
+
