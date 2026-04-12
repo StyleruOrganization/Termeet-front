@@ -6,6 +6,8 @@
   h1 {
     text-align: center;
 
+    color: var(--text-main);
+
     font-size: var(--text-display);
     margin-bottom: 32px;
   }

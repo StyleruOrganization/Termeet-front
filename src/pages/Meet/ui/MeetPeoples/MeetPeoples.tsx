@@ -37,7 +37,7 @@ export const MeetPeoples = ({ users }: { users: string[] }) => {
       >
         <div className={styles.MeetPeoples__Title}>
           <h3>
-            Участники встречи<span className={styles.MeetPeoples__Count}>{users.length}</span>
+            Участники: <span className={styles.MeetPeoples__Count}>{users.length}</span>
           </h3>
           <button
             onClick={() => {

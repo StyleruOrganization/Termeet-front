@@ -68,6 +68,10 @@
   min-height: 750px;
 
   min-width: 750px;
+
+  svg {
+    z-index: 100;
+  }
 }
 
 [data-theme="light"] .EntryPage__Section__Bg svg{
@@ -75,7 +79,9 @@
 }
 
 [data-theme="dark"] .EntryPage__Section__Bg svg{
-  color: var(--semantics-blue-950);
+  /* Не хочу тащить переменную еще одну */
+  /* stylelint-disable-next-line */ 
+  color: #1C2651;
 }
 
 .EntryPage__Section__Bg::after {
@@ -97,7 +103,7 @@
 }
 
 [data-theme="dark"] .EntryPage__Section__Bg::after {
-  background-image: radial-gradient(circle at 6px 6px, #292f37 2px, transparent 2px);
+  background-image: radial-gradient(circle at 6px 6px, #2b2b2c 2px, transparent 2px);
 }
 
 

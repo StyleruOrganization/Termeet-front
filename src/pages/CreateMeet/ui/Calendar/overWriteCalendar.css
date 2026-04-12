@@ -66,7 +66,7 @@ abbr {
 
 
 .react-calendar__tile--now:hover {
-  background-color: var(--semantics-blue-200);
+  background-color: var(--semantics-blue-300);
 }
 
 .react-calendar__tile--now:focus-visible {

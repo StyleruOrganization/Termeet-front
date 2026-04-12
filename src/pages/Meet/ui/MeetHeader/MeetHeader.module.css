@@ -144,6 +144,8 @@
 
   padding: 16px 16px 32px;
 
+  color: var(--text-main);
+
   p {
     font-size: 3.5rem;
   }

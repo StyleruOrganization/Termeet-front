@@ -42,7 +42,8 @@
   width: 118px;
 
   svg {
-    color: var(--semantics-blue-950);
+    /* stylelint-disable-next-line */
+    color: #1E264D;
   }
 }
 
@@ -53,8 +54,10 @@
 
   padding: 6px 12px;
 
-  color: var(--text-inverted);
-  background-color: var(--semantics-blue-950);
+  /* stylelint-disable-next-line */
+  color: white;
+  /* stylelint-disable-next-line */
+  background-color: #1E264D;
   border-radius: 16px;
 
   font-size: 3rem;

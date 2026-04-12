@@ -82,11 +82,11 @@ textarea:focus-visible {
 
   /* Задавайте актив стейт после ховера и будет все кайф */
   &:hover {
-    background-color: var(--semantics-blue-800);
+    background-color: var(--semantics-blue-1000);
   }
 
   &:active {
-    background-color: var(--semantics-blue-800);
+    background-color: var(--semantics-blue-1000);
   }
 
   &:disabled {

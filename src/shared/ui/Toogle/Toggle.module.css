@@ -31,7 +31,7 @@
 }
 
 .Toogle__Option_active {
-  color: var(--semantics-blue-600);
+  color: var(--semantics-blue-900);
   background-color: var(--semantics-blue-200);
 }
 

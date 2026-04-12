@@ -24,14 +24,6 @@
     --semantics-red-hover: #ffbfa4;
     --semantics-red-active: #ff8f6a;
     --semantics-yellow-main: #f8eb00;
-    --semantics-dark-blue-disabled: #bbbecb;
-    --semantics-dark-blue-default: #1c2651;
-    --semantics-dark-blue-active: #0d122d;
-    --semantics-dark-blue-hover: #253c83;
-    --semantics-light-blue-default: #dceafd;
-    --semantics-light-blue-hover: #c1dbfa;
-    --semantics-light-blue-active: #96c3f5;
-    --semantics-light-blue-disabled: #f0f5fe;
     --semantics-black-main: #000;
     --semantics-gray-default: #f8f8f8;
     --semantics-gray-hover: #ececec;
@@ -47,6 +39,7 @@
     --semantics-blue-800: #2844a6;
     --semantics-blue-900: #253c83;
     --semantics-blue-950: #1c2651;
+    --semantics-blue-1000: #0d122d;
   }
 }
 
@@ -58,24 +51,25 @@
     --text-secondary: #3d4049;
     --semantics-red-main: #f43;
     --semantics-red-active: #ff6b5c;
-    --semantics-red-hover: #cc3628;
+    --semantics-red-hover: #780a00;
     --semantics-red-disabled: #2e0f08;
     --semantics-red-secondary: #4a1508;
-    --semantics-blue-50: #0b0d12;
-    --semantics-blue-100: #171b24;
-    --semantics-blue-200: #222a3a;
-    --semantics-blue-300: #2d3952;
-    --semantics-blue-400: #394a6b;
-    --semantics-blue-500: #475a84;
-    --semantics-blue-600: #566c99;
-    --semantics-blue-700: #697faa;
-    --semantics-blue-800: #7f92b7;
-    --semantics-blue-900: #96a5c2;
-    --semantics-blue-950: #aeb8cd;
+    --semantics-blue-50: #161b25;
+    --semantics-blue-100: #172238;
+    --semantics-blue-200: #172848;
+    --semantics-blue-300: #173159;
+    --semantics-blue-400: #15386b;
+    --semantics-blue-500: #143e7c;
+    --semantics-blue-600: #14448f;
+    --semantics-blue-700: #134aa0;
+    --semantics-blue-800: #1451b1;
+    --semantics-blue-900: #0e58c2;
+    --semantics-blue-950: #0c5ed3;
+    --semantics-blue-1000: #0a64e4;
     --semantics-green-active: #00e660;
     --semantics-green-main: #00c94d;
     --semantics-green-disabled: #0a2618;
-    --semantics-green-hover: #00a340;
+    --semantics-green-hover: #00702c;
     --semantics-green-secondary: #003d1a;
     --semantics-gray-default: #212121;
     --fill-outline: #fff;
@@ -105,14 +99,6 @@
   --semantics-red-hover: #ffbfa4;
   --semantics-red-active: #ff8f6a;
   --semantics-yellow-main: #f8eb00;
-  --semantics-dark-blue-disabled: #bbbecb;
-  --semantics-dark-blue-default: #1c2651;
-  --semantics-dark-blue-active: #0d122d;
-  --semantics-dark-blue-hover: #253c83;
-  --semantics-light-blue-default: #dceafd;
-  --semantics-light-blue-hover: #c1dbfa;
-  --semantics-light-blue-active: #96c3f5;
-  --semantics-light-blue-disabled: #f0f5fe;
   --semantics-black-main: #000;
   --semantics-gray-default: #f8f8f8;
   --semantics-gray-hover: #ececec;
@@ -128,6 +114,7 @@
   --semantics-blue-800: #2844a6;
   --semantics-blue-900: #253c83;
   --semantics-blue-950: #1c2651;
+  --semantics-blue-1000: #0d122d;
 }
 
 [data-theme="dark"] {
@@ -137,24 +124,25 @@
   --text-secondary: #3d4049;
   --semantics-red-main: #f43;
   --semantics-red-active: #ff6b5c;
-  --semantics-red-hover: #cc3628;
+  --semantics-red-hover: #780a00;
   --semantics-red-disabled: #2e0f08;
   --semantics-red-secondary: #4a1508;
-  --semantics-blue-50: #0b0d12;
-  --semantics-blue-100: #171b24;
-  --semantics-blue-200: #222a3a;
-  --semantics-blue-300: #2d3952;
-  --semantics-blue-400: #394a6b;
-  --semantics-blue-500: #475a84;
-  --semantics-blue-600: #566c99;
-  --semantics-blue-700: #697faa;
-  --semantics-blue-800: #7f92b7;
-  --semantics-blue-900: #96a5c2;
-  --semantics-blue-950: #aeb8cd;
+  --semantics-blue-50: #161b25;
+  --semantics-blue-100: #172238;
+  --semantics-blue-200: #172848;
+  --semantics-blue-300: #173159;
+  --semantics-blue-400: #15386b;
+  --semantics-blue-500: #143e7c;
+  --semantics-blue-600: #14448f;
+  --semantics-blue-700: #134aa0;
+  --semantics-blue-800: #1451b1;
+  --semantics-blue-900: #0e58c2;
+  --semantics-blue-950: #0c5ed3;
+  --semantics-blue-1000: #0a64e4;
   --semantics-green-active: #00e660;
   --semantics-green-main: #00c94d;
   --semantics-green-disabled: #0a2618;
-  --semantics-green-hover: #00a340;
+  --semantics-green-hover: #00702c;
   --semantics-green-secondary: #003d1a;
   --semantics-gray-default: #212121;
   --fill-outline: #fff;

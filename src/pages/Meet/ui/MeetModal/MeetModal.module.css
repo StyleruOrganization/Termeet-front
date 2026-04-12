@@ -51,10 +51,8 @@
 }
 
 [data-theme="dark"] .MeetModal__HeaderBg::after {
-  background-image: radial-gradient(circle at 6px 6px, #292f37 2px, transparent 2px);
+  background-image: radial-gradient(circle at 6px 6px, #2b2b2c 2px, transparent 2px);
 }
-
-
 
 .MeetModal__HeaderBg__SmallIcon {
   position: absolute;
@@ -68,12 +66,18 @@
   right: 0;
 }
 
+.MeetModal__HeaderBg__BigIcon, .MeetModal__HeaderBg__SmallIcon {
+  z-index: 100;
+}
+
 [data-theme="light"] .MeetModal__HeaderBg__SmallIcon, [data-theme="light"] .MeetModal__HeaderBg__BigIcon{
   color: var(--semantics-blue-400);
 }
 
 [data-theme="dark"] .MeetModal__HeaderBg__SmallIcon, [data-theme="dark"] .MeetModal__HeaderBg__BigIcon{
-  color: var(--semantics-blue-950);
+  /* Не хочу тащить переменную еще одну */
+  /* stylelint-disable-next-line */ 
+  color: #1C2651;
 }
 
 .MeetModal__PrintIcon{

@@ -152,7 +152,7 @@ export const TableCell = ({ id, users, isDisabled, isFirstCell, isLastCell, colu
 
   const hoverColor = useMemo(() => {
     return isEditingMode && newSelectedSlots?.includes(id.split("T")[1])
-      ? "var(--semantics-blue-50)"
+      ? "var(--semantics-blue-950)"
       : users?.length
         ? variableColors?.hoverColor
         : "var(--semantics-blue-950)";
@@ -183,7 +183,6 @@ export const TableCell = ({ id, users, isDisabled, isFirstCell, isLastCell, colu
             position: "fixed",
             top: `${tooltipPosition.top}px`,
             left: `${tooltipPosition.left}px`,
-            // // left: `auto`,
           }}
         >
           {tooltipPosition.arrowDirection === "down" ? (

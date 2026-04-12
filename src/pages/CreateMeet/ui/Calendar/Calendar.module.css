@@ -74,11 +74,15 @@
   color: var(--fill-bg);
   background-color: var(--semantics-blue-950);
 
+  border-color: var(--semantics-blue-950);
+
   opacity: 1
 }
 
 .Calendar__Day.Calendar__Day_Selected:hover {
-  background-color: var(--semantics-blue-800);
+  background-color: var(--semantics-blue-1000);
+
+  border-color: var(--semantics-blue-1000);
 }
 
 .Calendar__Day_Selected:focus-visible {

@@ -44,21 +44,8 @@
 }
 
 .CreateMeetingPage__CreateButton {
-  width: 100%;
-  padding: 16px;
-
-  text-align: center;
-
-  color: var(--text-disabled);
-  background-color: var(--semantics-blue-950);
-  border-radius: 16px;
   border: 1px solid transparent;
 
-  transition: opacity 0.2s ease-in-out, background-color 0.2s ease-in-out;
-
-  cursor: pointer;
-
-  font-size: var(--text-body);
   line-height: 1.25;
 }
 
