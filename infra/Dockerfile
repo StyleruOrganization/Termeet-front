@@ -11,8 +11,16 @@ RUN pnpm run build
 
 FROM nginx:alpine
 
-COPY infra/nginx.conf /etc/nginx/conf.d/default.conf
+# Копируем шаблон конфига (не готовый конфиг!)
+COPY infra/nginx.conf.template /etc/nginx/templates/default.conf.template
 
+# Копируем entrypoint скрипт
+COPY infra/deploy/entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
+# Копируем собранный фронт
 COPY --from=builder /app/dist /usr/share/nginx/html
 
 EXPOSE 80
+
+ENTRYPOINT ["/docker-entrypoint.sh"]

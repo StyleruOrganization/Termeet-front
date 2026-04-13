@@ -1,4 +1,4 @@
-name: Deploy preprod
+name: Deploy Preprod
 run-name: "Build and Deploy PreProd"
 
 on:
@@ -11,9 +11,12 @@ jobs:
     env:
       Y_TOKEN: ${{ secrets.Y_TOKEN }}
       REGISTRY: cr.yandex/${{ secrets.CONTAINER_REGISTRY }}
+      IMAGE_TAG: ${{ github.sha }}
       DOMAIN: termeet-dev.ru
       EMAIL: ${{ secrets.EMAIL }}
-      IMAGE_TAG: ${{ github.sha }}
+      BACKEND_CONTAINER: backend      # ← имя существующего контейнера!
+      BACKEND_PORT: 8000
+      BACKEND_HOST: backend.termeet-dev.ru
     runs-on: ubuntu-latest
     
     steps:
@@ -37,6 +40,7 @@ jobs:
       - name: Push Docker images
         run: |
           docker push ${REGISTRY}/frontend:${IMAGE_TAG}
+          docker push ${REGISTRY}/frontend:latest
 
       - name: Deploy to server
         uses: appleboy/ssh-action@v1.0.0
@@ -44,33 +48,30 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          envs: Y_TOKEN,REGISTRY,DOMAIN,EMAIL,IMAGE_TAG
+          envs: Y_TOKEN,REGISTRY,IMAGE_TAG,DOMAIN,EMAIL,BACKEND_CONTAINER,BACKEND_PORT,BACKEND_HOST
           script: |
-            # Останавливаем и удаляем старый контейнер
-            docker stop frontend 2>/dev/null || true
-            docker rm frontend 2>/dev/null || true
-
             echo "${Y_TOKEN}" | docker login \
               --username oauth \
               --password-stdin \
               cr.yandex
             
-            # Скачиваем конкретный образ по SHA
             docker pull ${REGISTRY}/frontend:${IMAGE_TAG}
             
-            # Останавливаем и удаляем старый контейнер
+            # Останавливаем старый frontend (preprod)
             docker stop frontend 2>/dev/null || true
             docker rm frontend 2>/dev/null || true
-
-            # Удаляем контейнеры образы которые не используются
-            docker image prune --force
             
-            # Запускаем новый контейнер с конкретным тегом
+            # Запускаем новый frontend для preprod
             docker run -d \
               --name frontend \
+              -e BACKEND_CONTAINER=${BACKEND_CONTAINER} \
+              -e BACKEND_PORT=${BACKEND_PORT} \
+              -e BACKEND_HOST=${BACKEND_HOST} \
               -e VIRTUAL_HOST=${DOMAIN} \
               -e LETSENCRYPT_EMAIL=${EMAIL} \
               -e LETSENCRYPT_HOST=${DOMAIN} \
               --network nginx-proxy \
               --restart unless-stopped \
               ${REGISTRY}/frontend:${IMAGE_TAG}
+            
+            docker image prune -f
