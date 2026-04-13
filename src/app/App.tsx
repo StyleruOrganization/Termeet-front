@@ -17,22 +17,22 @@ import "./styles/variables.css";
 export const App = () => {
   useTheme();
   return (
-    <ErrorBoundary
-      fallbackRender={() => (
-        <>
-          <Stub message='Что-то пошло не так' />
-        </>
-      )}
-    >
-      <QueryClientProvider client={queryClient}>
-        <Suspense fallback={<Loader message='Загрузка ...' />}>
-          <Router>
+    <QueryClientProvider client={queryClient}>
+      <Suspense fallback={<Loader message='Загрузка ...' />}>
+        <Router>
+          <ErrorBoundary
+            fallbackRender={() => (
+              <>
+                <Stub message='Что-то пошло не так' />
+              </>
+            )}
+          >
             <ScrollRestoration />
             <Routing />
-          </Router>
-        </Suspense>
-        <ReactQueryDevtools />
-      </QueryClientProvider>
-    </ErrorBoundary>
+          </ErrorBoundary>
+        </Router>
+      </Suspense>
+      <ReactQueryDevtools />
+    </QueryClientProvider>
   );
 };
