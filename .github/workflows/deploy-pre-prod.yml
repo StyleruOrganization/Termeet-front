@@ -14,7 +14,6 @@ jobs:
       IMAGE_TAG: ${{ github.sha }}
       DOMAIN: termeet-dev.ru
       EMAIL: ${{ secrets.EMAIL }}
-      BACKEND_CONTAINER: backend      # ← имя существующего контейнера!
       BACKEND_PORT: 8000
       BACKEND_HOST: backend.termeet-dev.ru
     runs-on: ubuntu-latest
@@ -48,7 +47,7 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          envs: Y_TOKEN,REGISTRY,IMAGE_TAG,DOMAIN,EMAIL,BACKEND_CONTAINER,BACKEND_PORT,BACKEND_HOST
+          envs: Y_TOKEN,REGISTRY,IMAGE_TAG,DOMAIN,EMAIL,BACKEND_PORT,BACKEND_HOST
           script: |
             echo "${Y_TOKEN}" | docker login \
               --username oauth \
@@ -64,7 +63,6 @@ jobs:
             # Запускаем новый frontend для preprod
             docker run -d \
               --name frontend \
-              -e BACKEND_CONTAINER=${BACKEND_CONTAINER} \
               -e BACKEND_PORT=${BACKEND_PORT} \
               -e BACKEND_HOST=${BACKEND_HOST} \
               -e VIRTUAL_HOST=${DOMAIN} \
