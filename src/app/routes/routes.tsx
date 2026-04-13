@@ -23,7 +23,7 @@ export const Routing = () => {
         <Route path='/create' element={withSuspense(CreateMeetPage, "Загружаем страницу...")} />
         <Route path='/meet/:hash' element={withSuspense(MeetPage, "Загружаем слоты...")} />
         <Route path='/meet/edit/:hash' element={withSuspense(EditMeetPage, "Загружаем информацию о встрече...")} />
-        <Route path='*' element={withSuspense(StubPage, "Загрузка...")} />
+        <Route path='*' element={<StubPage message='Мы не нашли страницу, которую ты ищешь' />} />
       </Route>
     </ReactRoutes>
   );
