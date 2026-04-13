@@ -8,6 +8,7 @@
   padding-bottom: 24px;
 
   background-color: var(--fill-controls);
+  border: 1px solid var(--semantics-gray-hover);
   border-radius: 32px;
 
   font-size: 3rem;

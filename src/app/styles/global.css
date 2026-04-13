@@ -74,7 +74,7 @@ textarea:focus-visible {
 }
 
 .mainButton {
-  color: var(--text-inverted);
+  color: var(--light);
   background-color: var(--semantics-blue-950);
 
   transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, opacity 0.3s ease-in-out;

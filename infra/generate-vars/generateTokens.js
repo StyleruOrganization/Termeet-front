@@ -30,36 +30,28 @@ function generateRootCSS(themes) {
   // Получаем токены
   const lightTokens = flattenTokens(themes.light);
   const darkTokens = flattenTokens(themes.dark);
+  const constTokens = flattenTokens(themes.const);
 
   // Медиа-запросы для системных настроек
   css += `/* System preference detection */\n`;
 
-  css += `@media (prefers-color-scheme: light) {\n`;
-  css += `  :root {\n`;
-  for (const [varName, value] of Object.entries(lightTokens)) {
-    css += `    ${varName}: ${value};\n`;
-  }
-  css += `  }\n`;
-  css += `}\n\n`;
-
-  css += `@media (prefers-color-scheme: dark) {\n`;
-  css += `  :root {\n`;
-  for (const [varName, value] of Object.entries(darkTokens)) {
-    css += `    ${varName}: ${value};\n`;
-  }
-  css += `  }\n`;
-  css += `}\n`;
-
   // Светлая тема (явная)
-  css += `:root, [data-theme="light"] {\n`;
+  css += `:root[data-theme="light"] {\n`;
   for (const [varName, value] of Object.entries(lightTokens)) {
     css += `  ${varName}: ${value};\n`;
   }
   css += `}\n\n`;
 
   // Темная тема (явная)
-  css += `[data-theme="dark"] {\n`;
+  css += `:root[data-theme="dark"] {\n`;
   for (const [varName, value] of Object.entries(darkTokens)) {
+    css += `  ${varName}: ${value};\n`;
+  }
+  css += `}\n\n`;
+
+  // Константы
+  css += `:root {\n`;
+  for (const [varName, value] of Object.entries(constTokens)) {
     css += `  ${varName}: ${value};\n`;
   }
   css += `}\n\n`;

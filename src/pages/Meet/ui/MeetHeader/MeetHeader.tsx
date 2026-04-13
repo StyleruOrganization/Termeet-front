@@ -44,7 +44,7 @@ export const MeetHeader = ({ duration, description, name, link }: MeetHeaderProp
         >
           <Pencil />
         </button>
-        {description && (
+        {(WINDOW_WIDTH < 768 || description) && (
           <button
             onClick={() => {
               if (WINDOW_WIDTH < 768) {
@@ -86,10 +86,12 @@ export const MeetHeader = ({ duration, description, name, link }: MeetHeaderProp
             <div className={styles.MeetHeader__modalTitle}>Название встречи</div>
             <p>{name}</p>
           </div>
-          <div>
-            <div className={styles.MeetHeader__modalTitle}>Описание встречи</div>
-            <p>{description}</p>
-          </div>
+          {description && (
+            <div>
+              <div className={styles.MeetHeader__modalTitle}>Описание встречи</div>
+              <p>{description}</p>
+            </div>
+          )}
         </div>
       </ModalWrapper>
     </div>

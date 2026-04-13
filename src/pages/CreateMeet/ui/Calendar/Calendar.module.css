@@ -48,7 +48,7 @@
   border-radius: 8px;
   border: 1px solid transparent;
 
-  transition: background-color 0.2s ease-in-out;
+  transition: background-color 0.2s ease-in-out, border-radius 0.2s ease-in-out;
 
   font-size: var(--text-body);
 }
@@ -64,6 +64,10 @@
 
 .Calendar__Day:hover {
   background-color: var(--components-hover);
+}
+
+.Calendar__Day:active {
+  transform: scale(0.95);
 }
 
 .Calendar__Day:disabled:hover {

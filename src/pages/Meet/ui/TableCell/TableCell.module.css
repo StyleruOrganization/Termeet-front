@@ -54,8 +54,7 @@
 
   padding: 6px 12px;
 
-  /* stylelint-disable-next-line */
-  color: white;
+  color: var(--light);
   /* stylelint-disable-next-line */
   background-color: #1E264D;
   border-radius: 16px;

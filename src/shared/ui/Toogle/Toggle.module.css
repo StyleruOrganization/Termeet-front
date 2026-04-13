@@ -5,6 +5,7 @@
   padding: 4px;
 
   background-color: var(--fill-controls);
+  border: 1px solid var(--semantics-gray-hover);
   border-radius: 32px;
 }
 

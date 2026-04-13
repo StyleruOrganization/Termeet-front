@@ -29,6 +29,7 @@
 
   color: var(--text-main);
   background-color: var(--fill-controls);
+  border: 1px solid var(--semantics-gray-hover);
   border-radius: 16px;
 
   transition: background-color 0.3s ease-in-out;
