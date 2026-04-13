@@ -14,7 +14,6 @@ services:
       - LETSENCRYPT_HOST=termeet.tech
       - LETSENCRYPT_EMAIL=${EMAIL:-admin@termeet.tech}
       - BACKEND_HOST=backend.termeet.tech
-      - BACKEND_PORT=8001
       - BACKEND_CONTAINER=backend-prod
     expose:
       - 80
