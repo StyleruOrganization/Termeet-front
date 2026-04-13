@@ -8,7 +8,7 @@ echo "VIRTUAL_HOST: ${VIRTUAL_HOST}"
 echo "========================================="
 
 # Заменяем переменные в шаблоне
-envsubst '${BACKEND_PORT} ${BACKEND_HOST}' < /etc/nginx/templates/default.conf.template > /etc/nginx/conf.d/default.conf
+envsubst '${BACKEND_CONTAINER} ${BACKEND_PORT} ${BACKEND_HOST}' < /etc/nginx/templates/default.conf.template > /etc/nginx/conf.d/default.conf
 
 # Показываем сгенерированный конфиг (для отладки)
 echo "=== Generated nginx config ==="
