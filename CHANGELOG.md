@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.1] - 2026-04-13
+
+### Changes
+- update configs and configure proxy for prod backend
+- some corrections for deploy
+- some corrections for deploy
+- added error-boudary
+- added error-boudary
+- corrections
+- corrections
+- corrections
+- corrections
+- corrections
+- corrections
+- correcions in proxy address
+- correcions in port for prod backend
+- correcions in port for prod backend
+- correcions in port for back
+- correcions in port for back
+
+
+All notable changes to this project will be documented in this file.
+
 ## [1.1.0] - 2026-04-13
 
 ### Changes
