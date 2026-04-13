@@ -13,7 +13,7 @@ services:
       - VIRTUAL_PORT=80
       - LETSENCRYPT_HOST=termeet.tech
       - LETSENCRYPT_EMAIL=${EMAIL:-admin@termeet.tech}
-      - BACKEND_HOST=https://backend.termeet.tech
+      - BACKEND_HOST=backend.termeet.tech
       - BACKEND_PORT=8000
       - BACKEND_CONTAINER=backend-prod
     expose:

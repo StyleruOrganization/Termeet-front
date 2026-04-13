@@ -15,7 +15,7 @@ jobs:
       DOMAIN: termeet-dev.ru
       EMAIL: ${{ secrets.EMAIL }}
       BACKEND_PORT: 8000
-      BACKEND_HOST: https://backend.termeet-dev.ru/
+      BACKEND_HOST: backend.termeet-dev.ru
       BACKEND_CONTAINER: backend
     runs-on: ubuntu-latest
     
