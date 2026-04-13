@@ -66,6 +66,7 @@ jobs:
               --name frontend \
               -e BACKEND_HOST=${BACKEND_HOST} \
               -e BACKEND_CONTAINER=${BACKEND_CONTAINER} \
+              -e BACKEND_PORT=${BACKEND_PORT} \
               -e VIRTUAL_HOST=${DOMAIN} \
               -e LETSENCRYPT_EMAIL=${EMAIL} \
               -e LETSENCRYPT_HOST=${DOMAIN} \

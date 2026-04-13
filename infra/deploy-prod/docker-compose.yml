@@ -15,6 +15,7 @@ services:
       - LETSENCRYPT_EMAIL=${EMAIL:-admin@termeet.tech}
       - BACKEND_HOST=backend.termeet.tech
       - BACKEND_CONTAINER=backend-prod
+      - BACKEND_PORT=8000
     expose:
       - 80
     command: nginx -g "daemon off;"
