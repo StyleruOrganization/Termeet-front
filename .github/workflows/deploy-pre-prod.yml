@@ -48,7 +48,7 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          envs: Y_TOKEN,REGISTRY,IMAGE_TAG,DOMAIN,EMAIL,BACKEND_PORT,BACKEND_HOST
+          envs: Y_TOKEN,REGISTRY,IMAGE_TAG,DOMAIN,EMAIL,BACKEND_PORT,BACKEND_HOST,BACKEND_CONTAINER
           script: |
             echo "${Y_TOKEN}" | docker login \
               --username oauth \

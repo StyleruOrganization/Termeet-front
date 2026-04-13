@@ -4,6 +4,7 @@ set -e
 echo "=== Starting nginx with env variables ==="
 echo "BACKEND_PORT: ${BACKEND_PORT}"
 echo "BACKEND_HOST: ${BACKEND_HOST}"
+echo "BACKEND_CONTAINER: ${BACKEND_CONTAINER}"
 echo "VIRTUAL_HOST: ${VIRTUAL_HOST}"
 echo "========================================="
 
