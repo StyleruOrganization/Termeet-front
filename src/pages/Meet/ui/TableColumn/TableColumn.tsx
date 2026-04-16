@@ -83,6 +83,7 @@ export const TableColumn = memo(({ columnId, columnWidth, timeRanges }: TableCol
     const dataId = cell?.getAttribute("data-id")?.split("T")[1];
     const isDisabled = cell?.getAttribute("data-disabled-cell") === "true";
 
+    // Не хотим чтобы ячейка красилась, если мы скроллим горизонтально на мобилах
     if (!dataId || isDisabled || !isEditing || !isSelecting || Math.abs(e.clientY - clientY) <= 3) return;
 
     if (isRemoving && newSelectedSlots?.includes(dataId)) {
