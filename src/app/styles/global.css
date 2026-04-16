@@ -31,7 +31,7 @@ html {
   }
 }
 
-body {
+body, pre {
   background-color: var(--fill-bg);
 
   font-family: Manrope, sans-serif

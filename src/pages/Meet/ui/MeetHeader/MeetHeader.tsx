@@ -89,7 +89,7 @@ export const MeetHeader = ({ duration, description, name, link }: MeetHeaderProp
           {description && (
             <div>
               <div className={styles.MeetHeader__modalTitle}>Описание встречи</div>
-              <p>{description}</p>
+              <pre>{description}</pre>
             </div>
           )}
         </div>
