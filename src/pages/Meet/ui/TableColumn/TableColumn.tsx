@@ -65,7 +65,8 @@ export const TableColumn = memo(({ columnId, columnWidth, timeRanges }: TableCol
     e.preventDefault();
     const cell = document.elementFromPoint(e.clientX, e.clientY);
     const dataId = cell?.getAttribute("data-id")?.split("T")[1];
-    if (!dataId) return;
+    const isDisabled = cell?.getAttribute("data-disabled-cell") === "true";
+    if (!dataId || isDisabled) return;
 
     setIsSelecting(true);
     setClientY(e.clientY);
@@ -77,17 +78,14 @@ export const TableColumn = memo(({ columnId, columnWidth, timeRanges }: TableCol
 
   const handlePointerMove: React.PointerEventHandler<HTMLDivElement> = e => {
     e.preventDefault();
-    if (!isEditing) return;
-    if (!isSelecting) return;
-    console.log("handlePointerMove");
 
     const cell = document.elementFromPoint(e.clientX, e.clientY);
     const dataId = cell?.getAttribute("data-id")?.split("T")[1];
-    if (!dataId) return;
+    const isDisabled = cell?.getAttribute("data-disabled-cell") === "true";
 
-    console.log("Coords in handlePointerMove", e.clientX, e.clientY);
+    if (!dataId || isDisabled || !isEditing || !isSelecting || Math.abs(e.clientY - clientY) <= 3) return;
 
-    if ((isRemoving && newSelectedSlots?.includes(dataId)) || Math.abs(e.clientY - clientY) <= 1) {
+    if (isRemoving && newSelectedSlots?.includes(dataId)) {
       console.log(`delete ${dataId} in pointer move`);
 
       setSelectNewSell(columnId, dataId, true);
@@ -99,17 +97,16 @@ export const TableColumn = memo(({ columnId, columnWidth, timeRanges }: TableCol
   };
 
   const handlePointerUp: React.PointerEventHandler<HTMLDivElement> = e => {
-    setIsSelecting(false);
-    setIsRemoving(false);
-    console.log("handlePointerUp");
     e.preventDefault();
-    if (!isSelecting) return;
-    console.log("handlePointerMove");
 
     const cell = document.elementFromPoint(e.clientX, e.clientY);
     const dataId = cell?.getAttribute("data-id")?.split("T")[1];
+    const isDisabled = cell?.getAttribute("data-disabled-cell") === "true";
 
-    if (!dataId) return;
+    if (!dataId || isDisabled || !isEditing || !isSelecting) return;
+
+    setIsSelecting(false);
+    setIsRemoving(false);
 
     if (isRemoving && newSelectedSlots?.includes(dataId)) {
       console.log(`delete ${dataId} in pointer move`);
@@ -123,6 +120,7 @@ export const TableColumn = memo(({ columnId, columnWidth, timeRanges }: TableCol
   };
 
   console.log("NEW SELECTED SLOTS", newSelectedSlots);
+  console.log("Cell Ranges", cellIds);
 
   const justifyContent = cellIds?.length == 0 ? (isShowBefore.isShow ? "start" : isShowAfter.isShow ? "end" : "") : "";
 
@@ -141,14 +139,14 @@ export const TableColumn = memo(({ columnId, columnWidth, timeRanges }: TableCol
                   isFirstCell={cellIndex == 0}
                   id={cellId}
                   key={cellId}
-                  isDisabled
+                  isTimeZoneDisabled
                 />
               ))}
               <TableCell
                 isLastCell={cellIds?.length == 0 && isShowAfter.isShow == false}
                 isFirstCell={disabledBeforeCells.length == 0}
                 id={"disabled-cell"}
-                isDisabled
+                isTimeZoneDisabled
                 columnRef={columnRef}
               />
             </>
@@ -165,6 +163,7 @@ export const TableColumn = memo(({ columnId, columnWidth, timeRanges }: TableCol
               {cellsRange.map((cell, cellIndex) => {
                 const key = cell.split("T")[1];
                 const selectedPersons = userSlots?.get(key) || [];
+                const isBeforeCurrentTime = new Date(cell).getTime() < Date.now();
                 return (
                   <TableCell
                     columnRef={columnRef}
@@ -177,6 +176,7 @@ export const TableColumn = memo(({ columnId, columnWidth, timeRanges }: TableCol
                     id={cell}
                     key={cell}
                     users={selectedPersons}
+                    isBeforeCurrentTime={isBeforeCurrentTime}
                   />
                 );
               })}
@@ -186,7 +186,7 @@ export const TableColumn = memo(({ columnId, columnWidth, timeRanges }: TableCol
                   isLastCell={false}
                   isFirstCell={false}
                   id={"disabled-cell"}
-                  isDisabled
+                  isTimeZoneDisabled
                 />
               )}
             </div>
@@ -195,7 +195,13 @@ export const TableColumn = memo(({ columnId, columnWidth, timeRanges }: TableCol
           {/* Фейковые слоты после активного диапазона */}
           {isShowAfter.isShow && (
             <>
-              <TableCell columnRef={columnRef} isLastCell={false} isFirstCell={false} id={"disabled-cell"} isDisabled />
+              <TableCell
+                columnRef={columnRef}
+                isLastCell={false}
+                isFirstCell={false}
+                id={"disabled-cell"}
+                isTimeZoneDisabled
+              />
               {disabledAfterCells.map((cellId, cellIndex) => (
                 <TableCell
                   columnRef={columnRef}
@@ -203,7 +209,7 @@ export const TableColumn = memo(({ columnId, columnWidth, timeRanges }: TableCol
                   isLastCell={cellIndex == disabledAfterCells.length - 1}
                   id={cellId}
                   key={cellId}
-                  isDisabled
+                  isTimeZoneDisabled
                 />
               ))}
             </>

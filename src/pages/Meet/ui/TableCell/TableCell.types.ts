@@ -9,9 +9,13 @@ export interface TableCellProps {
   users?: string[];
 
   /**
-   * Показываем как неактивную ячейку(В случаях переходов из-за часовых поясов)
+   * Показываем как неактивную ячейку (В случаях переходов из-за часовых поясов)
    */
-  isDisabled?: boolean;
+  isTimeZoneDisabled?: boolean;
+  /**
+   * Если время раньше текущего
+   */
+  isBeforeCurrentTime?: boolean;
   /**
    * true если ячейка первая в колонке
    */

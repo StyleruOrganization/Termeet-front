@@ -11,7 +11,15 @@ const OFFSET_Y = 4; // отступ от ячейки
 const TOOLTIP_DISABLED_HEIGHT = 72 + ARROW_HEIGHT + OFFSET_Y;
 const TOOLTIP_USUAL_HEIGHT = 40 + ARROW_HEIGHT + OFFSET_Y;
 
-export const TableCell = ({ id, users, isDisabled, isFirstCell, isLastCell, columnRef }: TableCellProps) => {
+export const TableCell = ({
+  id,
+  users,
+  isTimeZoneDisabled,
+  isBeforeCurrentTime,
+  isFirstCell,
+  isLastCell,
+  columnRef,
+}: TableCellProps) => {
   const setHoveredUsers = useMeetStore(store => store.setHoveredUsers),
     isEditingMode = useMeetStore(store => store.isEditing),
     hoveredUser = useMeetStore(store => store.hoveredUser),
@@ -32,14 +40,14 @@ export const TableCell = ({ id, users, isDisabled, isFirstCell, isLastCell, colu
   });
 
   const timeInterval = useMemo(() => {
-    if (isDisabled) return;
+    if (isTimeZoneDisabled) return;
     const [hours, minutes] = id.split("T")[1].split(":").map(Number);
     const totalminutes = hours * 60 + minutes + 30;
 
     return `${hours}:${minutes.toString().padStart(2, "0")} - ${Math.floor(totalminutes / 60)
       .toString()
       .padStart(2, "0")}:${(totalminutes % 60).toString().padStart(2, "0")}`;
-  }, [id, isDisabled]);
+  }, [id, isTimeZoneDisabled]);
 
   // Функция для расчета позиции тултипа
   const calculateTooltipPosition = useCallback(() => {
@@ -48,7 +56,7 @@ export const TableCell = ({ id, users, isDisabled, isFirstCell, isLastCell, colu
     const cellRect = cellRef.current.getBoundingClientRect();
     const columnRect = columnRef.current.getBoundingClientRect();
     const cellWidth = cellRect.width;
-    const TOOLTIP_HEIGHT = isDisabled ? TOOLTIP_DISABLED_HEIGHT : TOOLTIP_USUAL_HEIGHT;
+    const TOOLTIP_HEIGHT = isTimeZoneDisabled || isBeforeCurrentTime ? TOOLTIP_DISABLED_HEIGHT : TOOLTIP_USUAL_HEIGHT;
     const WINDOW_WIDTH = window.innerWidth;
 
     // Базовая позиция: над ячейкой
@@ -92,7 +100,7 @@ export const TableCell = ({ id, users, isDisabled, isFirstCell, isLastCell, colu
 
       setTooltipPosition(poistions);
     }
-  }, [columnRef, cellRef, isDisabled]);
+  }, [columnRef, cellRef, isTimeZoneDisabled, isBeforeCurrentTime]);
 
   // Показываем тултип при наведении на десктопе и при клике на мобилах
   const handleMoveCell: React.MouseEventHandler = e => {
@@ -158,6 +166,10 @@ export const TableCell = ({ id, users, isDisabled, isFirstCell, isLastCell, colu
         : "var(--semantics-blue-950)";
   }, [isEditingMode, newSelectedSlots, users, variableColors, id]);
 
+  const isDisabled = useMemo(() => {
+    return isTimeZoneDisabled || (isBeforeCurrentTime && users?.length == 0) || (isBeforeCurrentTime && isEditingMode);
+  }, [isTimeZoneDisabled, isBeforeCurrentTime, users, isEditingMode]);
+
   return (
     <div
       style={
@@ -168,11 +180,12 @@ export const TableCell = ({ id, users, isDisabled, isFirstCell, isLastCell, colu
         } as React.CSSProperties
       }
       ref={cellRef}
-      data-first-cell={isFirstCell}
-      data-last-cell={isLastCell}
       onClick={handleMoveCell}
       onPointerMove={handleMoveCell}
       onPointerLeave={handlePointerLeave}
+      data-first-cell={isFirstCell}
+      data-last-cell={isLastCell}
+      data-disabled-cell={isDisabled}
       data-id={id}
       className={styles.TableCell + (isDisabled ? " " + styles.TableCell_disabled : "")}
     >
@@ -190,7 +203,11 @@ export const TableCell = ({ id, users, isDisabled, isFirstCell, isLastCell, colu
           ) : null}
 
           <div className={styles.cellTooltipContent}>
-            {isDisabled ? (
+            {isBeforeCurrentTime ? (
+              <>
+                <span className={styles.cellTooltipDisabled}>Это время из прошлого, его выбрать не получится</span>
+              </>
+            ) : isTimeZoneDisabled ? (
               <>
                 <span className={styles.cellTooltipDisabled}>Это время недоступно из-за смены часовых поясов</span>
               </>
