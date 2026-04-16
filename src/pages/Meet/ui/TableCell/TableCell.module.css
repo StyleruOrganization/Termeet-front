@@ -41,6 +41,8 @@
 
   width: 118px;
 
+  pointer-events: none;
+
   svg {
     /* stylelint-disable-next-line */
     color: #1E264D;

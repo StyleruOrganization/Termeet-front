@@ -94,8 +94,8 @@ export const TableCell = ({ id, users, isDisabled, isFirstCell, isLastCell, colu
     }
   }, [columnRef, cellRef, isDisabled]);
 
-  // Показываем тултип при наведении
-  const handleCellHover: React.MouseEventHandler = e => {
+  // Показываем тултип при наведении на десктопе и при клике на мобилах
+  const handleMoveCell: React.MouseEventHandler = e => {
     e.preventDefault();
     if (isEditingMode || hoveredUser) return;
 
@@ -170,8 +170,8 @@ export const TableCell = ({ id, users, isDisabled, isFirstCell, isLastCell, colu
       ref={cellRef}
       data-first-cell={isFirstCell}
       data-last-cell={isLastCell}
-      onClick={handleCellHover}
-      onPointerMove={handleCellHover}
+      onClick={handleMoveCell}
+      onPointerMove={handleMoveCell}
       onPointerLeave={handlePointerLeave}
       data-id={id}
       className={styles.TableCell + (isDisabled ? " " + styles.TableCell_disabled : "")}

@@ -31,6 +31,7 @@ export const createMeetStore = (initialState?: Partial<IMeetStore>) => {
     ...initialState,
     setSelectNewSell: (date, time, isRemove = false) => {
       set(state => {
+        console.log("setSelectNewSell", date, time, isRemove);
         const newSelectedSlots = new Map(state.newSelectedSlots);
         if (!newSelectedSlots.has(date)) {
           newSelectedSlots.set(date, []);
@@ -39,7 +40,8 @@ export const createMeetStore = (initialState?: Partial<IMeetStore>) => {
         const currentSelectedTimes = newSelectedSlots.get(date) || [];
 
         if (isRemove) {
-          if (currentSelectedTimes.length == 1) {
+          if (currentSelectedTimes.length == 1 && currentSelectedTimes.includes(time)) {
+            console.log("delete time array", time, currentSelectedTimes);
             newSelectedSlots.delete(date);
           } else {
             newSelectedSlots.set(date, currentSelectedTimes.filter(timeValue => timeValue != time) || []);

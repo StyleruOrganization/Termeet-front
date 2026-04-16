@@ -8,6 +8,7 @@ import type { TableColumnProps } from "./TableColumn.types";
 export const TableColumn = memo(({ columnId, columnWidth, timeRanges }: TableColumnProps) => {
   const [isSelecting, setIsSelecting] = useState(false);
   const [isRemoving, setIsRemoving] = useState(false);
+  const [clientY, setClientY] = useState(0);
   const columnRef = useRef<HTMLDivElement>(null);
   const { cellIds, userSlots, newSelectedSlots, isEditing, setSelectNewSell, isShowAfter, isShowBefore } =
     useColumnData(columnId);
@@ -59,43 +60,69 @@ export const TableColumn = memo(({ columnId, columnWidth, timeRanges }: TableCol
   }, [isEditing]);
 
   const handlePointerDown: React.PointerEventHandler<HTMLDivElement> = e => {
+    console.log("handlePointerDown");
     if (!isEditing) return;
     e.preventDefault();
-    const element = e.target as Element;
-    const dataId = element?.getAttribute("data-id")?.split("T")[1];
-    if (!element || !dataId) return;
+    const cell = document.elementFromPoint(e.clientX, e.clientY);
+    const dataId = cell?.getAttribute("data-id")?.split("T")[1];
+    if (!dataId) return;
 
     setIsSelecting(true);
+    setClientY(e.clientY);
+
     if (newSelectedSlots?.includes(dataId)) {
       setIsRemoving(true);
-      setSelectNewSell(columnId, dataId, true);
-    } else {
-      setSelectNewSell(columnId, dataId);
     }
   };
 
   const handlePointerMove: React.PointerEventHandler<HTMLDivElement> = e => {
-    if (!isEditing) return;
     e.preventDefault();
+    if (!isEditing) return;
     if (!isSelecting) return;
+    console.log("handlePointerMove");
 
     const cell = document.elementFromPoint(e.clientX, e.clientY);
     const dataId = cell?.getAttribute("data-id")?.split("T")[1];
     if (!dataId) return;
 
-    if (isRemoving && newSelectedSlots?.includes(dataId)) {
+    console.log("Coords in handlePointerMove", e.clientX, e.clientY);
+
+    if ((isRemoving && newSelectedSlots?.includes(dataId)) || Math.abs(e.clientY - clientY) <= 1) {
+      console.log(`delete ${dataId} in pointer move`);
+
       setSelectNewSell(columnId, dataId, true);
     } else if (!isRemoving && !newSelectedSlots?.includes(dataId)) {
+      console.log(`added ${dataId} in pointer move`);
+
       setSelectNewSell(columnId, dataId);
     }
   };
 
   const handlePointerUp: React.PointerEventHandler<HTMLDivElement> = e => {
-    if (!isEditing) return;
-    e.preventDefault();
     setIsSelecting(false);
     setIsRemoving(false);
+    console.log("handlePointerUp");
+    e.preventDefault();
+    if (!isSelecting) return;
+    console.log("handlePointerMove");
+
+    const cell = document.elementFromPoint(e.clientX, e.clientY);
+    const dataId = cell?.getAttribute("data-id")?.split("T")[1];
+
+    if (!dataId) return;
+
+    if (isRemoving && newSelectedSlots?.includes(dataId)) {
+      console.log(`delete ${dataId} in pointer move`);
+
+      setSelectNewSell(columnId, dataId, true);
+    } else if (!isRemoving && !newSelectedSlots?.includes(dataId)) {
+      console.log(`added ${dataId} in pointer move`);
+
+      setSelectNewSell(columnId, dataId);
+    }
   };
+
+  console.log("NEW SELECTED SLOTS", newSelectedSlots);
 
   const justifyContent = cellIds?.length == 0 ? (isShowBefore.isShow ? "start" : isShowAfter.isShow ? "end" : "") : "";
 

@@ -1,7 +1,9 @@
 declare module "*.module.css" {
-  const styles: Readonly<Record<string, string>>;
-  export default styles;
-}
+  const IClassNames: {
+    [className: string]: string
+  };
+  const classNames: IClassNames;
+  export = classNames;}
 
 declare module "*.svg" {
   import * as React from "react";
