@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.4] - 2026-04-17
+
+### Changes
+- added tooltip for editing mode
+- some updates
+- updated showing toasts when create meet
+
+
+All notable changes to this project will be documented in this file.
+
 ## [1.1.3] - 2026-04-17
 
 ### Changes
