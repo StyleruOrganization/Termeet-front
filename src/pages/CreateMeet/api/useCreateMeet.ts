@@ -42,12 +42,11 @@ export const useCreateMeet = ({ onSuccess: onSuccessExternal }: { onSuccess: () 
       });
     }
     onSuccessExternal();
-    navigate(`/meet/${response.hash}`, {
-      state: {
-        showToast: true,
-        toastMessage: "Встреча успешно создана",
-        toastId: "create-meet-success",
-      },
+    navigate(`/meet/${response.hash}`);
+    addToast({
+      id: "success-create-meet",
+      message: "Встреча успешно создана",
+      type: "success",
     });
   };
 
@@ -63,6 +62,7 @@ export const useCreateMeet = ({ onSuccess: onSuccessExternal }: { onSuccess: () 
   const { mutate, isPending } = useMutation({
     mutationFn: (data: MeetCreate) => apiClient.post<MeetResponse, MeetCreate>("/meet/create", data, meetCreateSchema),
     onSuccess: (response: MeetResponse) => {
+      console.log("SUCCESS");
       // Очищаем таймаут если он был
       if (toastTimerRef.current) {
         clearTimeout(toastTimerRef.current);

@@ -1,11 +1,10 @@
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Suspense } from "react";
-import { ErrorBoundary } from "react-error-boundary";
 import { BrowserRouter as Router } from "react-router";
+import { ToastContainer } from "@/features/ToastContainer";
 import { useTheme } from "@/shared/libs";
 import { Loader } from "@/shared/ui";
-import { Stub } from "@pages/Stub";
 import { queryClient } from "@shared/api";
 import { ScrollRestoration } from "./providers/ScrollRestoration";
 import { Routing } from "./routes/routes";
@@ -20,19 +19,12 @@ export const App = () => {
     <QueryClientProvider client={queryClient}>
       <Suspense fallback={<Loader message='Загрузка ...' />}>
         <Router>
-          <ErrorBoundary
-            fallbackRender={() => (
-              <>
-                <Stub message='Что-то пошло не так' />
-              </>
-            )}
-          >
-            <ScrollRestoration />
-            <Routing />
-          </ErrorBoundary>
+          <ScrollRestoration />
+          <Routing />
         </Router>
       </Suspense>
       <ReactQueryDevtools />
+      <ToastContainer />
     </QueryClientProvider>
   );
 };

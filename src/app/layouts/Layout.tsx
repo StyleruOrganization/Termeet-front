@@ -1,5 +1,4 @@
 import { Outlet, useNavigate } from "react-router";
-import { ToastContainer } from "@/features/ToastContainer";
 import { useTheme } from "@/shared/libs";
 import { Toggle } from "@/shared/ui";
 import MoonIcon from "@assets/icons/moon.svg";
@@ -18,7 +17,7 @@ export const Layout = () => {
 
   if (!isInitialized) {
     console.error("Theme is not initialized");
-    return null; // или скелетон/лоадер
+    return null;
   }
 
   return (
@@ -48,7 +47,6 @@ export const Layout = () => {
       </div>
       <div className={styles.container}>
         <Outlet />
-        <ToastContainer />
       </div>
     </>
   );

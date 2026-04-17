@@ -10,13 +10,13 @@ function flattenTokens(obj, prefix = '') {
 
     const newKey = prefix ? `${prefix}-${key}` : key;
 
-    if (value && typeof value === 'object' && !value.value) {
+    if (value && typeof value === 'object' && !value.value && !value.$value) {
       // Рекурсивно обрабатываем вложенные объекты
       Object.assign(result, flattenTokens(value, newKey));
-    } else if (value && value.value) {
+    } else if (value && (value.value || value.$value)) {
       // Это конечный токен с цветом
       const cssVarName = `--${newKey.replace(/_/g, '-')}`;
-      result[cssVarName] = value.value;
+      result[cssVarName] = value.value || value.$value;
     }
   }
 
@@ -26,7 +26,7 @@ function flattenTokens(obj, prefix = '') {
 function generateRootCSS(themes) {
   let css = `/* Auto-generated theme variables */\n`;
   css += `/* Do not edit directly, this file was auto-generated */\n\n`;
-  
+
   // Получаем токены
   const lightTokens = flattenTokens(themes.light);
   const darkTokens = flattenTokens(themes.dark);

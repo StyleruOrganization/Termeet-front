@@ -1,7 +1,6 @@
-import { useEffect, useMemo } from "react";
-import { useLocation, useParams, useSearchParams } from "react-router";
+import { useMemo } from "react";
+import { useParams, useSearchParams } from "react-router";
 import { MeetProvider } from "@/entities/Meet";
-import { useToastStore } from "@/features/ToastContainer";
 import { Toggle } from "@/shared/ui";
 import { useGetMeetInfo } from "./api/useGetMeetInfo";
 import { getTimeZone } from "./lib";
@@ -15,29 +14,12 @@ const WINDOW_WIDTH = window.innerWidth;
 export function Meet() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { hash = "" } = useParams();
-  const location = useLocation();
   const isLocalTime = searchParams.get("localTime") === "true" || searchParams.get("localTime") == null;
   const { meetData } = useGetMeetInfo(hash, isLocalTime);
-  const addToast = useToastStore(state => state.addToast);
-  const hasIdToast = useToastStore(state => state.hasIdToast);
 
   const timeZones = useMemo(() => {
     return getTimeZone();
   }, []);
-
-  useEffect(() => {
-    if (location.state?.showToast) {
-      if (!hasIdToast(location.state.toastId)) {
-        addToast({
-          type: "success",
-          message: location.state.toastMessage,
-          id: location.state.toastId,
-        });
-      }
-
-      window.history.replaceState({}, document.title);
-    }
-  }, [location.state, addToast, hasIdToast]);
 
   if (!hash || !meetData) {
     return <h1>Необходим идентификатор встречи</h1>;

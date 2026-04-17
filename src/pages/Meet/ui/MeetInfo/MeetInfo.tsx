@@ -65,7 +65,7 @@ export const MeetInfo = ({ data }: IMeetInfoProps) => {
         </div>
         <MeetPeoples users={data.users} />
         <div className={styles.MeetInfo__Buttons}>
-          {!isEditingMode ? (
+          {!isEditingMode || (isEditingMode && WINDOW_WIDTH < 768) ? (
             <button
               onClick={() => {
                 copyTextToClipboard(window.location.href, addToast);

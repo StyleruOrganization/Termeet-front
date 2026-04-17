@@ -8,5 +8,6 @@ export const MeetQueries = {
       queryKey: [...MeetQueries.generallKey, hash],
       queryFn: () => getMeet(hash),
       enabled: !!hash,
+      retry: 1,
     }),
 };

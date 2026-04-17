@@ -54,6 +54,14 @@
   background-color: var(--semantics-red-active);
 }
 
+.Toast__Wait {
+  background-color: var(--semantics-yellow-main);
+}
+
+.Toast__IconWait {
+  animation: rotate 3s infinite ease-in-out;
+}
+
 .Toast__Close {
   width: 16px;
   height: 16px;

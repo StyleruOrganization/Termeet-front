@@ -51,6 +51,7 @@ class ApiClient {
         });
       }
     }
+    console.log("Вызываю post метод");
     const response = await fetch(`/api${endpoint}`, {
       method: "POST",
       headers: {
