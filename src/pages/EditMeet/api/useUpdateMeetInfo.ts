@@ -4,7 +4,6 @@ import { MeetQueries } from "@/entities/Meet";
 import { useToastStore } from "@/features/ToastContainer";
 import { apiClient } from "@/shared/api";
 import type { IEditMeetPayload } from "../model/EditMeet.types";
-// import {
 
 export const useUpdateMeetInfo = (hash: string) => {
   const queryClient = useQueryClient();
@@ -30,12 +29,11 @@ export const useUpdateMeetInfo = (hash: string) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries(MeetQueries.meet(hash));
-      navigate(`/meet/${hash}`, {
-        state: {
-          showToast: true,
-          toastMessage: "Информация о встрече успешно обновлена!",
-          toastId: "update-meet-success",
-        },
+      navigate(`/meet/${hash}`);
+      addToast({
+        id: "update-meet-success",
+        message: "Информация о встрече успешно обновлена!",
+        type: "success",
       });
     },
   });
