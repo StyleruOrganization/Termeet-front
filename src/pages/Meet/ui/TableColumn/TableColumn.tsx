@@ -5,10 +5,15 @@ import { getCellIds, useColumnData } from "../../lib";
 import { TableCell } from "../TableCell/TableCell";
 import type { TableColumnProps } from "./TableColumn.types";
 
+interface ICoords {
+  initialX: number;
+  initialY: number;
+}
+
 export const TableColumn = memo(({ columnId, columnWidth, timeRanges }: TableColumnProps) => {
   const [isSelecting, setIsSelecting] = useState(false);
   const [isRemoving, setIsRemoving] = useState(false);
-  const [clientY, setClientY] = useState(0);
+  const [initialCoords, setInitialCoords] = useState<ICoords>();
   const columnRef = useRef<HTMLDivElement>(null);
   const { cellIds, userSlots, newSelectedSlots, isEditing, setSelectNewSell, isShowAfter, isShowBefore } =
     useColumnData(columnId);
@@ -69,7 +74,10 @@ export const TableColumn = memo(({ columnId, columnWidth, timeRanges }: TableCol
     if (!dataId || isDisabled) return;
 
     setIsSelecting(true);
-    setClientY(e.clientY);
+    setInitialCoords({
+      initialX: e.clientX,
+      initialY: e.clientY,
+    });
 
     if (newSelectedSlots?.includes(dataId)) {
       setIsRemoving(true);
@@ -83,8 +91,19 @@ export const TableColumn = memo(({ columnId, columnWidth, timeRanges }: TableCol
     const dataId = cell?.getAttribute("data-id")?.split("T")[1];
     const isDisabled = cell?.getAttribute("data-disabled-cell") === "true";
 
+    // console.log("DY", e.clientY - initialCoords.initialY, "DX", e.clientX - initialCoords.initialX);
+
     // Не хотим чтобы ячейка красилась, если мы скроллим горизонтально на мобилах
-    if (!dataId || isDisabled || !isEditing || !isSelecting || Math.abs(e.clientY - clientY) <= 3) return;
+    if (
+      !dataId ||
+      isDisabled ||
+      !isEditing ||
+      !isSelecting ||
+      !initialCoords ||
+      Math.abs(e.clientY - initialCoords.initialY) <= 3 ||
+      Math.abs(e.clientY - initialCoords.initialY) < Math.abs(e.clientX - initialCoords.initialX)
+    )
+      return;
 
     if (isRemoving && newSelectedSlots?.includes(dataId)) {
       console.log(`delete ${dataId} in pointer move`);
