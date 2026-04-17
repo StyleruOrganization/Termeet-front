@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.3] - 2026-04-17
+
+### Changes
+- added block for adding when gorizontal scrolling
+- added disabled for time before current
+- updated formatting for desc in modal
+- added comment for diff moments
+- updated lock highlighting for mobile
+
+
+All notable changes to this project will be documented in this file.
+
 ## [1.1.2] - 2026-04-14
 
 ### Changes
