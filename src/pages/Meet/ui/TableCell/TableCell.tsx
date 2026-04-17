@@ -39,6 +39,10 @@ export const TableCell = ({
     countSelectPerson: users?.length || 0,
   });
 
+  const isDisabled = useMemo(() => {
+    return isTimeZoneDisabled || (isBeforeCurrentTime && users?.length == 0) || (isBeforeCurrentTime && isEditingMode);
+  }, [isTimeZoneDisabled, isBeforeCurrentTime, users, isEditingMode]);
+
   const timeInterval = useMemo(() => {
     if (isTimeZoneDisabled) return;
     const [hours, minutes] = id.split("T")[1].split(":").map(Number);
@@ -105,7 +109,8 @@ export const TableCell = ({
   // Показываем тултип при наведении на десктопе и при клике на мобилах
   const handleMoveCell: React.MouseEventHandler = e => {
     e.preventDefault();
-    if (isEditingMode || hoveredUser) return;
+
+    if (isEditingMode && !isDisabled) return;
 
     setHoveredUsers(users || [], users?.length == 0 ? true : false);
     setIsTooltipVisible(true);
@@ -165,10 +170,6 @@ export const TableCell = ({
         ? variableColors?.hoverColor
         : "var(--semantics-blue-950)";
   }, [isEditingMode, newSelectedSlots, users, variableColors, id]);
-
-  const isDisabled = useMemo(() => {
-    return isTimeZoneDisabled || (isBeforeCurrentTime && users?.length == 0) || (isBeforeCurrentTime && isEditingMode);
-  }, [isTimeZoneDisabled, isBeforeCurrentTime, users, isEditingMode]);
 
   return (
     <div
