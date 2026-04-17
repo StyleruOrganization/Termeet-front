@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.5] - 2026-04-17
+
+### Changes
+- delete hover color for close icon bebebe
+- recover toast for updating meetInfo
+
+
+All notable changes to this project will be documented in this file.
+
 ## [1.1.4] - 2026-04-17
 
 ### Changes
