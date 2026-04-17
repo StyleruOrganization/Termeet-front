@@ -59,15 +59,32 @@
 }
 
 .Toast__IconWait {
-  animation: rotate 3s infinite ease-in-out;
+  animation: rotate 1s infinite ease-in;
 }
 
 .Toast__Close {
-  width: 16px;
-  height: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 4px;
+
+  border-radius: 10px;
+
+  transition: background-color .3s ease-in-out;
 
   cursor: pointer;
-  rotate: 45deg;
+
+  svg {
+    width: 16px;
+    height: 16px;
+
+    transform: rotate(45deg);
+  }
+}
+
+.Toast__Close:hover {
+  background-color: var(--semantics-yellow-hover);
 }
 
 @keyframes fade-in {

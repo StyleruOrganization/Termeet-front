@@ -1,4 +1,3 @@
-import { useToastStore } from "@/features/ToastContainer";
 import { useScrollToTop } from "@/shared/libs";
 import { useCreateMeet } from "./api/useCreateMeet";
 import styles from "./CreateMeet.module.css";
@@ -33,7 +32,6 @@ const CreateButton = () => {
 
 export function CreateMeet() {
   const resetForm = useCreateMeetStore(state => state.resetForm);
-  const addToast = useToastStore(state => state.addToast);
 
   const { createMeet } = useCreateMeet({
     onSuccess: () => {
@@ -46,12 +44,6 @@ export function CreateMeet() {
 
     const values = useCreateMeetStore.getState().values;
     createMeet(values);
-
-    addToast({
-      type: "success",
-      message: "Встреча успешно создана",
-      id: "create-meet-success",
-    });
   };
 
   return (

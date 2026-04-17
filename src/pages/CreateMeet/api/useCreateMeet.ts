@@ -44,7 +44,7 @@ export const useCreateMeet = ({ onSuccess: onSuccessExternal }: { onSuccess: () 
     onSuccessExternal();
     navigate(`/meet/${response.hash}`);
     addToast({
-      id: "success-create-meet",
+      id: "create-meet-success",
       message: "Встреча успешно создана",
       type: "success",
     });

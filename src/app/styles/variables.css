@@ -38,6 +38,7 @@
   --semantics-blue-950: #1c2651;
   --semantics-blue-1000: #0d122d;
   --semantics-yellow-main: #cb9800;
+  --semantics-yellow-hover: #e8c200;
 }
 
 :root[data-theme="dark"] {
@@ -46,6 +47,7 @@
   --text-secondary: #3d4049;
   --text-main: #ececec;
   --semantics-yellow-main: #e8c200;
+  --semantics-yellow-hover: #cb9800;
   --semantics-red-main: #f43;
   --semantics-red-active: #ff6b5c;
   --semantics-red-hover: #780a00;
