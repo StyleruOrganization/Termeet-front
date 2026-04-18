@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.6] - 2026-04-18
+
+### Changes
+- updated name for dev container
+- updated showing toasts and added rule 300/500
+
+
+All notable changes to this project will be documented in this file.
+
 ## [1.1.5] - 2026-04-17
 
 ### Changes
