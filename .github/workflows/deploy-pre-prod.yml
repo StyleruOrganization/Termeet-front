@@ -16,7 +16,7 @@ jobs:
       EMAIL: ${{ secrets.EMAIL }}
       BACKEND_PORT: 8000
       BACKEND_HOST: backend.termeet-dev.ru
-      BACKEND_CONTAINER: backend
+      BACKEND_CONTAINER: backend-dev
     runs-on: ubuntu-latest
     
     steps:
@@ -58,12 +58,12 @@ jobs:
             docker pull ${REGISTRY}/frontend:${IMAGE_TAG}
             
             # Останавливаем старый frontend (preprod)
-            docker stop frontend 2>/dev/null || true
-            docker rm frontend 2>/dev/null || true
+            docker stop frontend-dev 2>/dev/null || true
+            docker rm frontend-dev 2>/dev/null || true
             
             # Запускаем новый frontend для preprod
             docker run -d \
-              --name frontend \
+              --name frontend-dev \
               -e BACKEND_HOST=${BACKEND_HOST} \
               -e BACKEND_CONTAINER=${BACKEND_CONTAINER} \
               -e BACKEND_PORT=${BACKEND_PORT} \
