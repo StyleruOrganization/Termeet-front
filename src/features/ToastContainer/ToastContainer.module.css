@@ -59,7 +59,7 @@
 }
 
 .Toast__IconWait {
-  animation: rotate 1s infinite ease-in;
+  animation: rotate 1s linear infinite;
 }
 
 .Toast__Close {

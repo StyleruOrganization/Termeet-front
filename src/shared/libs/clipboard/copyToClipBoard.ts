@@ -25,13 +25,13 @@ function fallbackCopyTextToClipboard(text: string, addToast: (toast: Toast) => v
     addToast({
       message: successful ? "Ссылка скопирована" : "Не удалось скопировать ссылку",
       type: successful ? "success" : "error",
-      id: `copy-to-clipboard-${Date.now()}`,
+      id: "copy-to-clipboard-success",
     });
   } catch {
     addToast({
       message: "Не удалось скопировать ссылку",
       type: "error",
-      id: `copy-to-clipboard-${Date.now()}`,
+      id: "copy-to-clipboard-error",
     });
   }
 
@@ -47,14 +47,14 @@ export function copyTextToClipboard(text: string, addToast: (toast: Toast) => vo
       addToast({
         message: "Ссылка скопирована",
         type: "success",
-        id: `copy-to-clipboard-${Date.now()}`,
+        id: "copy-to-clipboard-success",
       });
     },
     () => {
       addToast({
         message: "Не удалось скопировать ссылку",
         type: "error",
-        id: `copy-to-clipboard-${Date.now()}`,
+        id: "copy-to-clipboard-error",
       });
     },
   );

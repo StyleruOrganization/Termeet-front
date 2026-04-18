@@ -21,6 +21,7 @@ export const useCreateMeet = ({ onSuccess: onSuccessExternal }: { onSuccess: () 
   const addToast = useToastStore(store => store.addToast);
   const removeToast = useToastStore(store => store.removeToast);
   const toastTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const startShowLoaderTime = useRef<number>(null);
 
   // Очистка таймаутов при размонтировании
   useEffect(() => {
@@ -43,6 +44,7 @@ export const useCreateMeet = ({ onSuccess: onSuccessExternal }: { onSuccess: () 
     }
     onSuccessExternal();
     navigate(`/meet/${response.hash}`);
+    removeToast("create-meet-wait");
     addToast({
       id: "create-meet-success",
       message: "Встреча успешно создана",
@@ -61,18 +63,25 @@ export const useCreateMeet = ({ onSuccess: onSuccessExternal }: { onSuccess: () 
 
   const { mutate, isPending } = useMutation({
     mutationFn: (data: MeetCreate) => apiClient.post<MeetResponse, MeetCreate>("/meet/create", data, meetCreateSchema),
-    onSuccess: (response: MeetResponse) => {
-      console.log("SUCCESS");
-      // Очищаем таймаут если он был
+    onSuccess: async (response: MeetResponse) => {
+      //t.me/mikhailnaer/775 - используем правильно 300/500
+      if (
+        startShowLoaderTime.current &&
+        Date.now() - startShowLoaderTime.current > 300 &&
+        Date.now() - startShowLoaderTime.current < 800
+      ) {
+        await new Promise(resolve =>
+          setTimeout(resolve, 800 - (Date.now() - (startShowLoaderTime.current || Date.now()))),
+        );
+      }
       if (toastTimerRef.current) {
         clearTimeout(toastTimerRef.current);
-        toastTimerRef.current = null;
       }
-      removeToast("create-meet-wait");
       handleSuccess(response);
     },
     onMutate: () => {
       toastTimerRef.current = setTimeout(() => {
+        startShowLoaderTime.current = Date.now();
         addToast({
           type: "wait",
           message: "Создание встречи...",
