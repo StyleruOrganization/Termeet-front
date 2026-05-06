@@ -1,27 +1,23 @@
-.container {
-  margin: 0 auto;
-  padding: 32px 100px 40px;
-
-  background-color: var(--fill-bg);
-
-  max-width: 1400px;
-}
-
 .headerContainer {
   background-color: var(--fill-controls);
 }
 
-.header {
+header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
 
-  height: 44px;
   margin: 0 auto;
   padding: 10px 0;
   padding: 0 100px;
 
+  grid-template-columns: repeat(3, auto);
+
   max-width: 1400px;
+
+  min-height: 54px;
 }
 
 .header__title {
@@ -30,6 +26,26 @@
   font-size: 4rem;
   font-weight: 700;
   line-height: 24px;
+}
+
+.header__groupAnchors {
+  display: flex;  
+  align-items: center;
+  gap: 24px;
+
+  order: 2;
+
+  span {
+    font-size: 3rem;
+  }
+}
+
+button.header__loginBtn {
+  width: fit-content;
+  padding: 8px 10px;
+
+  font-size: 3rem;
+  order: 3;
 }
 
 .toogleTheme {
@@ -52,12 +68,33 @@
   padding: 4px
 }
 
+
+
 @media (width <= 1024px) {
-  .container {
-    padding: 10px 10px 40px;
+  header {
+    padding: 0 10px; 
+
+    min-height: 44px; 
+  }
+}
+
+@media (width <= 568px) {
+  header {
+    padding: 5px 10px;
+
+    grid-template-columns: repeat(2, auto); 
   }
 
-  .header {
-    padding: 0 10px;  
+  button.header__loginBtn {
+    order: 2
+  }
+
+  .header__groupAnchors {
+    justify-content: space-evenly;
+
+    width: 100%;
+    padding: 0 20px;
+
+    order: 3;
   }
 }

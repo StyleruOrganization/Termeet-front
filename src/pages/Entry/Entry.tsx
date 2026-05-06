@@ -1,14 +1,25 @@
-import { useNavigate } from "react-router";
-import BigIcon from "@assets/icons/bigShadow.svg";
-import LogoIcon from "@assets/icons/logo.svg";
-import SmallIcon from "@assets/icons/smallShadow.svg";
+// import { useNavigate } from "react-router";
 import styles from "./Entry.module.css";
 
 export const Entry = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   return (
     <div className={styles.EntryPage}>
-      <div className={styles.EntryPage__Content}>
+      <div className={styles.EntryPage__intro}>
+        <h1>Планируй встречи легко</h1>
+        <p>
+          Создайте событие, поделитесь ссылкой и узнайте,
+          <br /> когда все участники свободны
+        </p>
+        <div className={styles.EntryPage__groupButtons}>
+          <button className='baseButton mainButton'>Создать встречу</button>
+          <button className='baseButton secondaryButton'>Войти или зарегистрироваться</button>
+        </div>
+        {/* Gradients */}
+        <div className={styles.EntryPage__litleGrd}></div>
+        <div className={styles.EntryPage__bigGrd}></div>
+      </div>
+      {/* <div className={styles.EntryPage__Content}>
         <div className={styles.EntryPage__Content__Wrapper}>
           <div className={styles.EntryPage__Content__Logo}>
             <LogoIcon />
@@ -30,7 +41,7 @@ export const Entry = () => {
           <SmallIcon className={styles.EntryPage__Section__Bg__SmallIcon} />
           <BigIcon className={styles.EntryPage__Section__Bg__BigIcon} />
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

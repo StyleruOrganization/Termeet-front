@@ -23,8 +23,8 @@ const withErrorBoundary = (component: React.ReactNode, errorMessage: string) => 
 export const Routing = () => {
   return (
     <ReactRoutes>
-      <Route index element={withSuspense(EntryPage, "Загружаем страницу...")} />
       <Route path='/' element={<Layout />}>
+        <Route index element={withSuspense(EntryPage, "Загружаем страницу...")} />
         <Route path='create' element={withSuspense(CreateMeetPage, "Загружаем страницу...")} />
         <Route
           path='meet/:hash'

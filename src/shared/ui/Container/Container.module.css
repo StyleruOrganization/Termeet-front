@@ -1,0 +1,14 @@
+.container {
+  margin: 0 auto;
+  padding: 32px 100px 40px;
+
+  background-color: var(--fill-bg);
+
+  max-width: 1400px;
+}
+
+@media (width <= 1024px) {
+  .container {
+    padding: 10px 10px 40px;
+  }
+}

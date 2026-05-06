@@ -43,9 +43,9 @@ export const useTheme = () => {
   // Инициализация темы
   useEffect(() => {
     const initialTheme = getInitialTheme();
+    setIsInitialized(true);
     setTheme(initialTheme);
     applyTheme(initialTheme);
-    setIsInitialized(true);
   }, [getInitialTheme, applyTheme]);
 
   // Следим за изменением системной темы (опционально)
