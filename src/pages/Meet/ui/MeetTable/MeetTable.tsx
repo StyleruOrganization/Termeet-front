@@ -37,7 +37,7 @@ export const MeetTable = ({ timeRanges, meeting_days }: MeetTableProps) => {
   }, [setHoveredUsers, setHoveredUser]);
 
   return (
-    <div className={styles.MeetTable}>
+    <div className={styles.MeetTable} data-test-id='meet-table'>
       <div className={styles.MeetTable__TimesPeriodsContainer}>
         {timeOptions.map((timePeriodOpitions, indexPeriods) => (
           <div key={indexPeriods}>

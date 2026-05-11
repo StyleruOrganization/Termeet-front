@@ -17,10 +17,9 @@ export const Calendar = ({
   const { onDateClick, formatClassName, error, selectedDates } = useCalendarData();
 
   return (
-    <div className={styles.CalendarWrapper}>
+    <div className={styles.CalendarWrapper} data-test-id='calendar'>
       <ReactCalendar
         className={styles.Calendar}
-        data-test-id='calendar'
         locale='ru-RU'
         minDetail='month'
         nextAriaLabel='Go to next'

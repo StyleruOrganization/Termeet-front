@@ -1,7 +1,14 @@
 import { defineConfig, devices } from "@playwright/test";
 
+/** Задаёшь сам: `PLAYWRIGHT_BASE_URL=https://termeet.tech` или локально без переменной = localhost */
+const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? "http://localhost:5173";
+const useWebServer = baseURL.includes("localhost") || baseURL.includes("127.0.0.1");
+const remoteOrigin = !baseURL.includes("localhost") && !baseURL.includes("127.0.0.1");
+
 export default defineConfig({
-  testDir: "./e2e",
+  testDir: "./tests/e2e",
+  /* Удалённый origin: медленнее чанки/CDN и выше шанс гонок до дефолтных 5s у expect */
+  expect: { timeout: remoteOrigin ? 20_000 : 10_000 },
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -18,7 +25,9 @@ export default defineConfig({
 
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    baseURL: "http://localhost:8080",
+    baseURL,
+    /* Совпадает с атрибутами в коде (`data-test-id`), а не дефолтный data-testid */
+    testIdAttribute: "data-test-id",
     /* Настройки для каждого теста */
     screenshot: "only-on-failure", // Делать скриншот только при падении
     trace: "on-first-retry",
@@ -71,10 +80,12 @@ export default defineConfig({
     },
   ],
 
-  webServer: {
-    command: "npm run dev",
-    url: "http://localhost:8080",
-    timeout: 120 * 1000,
-    reuseExistingServer: !process.env.CI,
-  },
+  webServer: useWebServer
+    ? {
+        command: "pnpm run dev",
+        url: baseURL,
+        timeout: 120 * 1000,
+        reuseExistingServer: true,
+      }
+    : undefined,
 });

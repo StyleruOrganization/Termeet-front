@@ -31,11 +31,14 @@ export const MeetHeader = ({ duration, description, name, link }: MeetHeaderProp
   };
 
   return (
-    <div className={`${styles.MeetHeader} ${isExpanded ? styles.MeetHeader__expanded : ""}`}>
+    <div className={`${styles.MeetHeader} ${isExpanded ? styles.MeetHeader__expanded : ""}`} data-test-id='meet-header'>
       <div className={styles.MeetHeader__Info}>
         <span className={styles.MeetHeader__Info__Title}>{name}</span>
         <span className={styles.MeetHeader__Info__Duration}>{duration}</span>
         <button
+          type='button'
+          aria-label='Редактировать встречу'
+          data-test-id='meet-header-edit'
           onClick={() => {
             navigateWithParams(`/meet/edit/${hash}`);
             scrollToTop();
@@ -46,6 +49,9 @@ export const MeetHeader = ({ duration, description, name, link }: MeetHeaderProp
         </button>
         {(WINDOW_WIDTH < 768 || description) && (
           <button
+            type='button'
+            aria-label='Показать или скрыть описание встречи'
+            data-test-id='meet-header-expand-desc'
             onClick={() => {
               if (WINDOW_WIDTH < 768) {
                 setIsDescPopupOpen(true);
@@ -63,6 +69,8 @@ export const MeetHeader = ({ duration, description, name, link }: MeetHeaderProp
       {description && <div className={styles.MeetHeader__desc}>{description}</div>}
       {link && (
         <a
+          href={link}
+          data-test-id='meet-header-copy-room-link'
           className={styles.MeetHeader__link}
           onClick={event => {
             event.preventDefault();
