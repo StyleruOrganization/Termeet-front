@@ -1,0 +1,371 @@
+.FeedbackForm {
+    padding: 24px 32px;
+
+    background-color: var(--semantics-blue-100);
+    border-radius: 48px;
+
+    min-width: 0;
+
+    h2 {
+        font-size: 20px;
+        font-weight: 700;
+    }
+}
+
+.FeedbackForm__Select {
+    label, input, li button {
+        font-size: 12px;
+    }
+    width: 50%;
+
+    input {
+        padding: 10px;
+    }
+
+    label {
+        font-weight: 700;
+    }
+}
+
+.FeedbackForm__SelectsWrapper {
+    display: flex;
+    gap: 16px;
+}
+
+.FeedbackForm__Input {
+    label {
+        font-weight: 700;
+    }
+
+    input, label {
+        font-size: 12px;
+    }
+
+    span {
+        font-size: 10px;
+    }
+
+    input {
+        padding: 10px;
+        padding-left: 82px;
+    }
+}
+
+.FeedbackForm__InputChanelWrapper {
+    position: relative;
+
+    width: 50%;
+}
+
+.FeedbackForm__SelectChannel {
+    position: absolute;
+    top: 31.5px;
+    left: 10px;
+
+    height: fit-content;
+    width: 70px;
+
+    label, input, li button {
+        font-size: 10px;
+    }
+
+    li button {
+        border-radius: 8px;
+    }
+
+    label {
+        font-weight: 700;
+    }
+
+    input {
+        padding: 3px 4px;
+
+        background-color: var(--semantics-gray-hover);
+        border-radius: 4px;
+
+        max-height: 20px;
+    }
+
+    input:focus-visible {
+        outline: none;
+    }
+
+    input::after {
+        width: 8px;
+        height: 8px;
+    }
+}
+
+.FeedbackForm__TextArea {
+    label {
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    textarea {
+        padding: 12px 40px 60px 16px;
+
+        font-size: 12px;
+        max-height: 120px;
+    }
+
+    textarea::-webkit-scrollbar-thumb {
+        border-radius: 200px;
+        background-color: var(--semantics-gray-default);
+    }
+
+    textarea::-webkit-scrollbar-thumb:hover {
+        background-color: var(--semantics-gray-hover);
+    }
+
+    textarea::-webkit-scrollbar-thumb:active {
+        background-color: var(--semantics-gray-active);
+    }
+}
+
+.FeedbackForm__TextAreaWrapper {
+    position: relative;
+}
+
+.FeedbackForm__DragOverlay {
+    display: flex;
+    gap: 8px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    background-color: var(--fill-bg);
+    border: 1px dashed var(--text-main);
+    border-radius: 32px;
+
+    inset: 0;
+    min-height: 280px;
+
+    pointer-events: none;
+
+    svg {
+        width: 32px;
+        height: 32px;
+    }
+
+    span {
+        display: block;
+
+        text-align: center;
+
+        font-size: 16px;
+    }
+}
+
+.FeedbackForm__FileUploadExts {
+    color: var(--text-secondary);
+
+    font-size: 12px;
+}
+
+.FeedbackForm__FilesPreview {
+    display: flex;
+    gap: 4px;
+
+    min-width: 0;
+    overflow-x: auto;
+}
+
+.FeedbackForm__FormWrapper {
+    position: relative;
+
+    display: flex;
+    gap: 16px;
+    flex-direction: column;
+
+    margin-bottom: 32px;
+
+    min-width: 0;
+}
+
+/* Thumb must come before FileItem so nested override has higher specificity */
+.FeedbackForm__FileThumb {
+    width: 100%;
+    height: 100%;
+
+    filter: brightness(.8);
+
+    object-fit: cover;
+}
+
+.FeedbackForm__FileItem {
+    position: relative;
+
+    display: flex;
+    overflow: hidden;
+    flex-shrink: 0;
+
+    width: 48px;
+    height: 48px;
+
+    border: 1px solid var(--semantics-gray-hover);
+    border-radius: 8px;
+}
+
+.FeedbackForm__FileItem_invalid {
+    border: 1px solid var(--semantics-red, #e53935);
+}
+
+.FeedbackForm__PaperClipUploader {
+    position: absolute;
+    top: 30px;
+    right: 11px;
+
+    transition: opacity 0.3s ease-in-out;
+
+    label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        cursor: pointer;
+    }
+
+    & svg {
+        width: 27px;
+        height: 27px;
+        padding: 5px;
+
+        cursor: pointer;
+        pointer-events: none;
+    }
+
+    &:hover {
+        opacity: 0.6;
+    }
+}
+
+.FeedbackForm__FileRemove {
+    position: absolute;
+    z-index: 3;
+    top: 4px;
+    right: 4px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 12px;
+    height: 12px;
+
+    background-color: var(--fill-bg);
+    border-radius: 50%;
+
+    transform: rotate(45deg);
+    transition: opacity 0.3s ease-in-out;
+
+    cursor: pointer;
+
+    & svg {
+        width: 8px;
+        height: 8px;
+    }
+
+    &:hover {
+        opacity: 0.8;
+    }
+}
+
+.FeedbackForm__FileAdd {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: var(--fill-bg);
+
+    transition: opacity 0.3s ease-in-out;
+
+    cursor: pointer;
+
+    label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 100%;
+        height: 100%;
+
+        cursor: pointer;
+    }
+
+    & svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    &:hover {
+        opacity: 0.7;
+    }
+}
+
+.FeedbackForm__FileInput {
+    display: none;
+}
+
+.TextAreaActiveZone {
+    border: 1px dashed var(--text-main);
+
+    &:focus-visible {
+        outline: none;
+    }
+}
+
+@media (width < 768px) {
+    .FeedbackForm {
+        padding: 12px 16px;
+
+        border-radius: 24px;
+    }
+
+    .FeedbackForm__SelectsWrapper {
+        flex-direction: column;
+    }
+
+    .FeedbackForm__Select, .FeedbackForm__InputChanelWrapper {
+        width: 100%;
+    }
+
+    .FeedbackForm__PaperClipUploader {
+        & svg {
+            width: 24px;
+            height: 24px;
+        }
+    }
+
+    .FeedbackForm__DragOverlay {
+        svg {
+            width: 24px;
+            height: 24px;
+        }
+    }
+}
+
+.FeedbackForm__Error {
+  color: var(--semantics-red-main);
+
+  animation: fade-in 0.3s ease-in-out;
+
+  font-size: 3rem;
+  line-height: 1.25;
+  margin-left: 6px;
+  margin-top: -10px;
+}
+
+@keyframes fade-in {
+  0% {
+    transform: translateY(-10px);
+
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0);
+
+    opacity: 1;
+  }
+}

@@ -49,13 +49,13 @@
   line-height: 1.25;
 }
 
-@media (width <= 1024px) {
+@media (width < 1024px) {
   .CreateMeetingPage__Content__Title {
     margin-bottom: 20px;
   }
 }
 
-@media (width <= 768px) {
+@media (width < 768px) {
   .CreateMeetingPage__CreateButtonWrapper {
     position: fixed;
     bottom: 0;

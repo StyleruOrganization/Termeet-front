@@ -1,18 +1,18 @@
-.TimeSelect {
+.Select {
   position: relative;
 
   width: 100%;
   height: 100%;
-
-  align-self: end
 }
 
 
-.TimeSelect__Dropdown {
+.Select__Dropdown {
   position: fixed;
   z-index: 100;
   right: 0;
   left: 0;
+
+  width: fit-content;
 
   /* Симметрия с местом для скроллбара */
   padding: 8px 2px 8px 8px;
@@ -37,17 +37,17 @@
   }
 }
 
-.TimeSelect__List {
+.Select__List {
   display: flex;
   gap: 4px;
   flex-direction: column;
 
-  padding-right: 2px; 
+  padding-right: 8px; 
 
   list-style: none
 }
 
-.TimeSelect__Option {
+.Select__Option {
   width: 100%;
   padding: 10px 12px;
 
@@ -66,33 +66,39 @@
   line-height: 1.25;
 }
 
-.TimeSelect__Option:focus-visible{
+.Select__Option:focus-visible{
   outline: 2px solid var(--semantics-blue-800);
   outline-offset: 2px;
 }
 
-.TimeSelect__Option:hover {
+.Select__Option:hover {
   background-color: var(--semantics-gray-default);
 }
 
-.TimeSelect__InputWrapper {
+.Select__InputWrapper {
   position: relative;
+
+  cursor: pointer;
+  
+  input {
+    cursor: pointer;
+  }
 }
 
-.TimeSelect__InputWrapper::after {
+.Select__InputWrapper::after {
   position: absolute;
   top: 50%;
-  right: 16px;
-  
-  width: 16px;
-  height: 16px;
+  right: var(--arrow-size);
+
+  height: var(--arrow-size);
+  width: var(--arrow-size);
 
   color: var(--text-main);
 
   transform: translateY(-50%) rotate(90deg);
   transition: transform 0.3s ease;
   
-  background-image: url("./../../../../assets/icons/arrow.svg");
+  background-image: url("./../../../assets/icons/arrow.svg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
@@ -101,27 +107,27 @@
   pointer-events: none;
 }
 
-[data-theme="dark"] .TimeSelect__InputWrapper::after {
-  background-image: url("./../../../../assets/icons/dark_arrow.svg");
+[data-theme="dark"] .Select__InputWrapper::after {
+  background-image: url("./../../../assets/icons/dark_arrow.svg");
 }
 
-.TimeSelect__InputWrapper_open::after {
+.Select__InputWrapper_open::after {
   transform: translateY(-50%) rotate(270deg);
 }
 
-.TimeSelect__Option_selected, .TimeSelect__Option:active {
+.Select__Option_selected, .TimeSelect__Option:active {
   background-color: var(--semantics-gray-hover);
 }
 
-.TimeSelect__Option_selected:hover {
+.Select__Option_selected:hover {
   background-color: var(--semantics-gray-hover);
 }
 
 /* Стили для скроллбара */
-.TimeSelect__Dropdown::-webkit-scrollbar {
+.Select__Dropdown::-webkit-scrollbar {
   width: 4px;
 }
 
-.TimeSelect__Dropdown::-webkit-scrollbar-track {
+.Select__Dropdown::-webkit-scrollbar-track {
   background: transparent;
 }

@@ -1,4 +1,5 @@
 import { useScrollToTop } from "@/shared/libs";
+import { Container } from "@/shared/ui/Container/Container";
 import { useCreateMeet } from "./api/useCreateMeet";
 import styles from "./CreateMeet.module.css";
 import { useCreateMeetStore } from "./model/useCreateMeetStore";
@@ -47,17 +48,19 @@ export function CreateMeet() {
   };
 
   return (
-    <div className={styles.CreateMeetingPage__Content}>
-      <h1 className={styles.CreateMeetingPage__Content__Title}>Создайте встречу</h1>
-      <form className={styles.CreateMeetingPage__Form} onSubmit={handleSubmit}>
-        <div className={styles.CreateMeetingPage__Calendar}>
-          <Calendar suggestMessage='Выберите минимум один день' />
-        </div>
-        <div className={styles.CreateMeetingPage__Content__FormWrapper}>
-          <Form />
-          <CreateButton />
-        </div>
-      </form>
-    </div>
+    <Container>
+      <div className={styles.CreateMeetingPage__Content}>
+        <h1 className={styles.CreateMeetingPage__Content__Title}>Создайте встречу</h1>
+        <form className={styles.CreateMeetingPage__Form} onSubmit={handleSubmit}>
+          <div className={styles.CreateMeetingPage__Calendar}>
+            <Calendar suggestMessage='Выберите минимум один день' />
+          </div>
+          <div className={styles.CreateMeetingPage__Content__FormWrapper}>
+            <Form />
+            <CreateButton />
+          </div>
+        </form>
+      </div>
+    </Container>
   );
 }

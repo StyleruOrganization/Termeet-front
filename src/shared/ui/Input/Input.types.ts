@@ -12,4 +12,6 @@ export interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: string;
   /** Ненавязывающее сообщение о заполении поля ввода */
   suggestMessage?: string;
+  className?: string;
+  classNameInputWrapper?: string;
 }

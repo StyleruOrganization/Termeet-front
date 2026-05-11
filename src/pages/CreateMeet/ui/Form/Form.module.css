@@ -59,7 +59,7 @@
   }
 }
 
-@media (width <= 768px) {
+@media (width < 768px) {
   .MeetingForm {
     padding-bottom: 95px;
   }

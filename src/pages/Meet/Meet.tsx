@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { useParams, useSearchParams } from "react-router";
 import { MeetProvider } from "@/entities/Meet";
 import { Toggle } from "@/shared/ui";
+import { Container } from "@/shared/ui/Container/Container";
 import { useGetMeetInfo } from "./api/useGetMeetInfo";
 import { getTimeZone } from "./lib";
 import styles from "./Meet.module.css";
@@ -33,35 +34,37 @@ export function Meet() {
   };
 
   return (
-    <MeetProvider timeInfo={meetData.timeInfo} timeRanges={meetData.timeRanges} users={meetData.users}>
-      <div className={styles.MeetPage}>
-        {WINDOW_WIDTH < 768 ? (
-          <div className={styles.MeetPage__HeaderWrapper_Mobile}>
-            <MeetHeader
-              duration={meetData.duration}
-              description={meetData.description}
-              name={meetData.name}
-              link={meetData.link}
+    <Container>
+      <MeetProvider timeInfo={meetData.timeInfo} timeRanges={meetData.timeRanges} users={meetData.users}>
+        <div className={styles.MeetPage}>
+          {WINDOW_WIDTH < 768 ? (
+            <div className={styles.MeetPage__HeaderWrapper_Mobile}>
+              <MeetHeader
+                duration={meetData.duration}
+                description={meetData.description}
+                name={meetData.name}
+                link={meetData.link}
+              />
+            </div>
+          ) : null}
+          <div className={styles.MeetPage__InfoWrapper}>
+            <MeetInfo data={meetData} />
+          </div>
+          <div className={styles.MeetPage__TableWrapper}>
+            <MeetTable
+              key={isLocalTime ? "local" : "moscow"}
+              meeting_days={meetData.meeting_days}
+              timeRanges={meetData.timeRanges}
+            />
+            <Toggle
+              LeftLabel={"По местному " + timeZones.local.utcString}
+              RightLabel={"По Москве " + timeZones.moscow.utcString}
+              defaultActive={isLocalTime ? "left" : "right"}
+              onChange={handleToggleChange}
             />
           </div>
-        ) : null}
-        <div className={styles.MeetPage__InfoWrapper}>
-          <MeetInfo data={meetData} />
         </div>
-        <div className={styles.MeetPage__TableWrapper}>
-          <MeetTable
-            key={isLocalTime ? "local" : "moscow"}
-            meeting_days={meetData.meeting_days}
-            timeRanges={meetData.timeRanges}
-          />
-          <Toggle
-            LeftLabel={"По местному " + timeZones.local.utcString}
-            RightLabel={"По Москве " + timeZones.moscow.utcString}
-            defaultActive={isLocalTime ? "left" : "right"}
-            onChange={handleToggleChange}
-          />
-        </div>
-      </div>
-    </MeetProvider>
+      </MeetProvider>
+    </Container>
   );
 }

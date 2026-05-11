@@ -3,21 +3,34 @@ import styles from "./Input.module.css";
 import type { IInputProps } from "./Input.types";
 
 export const Input = forwardRef<HTMLInputElement, IInputProps>(
-  ({ label, placeholder, name, error, onChange, readOnly = false, className, suggestMessage, ...inputProps }, ref) => {
+  (
+    {
+      label,
+      placeholder,
+      name,
+      error,
+      onChange,
+      readOnly = false,
+      className,
+      suggestMessage,
+      classNameInputWrapper,
+      ...inputProps
+    },
+    ref,
+  ) => {
     return (
-      <div className={`${styles.Input} ${error ? styles.Input__Error : ""}`}>
+      <div className={`${styles.Input} ${className} ${error ? styles.Input__Error : ""}`}>
         {label && (
           <label className={styles.Input__Label} htmlFor={name}>
             {label}
           </label>
         )}
-        <div className={className}>
+        <div className={classNameInputWrapper}>
           <input
             {...inputProps}
             ref={ref}
             onChange={onChange}
             id={name}
-            name={name}
             readOnly={readOnly}
             placeholder={placeholder}
             className={`${styles.Input__Field}`}

@@ -1,17 +1,26 @@
 import styles from "./TextArea.module.css";
 import type { ITextAreaProps } from "./TextArea.types";
 
-export const TextArea = ({ name, placeholder, label, error, suggestMessage, ...textAreaProps }: ITextAreaProps) => {
+export const TextArea = ({
+  name,
+  placeholder,
+  label,
+  error,
+  suggestMessage,
+  className,
+  textAreaRef,
+  ...textAreaProps
+}: ITextAreaProps) => {
   return (
-    <div className={styles.TextArea + (error ? " " + styles.TextArea__Error : "")}>
+    <div className={styles.TextArea + (className ? " " + className : "") + (error ? " " + styles.TextArea__Error : "")}>
       <label className={styles.TextArea__Label} htmlFor={name}>
         {label}
       </label>
       <textarea
         {...textAreaProps}
+        ref={textAreaRef}
         id={name}
         className={styles.TextArea__Field}
-        name={name}
         placeholder={placeholder}
         autoComplete='off'
       />

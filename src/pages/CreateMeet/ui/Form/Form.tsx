@@ -4,7 +4,7 @@ import styles from "./Form.module.css";
 import { isDurationValid } from "../../lib";
 import { useCreateMeetStore } from "../../model";
 import { Input } from "../Input/Input";
-import { Select } from "../Select/Select";
+import { Select } from "../../../../shared/ui/Select/Select";
 import { TextArea } from "../TextArea/TextArea";
 
 export const Form = () => {

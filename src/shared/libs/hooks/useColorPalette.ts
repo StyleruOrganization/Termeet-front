@@ -1,5 +1,3 @@
-import { useMeetStore } from "@/entities/Meet";
-
 const variablesColors = [
   {
     color: "var(--semantics-blue-950)",
@@ -53,18 +51,20 @@ interface IUseColorPalette {
    * Кол-во людей проголосовавших за текущий слот
    **/
   countSelectPerson: number;
+
+  /**
+   * Кол-во всех людей
+   **/
+  totalPersons: number;
 }
 
-export const useColorPalette = ({ countSelectPerson }: IUseColorPalette) => {
-  const users = useMeetStore(store => store.users);
-
-  if (!users || users.length == 0) {
+export const useColorPalette = ({ countSelectPerson, totalPersons }: IUseColorPalette) => {
+  if (totalPersons == 0) {
     return {
       color: undefined,
       hoverColor: undefined,
     };
   }
-  const countAllPeople = users.length;
-  const avaliableColors = variablesColors.slice(0, countAllPeople).reverse();
-  return avaliableColors[Math.max((countSelectPerson / countAllPeople) * avaliableColors.length - 1, 0)];
+  const avaliableColors = variablesColors.slice(0, totalPersons).reverse();
+  return avaliableColors[Math.max((countSelectPerson / totalPersons) * avaliableColors.length - 1, 0)];
 };

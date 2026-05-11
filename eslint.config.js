@@ -66,6 +66,7 @@ export default [
         },
       ],
       "react-hooks/set-state-in-effect": "off",
+      "no-irreglar-whitespace": "off",
       "import/no-cycle": "error",
       // Enforces FSD layer import rules (e.g., features cannot import pages)
       "fsd/forbidden-imports": "error",

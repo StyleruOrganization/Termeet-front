@@ -11,4 +11,6 @@ export interface ITextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaEleme
   suggestMessage?: string;
   /** Сообщение об ошибке */
   error?: string;
+
+  textAreaRef?: React.RefObject<HTMLTextAreaElement | null>;
 }

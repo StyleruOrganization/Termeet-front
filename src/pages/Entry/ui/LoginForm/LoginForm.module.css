@@ -1,0 +1,80 @@
+.LoginForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+
+    padding: 32px 32px 48px;
+    width: 100%;
+}
+
+.LoginForm__Logo {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.LoginForm__Toggle {
+    width: 100%;
+
+    border-radius: 16px;
+
+}
+
+.LoginForm__Toggle__Option {
+    width: 50%;
+
+    border-radius: 12px;
+}
+
+.LoginForm__Toggle__Option__Active {
+    border: 1px solid var(--semantics-gray-hover);
+    box-shadow: 0 1px 2px rgb(0 0 0 / 10%);
+    background-color: var(--fill-bg);
+    color: var(--semantics-blue-700);
+
+    &:hover {
+        background-color: var(--fill-bg);
+
+        opacity: 0.8;
+    }
+}
+
+.LoginForm__Wrapper {
+  display: flex;
+  gap: 24px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+} 
+
+.LoginForm__FL16 {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    width: 100%;
+}
+
+.LoginForm__Devider {
+    width: calc(100% - 32px);
+    height: 1px;
+
+    background-color: var(--semantics-gray-hover);
+}
+
+.LoginForm__Buttons {
+    width: 100%;
+}
+
+@media (width < 768px) {
+    .LoginForm {
+        padding: 16px 16px 32px;
+    }
+}

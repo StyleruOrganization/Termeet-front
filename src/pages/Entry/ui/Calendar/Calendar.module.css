@@ -1,0 +1,138 @@
+.Calendar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    width: 100%;
+    padding: 12px;
+
+    background-color: var(--fill-controls);
+    border: 1px solid var(--semantics-gray-hover);
+    border-radius: 32px;
+
+    font-size: 3rem;
+}
+
+.Calendar__TimeWrapper {
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+
+    color: var(--text-main);
+    
+    span {
+        height: 20px;
+    }
+}
+
+.Calendar__Date {
+    height: 20px;
+}
+
+.Calendar__Cell {
+    height: 20px;
+
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-color);
+
+    min-width: 70px;
+}
+
+.Calendar__Cell_first {
+    border-top-left-radius: 24px;
+}
+
+.Calendar__Cell_last {
+    border-bottom-right-radius: 24px;
+}
+
+.Calendar__Cell_six{
+    border-top-right-radius: 24px;
+}
+
+.Calendar__Cell_hundred {
+    border-bottom-left-radius: 24px;
+}
+
+.CalendarWrapper {
+    display: grid;
+
+    /* Горизонтальный скролл */
+    overflow: auto hidden;
+
+    grid-template-columns: repeat(6, 1fr);
+
+     -ms-overflow-style: none; /* IE и Edge */
+    
+    /* Убираем скроллбар в разных браузерах */
+    scrollbar-width: none; /* Firefox */
+}
+
+.cellTooltip {
+  position: absolute;
+  z-index: 100;
+  top: -60px;
+  left: 50%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  transform: translateX(-50%) translateY(6px);
+
+  opacity: 0;
+
+  pointer-events: none;
+
+  svg {
+    color: var(--fill-bg);
+  }
+}
+
+.cellTooltip_visible {
+  animation: tooltip-fade-in 0.4s cubic-bezier(0.34, 1.2, 0.64, 1) forwards;
+
+  animation-delay: var(--tooltip-delay, 0ms);
+}
+
+@keyframes tooltip-fade-in {
+  from {
+    transform: translateX(-50%) translateY(6px);
+
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(-50%) translateY(0);
+
+    opacity: 1;
+  }
+}
+
+.cellTooltipContent {
+  display: flex;
+  gap: 0;
+  flex-direction: column;
+
+  padding: 6px 12px;
+
+  color: var(--text-main);
+  box-shadow: 0 2px 12px 0 rgb(0 0 0 / 15%);
+  /* stylelint-disable-next-line */
+  background-color: var(--fill-bg);;
+  border-radius: 16px;
+
+  font-size: 3rem;
+  line-height: 1.25;
+}
+
+.cellTooltipTime {
+  opacity: .5;
+}
+
+.cellTooltipCount {
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

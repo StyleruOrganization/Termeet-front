@@ -1,5 +1,6 @@
 .ToogleContainer {
   display: inline-flex;
+  gap: 8px;
 
   width: fit-content;
   padding: 4px;

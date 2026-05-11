@@ -25,6 +25,7 @@ export const TableCell = ({
     hoveredUser = useMeetStore(store => store.hoveredUser),
     newSelectedSlots = useMeetStore(store => store.newSelectedSlots.get(id.split("T")[0])),
     allUsers = useMeetStore(store => store.users);
+
   const cellRef = useRef<HTMLDivElement>(null);
 
   const countAllPeople = allUsers?.length;
@@ -37,6 +38,7 @@ export const TableCell = ({
 
   const variableColors = useColorPalette({
     countSelectPerson: users?.length || 0,
+    totalPersons: allUsers.length,
   });
 
   const isDisabled = useMemo(() => {

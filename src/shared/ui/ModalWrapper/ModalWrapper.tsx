@@ -12,7 +12,7 @@ export const ModalWrapper = ({
   className = "",
   isAnimate = false,
   animationDuration = 300,
-  scrollbarWidth,
+  scrollbarWidth = window.innerWidth - document.documentElement.clientWidth,
 }: IModalWrapperProps) => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [isVisible, setVisible] = useState(false);

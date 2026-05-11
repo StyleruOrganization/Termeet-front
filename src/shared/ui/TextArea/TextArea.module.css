@@ -15,9 +15,9 @@
   height: 150px;
   padding: 16px;
 
-  background-color: var(--fill-controls);
   color: var(--text-main);
-  border: 1px solid transparent;
+  background-color: var(--fill-controls);
+  border: 1px solid var(--semantics-gray-hover);
   border-radius: 16px;
 
   transition: border-color 0.2s ease;
@@ -26,6 +26,7 @@
   line-height: 1.25;
 
   resize: none;
+
 }
 
 .TextArea__Field::placeholder {

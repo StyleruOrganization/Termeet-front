@@ -115,7 +115,7 @@ export default defineConfig(({ mode }) => ({
   server: {
     proxy: {
       "/api": {
-        target: "https://backend.termeet-dev.ru",
+        target: "https://termeet-dev.ru",
         changeOrigin: true,
         // Важно: не переписываем путь
         rewrite: path => path,

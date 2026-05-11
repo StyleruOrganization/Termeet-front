@@ -8,7 +8,7 @@
   --cell-size: 40px;
   padding: 20px 24px;
   padding-bottom: 35px;
-
+  
   text-align: center;
 
   color: var(--text-main);
@@ -134,13 +134,13 @@
   }
 }
 
-@media (width <= 768px) {
+@media (width < 768px) {
   .Calendar {
     --cell-size: 32px;
   }
 }
 
-@media (width <= 300px) {
+@media (width < 300px) {
   .Calendar {
     --cell-size: 24px;
   }

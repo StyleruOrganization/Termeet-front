@@ -8,7 +8,7 @@ interface ToggleProps {
   defaultActive?: "left" | "right";
   className?: string;
   classNameActive?: string;
-  classNameOptions?: string;
+  classNameOption?: string;
 }
 
 export const Toggle: React.FC<ToggleProps> = ({
@@ -17,7 +17,7 @@ export const Toggle: React.FC<ToggleProps> = ({
   onChange,
   className,
   classNameActive,
-  classNameOptions,
+  classNameOption,
   defaultActive = "left",
 }) => {
   const [active, setActive] = useState<"left" | "right">(defaultActive);
@@ -39,14 +39,16 @@ export const Toggle: React.FC<ToggleProps> = ({
     <div className={`${className} ${styles.ToogleContainer}`} ref={containerRef}>
       <button
         ref={leftRef}
-        className={`${classNameOptions} ${styles.Toogle__Option} ${active === "left" ? `${classNameActive} ${styles.Toogle__Option_active}` : ""}`}
+        type='button'
+        className={`${classNameOption} ${styles.Toogle__Option} ${active === "left" ? `${classNameActive} ${styles.Toogle__Option_active}` : ""}`}
         onClick={() => handleClick("left")}
       >
         {LeftLabel}
       </button>
       <button
         ref={rightRef}
-        className={`${classNameOptions} ${styles.Toogle__Option} ${active === "right" ? `${classNameActive} ${styles.Toogle__Option_active}` : ""}`}
+        type='button'
+        className={`${classNameOption} ${styles.Toogle__Option} ${active === "right" ? `${classNameActive} ${styles.Toogle__Option_active}` : ""}`}
         onClick={() => handleClick("right")}
       >
         {RightLabel}

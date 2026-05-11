@@ -10,7 +10,6 @@ header {
   gap: 8px;
 
   margin: 0 auto;
-  padding: 10px 0;
   padding: 0 100px;
 
   grid-template-columns: repeat(3, auto);
@@ -35,17 +34,37 @@ header {
 
   order: 2;
 
-  span {
+  a {
+    text-decoration: none;
+
+    color: var(--text-main);
+
     font-size: 3rem;
+
+    &:hover {
+      color: var(--text-secondary);
+    }
+
+    &:active {
+      color: var(--semantics-blue-700);
+    }
   }
 }
 
 button.header__loginBtn {
   width: fit-content;
+  margin: 0 auto;
   padding: 8px 10px;
 
   font-size: 3rem;
+  min-width: 202px;
   order: 3;
+}
+
+.header__logoBtn {
+  h1 {
+    text-align: left;
+  }
 }
 
 .toogleTheme {
@@ -68,21 +87,25 @@ button.header__loginBtn {
   padding: 4px
 }
 
+.header__groupButtons {
+  display: flex;
+  gap: 16px;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: space-between;
 
+  order: 3;
+}
 
-@media (width <= 1024px) {
+@media (width < 1024px) {
   header {
-    padding: 0 10px; 
+    padding: 5px 10px; 
 
     min-height: 44px; 
   }
-}
 
-@media (width <= 568px) {
-  header {
-    padding: 5px 10px;
-
-    grid-template-columns: repeat(2, auto); 
+  .header__logoBtn {
+    padding: 0;
   }
 
   button.header__loginBtn {
@@ -96,5 +119,9 @@ button.header__loginBtn {
     padding: 0 20px;
 
     order: 3;
+  }
+
+  .header__groupButtons {
+    width: 100%;
   }
 }
