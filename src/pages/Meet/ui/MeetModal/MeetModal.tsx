@@ -91,10 +91,16 @@ export const MeetModal = () => {
               value={userName}
             />
             <div className={styles.MeetModal__Buttons}>
-              <button type='submit' disabled={isButtonDisabled} className={"baseButton mainButton"}>
+              <button
+                data-test-id='meet-modal-submit-slots'
+                type='submit'
+                disabled={isButtonDisabled}
+                className={"baseButton mainButton"}
+              >
                 Сохранить слоты
               </button>
               <button
+                data-test-id='meet-modal-cancel'
                 onClick={() => {
                   setIsModalOpen(false);
                 }}

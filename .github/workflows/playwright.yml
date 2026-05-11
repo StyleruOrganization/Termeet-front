@@ -49,14 +49,22 @@ jobs:
           rm -rf playwright/.cache
           rm -rf test-results
           npx playwright clear-cache
-          pnpm run ${{ matrix.command }}
+          if [ "${{ matrix.test-type }}" = "e2e" ]; then
+            pnpm run ${{ matrix.command }} -- --project=chromium
+          else
+            pnpm run ${{ matrix.command }}
+          fi
 
       # Обновляем скриншоты если тесты упали
       - name: Update screenshots
         id: update-screens
         if: steps.run-tests.outcome == 'failure'
         run: |
-          pnpm run ${{ matrix.command }} --update-snapshots
+          if [ "${{ matrix.test-type }}" = "e2e" ]; then
+            pnpm run ${{ matrix.command }} -- --project=chromium --update-snapshots
+          else
+            pnpm run ${{ matrix.command }} --update-snapshots
+          fi
           echo "SCREENSHOTS_UPDATED=true" >> $GITHUB_OUTPUT
 
       # Коммитим обновленные скриншоты

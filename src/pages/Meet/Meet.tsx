@@ -34,7 +34,7 @@ export function Meet() {
 
   return (
     <MeetProvider timeInfo={meetData.timeInfo} timeRanges={meetData.timeRanges} users={meetData.users}>
-      <div className={styles.MeetPage}>
+      <div className={styles.MeetPage} data-test-id='meet-page'>
         {WINDOW_WIDTH < 768 ? (
           <div className={styles.MeetPage__HeaderWrapper_Mobile}>
             <MeetHeader
@@ -54,12 +54,14 @@ export function Meet() {
             meeting_days={meetData.meeting_days}
             timeRanges={meetData.timeRanges}
           />
-          <Toggle
-            LeftLabel={"По местному " + timeZones.local.utcString}
-            RightLabel={"По Москве " + timeZones.moscow.utcString}
-            defaultActive={isLocalTime ? "left" : "right"}
-            onChange={handleToggleChange}
-          />
+          <div data-test-id='meet-timezone-toggle'>
+            <Toggle
+              LeftLabel={"По местному " + timeZones.local.utcString}
+              RightLabel={"По Москве " + timeZones.moscow.utcString}
+              defaultActive={isLocalTime ? "left" : "right"}
+              onChange={handleToggleChange}
+            />
+          </div>
         </div>
       </div>
     </MeetProvider>

@@ -23,6 +23,7 @@ export default defineConfig({
   reporter: "html",
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
+    testIdAttribute: "data-test-id",
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
 
@@ -31,16 +32,18 @@ export default defineConfig({
     ctViteConfig: {
       resolve: {
         extensions: [".ts", ".tsx", ".js", ".json"],
-        alias: {
-          "@": resolve(__dirname, "src"),
-          "@app": resolve(__dirname, "src/app"),
-          "@assets": resolve(__dirname, "src/assets"),
-          "@entities": resolve(__dirname, "src/entities"),
-          "@features": resolve(__dirname, "src/features"),
-          "@pages": resolve(__dirname, "src/pages"),
-          "@shared": resolve(__dirname, "src/shared"),
-          "@widgets": resolve(__dirname, "src/widgets"),
-        },
+        alias: [
+          // In CT we don't care about real SVG rendering — stub icons to avoid svgr/vite plugin drift.
+          { find: /^.*\.svg$/, replacement: resolve(__dirname, "src/test-utils/ct/SvgStub.tsx") },
+          { find: "@", replacement: resolve(__dirname, "src") },
+          { find: "@app", replacement: resolve(__dirname, "src/app") },
+          { find: "@assets", replacement: resolve(__dirname, "src/assets") },
+          { find: "@entities", replacement: resolve(__dirname, "src/entities") },
+          { find: "@features", replacement: resolve(__dirname, "src/features") },
+          { find: "@pages", replacement: resolve(__dirname, "src/pages") },
+          { find: "@shared", replacement: resolve(__dirname, "src/shared") },
+          { find: "@widgets", replacement: resolve(__dirname, "src/widgets") },
+        ],
       },
     },
   },

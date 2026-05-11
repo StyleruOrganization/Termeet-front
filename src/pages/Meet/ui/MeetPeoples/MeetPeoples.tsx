@@ -40,6 +40,9 @@ export const MeetPeoples = ({ users }: { users: string[] }) => {
             Участники: <span className={styles.MeetPeoples__Count}>{users.length}</span>
           </h3>
           <button
+            type='button'
+            aria-label='Свернуть или развернуть список участников'
+            data-test-id='meet-participants-toggle'
             onClick={() => {
               setIsExpanded(prev => !prev);
             }}

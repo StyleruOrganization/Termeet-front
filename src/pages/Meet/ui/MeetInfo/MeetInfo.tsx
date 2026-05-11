@@ -67,6 +67,9 @@ export const MeetInfo = ({ data }: IMeetInfoProps) => {
         <div className={styles.MeetInfo__Buttons}>
           {!isEditingMode || (isEditingMode && WINDOW_WIDTH < 768) ? (
             <button
+              type='button'
+              aria-label='Поделиться ссылкой на страницу встречи'
+              data-test-id='meet-share-page-url'
               onClick={() => {
                 copyTextToClipboard(window.location.href, addToast);
               }}
@@ -80,6 +83,9 @@ export const MeetInfo = ({ data }: IMeetInfoProps) => {
             {isEditingMode ? (
               <>
                 <button
+                  type='button'
+                  aria-label='Отменить выбор времени'
+                  data-test-id='meet-cancel-edit-slots'
                   onClick={() => {
                     setIsEditing(false);
                     clearNewSelectedSlots();
@@ -92,6 +98,9 @@ export const MeetInfo = ({ data }: IMeetInfoProps) => {
                   <CancelIcon className={styles.MeetInfo__CancelIcon} /> <span>Отменить</span>
                 </button>
                 <button
+                  type='button'
+                  aria-label='Сохранить выбранные слоты'
+                  data-test-id='meet-save-slots-open-modal'
                   disabled={!newSelectedSlots.size}
                   onClick={() => {
                     setIsModalOpen(true);
@@ -109,6 +118,8 @@ export const MeetInfo = ({ data }: IMeetInfoProps) => {
               <>
                 {/* <button className={"baseButton secondaryButton"}>Назначить встречу</button> */}
                 <button
+                  type='button'
+                  data-test-id='meet-add-time'
                   onClick={() => {
                     setIsEditing(true);
                   }}

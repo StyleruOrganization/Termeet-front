@@ -18,7 +18,7 @@ export const Layout = () => {
 
   return (
     <>
-      <div className={styles.headerContainer}>
+      <div className={styles.headerContainer} data-test-id='layout-header'>
         <header>
           <button
             onClick={() => {
