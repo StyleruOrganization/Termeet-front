@@ -4,6 +4,7 @@ WORKDIR /app
 RUN npm install -g pnpm@8.15.8
 
 COPY package.json pnpm-lock.yaml* ./
+RUN pnpm config set registry https://registry.npmjs.org/ы
 RUN pnpm install --frozen-lockfile
 
 COPY . .
