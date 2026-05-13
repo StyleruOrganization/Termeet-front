@@ -1017,7 +1017,9 @@ footer {
     }
 
     .TeamInfo__CardsSection {
-      gap: 48px
+      gap: 48px;
+
+      background-image: none;
     }
 }
 
