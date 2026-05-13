@@ -815,6 +815,8 @@ section h2 {
 
   width: 100%;
 
+  max-width: 450px;
+
   min-height: 220px;
   min-width: 370px;
 }
@@ -977,7 +979,7 @@ footer {
 
   .EntryPage__Footer__FeedbackFromWrapper {
     grid-column: 1/2;
-    grid-row: 2/3;
+    grid-row: 1/2;
   }
 }
 

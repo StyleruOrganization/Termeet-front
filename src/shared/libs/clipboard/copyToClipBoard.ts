@@ -37,7 +37,12 @@ function fallbackCopyTextToClipboard(text: string, addToast: (toast: Toast) => v
 
   document.body.removeChild(textArea);
 }
-export function copyTextToClipboard(text: string, addToast: (toast: Toast) => void) {
+export function copyTextToClipboard(
+  text: string,
+  addToast: (toast: Toast) => void,
+  successMessage: string,
+  errorMessage: string,
+) {
   if (!navigator.clipboard) {
     fallbackCopyTextToClipboard(text, addToast);
     return;
@@ -45,14 +50,14 @@ export function copyTextToClipboard(text: string, addToast: (toast: Toast) => vo
   navigator.clipboard.writeText(text).then(
     () => {
       addToast({
-        message: "Ссылка скопирована",
+        message: successMessage,
         type: "success",
         id: "copy-to-clipboard-success",
       });
     },
     () => {
       addToast({
-        message: "Не удалось скопировать ссылку",
+        message: errorMessage,
         type: "error",
         id: "copy-to-clipboard-error",
       });

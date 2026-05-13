@@ -1,3 +1,4 @@
+import kirillCv from "@assets/cvs/Frontend-developer.pdf";
 import GmailIcon from "@assets/icons/gmail.svg";
 import TermeetIcon from "@assets/icons/logo.svg";
 import YandexMailIcon from "@assets/icons/yandex-mail.svg";
@@ -97,7 +98,7 @@ export const TEAM_MEMBERS = [
     photo: dimaPhoto,
     telegramContact: "https://t.me/Lobaaashik",
     description:
-      "У меня 48 часов в сутках, веришь нет У меня 48 часов в сутках, веришь нет У меня 48 часов в сутках, веришь нет У меня 48 часов в сутках, веришь нет",
+      "Раньше был КМС по биатлону, теперь КМС по код ревью. Много бегаю, вкусно готовлю и слежу, чтобы разработчики писали termeet",
     email: "",
   },
   {
@@ -116,8 +117,9 @@ export const TEAM_MEMBERS = [
     photo: kirillPhoto,
     telegramContact: "https://t.me/kiryshka2205",
     description:
-      "Я ебаная машина, которая пиздячит код налево и направо. Меня не остановить ни работой в Яндексе, ни загрузкой, мне похуй. Я газую",
+      "Выдаю идеальный код круглосуточно, живу футболом по обе стороны экрана и искренне верю, что еда должна появляться дома исключительно через API доставки.",
     email: "kipabelousov@edu.hse.ru",
+    cv: kirillCv,
   },
   {
     name: "Ксюша Макаева",
@@ -134,7 +136,8 @@ export const TEAM_MEMBERS = [
     role: "Backend-developer",
     photo: danekPhoto,
     telegramContact: "https://t.me/d10110101",
-    description: "Я бэкенд дев, я крутой, я пишу на питоне и других языках",
+    description:
+      "Вайбую по жизни, пью вкусный чай, поднимаю Docker с третьего раза и искренне верю, что Nginx как-нибудь настроится сам.",
     email: "daniilmaklakov36@gmail.com",
   },
   {

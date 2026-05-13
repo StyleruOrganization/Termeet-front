@@ -138,7 +138,7 @@ export const Entry = () => {
       timer = setTimeout(() => {
         setExpandedDesc(true);
         setExpandUserList(true);
-      }, 1000);
+      }, 500);
     }
 
     return () => {
@@ -203,7 +203,7 @@ export const Entry = () => {
                 >
                   <div className={styles.ChatContainer__Msg__Author}>O</div>
                   <div className={styles.ChatContainer__Msg__Content}>
-                    <span>Орагнизатор</span>
+                    <span>Организатор</span>
                     <span>Коллеги, здесь собираем слоты на встречу:</span>
                     <span className={styles.ChatContainer__Msg__Content__Link}>
                       https://termeet.tech/meet/ab0b9ee5-9e58-4507-9f52-fbdd531ec3eb
@@ -229,7 +229,7 @@ export const Entry = () => {
                 >
                   <div className={styles.ChatContainer__Msg__Author}>O</div>
                   <div className={styles.ChatContainer__Msg__Content}>
-                    <span>Орагнизатор</span>
+                    <span>Организатор</span>
                     <span>Отлично</span>
                     <ChatMsgArrow />
                   </div>
@@ -331,7 +331,9 @@ export const Entry = () => {
                     </button>
                     <button
                       className={styles.MeetHeader__Info__Button + " " + styles.MeetHeader__Info__ExpandButton}
-                      onClick={prev => setExpandedDesc(!prev)}
+                      onClick={() => {
+                        setExpandedDesc(!expandedDesc);
+                      }}
                     >
                       <Arrow />
                     </button>
@@ -351,7 +353,10 @@ export const Entry = () => {
                     <button className={styles.MeetHeader__Info__Button}>
                       <Pencil />
                     </button>
-                    <button onClick={prev => setExpandUserList(!prev)} className={styles.MeetPeoples__ExpandButton}>
+                    <button
+                      onClick={() => setExpandUserList(!expandUserList)}
+                      className={styles.MeetPeoples__ExpandButton}
+                    >
                       <Arrow />
                     </button>
                   </div>
@@ -459,15 +464,15 @@ export const Entry = () => {
 
               <div className={styles.EntryPage__Footer__Links}>
                 <span onClick={openLoginModal} style={{ cursor: "pointer" }}>
-                  Зарегестрироваться
+                  Зарегистрироваться
                 </span>
                 <a href='#intro'>Главная</a>
                 <a href='#features'>Удобства</a>
                 <a href='#advantages'>Преимущества</a>
-                <span>О нас</span>
+                <a href='#team-info'>О нас</a>
                 <span>Гайд</span>
                 <a href='#feedback'>Обратная связь</a>
-                <span>Поддержка</span>
+                <a href='#feedback'>Поддержка</a>
               </div>
             </div>
             <div className={styles.EntryPage__Footer__FeedbackFromWrapper}>

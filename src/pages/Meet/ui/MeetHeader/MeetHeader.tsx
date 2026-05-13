@@ -67,7 +67,7 @@ export const MeetHeader = ({ duration, description, name, link }: MeetHeaderProp
           onClick={event => {
             event.preventDefault();
 
-            copyTextToClipboard(link, addToast);
+            copyTextToClipboard(link, addToast, "Ссылка скопирована", "Не удалось скопировать ссылку");
           }}
         >
           Ссылка на встречу

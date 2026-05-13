@@ -9,3 +9,8 @@ declare module "*.svg" {
   import * as React from "react";
   export default React.FC<React.SVGProps<SVGSVGElement>>;
 }
+
+declare module "*.pdf" {
+  const src: string;
+  export default src;
+}

@@ -68,7 +68,12 @@ export const MeetInfo = ({ data }: IMeetInfoProps) => {
           {!isEditingMode || (isEditingMode && WINDOW_WIDTH < 768) ? (
             <button
               onClick={() => {
-                copyTextToClipboard(window.location.href, addToast);
+                copyTextToClipboard(
+                  window.location.href,
+                  addToast,
+                  "Ссылка скопирована",
+                  "Не удалось скопировать ссылку",
+                );
               }}
               className={styles.MeetInfo__ShareButton}
             >
