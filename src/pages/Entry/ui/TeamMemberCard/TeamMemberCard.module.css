@@ -11,8 +11,30 @@
     grid-template-columns: 200px 1fr;
     grid-template-rows: repeat(3, auto);
 
+    opacity: 0;
+
     p {
         font-size: var(--text-body)
+    }
+}
+
+.TeamMemberCard_visible {
+    animation: fade-in 0.25s forwards;
+
+    animation-delay: var(--animation-delay, 0ms);
+}
+
+@keyframes fade-in {
+    from {
+        transform: translateY(12px);
+
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+
+        opacity: 1;
     }
 }
 

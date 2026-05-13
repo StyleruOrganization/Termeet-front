@@ -55,14 +55,11 @@ export const Entry = () => {
   const calendarRef = useRef<HTMLDivElement>(null);
   const manageContainerRef = useRef<HTMLDivElement>(null);
   const calendarAdvRef = useRef<HTMLDivElement>(null);
-  const teamSectionRef = useRef<HTMLDivElement>(null);
-
   const { isVisible: chatInView, hasBeenSeen: chatHasBeenSeen } = useInView(chatRef, 0.1);
   const { isVisible: notificationsInView, hasBeenSeen: notificationsHasBeenSeen } = useInView(notificationsRef, 1);
   const { hasBeenSeen: calendarHasBeenSeen } = useInView(calendarRef);
   const { hasBeenSeen: manageContainerHasBeenSeen } = useInView(manageContainerRef, 0.5);
   const { hasBeenSeen: calendarAdvHasBeenSeen } = useInView(calendarAdvRef, 0.5);
-  const { hasBeenSeen: teamSectionHasBeenSeen } = useInView(teamSectionRef, 0.2);
 
   const getNotificationDelay = (position: number, total: number) => {
     const chatOffset = chatInView && notificationsInView ? CHAT_TOTAL_DURATION : 0;
@@ -431,11 +428,7 @@ export const Entry = () => {
       </Container>
 
       <Container>
-        <section
-          ref={teamSectionRef}
-          id='team-info'
-          className={`${teamSectionHasBeenSeen ? styles.TeamInfo_visible : ""}`}
-        >
+        <section id='team-info'>
           <h2>Наша команда</h2>
 
           <div className={styles.TeamInfo__CardsSection}>

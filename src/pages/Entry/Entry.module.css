@@ -1003,14 +1003,6 @@ footer {
   z-index: 2;
 
   max-width: 600px;
-
-  opacity: 0;
-}
-
-.TeamInfo_visible .TeamInfo__Card {
-  animation: fade-in 0.3s forwards;
-
-  animation-delay: var(--animation-delay);
 }
 
 .TeamInfo__Card:nth-child(2n) {
