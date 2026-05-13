@@ -90,7 +90,7 @@ export const TEAM_MEMBERS = [
     telegramContact: "https://t.me/Kotletkad",
     description:
       "Я ебаная машина, которая пиздячит код налево и направо. Меня не остановить ни работой в Яндексе, ни загрузкой, мне похуй. Я газую",
-    email: "",
+    email: "timycmorozov5795@gmail.com",
   },
   {
     name: "Дима Лобанев",
@@ -99,7 +99,7 @@ export const TEAM_MEMBERS = [
     telegramContact: "https://t.me/Lobaaashik",
     description:
       "Раньше был КМС по биатлону, теперь КМС по код ревью. Много бегаю, вкусно готовлю и слежу, чтобы разработчики писали termeet",
-    email: "",
+    email: "dalobanev@yandex.ru",
   },
   {
     name: "Артем Шевчук",
@@ -147,7 +147,7 @@ export const TEAM_MEMBERS = [
     telegramContact: "https://t.me/airsenya",
     description:
       "Я ебаная машина, которая пиздячит код налево и направо. Меня не остановить ни работой в Яндексе, ни загрузкой, мне похуй. Я газую",
-    email: "",
+    email: "airsenya18@gmail.com",
   },
   {
     name: "Коля Красавин",
