@@ -169,7 +169,7 @@ export const Entry = () => {
 
   return (
     <div className={styles.EntryPage}>
-      <div id='intro' className={styles.EntryPage__intro}>
+      <div className={styles.EntryPage__intro}>
         <div className={styles.EntryPage__intro__content}>
           <h1>Планируй встречи легко</h1>
           <p>
@@ -483,7 +483,9 @@ export const Entry = () => {
                 <span onClick={openLoginModal} style={{ cursor: "pointer" }}>
                   Зарегистрироваться
                 </span>
-                <a href='#intro'>Главная</a>
+                <span style={{ cursor: "pointer" }} onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
+                  Главная
+                </span>
                 <a href='#features'>Удобства</a>
                 <a href='#advantages'>Преимущества</a>
                 <a href='#team-info'>О нас</a>
