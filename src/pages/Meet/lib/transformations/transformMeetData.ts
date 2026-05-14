@@ -14,7 +14,7 @@ export const transformMeetData = (meetData: MeetResponse, isLocal: boolean): IMe
 
   const timeZoneOffset = isLocal ? -new Date().getTimezoneOffset() / 60 : 3;
   // Переводим UTC в нужное время - это дни в которые проходит встреча
-  const preparedMeetDataDataRanges = meetData.dataRange.map(([startTime, endTime]) => [
+  const preparedMeetDataDataRanges = meetData.data_range.map(([startTime, endTime]) => [
     convertUTCToTimezone(startTime, timeZoneOffset),
     convertUTCToTimezone(endTime, timeZoneOffset),
   ]);
@@ -215,6 +215,8 @@ export const transformMeetData = (meetData: MeetResponse, isLocal: boolean): IMe
     }),
     timeInfo,
     users: Array.from(users),
+    isCreator: meetData.isCreator,
+    isCreatorAuth: meetData.isCreatorAuth,
   };
 
   return processedData;

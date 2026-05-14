@@ -36,7 +36,7 @@
     height: max-content;
     padding: 4px;
 
-    background-color: var(--components-hover);
+    background-color: var(--semantics-gray-default);
     border-radius: 7px;
 
     min-height: var(--icon-size);

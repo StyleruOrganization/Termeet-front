@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useMeetStore, slotsUserSchema, MeetQueries } from "@/entities/Meet";
+import { useMeetStore, MeetQueries } from "@/entities/Meet";
 import { useToastStore } from "@/features/ToastContainer";
 import { apiClient } from "@/shared/api";
 
@@ -20,11 +20,7 @@ export const useSaveUserSelectedSlots = (meetHash: string, onMutate?: () => void
       const preparedSlots = getPreparedNewSlots();
       clearNewSelectedSlots();
 
-      return await apiClient.patch(
-        `/meet/${meetHash}/slots`,
-        { name: userName, slots: preparedSlots },
-        slotsUserSchema,
-      );
+      return await apiClient.patch(`/meet/${meetHash}/slots`, { name: userName, slots: preparedSlots });
     },
     // Оптимистичное обновление
     onMutate: async userName => {

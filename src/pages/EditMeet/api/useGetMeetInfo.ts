@@ -11,7 +11,7 @@ export const useGetMeetInfo = (): Pick<IMeet, "name" | "description" | "link" | 
   const timeZoneOffset = isLocalTime ? -new Date().getTimezoneOffset() / 60 : 3;
   const timeRanges: IMeet["timeRanges"] = [];
 
-  const preparedMeetDataDataRanges = meetData.dataRange.map(([startTime, endTime]) => [
+  const preparedMeetDataDataRanges = meetData.data_range.map(([startTime, endTime]) => [
     convertUTCToTimezone(startTime, timeZoneOffset),
     convertUTCToTimezone(endTime, timeZoneOffset),
   ]);

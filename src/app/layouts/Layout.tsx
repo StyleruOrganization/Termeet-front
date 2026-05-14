@@ -1,4 +1,5 @@
 import { Outlet, useLocation, useNavigate } from "react-router";
+import { useActiveSectionStore } from "@/pages/Entry/lib/store/useActiveSection";
 import { LoginForm } from "@/pages/Entry/ui/LoginForm/LoginForm";
 import { useTheme } from "@/shared/libs";
 import { useLoginModalStore } from "@/shared/libs/store/useLoginModalStore";
@@ -20,11 +21,22 @@ export const Layout = () => {
   const { pathname } = useLocation();
   const { theme, setTheme } = useTheme();
   const { isOpen, open, close } = useLoginModalStore();
+  const { activeSection } = useActiveSectionStore();
 
   return (
     <>
-      <div id='intro' className={styles.headerContainer}>
-        <header>
+      <div
+        id='intro'
+        className={styles.headerContainer}
+        style={{
+          position: pathname == "/" ? "sticky" : "static",
+        }}
+      >
+        <header
+          style={{
+            padding: pathname == "/" ? "16px 16px 0px" : "16px",
+          }}
+        >
           <button
             onClick={() => {
               navigate("/");
@@ -56,9 +68,15 @@ export const Layout = () => {
           ) : null} */}
           {pathname == "/" && (
             <div className={styles.header__groupAnchors}>
-              <a href='#features'>Удобства</a>
-              <a href='#advantages'>Возможности</a>
-              <a>О нас</a>
+              <a className={activeSection == "features" ? styles.activeAnchor : ""} href='#features'>
+                Удобства
+              </a>
+              <a className={activeSection == "advantages" ? styles.activeAnchor : ""} href='#advantages'>
+                Возможности
+              </a>
+              <a className={activeSection == "team" ? styles.activeAnchor : ""} href='#team-info'>
+                О нас
+              </a>
             </div>
           )}
 

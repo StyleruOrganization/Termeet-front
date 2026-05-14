@@ -9,7 +9,10 @@ export interface TimeSelectProps {
   options: string[];
 
   sizeArrow?: 16 | 8;
+  /** Начальное значение (uncontrolled) */
   initialValue?: string;
+  /** Контролируемое значение */
+  value?: string;
   className?: string;
   onChange?: (value: string) => void;
   onBlur?: () => void;

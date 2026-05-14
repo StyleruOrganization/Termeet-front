@@ -3,8 +3,9 @@ import { Select, Input, TextArea } from "@/shared/ui";
 import CrossIcon from "@assets/icons/cross.svg";
 import PaperClipIcon from "@assets/icons/paperclip.svg";
 import UploadIcon from "@assets/icons/upload.svg";
+import { useSendFeedback } from "./api/useSendFeedBack";
 import styles from "./FeedbackForm.module.css";
-import { FEEDBACK_REASONS, CHANELLS } from "./lib/consts/consts";
+import { FEEDBACK_REASONS, CHANELLS, REASON_TO_API, CHANNEL_TO_API } from "./lib/consts/consts";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/avif", "image/webp", "image/jpg"];
@@ -132,6 +133,7 @@ export const FeedbackForm = () => {
   const { reason, channel, contact, message, files, errorsState } = state;
   const formRef = useRef<HTMLFormElement>(null);
   const dragCounterRef = useRef(0);
+  const { sendFeedback, isPending } = useSendFeedback();
 
   const handleChannelChange = (newChannel: string) => {
     dispatch({
@@ -177,16 +179,17 @@ export const FeedbackForm = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append("reason", reason);
-    formData.append("channel", channel);
-    formData.append("contact", contact);
-    formData.append("message", message);
-    files.filter(e => !e.invalid).forEach(e => formData.append("files", e.file));
-    console.log({ reason, channel, contact, message, files: files });
 
+    const validFiles = files.map(f => f.file);
+
+    sendFeedback({
+      photos: validFiles,
+      type: REASON_TO_API[reason],
+      communication_channel: CHANNEL_TO_API[channel],
+      contact: contact.trim(),
+      message: message.trim(),
+    });
     dispatch({ type: "RESET" });
-    // fetch('/api/feedback', { method: 'POST', body: formData });
   };
 
   useEffect(() => {
@@ -245,6 +248,7 @@ export const FeedbackForm = () => {
 
   const hasInvalidFiles = files.some(e => e.invalid);
   const submitButtonDisabled =
+    isPending ||
     Boolean(errorsState.contact) ||
     Boolean(errorsState.message) ||
     !contact.trim() ||

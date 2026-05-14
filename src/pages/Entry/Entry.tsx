@@ -15,6 +15,7 @@ import TelemostIcon from "@assets/icons/telemost.svg";
 import TgIcon from "@assets/icons/tg.svg";
 import TrashBinIcon from "@assets/icons/trash-bin.svg";
 import YandexCalendarIcon from "@assets/icons/yandex-calendar.svg";
+import { useToastStore } from "@features/ToastContainer";
 import { useInView } from "@shared/libs/hooks/useinView";
 import styles from "./Entry.module.css";
 import {
@@ -30,6 +31,7 @@ import {
   MEETS,
   TEAM_MEMBERS,
 } from "./lib/consts/consts";
+import { useActiveSectionStore } from "./lib/store/useActiveSection";
 import { Calendar } from "./ui/Calendar/Calendar";
 import { Card } from "./ui/Card/Card";
 import { Notification } from "./ui/Notification/Notification";
@@ -44,6 +46,8 @@ export const Entry = () => {
   const [expandUserList, setExpandUserList] = useState(false);
   const [hoveredUser, setHoveredUser] = useState("");
   const openLoginModal = useLoginModalStore(state => state.open);
+  const addToast = useToastStore(state => state.addToast);
+  const setActiveSection = useActiveSectionStore(state => state.setActiveSection);
 
   const navigate = useNavigate();
 
@@ -55,6 +59,14 @@ export const Entry = () => {
   const calendarRef = useRef<HTMLDivElement>(null);
   const manageContainerRef = useRef<HTMLDivElement>(null);
   const calendarAdvRef = useRef<HTMLDivElement>(null);
+
+  const sectionFeauturesRef = useRef<HTMLDivElement>(null);
+  const sectionAdvantagesRef = useRef<HTMLDivElement>(null);
+  const sectionTeamRef = useRef<HTMLDivElement>(null);
+
+  const { isVisible: sectionFeauturesInView } = useInView(sectionFeauturesRef, 0.3);
+  const { isVisible: sectionAdvantagesInView } = useInView(sectionAdvantagesRef, 0.3);
+  const { isVisible: sectionTeamInView } = useInView(sectionTeamRef, 0.3);
   const { isVisible: chatInView, hasBeenSeen: chatHasBeenSeen } = useInView(chatRef, 0.1);
   const { isVisible: notificationsInView, hasBeenSeen: notificationsHasBeenSeen } = useInView(notificationsRef, 1);
   const { hasBeenSeen: calendarHasBeenSeen } = useInView(calendarRef);
@@ -143,9 +155,21 @@ export const Entry = () => {
     };
   }, [manageContainerHasBeenSeen]);
 
+  useEffect(() => {
+    if (sectionAdvantagesInView) {
+      setActiveSection("advantages");
+    } else if (sectionFeauturesInView) {
+      setActiveSection("features");
+    } else if (sectionTeamInView) {
+      setActiveSection("team");
+    } else {
+      setActiveSection(null);
+    }
+  }, [sectionAdvantagesInView, sectionFeauturesInView, sectionTeamInView, setActiveSection]);
+
   return (
     <div className={styles.EntryPage}>
-      <div className={styles.EntryPage__intro}>
+      <div id='intro' className={styles.EntryPage__intro}>
         <div className={styles.EntryPage__intro__content}>
           <h1>Планируй встречи легко</h1>
           <p>
@@ -180,6 +204,7 @@ export const Entry = () => {
             } as React.CSSProperties
           }
           className={styles.EntryPage__Reasons}
+          ref={sectionFeauturesRef}
         >
           <h2>
             Почему встречи удобнее <br />
@@ -295,6 +320,7 @@ export const Entry = () => {
             } as React.CSSProperties
           }
           className={styles.EntryPage__Advantages}
+          ref={sectionAdvantagesRef}
         >
           <h2>Преимущества Termeet</h2>
 
@@ -425,10 +451,8 @@ export const Entry = () => {
             </Card>
           </div>
         </section>
-      </Container>
 
-      <Container>
-        <section id='team-info'>
+        <section id='team-info' ref={sectionTeamRef}>
           <h2>Наша команда</h2>
 
           <div className={styles.TeamInfo__CardsSection}>
@@ -463,7 +487,18 @@ export const Entry = () => {
                 <a href='#features'>Удобства</a>
                 <a href='#advantages'>Преимущества</a>
                 <a href='#team-info'>О нас</a>
-                <span>Гайд</span>
+                <span
+                  style={{ cursor: "pointer" }}
+                  onClick={() =>
+                    addToast({
+                      id: "guide-coming-soon",
+                      message: "Гайд скоро появится",
+                      type: "info",
+                    })
+                  }
+                >
+                  Гайд
+                </span>
                 <a href='#feedback'>Обратная связь</a>
                 <a href='#feedback'>Поддержка</a>
               </div>

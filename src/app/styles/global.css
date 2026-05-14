@@ -3,10 +3,11 @@ html {
   font-weight: 500;
 
   scroll-behavior: smooth;
-  
+
   --text-display: clamp(24px, 1.786vw + 10.29px, 36px);
   --text-heading: clamp(20px, 0.595vw + 15.43px, 24px);
   --text-body: clamp(14px, 0.298vw + 11.71px, 16px);
+  --text-small: clamp(16px, 0.595vw + 12.29px, 24px);
 }
 
 @supports not (font-size: clamp(1rem, 1vw, 2rem)) {
@@ -14,21 +15,24 @@ html {
     --text-display: calc(24px + (36 - 24) * ((100vw - 768px) / (1440 - 768)));
     --text-heading: calc(20px + (24 - 20) * ((100vw - 768px) / (1440 - 768)));
     --text-body: calc(14px + (16 - 14) * ((100vw - 768px) / (1440 - 768)));
+    --text-small: calc(16px + (24 - 16) * ((100vw - 768px) / (1440 - 768)));
   }
-  
+
   @media (width < 768px) {
     :root {
       --text-display: 24px;
       --text-heading: 20px;
       --text-body: 14px;
+      --text-small: 16px;
     }
   }
-  
+
   @media (width > 1440px) {
     :root {
       --text-display: 36px;
       --text-heading: 24px;
       --text-body: 16px;
+      --text-small: 24px;
     }
   }
 }
@@ -52,6 +56,7 @@ textarea:focus-visible {
 }
 
 * {
+  scroll-margin-top: 90px;
   -webkit-tap-highlight-color: transparent;
 }
 

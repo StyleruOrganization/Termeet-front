@@ -54,8 +54,8 @@
   background-color: var(--semantics-red-active);
 }
 
-.Toast__Wait {
-  background-color: var(--semantics-yellow-main);
+.Toast__Wait, .Toast__Info {
+  background-color: var(--semantics-yellow-hover);
 }
 
 .Toast__IconWait {

@@ -13,7 +13,9 @@ export const LoginForm = () => {
         termeet
       </div>
       <div className={styles.LoginForm__Wrapper}>
-        <Toggle
+
+        Регистрация вот-вот появится ...
+        {/* <Toggle
           className={styles.LoginForm__Toggle}
           classNameOption={styles.LoginForm__Toggle__Option}
           classNameActive={styles.LoginForm__Toggle__Option__Active}
@@ -49,7 +51,7 @@ export const LoginForm = () => {
             <YandexLogo />
             <span>Войти с помощью Яндекс</span>
           </button>
-        </div>
+        </div> */}
       </div>
     </form>
   );

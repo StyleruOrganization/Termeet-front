@@ -1,2 +1,2 @@
 export { queryClient } from "./query-client";
-export { apiClient } from "./apiClient";
+export { apiClient, HttpError } from "./apiClient";

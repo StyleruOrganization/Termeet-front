@@ -33,6 +33,8 @@ export function Meet() {
     setSearchParams({ localTime: newValue.toString() }, { replace: true });
   };
 
+  console.log("MEETDATA", meetData);
+
   return (
     <Container>
       <MeetProvider timeInfo={meetData.timeInfo} timeRanges={meetData.timeRanges} users={meetData.users}>

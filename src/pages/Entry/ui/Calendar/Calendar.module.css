@@ -70,7 +70,6 @@
 
 .cellTooltip {
   position: absolute;
-  z-index: 100;
   top: -60px;
   left: 50%;
 

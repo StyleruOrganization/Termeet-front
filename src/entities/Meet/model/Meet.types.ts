@@ -24,6 +24,9 @@ export interface IMeet {
    * И слоты - мапа ключ - время, значение - массив пользователей
    */
   timeInfo: Map<string, { timeRanges: [string, string][]; userSlots: Map<string, string[]> }>;
+
+  isCreatorAuth: boolean;
+  isCreator: boolean;
 }
 
 export interface IMeetStore {

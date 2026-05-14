@@ -2,7 +2,7 @@ import { Select as SelectBase } from "@shared/ui";
 import { type TimeSelectProps } from "./TimeSelect.types";
 import { useCreateMeetStore } from "../../model";
 
-export const TimeSelect = ({ name, ...props }: TimeSelectProps) => {
+export const TimeSelect = ({ name,  initialValue,  ...props }: TimeSelectProps) => {
   const inputValue = useCreateMeetStore(state => state.values[name]);
   const setTime = useCreateMeetStore(state => state.setTime);
   const blurTimeField = useCreateMeetStore(state => state.blurTimeField);
@@ -20,7 +20,8 @@ export const TimeSelect = ({ name, ...props }: TimeSelectProps) => {
       onBlur={() => {
         blurTimeField(name);
       }}
-      initialValue={inputValue}
+      initialValue={initialValue}
+      value={inputValue}
       name={name}
       {...props}
     />

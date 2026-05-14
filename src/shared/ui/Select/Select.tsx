@@ -15,11 +15,14 @@ export const Select = ({
   onChange: onChangeExternal,
   onFocus: onFocusExternal,
   initialValue,
+  value: valueProp,
   sizeArrow,
 }: TimeSelectProps) => {
+  const isControlled = valueProp !== undefined;
   const dropdownRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const [inputValue, setInputValue] = useState(initialValue);
+  const [internalValue, setInternalValue] = useState(initialValue);
+  const inputValue = isControlled ? valueProp : internalValue;
   const { isOpen, dropdownPosition, openDropdown, closeDropdown } = useDropdownPosition(
     inputRef,
     dropdownRef,
@@ -76,7 +79,9 @@ export const Select = ({
                   onClick={event => {
                     event.preventDefault();
                     onChangeExternal?.(option);
-                    setInputValue(option);
+                    if (!isControlled) {
+                      setInternalValue(option);
+                    }
                     closeDropdown();
                   }}
                   key={option}

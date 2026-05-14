@@ -5,6 +5,7 @@ import { transformMeetData } from "../lib";
 
 export const useGetMeetInfo = (hash: string, isLocal: boolean) => {
   const { data } = useSuspenseQuery(MeetQueries.meet(hash));
+  console.log("DATA", data);
 
   // Используем useMemo для автоматического пересчета при изменении isLocal
   const transformedMeetData = useMemo(() => {

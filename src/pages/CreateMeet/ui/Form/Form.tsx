@@ -4,8 +4,8 @@ import styles from "./Form.module.css";
 import { isDurationValid } from "../../lib";
 import { useCreateMeetStore } from "../../model";
 import { Input } from "../Input/Input";
-import { Select } from "../../../../shared/ui/Select/Select";
 import { TextArea } from "../TextArea/TextArea";
+import { TimeSelect } from "../TimeSelect/TimeSelect";
 
 export const Form = () => {
   const timeStart = useCreateMeetStore(state => state.values.timeStart);
@@ -27,23 +27,25 @@ export const Form = () => {
       />
       <div className={styles.MeetingForm__InputsTimes__Label}>Когда хотите встретиться?</div>
       <div className={styles.MeetingForm__InputsTimes}>
-        <Select
+        <TimeSelect
           name='timeStart'
           placeholder='Выберите'
           options={TIMES}
           className={styles.MeetingForm__InputTimes__Input}
           disabledFunc={time => !isTimeBefore(time, timeEnd)}
+          initialValue='10:00'
         />
         <div className={styles.MeetingForm__InputsTimes__Separator} />
-        <Select
+        <TimeSelect
           name='timeEnd'
           placeholder='Выберите'
           options={TIMES}
           className={styles.MeetingForm__InputTimes__Input}
           disabledFunc={time => isTimeBefore(time, timeStart) || time == timeStart}
+          initialValue='19:00'
         />
       </div>
-      <Select
+      <TimeSelect
         name='timeDuration'
         label='Продолжительность встречи'
         className={styles.MeetingForm__InputTimes__Input}

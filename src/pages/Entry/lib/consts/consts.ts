@@ -1,4 +1,6 @@
-import kirillCv from "@assets/cvs/Frontend-developer.pdf";
+import danekCv from "@assets/cvs/Danek.pdf";
+import kirillCv from "@assets/cvs/Kirill.pdf";
+import timofeyCv from "@assets/cvs/Timofey.pdf";
 import GmailIcon from "@assets/icons/gmail.svg";
 import TermeetIcon from "@assets/icons/logo.svg";
 import YandexMailIcon from "@assets/icons/yandex-mail.svg";
@@ -92,6 +94,7 @@ export const TEAM_MEMBERS = [
     description:
       "Создаю лучший продукт, на который вы сейчас смотрите. AI native product. NBA Timberwolves Minisota🫡.",
     email: "timycmorozov5795@gmail.com",
+    cv: timofeyCv,
   },
   {
     name: "Дима Лобанев",
@@ -107,8 +110,7 @@ export const TEAM_MEMBERS = [
     role: "Арт-директор",
     photo: artyomPhoto,
     telegramContact: "https://t.me/ShevchukArtyom",
-    description:
-      "Я если честно в рот ебал этот ваш дизайн, но вы пищите если нужно что-то кайфовое. Я норм сделаю. Не шик, но сделаю",
+    description: "Я если честно устал, но вы пищите если нужно что-то кайфовое. Я норм сделаю. Не шик, но сделаю",
     email: "working.aashevchuk@gmail.com",
     portfolioLink: "https://shevchuk.tech/",
   },
@@ -139,14 +141,14 @@ export const TEAM_MEMBERS = [
     description:
       "Вайбую по жизни, пью вкусный чай, поднимаю Docker с третьего раза и искренне верю, что Nginx как-нибудь настроится сам.",
     email: "daniilmaklakov36@gmail.com",
+    cv: danekCv,
   },
   {
     name: "Ксюша Шурыгина",
     role: "Product designer",
     photo: kseniaShPhoto,
     telegramContact: "https://t.me/airsenya",
-    description:
-      "Я ебаная машина, которая пиздячит код налево и направо. Меня не остановить ни работой в Яндексе, ни загрузкой, мне похуй. Я газую",
+    description: "Если продукт не работает — дизайн тут ни при чём. Если работает — уже при чём.",
     email: "airsenya18@gmail.com",
   },
   {
@@ -155,7 +157,7 @@ export const TEAM_MEMBERS = [
     photo: kolyaPhoto,
     telegramContact: "https://t.me/kolyanikolka",
     description:
-      "Я ебаная машина, которая пиздячит код налево и направо. Меня не остановить ни работой в Яндексе, ни загрузкой, мне похуй. Я газую",
+      "Профессионально делаю вид, что не только крашу кнопки на фронтенде. Заливаю катки в CS быстрее, чем прилетают правки, и потребляю больше Dr Pepper, чем вся республика Татарстан.",
     email: "nik.krasavin.06@gmail.com",
   },
 ];

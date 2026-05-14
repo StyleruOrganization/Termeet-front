@@ -1,31 +1,28 @@
-import type { ZodSchema } from "zod";
+export class HttpError extends Error {
+  readonly status: number;
+
+  constructor(status: number) {
+    super(`HTTP error! Status: ${status}`);
+    this.name = "HttpError";
+    this.status = status;
+  }
+}
 
 class ApiClient {
-  async handleResponse<TResult>(response: Response, validationSchema?: ZodSchema<TResult>): Promise<TResult> {
+  async handleResponse<TResult>(response: Response): Promise<TResult> {
     if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+      throw new HttpError(response.status);
     }
 
     try {
       const result = await response.json();
-
-      if (validationSchema) {
-        const validationRes = validationSchema.safeParse(result);
-        if (!validationRes.success) {
-          console.error("❌ Ошибка валидации данных:", {
-            error: validationRes.error,
-            timestamp: new Date().toISOString(),
-          });
-        }
-      }
-
       return result;
     } catch (error) {
       throw new Error(`Error parsing JSON response: ${error instanceof Error ? error.message : ""}`);
     }
   }
 
-  public async get<TResult = unknown>(endpoint: string, validationSchema?: ZodSchema<TResult>): Promise<TResult> {
+  public async get<TResult = unknown>(endpoint: string): Promise<TResult> {
     const response = await fetch(`/api${endpoint}`, {
       method: "GET",
       headers: {
@@ -33,25 +30,13 @@ class ApiClient {
       },
     });
 
-    return this.handleResponse<TResult>(response, validationSchema);
+    return this.handleResponse<TResult>(response);
   }
 
   public async post<TResult = unknown, TData = Record<string, unknown>>(
     endpoint: string,
     body: TData,
-    validationSchema?: ZodSchema<TData>,
   ): Promise<TResult> {
-    if (validationSchema) {
-      const validationRes = validationSchema.safeParse(body);
-      if (!validationRes.success) {
-        console.error("❌ Ошибка валидации данных:", {
-          error: validationRes.error.issues[0].message,
-          path: validationRes.error.issues[0].path,
-          timestamp: new Date().toISOString(),
-        });
-      }
-    }
-    console.log("Вызываю post метод");
     const response = await fetch(`/api${endpoint}`, {
       method: "POST",
       headers: {
@@ -64,22 +49,22 @@ class ApiClient {
     return this.handleResponse<TResult>(response);
   }
 
+  public async postFormData<TResult = unknown>(endpoint: string, body: FormData): Promise<TResult> {
+    const response = await fetch(`/api${endpoint}`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+      },
+      body,
+    });
+
+    return this.handleResponse<TResult>(response);
+  }
+
   public async patch<TResult = unknown, TData = Record<string, unknown>>(
     endpoint: string,
     body: TData,
-    validationSchema?: ZodSchema<TData>,
   ): Promise<TResult> {
-    if (validationSchema) {
-      const validationRes = validationSchema.safeParse(body);
-      if (!validationRes.success) {
-        console.error("❌ Ошибка валидации данных:", {
-          error: validationRes.error.issues[0].message,
-          path: validationRes.error.issues[0].path,
-          timestamp: new Date().toISOString(),
-        });
-      }
-    }
-
     const response = await fetch(`/api${endpoint}`, {
       method: "PATCH",
       headers: {

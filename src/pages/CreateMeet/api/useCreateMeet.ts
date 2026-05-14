@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useRef, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { apiClient } from "@/shared/api";
-import { meetCreateSchema, type MeetCreate, meetResponseSchema, type MeetResponse } from "@entities/Meet";
+import { type MeetCreate, type MeetResponse } from "@entities/Meet";
 import { useToastStore } from "@features/ToastContainer";
 import type { ICreateMeet } from "../model";
 
@@ -34,14 +34,6 @@ export const useCreateMeet = ({ onSuccess: onSuccessExternal }: { onSuccess: () 
   }, []);
 
   const handleSuccess = (response: MeetResponse) => {
-    const validationRes = meetResponseSchema.safeParse(response);
-    if (!validationRes.success) {
-      console.error("❌ Ошибка валидации данных в ответе при создании встречи:", {
-        error: validationRes.error.issues[0].message,
-        path: validationRes.error.issues[0].path,
-        timestamp: new Date().toISOString(),
-      });
-    }
     onSuccessExternal();
     navigate(`/meet/${response.hash}`);
     removeToast("create-meet-wait");
@@ -62,7 +54,7 @@ export const useCreateMeet = ({ onSuccess: onSuccessExternal }: { onSuccess: () 
   };
 
   const { mutate, isPending } = useMutation({
-    mutationFn: (data: MeetCreate) => apiClient.post<MeetResponse, MeetCreate>("/meet/create", data, meetCreateSchema),
+    mutationFn: (data: MeetCreate) => apiClient.post<MeetResponse, MeetCreate>("/meet/create", data),
     onSuccess: async (response: MeetResponse) => {
       //t.me/mikhailnaer/775 - используем правильно 300/500
       if (

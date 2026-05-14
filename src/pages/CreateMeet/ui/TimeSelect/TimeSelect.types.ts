@@ -9,4 +9,5 @@ export interface TimeSelectProps {
   /** Варинаты которые можно выбрать */
   options: string[];
   className?: string;
+  initialValue?: string;
 }

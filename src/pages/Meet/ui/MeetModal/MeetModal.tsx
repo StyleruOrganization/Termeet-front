@@ -63,9 +63,7 @@ export const MeetModal = () => {
           <form
             onSubmit={event => {
               event.preventDefault();
-              const formValues = new FormData(event.target);
-              const username = formValues.get("userName")?.toString() || "";
-              saveSelectesSlots(username);
+              saveSelectesSlots(userName.trim());
               setUserName("");
             }}
             data-test-id='meet-modal'

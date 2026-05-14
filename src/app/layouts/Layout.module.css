@@ -1,4 +1,7 @@
 .headerContainer {
+  z-index: 100;
+  top: 0;
+
   background-color: var(--fill-controls);
 }
 
@@ -32,12 +35,21 @@ header {
   align-items: center;
   gap: 24px;
 
+  height: 54px;
+
   order: 2;
 
   a {
+    display: flex;
+    align-items: center;
+
+    height: 100%;
+
     text-decoration: none;
 
     color: var(--text-main);
+
+    border-bottom: 2px  solid transparent;
 
     font-size: 3rem;
 
@@ -46,8 +58,13 @@ header {
     }
 
     &:active {
-      color: var(--semantics-blue-700);
+      color: var(--text-main);
     }
+
+  }
+
+  a.activeAnchor {
+    border-color: var(--text-main);
   }
 }
 
@@ -58,7 +75,6 @@ button.header__loginBtn {
 
   font-size: 3rem;
   min-width: 202px;
-  order: 3;
 }
 
 .header__logoBtn {
@@ -99,7 +115,7 @@ button.header__loginBtn {
 
 @media (width < 1024px) {
   header {
-    padding: 5px 10px; 
+    padding: 16px 16px 0; 
 
     min-height: 44px; 
   }
@@ -108,20 +124,18 @@ button.header__loginBtn {
     padding: 0;
   }
 
-  button.header__loginBtn {
-    order: 2
-  }
-
   .header__groupAnchors {
-    justify-content: space-evenly;
+    gap: 24px;
+    justify-content: center;
 
     width: 100%;
+    height: 30px;
     padding: 0 20px;
 
-    order: 3;
+    order: 3
   }
 
   .header__groupButtons {
-    width: 100%;
+    order: 2;
   }
 }

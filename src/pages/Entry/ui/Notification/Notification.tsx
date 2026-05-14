@@ -73,7 +73,7 @@ export const Notification = ({
           "--stack-offset-y": `${stackOffsetY}px`,
           "--stack-offset-x": `${stackOffsetX}px`,
           "--stack-scale": stackScale,
-          "--base-font-size": `${14 - 1.5 * position}px`,
+          "--base-font-size": `${13 - 1 * position}px`,
           "--icon-size": `${36 - 6 * position}px`,
           zIndex,
         } as React.CSSProperties

@@ -16,13 +16,17 @@
 
     font-size: 16px;
     font-weight: 700;
+
+    svg {
+        width: 16px;
+        height: 16px;
+    }
 }
 
 .LoginForm__Toggle {
     width: 100%;
 
     border-radius: 16px;
-
 }
 
 .LoginForm__Toggle__Option {
@@ -52,6 +56,8 @@
   align-items: center;
 
   width: 100%;
+
+  font-size: var(--text-body)
 } 
 
 .LoginForm__FL16 {
