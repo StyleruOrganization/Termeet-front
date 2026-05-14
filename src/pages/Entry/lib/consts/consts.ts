@@ -9,6 +9,7 @@ import kirillPhoto from "@assets/team/kirill.png";
 import kolyaPhoto from "@assets/team/kolya.png";
 import kseniaMPhoto from "@assets/team/kseniam.png";
 import kseniaShPhoto from "@assets/team/kseniash.png";
+import timofeyPhoto from "@assets/team/timofey.png";
 import { generateTimeOptions } from "@shared/libs/times/generateTimeOptions";
 
 export const MOCK_PEOPLES = ["Дмитрий Лобанев", "Кирилл Белоусов", "Артем Шевчук", "Ламин Ямаль"];
@@ -86,10 +87,10 @@ export const TEAM_MEMBERS = [
   {
     name: "Тимофей Морозов",
     role: "Product manager",
-    photo: kirillPhoto,
+    photo: timofeyPhoto,
     telegramContact: "https://t.me/Kotletkad",
     description:
-      "Я ебаная машина, которая пиздячит код налево и направо. Меня не остановить ни работой в Яндексе, ни загрузкой, мне похуй. Я газую",
+      "Создаю лучший продукт, на который вы сейчас смотрите. AI native product. NBA Timberwolves Minisota🫡.",
     email: "timycmorozov5795@gmail.com",
   },
   {
@@ -126,8 +127,7 @@ export const TEAM_MEMBERS = [
     role: "Product designer",
     photo: kseniaMPhoto,
     telegramContact: "https://t.me/mcksesh",
-    description:
-      "Я ебаная машина, которая пиздячит код налево и направо. Меня не остановить ни работой в Яндексе, ни загрузкой, мне похуй. Я газую",
+    description: "Днём — Figma, CJM и бесконечные user flow, вечером — волейбол и немного здорового перфекционизма",
     email: "makaevaks17@gmail.com",
   },
 
