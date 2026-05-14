@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.2] - 2026-05-14
+
+### Changes
+- first section for lending [skip ci]
+- FAT COMMIT BEBEBEBE
+- upd version for pnpm
+- upd registery for pnpm
+- upd registery for pnpm
+- reinstall deps
+- delete type check before build
+- upd some moments after design-review
+- add animation for member card
+- delete bg for mobile in one section
+- add emails for some people
+- upd team info
+- upd design moments, added desc for team card and some yet
+- upd scroll moving
+
+
+All notable changes to this project will be documented in this file.
+
 ## [2.0.1] - 2026-05-05
 
 ### Changes
