@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.4] - 2026-06-30
+
+### Changes
+- Production deployment
+
+
+All notable changes to this project will be documented in this file.
+
 ## [2.0.3] - 2026-05-14
 
 ### Changes
