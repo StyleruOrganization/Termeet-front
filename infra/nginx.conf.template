@@ -4,7 +4,7 @@ server {
     root /usr/share/nginx/html;
     index index.html;
 
-    # Увеличиваем максимальный размер тела запроса до 30 МБ
+    # Глобальный лимит для всего сервера
     client_max_body_size 30M;
 
     # Сжатие
@@ -21,6 +21,9 @@ server {
 
     # Проксируем запросы к API на бэкенд
     location /api/ {
+        # ПОВТОРНО УКАЗЫВАЕМ ЛИМИТ для этого location
+        client_max_body_size 30M;
+        
         proxy_pass http://${BACKEND_CONTAINER}:${BACKEND_PORT}/api/;
         proxy_set_header Host ${BACKEND_HOST};
         proxy_set_header X-Real-IP $remote_addr;
@@ -43,6 +46,8 @@ server {
         proxy_buffer_size 128k;
         proxy_buffers 4 256k;
         proxy_busy_buffers_size 256k;
+        
+        proxy_request_buffering off;
     }
 
     # SPA fallback
