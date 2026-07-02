@@ -9,21 +9,6 @@
   min-width: 0;
 }
 
-.MeetPage__TableWrapper {
-  display: flex;
-  flex-direction: column;
-
-  /* Вычитаем ебучий gap */
-  flex: 1 1 calc(65% - 32px);
-  gap: 24px;
-
-  width: 100%;
-
-  max-width: 100%;
-
-  min-width: 0;
-}
-
 .MeetInfo__ButtonsEdit {
   position: fixed;
   bottom: 0;

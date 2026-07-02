@@ -1,70 +1,14 @@
-.MeetPeoples {
-  display: flex;
-  flex-direction: column;
-
-  padding: 22px;
-
-  background-color: var(--fill-controls);
-  border: 1px solid var(--semantics-gray-hover);
-  border-radius: 32px;
-
-  max-width: 100%;
-}
-
 .MeetPeoples__Title {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  color: var(--text-main);
 
-  h3 {
-    color: var(--text-main);
-
-    font-size: var(--text-heading);
-    font-weight: 800
-  }
+  font-size: var(--text-heading);
+  font-weight: 800
 }
 
 .MeetPeoples__Count {
   color: var(--semantics-gray-active);
 
   margin-left: 8px;
-}
-
-.MeetPeoples__ExpandButton {
-  flex-shrink: 0;
-  display: flex;
-
-  padding: 16px;
-  
-  border-radius: 16px;
-  background-color: var(--fill-bg);
-
-  transition: background-color 0.3s ease-in-out; 
-
-  svg {
-    margin: 0;
-    width: 16px;
-    height: 16px;
-
-    color: var(--text-main);
-
-    transition: transform .3s ease-in-out;
-    transform: rotate(90deg);
-  }
-
-  &:hover {
-    background-color: var(--components-hover)
-  }
-
-  &:active {
-    background-color: var(--text-disabled)
-  }
-}
-
-.MeetPeoples__expanded .MeetPeoples__ExpandButton{
-  svg {
-    transform: rotate(270deg);
-  }
 }
 
 .MeetPeoples__Users__Container {
@@ -76,11 +20,7 @@
 
   color: var(--text-main);
 
-  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
-  
   font-size: 4rem;
-  max-height: 0;
-  opacity: 0;
 
   span {
     overflow: hidden;
@@ -99,11 +39,6 @@
   span:hover {
     color: var(--text-main);
   }
-}
-
-.MeetPeoples__expanded .MeetPeoples__Users__Container {
-  max-height: var(--user-list-height, 350px); /* Достаточно большое значение */
-  opacity: 1;
 }
 
 .MeetPeoples__user_hovered {

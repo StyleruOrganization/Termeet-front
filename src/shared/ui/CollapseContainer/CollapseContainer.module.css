@@ -1,0 +1,69 @@
+.CollapseContainer {
+    display: flex;
+    flex-direction: column;
+
+    padding: 22px;
+
+    background-color: var(--fill-controls);
+    border: 1px solid var(--semantics-gray-hover);
+    border-radius: 32px;
+
+    max-width: 100%;
+}
+
+.CollapseContainer__ExpandButton {
+  flex-shrink: 0;
+  display: flex;
+
+  padding: 16px;
+  
+  border-radius: 16px;
+  background-color: var(--fill-bg);
+
+  transition: background-color 0.3s ease-in-out; 
+
+  svg {
+    margin: 0;
+    width: 16px;
+    height: 16px;
+
+    color: var(--text-main);
+
+    transition: transform .3s ease-in-out;
+    transform: rotate(90deg);
+  }
+
+  &:hover {
+    background-color: var(--components-hover)
+  }
+
+  &:active {
+    background-color: var(--text-disabled)
+  }
+}
+
+.CollapseContainer__expanded .CollapseContainer__ExpandButton{
+  svg {
+    transform: rotate(270deg);
+  }
+}
+
+.CollapseContainer__Title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.CollapseContainer__Content {
+  padding: 0;
+
+  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+
+  max-height: 0;
+  opacity: 0;
+}
+
+.CollapseContainer__expanded .CollapseContainer__Content {
+  max-height: var(--max-height, 350px);
+  opacity: 1;
+}

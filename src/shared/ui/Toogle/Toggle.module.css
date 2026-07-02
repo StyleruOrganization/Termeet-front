@@ -16,8 +16,6 @@
   color: var(--text-main);
   border-radius: 32px;
 
-  transition: background-color 0.3s ease-in-out,  color 0.3s ease-in-out;
-
   cursor: pointer;
 
   font-size: var(--text-body);
@@ -33,10 +31,11 @@
 }
 
 .Toogle__Option_active {
-  color: var(--semantics-blue-900);
-  background-color: var(--semantics-blue-200);
+  color: var(--semantics-blue-600);
+  background-color: var(--fill-bg);
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 10%);
 }
 
 .Toogle__Option_active:hover {
-  background-color: var(--semantics-blue-300)
+  background-color: var(--fill-bg);
 }
