@@ -4,7 +4,7 @@ import type { MeetingFormState, ICreateMeet } from "./createMeet.types";
 
 const validators: {
   [key in keyof ICreateMeet]?: key extends "dates"
-    ? (value: string[]) => string | undefined
+    ? (value: ICreateMeet["dates"]) => string | undefined
     : (value: string) => string | undefined;
 } = {
   description: (value: string) => {
@@ -20,8 +20,25 @@ const validators: {
     if (value && !/^https?:\/\/.+/.test(value)) return "Введите корректную ссылку (http:// или https://)";
     return undefined;
   },
-  dates: (value: string[]) => {
-    if (value.length > 30) return "Максимум можно выбрать 30 дней";
+  dates: value => {
+    let countDays = 0;
+
+    value.forEach(interval => {
+      const d1 = new Date(interval.start);
+      d1.setHours(0, 0, 0, 0);
+
+      const d2 = new Date(interval.end);
+      d2.setHours(0, 0, 0, 0);
+
+      // Разница в миллисекундах
+      const diffTime = Math.abs(d2.getTime() - d1.getTime());
+
+      // Переводим в дни
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      countDays += diffDays || 1;
+    });
+
+    if (countDays + 1 > 30) return "Максимум можно выбрать 30 дней";
     return undefined;
   },
 };
@@ -47,6 +64,54 @@ export const useCreateMeetStore = create<MeetingFormState>((set, get) => ({
     set(state => ({
       values: { ...state.values, [name]: value },
     }));
+  },
+
+  setDate: ({ start, end }, overrideCurrentInterval = false) => {
+    if (start == null || end == null) {
+      return set(state => ({
+        values: {
+          ...get().values,
+          dates: state.values.dates.filter(
+            interval =>
+              interval.start.toDateString() != start?.toDateString() &&
+              interval.end.toDateString() != end?.toDateString(),
+          ),
+        },
+      }));
+    }
+    if (!overrideCurrentInterval) {
+      const currentIntervals = get().values.dates;
+      // Это интервалы без тех которые попали внутрь нового интервала
+      const newIntervals: typeof currentIntervals = [];
+
+      currentIntervals.forEach(interval => {
+        if ((interval.start < start && interval.end < start) || (interval.start > end && interval.end > end)) {
+          console.log("Пушим старый интервал так как он не пересекается с выбранным");
+          newIntervals.push({ start: interval.start, end: interval.end });
+        }
+      });
+      newIntervals.push({ start, end });
+
+      console.log("Всего интервалов получилось", newIntervals.length);
+      return set(state => ({
+        values: {
+          ...state.values,
+          dates: [...newIntervals],
+        },
+      }));
+    } else {
+      return set(state => ({
+        values: {
+          ...state.values,
+          dates: state.values.dates.map(interval =>
+            interval.start?.toDateString() === start?.toDateString() ||
+            interval.end?.toDateString() === end?.toDateString()
+              ? { start, end }
+              : interval,
+          ),
+        },
+      }));
+    }
   },
 
   setTime: (name, value, isSaveAsLast = true) => {
@@ -144,7 +209,6 @@ export const useCreateMeetStore = create<MeetingFormState>((set, get) => ({
       },
     })),
   validateField: name => {
-    console.log("validate Field", name);
     const value = get().values[name];
     const setError = get().setError;
     const validator = validators[name];
@@ -155,7 +219,7 @@ export const useCreateMeetStore = create<MeetingFormState>((set, get) => ({
     }
 
     if (Array.isArray(value)) {
-      const result = (validator as (value: string[]) => string | undefined)(value);
+      const result = (validator as (value: ICreateMeet["dates"]) => string | undefined)(value);
       setError(name, result);
     } else {
       const result = (validator as (value: string) => string | undefined)(value as string);

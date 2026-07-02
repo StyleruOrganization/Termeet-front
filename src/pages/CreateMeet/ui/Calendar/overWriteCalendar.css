@@ -57,20 +57,3 @@ abbr {
 .react-calendar__month-view__days__day--neighboringMonth {
   color: var(--text-disabled)
 }
-
-.react-calendar__tile--now {
-  background-color: var(--semantics-blue-100);
-
-  border-color: var(--semantics-blue-300);
-}
-
-
-.react-calendar__tile--now:hover {
-  background-color: var(--semantics-blue-300);
-}
-
-.react-calendar__tile--now:focus-visible {
-  border-color: var(--semantics-blue-300);
-  outline: 2px solid var(--semantics-blue-800);
-  outline-offset: 2px;
-}

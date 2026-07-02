@@ -6,14 +6,41 @@ import { type MeetCreate, type MeetResponse } from "@entities/Meet";
 import { useToastStore } from "@features/ToastContainer";
 import type { ICreateMeet } from "../model";
 
-const prepareDateRanges = (dates: string[], start_time: string, end_time: string) => {
-  start_time = start_time.replace(/\s/g, "");
-  end_time = end_time.replace(/\s/g, "");
+const formatLocalDate = (date: Date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
 
-  return dates.map(date => [
-    new Date(`${date}T${start_time}:00`).toISOString(),
-    new Date(`${date}T${end_time}:00`).toISOString(),
-  ]);
+  return `${year}-${month}-${day}`;
+};
+
+const prepareDateRanges = (datesIntervals: ICreateMeet["dates"], start_time: string, end_time: string) => {
+  const dates: Date[] = [];
+
+  datesIntervals.forEach(({ start, end }) => {
+    const current = new Date(start);
+    const endDate = new Date(end);
+
+    current.setHours(0, 0, 0, 0);
+    endDate.setHours(0, 0, 0, 0);
+
+    while (current <= endDate) {
+      dates.push(new Date(current));
+      current.setDate(current.getDate() + 1);
+    }
+  });
+
+  const normalizedStartTime = start_time.replace(/\s/g, "");
+  const normalizedEndTime = end_time.replace(/\s/g, "");
+
+  return dates.map(date => {
+    const dateStr = formatLocalDate(date);
+
+    const startDateTime = new Date(`${dateStr}T${normalizedStartTime}:00`);
+    const endDateTime = new Date(`${dateStr}T${normalizedEndTime}:00`);
+
+    return [startDateTime.toISOString(), endDateTime.toISOString()];
+  });
 };
 
 export const useCreateMeet = ({ onSuccess: onSuccessExternal }: { onSuccess: () => void }) => {
@@ -101,6 +128,8 @@ export const useCreateMeet = ({ onSuccess: onSuccessExternal }: { onSuccess: () 
       duration: formData.timeDuration,
       dataRange: prepareDateRanges(formData.dates, formData.timeStart, formData.timeEnd),
     };
+
+    console.log("preparedData", preparedData);
 
     mutate(preparedData);
   };

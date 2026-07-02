@@ -2,11 +2,16 @@ export type ICreateMeet = {
   title: string;
   timeStart: string;
   timeEnd: string;
-  dates: string[];
+  dates: CalendarDateRange[];
   description?: string;
   link?: string;
   timeDuration?: string;
 };
+
+interface CalendarDateRange {
+  start: Date;
+  end: Date;
+}
 
 export interface MeetingFormState {
   values: ICreateMeet;
@@ -27,6 +32,7 @@ export interface MeetingFormState {
   clearError: (name: keyof ICreateMeet) => void;
   setTime: (name: "timeStart" | "timeEnd" | "timeDuration", value: string, isSaveAsLast?: boolean) => void;
   blurTimeField: (name: "timeStart" | "timeEnd" | "timeDuration") => void;
+  setDate: ({ start, end }: { start: Date | null; end: Date | null }, overrideCurrentInterval?: boolean) => void;
   /** Валидирует поле ввода и ошибку выставляет сразу в поле нужное в объекте errors */
   validateField: (name: keyof ICreateMeet) => void;
 }
