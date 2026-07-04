@@ -66,5 +66,5 @@ export const useColorPalette = ({ countSelectPerson, totalPersons }: IUseColorPa
     };
   }
   const avaliableColors = variablesColors.slice(0, Math.min(variablesColors.length, totalPersons)).reverse();
-  return avaliableColors[Math.max(Math.round((countSelectPerson / totalPersons) * avaliableColors.length), 1)];
+  return avaliableColors[Math.max(Math.round((countSelectPerson / totalPersons) * avaliableColors.length - 1), 0)];
 };

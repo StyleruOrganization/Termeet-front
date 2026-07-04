@@ -23,7 +23,7 @@ const Cell = ({
   tooltipDelay?: number;
   inView?: boolean;
 }) => {
-  const { color } = useColorPalette({
+  const variablesColors = useColorPalette({
     countSelectPerson: cell,
     totalPersons: 10,
   });
@@ -35,8 +35,8 @@ const Cell = ({
       className={className}
       style={
         {
-          "--bg-color": color || "var(--fill-bg)",
-          "--border-color": color || "var(--semantics-gray-default)",
+          "--bg-color": variablesColors?.color || "var(--fill-bg)",
+          "--border-color": variablesColors?.color || "var(--semantics-gray-default)",
           "position": isHighlighted ? "relative" : "static",
         } as React.CSSProperties
       }
