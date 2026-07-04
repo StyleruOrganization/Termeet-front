@@ -25,31 +25,29 @@ export const CollapseContainer = ({
   }, [initialExpanded]);
 
   return (
-    <>
-      <div
-        style={
-          // Анимирую max-height поэтому надо посчитать
-          {
-            "--max-height": `${maxHeight}px`,
-          } as React.CSSProperties
-        }
-        className={`${styles.CollapseContainer} ${isExpanded ? styles.CollapseContainer__expanded : ""} ${className}`}
-      >
-        <div className={styles.CollapseContainer__Title}>
-          {Title}
-          <button
-            onClick={() => {
-              setIsExpanded(prev => !prev);
-            }}
-            className={styles.CollapseContainer__ExpandButton}
-            disabled={disabled}
-            type='button'
-          >
-            <Arrow />
-          </button>
-        </div>
-        <div className={styles.CollapseContainer__Content}>{Content}</div>
+    <div
+      style={
+        // Анимирую max-height поэтому надо посчитать
+        {
+          "--max-height": `${maxHeight}px`,
+        } as React.CSSProperties
+      }
+      className={`${styles.CollapseContainer} ${isExpanded ? styles.CollapseContainer__expanded : ""} ${className}`}
+    >
+      <div className={styles.CollapseContainer__Title}>
+        {Title}
+        <button
+          onClick={() => {
+            setIsExpanded(prev => !prev);
+          }}
+          className={styles.CollapseContainer__ExpandButton}
+          disabled={disabled}
+          type='button'
+        >
+          <Arrow />
+        </button>
       </div>
-    </>
+      <div className={styles.CollapseContainer__Content}>{Content}</div>
+    </div>
   );
 };

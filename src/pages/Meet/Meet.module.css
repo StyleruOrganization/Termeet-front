@@ -25,9 +25,6 @@
 }
 
 .MeetPage__HeaderWrapper_Mobile {
-  position: sticky;
-  top: 10px;
-
   order: 1
 }
 

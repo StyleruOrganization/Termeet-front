@@ -6,6 +6,7 @@ import styles from "./Meet.module.css";
 import { MeetHeader } from "./ui/MeetHeader/MeetHeader";
 import { MeetInfo } from "./ui/MeetInfo/MeetInfo";
 import { MeetTable } from "./ui/MeetTable/MeetTable";
+import { Onboarding } from "./ui/Onboarding/Onboarding";
 
 const WINDOW_WIDTH = window.innerWidth;
 
@@ -41,6 +42,7 @@ export function Meet() {
             meeting_days={meetData.meeting_days}
             timeRanges={meetData.timeRanges}
           />
+          {WINDOW_WIDTH < 768 ? <Onboarding /> : null}
         </div>
       </MeetProvider>
     </Container>

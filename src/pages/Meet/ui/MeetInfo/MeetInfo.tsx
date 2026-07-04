@@ -17,7 +17,7 @@ export const MeetInfo = ({ data }: IMeetInfoProps) => {
           ) : null}
         </div>
         <MeetPeoples users={data.users} />
-        <Onboarding />
+        {WINDOW_WIDTH >= 768 ? <Onboarding /> : null}
       </div>
       <MeetModal />
     </>
