@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.0] - 2026-07-04
+
+### Changes
+- increase bosy
+- increase bodyX2
+- added choosing time for creating meet via intervals
+- update layout for meet page
+- added onboarding for create meet and meet page
+- some corrections for mobile devices
+
+
+All notable changes to this project will be documented in this file.
+
 ## [2.0.4] - 2026-06-30
 
 ### Changes
