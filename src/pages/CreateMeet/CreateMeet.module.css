@@ -43,6 +43,8 @@
 }
 
 .CreateMeetingPage__CreateButtonWrapper {
+  z-index: 100;
+
   width: 100%;
 }
 
