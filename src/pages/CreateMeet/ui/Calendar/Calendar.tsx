@@ -57,21 +57,26 @@ export const Calendar = ({
         }}
         formatShortWeekday={formatWeekday}
         onClickDay={date => {
-          if (
-            isTouch &&
-            !selectedDates.find(({ start, end }) => {
-              return start <= date && date <= end;
-            })
-          ) {
+          const dateInExistInterval = selectedDates.find(({ start, end }) => {
+            return start <= date && date <= end;
+          });
+          if (isTouch && !dateInExistInterval) {
+            console.log("Добавляем дату");
             onDateClick({
               startDate: date,
               endDate: date,
             });
             return;
           }
-          const dateInExistInterval = selectedDates.find(({ start, end }) => {
-            return start <= date && date <= end;
-          });
+
+          if (isTouch && dateInExistInterval) {
+            console.log("Удаляем дату");
+            onDateClick({
+              startDate: date,
+              endDate: null,
+            });
+            return;
+          }
 
           // Клик по концу/началу интервала - даем возможность выбрать новый интервал
           if (
@@ -144,14 +149,13 @@ export const Calendar = ({
           );
         }}
         tileContent={({ date }) => (
-          <button
+          <div
             onPointerMove={() => handlePointerMove(date)}
             onPointerLeave={handlePointerLeave}
-            type='button'
             className={formatClassName(date, [selectedDateForInterval, hoveredDate])}
           >
             {date.getDate()}
-          </button>
+          </div>
         )}
       />
       {suggestMessage && !selectedDates.length && !error && (

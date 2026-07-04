@@ -65,6 +65,10 @@ export interface IMeetStore {
   // Для отптимистичных обновлений
   setUsers: (users: string[]) => void;
   setTimeInfo: (timeInfo: IMeet["timeInfo"]) => void;
+  /**
+   * Пользователь успешно добавил свое время
+   */
+  setTimeIsAdded: () => void;
   // _+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+
   /**
    * Слоты пользователя с бека, подготовленные
@@ -80,6 +84,7 @@ export interface IMeetStore {
   users: IMeet["users"];
   /**
    * Юзер пока не известен поэтому просто Map
+   * Выбранные пользователем слоты
    */
   newSelectedSlots: Map<string, string[]>;
   /**
@@ -98,4 +103,5 @@ export interface IMeetStore {
    */
   hoveredUser: string;
   isModalOpen: boolean;
+  timeIsAdded: boolean;
 }

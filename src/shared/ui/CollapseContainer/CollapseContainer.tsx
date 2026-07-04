@@ -8,6 +8,7 @@ interface CollapseContainerProps {
   maxHeight: number;
   initialExpanded?: boolean;
   disabled?: boolean;
+  className?: string;
 }
 export const CollapseContainer = ({
   Title,
@@ -15,6 +16,7 @@ export const CollapseContainer = ({
   maxHeight,
   disabled = false,
   initialExpanded = false,
+  className,
 }: CollapseContainerProps) => {
   const [isExpanded, setIsExpanded] = useState(initialExpanded);
 
@@ -31,7 +33,7 @@ export const CollapseContainer = ({
             "--max-height": `${maxHeight}px`,
           } as React.CSSProperties
         }
-        className={`${styles.CollapseContainer} ${isExpanded ? styles.CollapseContainer__expanded : ""}`}
+        className={`${styles.CollapseContainer} ${isExpanded ? styles.CollapseContainer__expanded : ""} ${className}`}
       >
         <div className={styles.CollapseContainer__Title}>
           {Title}
@@ -41,6 +43,7 @@ export const CollapseContainer = ({
             }}
             className={styles.CollapseContainer__ExpandButton}
             disabled={disabled}
+            type='button'
           >
             <Arrow />
           </button>

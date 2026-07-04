@@ -10,7 +10,10 @@
 .CreateMeetingPage__Calendar {
   position: relative;
 
+  display: flex;
   flex: 1 1 420px;
+  flex-direction: column;
+  gap: 10px;
 } 
 
 .CreateMeetingPage__Content {
@@ -68,6 +71,10 @@
 
     border-top-left-radius: 16px;
     border-top-right-radius: 16px;
+  }
+
+  .CreateMeetingPage__Calendar {
+    flex-direction: column-reverse;
   }
 
   .CreateMeetingPage__Content__FormWrapper {

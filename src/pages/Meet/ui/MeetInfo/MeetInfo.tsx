@@ -1,17 +1,13 @@
-import { useEffect, useState } from "react";
-import { useMeetStore } from "@/entities/Meet";
 import styles from "./MeetInfo.module.css";
 import { MeetHeader } from "../MeetHeader/MeetHeader";
 import { MeetModal } from "../MeetModal/MeetModal";
 import { MeetPeoples } from "../MeetPeoples/MeetPeoples";
+import { Onboarding } from "../Onboarding/Onboarding";
 import type { IMeetInfoProps } from "./MeetInfo.types";
 
 const WINDOW_WIDTH = window.innerWidth;
 
 export const MeetInfo = ({ data }: IMeetInfoProps) => {
-  const isEditingMode = useMeetStore(store => store.isEditing);
-
-
   return (
     <>
       <div className={styles.MeetInfo}>
@@ -21,6 +17,7 @@ export const MeetInfo = ({ data }: IMeetInfoProps) => {
           ) : null}
         </div>
         <MeetPeoples users={data.users} />
+        <Onboarding />
       </div>
       <MeetModal />
     </>

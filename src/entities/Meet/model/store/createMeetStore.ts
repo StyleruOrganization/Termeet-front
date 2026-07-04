@@ -14,6 +14,7 @@ export const createMeetStore = (initialState?: Partial<IMeetStore>) => {
     timeInfo: new Map(),
     timeRanges: [],
     users: [],
+    timeIsAdded: false,
     setSelectNewSell: () => {},
     setHoveredUsers: () => {},
     setHoveredUser: () => {},
@@ -24,6 +25,7 @@ export const createMeetStore = (initialState?: Partial<IMeetStore>) => {
     getNewSelectedSlots: () => new Map(),
     setUsers: () => {},
     setTimeInfo: () => {},
+    setTimeIsAdded: () => {},
   };
 
   return createStore<IMeetStore>()((set, get) => ({
@@ -158,6 +160,11 @@ export const createMeetStore = (initialState?: Partial<IMeetStore>) => {
     setTimeInfo: timeInfo => {
       set(() => ({
         timeInfo,
+      }));
+    },
+    setTimeIsAdded: () => {
+      set(() => ({
+        timeIsAdded: true,
       }));
     },
   }));

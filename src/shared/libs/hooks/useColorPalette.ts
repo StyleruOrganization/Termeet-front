@@ -65,6 +65,6 @@ export const useColorPalette = ({ countSelectPerson, totalPersons }: IUseColorPa
       hoverColor: undefined,
     };
   }
-  const avaliableColors = variablesColors.slice(0, totalPersons).reverse();
-  return avaliableColors[Math.max((countSelectPerson / totalPersons) * avaliableColors.length - 1, 0)];
+  const avaliableColors = variablesColors.slice(0, Math.min(variablesColors.length, totalPersons)).reverse();
+  return avaliableColors[Math.max(Math.round((countSelectPerson / totalPersons) * avaliableColors.length), 1)];
 };

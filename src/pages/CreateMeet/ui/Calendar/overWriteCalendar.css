@@ -57,3 +57,9 @@ abbr {
 .react-calendar__month-view__days__day--neighboringMonth {
   color: var(--text-disabled)
 }
+
+.react-calendar__tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

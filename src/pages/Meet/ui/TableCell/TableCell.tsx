@@ -41,6 +41,8 @@ export const TableCell = ({
     totalPersons: allUsers.length,
   });
 
+  console.log("variablesColor", variableColors);
+
   const isDisabled = useMemo(() => {
     return isTimeZoneDisabled || (isBeforeCurrentTime && users?.length == 0) || (isBeforeCurrentTime && isEditingMode);
   }, [isTimeZoneDisabled, isBeforeCurrentTime, users, isEditingMode]);

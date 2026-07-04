@@ -11,7 +11,8 @@ export const useSaveUserSelectedSlots = (meetHash: string, onMutate?: () => void
     oldTimeInfo = useMeetStore(store => store.timeInfo),
     oldUsers = useMeetStore(store => store.users),
     setUsers = useMeetStore(store => store.setUsers),
-    setTimeInfo = useMeetStore(store => store.setTimeInfo);
+    setTimeInfo = useMeetStore(store => store.setTimeInfo),
+    setTimeIsAdded = useMeetStore(store => store.setTimeIsAdded);
 
   const addToast = useToastStore(state => state.addToast);
 
@@ -29,7 +30,6 @@ export const useSaveUserSelectedSlots = (meetHash: string, onMutate?: () => void
       });
 
       // Глубокое копирование timeInfo
-
       const oldTimeInfoCopy: Map<
         string,
         {
@@ -97,6 +97,7 @@ export const useSaveUserSelectedSlots = (meetHash: string, onMutate?: () => void
 
       setUsers([...(oldUsers || []), userName]);
       setTimeInfo(newTimeInfo);
+      setTimeIsAdded();
       onMutate?.();
 
       return { previousData: previousState };

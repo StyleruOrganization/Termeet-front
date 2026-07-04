@@ -1,0 +1,85 @@
+.Onboarding__Title {
+  color: var(--text-main);
+
+  font-size: var(--text-heading);
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.Onboarding__ContainerItems {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.Onboarding__Item {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.Onboarding__Item__Marker {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 25px;
+  height: 25px;
+
+  color: var(--text-main);
+  background-color: var(--semantics-blue-200);
+  border-radius: 6px;
+
+  transition: color .2s ease-in, background-color 0.3s ease-in;
+
+  font-size: 3rem;
+  line-height: 18px;
+}
+
+.Onboarding__Item__Marker_Filled {
+  color: var(--light);
+  background-color: var(--semantics-blue-950);
+}
+
+.Onboarding__Item__Text {
+  color: var(--text-main);
+
+  font-size: var(--text-body)
+}
+
+.Onboarding__Congratulate__Text {
+  text-align: center;
+
+  font-size: var(--text-body);
+}
+
+.CongratulationContainer {
+  display: flex;
+  gap: 8px;
+  flex-direction: column;
+  align-items: center;
+
+  animation: fade-in 0.3s ease-in;
+}
+
+@keyframes fade-in {
+  from {
+    transform: translateY(-10px);
+
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+
+    opacity: 1;
+  }
+}
+
+@media (width < 768px) {
+  .Onboarding {
+    position: sticky;
+    top: 10px;
+    z-index: 100;
+  }
+}

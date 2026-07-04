@@ -5,6 +5,7 @@ import styles from "./CreateMeet.module.css";
 import { useCreateMeetStore } from "./model/useCreateMeetStore";
 import { Calendar } from "./ui/Calendar/Calendar";
 import { Form } from "./ui/Form/Form";
+import { Onboarding } from "./ui/Onboarding/Onboarding";
 
 const CreateButton = () => {
   const values = useCreateMeetStore(state => state.values);
@@ -54,6 +55,7 @@ export function CreateMeet() {
         <form className={styles.CreateMeetingPage__Form} onSubmit={handleSubmit}>
           <div className={styles.CreateMeetingPage__Calendar}>
             <Calendar suggestMessage='Выберите минимум один день' />
+            <Onboarding />
           </div>
           <div className={styles.CreateMeetingPage__Content__FormWrapper}>
             <Form />
