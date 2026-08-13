@@ -6,7 +6,7 @@ const getMinutes = (time: string) => {
   return hours * 60 + minutes;
 };
 
-export const transformMeetData = (meetData: MeetResponse, isLocal: boolean): IMeet => {
+export const transformMeetData = (meetData: MeetResponse, isLocal: boolean, currentUserId?: string | null): IMeet => {
   const meetingDays = new Set<string>();
   const users = new Set<string>();
   const timeRanges: IMeet["timeRanges"] = [];
@@ -217,6 +217,10 @@ export const transformMeetData = (meetData: MeetResponse, isLocal: boolean): IMe
     users: Array.from(users),
     isCreator: meetData.isCreator,
     isCreatorAuth: meetData.isCreatorAuth,
+    mySlotName:
+      currentUserId && currentUserId !== "guest"
+        ? (meetData.slots.find(slot => (slot.userId ?? slot.user_id) === currentUserId)?.name ?? null)
+        : null,
   };
 
   return processedData;

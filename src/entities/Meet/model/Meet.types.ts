@@ -27,6 +27,11 @@ export interface IMeet {
 
   isCreatorAuth: boolean;
   isCreator: boolean;
+  /**
+   * Имя, под которым текущий залогиненный пользователь уже сохранил слоты.
+   * Гость и человек без своих слотов — null.
+   */
+  mySlotName: string | null;
 }
 
 export interface IMeetStore {
@@ -46,6 +51,10 @@ export interface IMeetStore {
    * Режим работы с календарем
    */
   setIsEditing: (isEditing: boolean) => void;
+  /**
+   * Вход в режим выбора слотов. Если передано имя — подставляем уже сохранённые слоты этого участника.
+   */
+  startEditingSlots: (userName?: string | null) => void;
   /**
    * Очищаем новые выбранные слоты
    */

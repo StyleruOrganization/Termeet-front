@@ -1,5 +1,5 @@
+export { useColorPalette } from "@/shared/libs";
 export { getCellIds } from "./cells/getCellsIds";
-export { useColorPalette } from "../../../shared/libs/hooks/useColorPalette";
 
 export { useColumnData } from "./columns/useColumnData";
 export { useColumnWidth } from "./columns/useColumnWidth";

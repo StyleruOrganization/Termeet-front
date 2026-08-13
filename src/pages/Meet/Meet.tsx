@@ -1,6 +1,6 @@
 import { useParams, useSearchParams } from "react-router";
-import { MeetProvider } from "@/entities/Meet";
-import { Container } from "@/shared/ui/Container/Container";
+import { MeetProvider, canManageMeeting } from "@/entities/Meet";
+import { Container } from "@/shared/ui";
 import { useGetMeetInfo } from "./api/useGetMeetInfo";
 import styles from "./Meet.module.css";
 import { MeetHeader } from "./ui/MeetHeader/MeetHeader";
@@ -20,6 +20,8 @@ export function Meet() {
     return <h1>Необходим идентификатор встречи</h1>;
   }
 
+  const canManage = canManageMeeting(meetData.isCreator, meetData.isCreatorAuth);
+
   return (
     <Container>
       <MeetProvider timeInfo={meetData.timeInfo} timeRanges={meetData.timeRanges} users={meetData.users}>
@@ -31,6 +33,7 @@ export function Meet() {
                 description={meetData.description}
                 name={meetData.name}
                 link={meetData.link}
+                canManage={canManage}
               />
             </div>
           ) : null}
@@ -41,6 +44,7 @@ export function Meet() {
             key={isLocalTime ? "local" : "moscow"}
             meeting_days={meetData.meeting_days}
             timeRanges={meetData.timeRanges}
+            mySlotName={meetData.mySlotName}
           />
           {WINDOW_WIDTH < 768 ? <Onboarding /> : null}
         </div>

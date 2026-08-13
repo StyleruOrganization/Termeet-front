@@ -1,11 +1,19 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useParams, useSearchParams } from "react-router";
 import { MeetQueries, type IMeet } from "@/entities/Meet";
+import { useSessionStore } from "@/entities/User";
 import { convertUTCToTimezone } from "@/shared/libs";
 
-export const useGetMeetInfo = (): Pick<IMeet, "name" | "description" | "link" | "timeRanges" | "duration"> => {
+export const useGetMeetInfo = (): Pick<
+  IMeet,
+  "name" | "description" | "link" | "timeRanges" | "duration" | "isCreator" | "isCreatorAuth"
+> => {
   const { hash = "" } = useParams();
-  const { data: meetData } = useSuspenseQuery(MeetQueries.meet(hash));
+  const userId = useSessionStore(state => state.user?.id ?? "guest");
+  const { data: meetData } = useSuspenseQuery({
+    ...MeetQueries.meet(hash),
+    queryKey: [...MeetQueries.meet(hash).queryKey, userId],
+  });
   const [searchParams] = useSearchParams();
   const isLocalTime = searchParams.get("localTime") === "true" || searchParams.get("localTime") == null;
   const timeZoneOffset = isLocalTime ? -new Date().getTimezoneOffset() / 60 : 3;
@@ -42,5 +50,7 @@ export const useGetMeetInfo = (): Pick<IMeet, "name" | "description" | "link" | 
     link: meetData.link || "",
     timeRanges,
     duration: meetData.duration || "",
+    isCreator: meetData.isCreator,
+    isCreatorAuth: meetData.isCreatorAuth,
   };
 };

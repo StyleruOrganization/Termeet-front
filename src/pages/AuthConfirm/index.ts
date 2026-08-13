@@ -1,0 +1,1 @@
+export { AuthConfirm } from "./AuthConfirm";

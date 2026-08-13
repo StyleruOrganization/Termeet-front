@@ -1,11 +1,9 @@
 import { Outlet, useLocation, useNavigate } from "react-router";
-import { useActiveSectionStore } from "@/pages/Entry/lib/store/useActiveSection";
-import { LoginForm } from "@/pages/Entry/ui/LoginForm/LoginForm";
-import { useTheme } from "@/shared/libs";
-import { useLoginModalStore } from "@/shared/libs/store/useLoginModalStore";
-import { ModalWrapper, Toggle } from "@/shared/ui";
-import MoonIcon from "@assets/icons/moon.svg";
-import SunIcon from "@assets/icons/sun.svg";
+import { useSessionStore } from "@/entities/User";
+import { LoginForm, useActiveSectionStore } from "@/pages/Entry";
+import { useLoginModalStore } from "@/shared/libs";
+import { ModalWrapper } from "@/shared/ui";
+import { useToastStore } from "@features/ToastContainer";
 import styles from "./Layout.module.css";
 
 // Global Styles
@@ -19,9 +17,20 @@ const WINDOW_WIDTH = window.innerWidth;
 export const Layout = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const { theme, setTheme } = useTheme();
   const { isOpen, open, close } = useLoginModalStore();
   const { activeSection } = useActiveSectionStore();
+  const user = useSessionStore(state => state.user);
+  const logout = useSessionStore(state => state.logout);
+  const addToast = useToastStore(state => state.addToast);
+
+  const handleLogout = async () => {
+    await logout();
+    addToast({
+      id: "logout-success",
+      type: "info",
+      message: "Вы вышли из аккаунта",
+    });
+  };
 
   return (
     <>
@@ -81,9 +90,20 @@ export const Layout = () => {
           )}
 
           <div className={styles.header__groupButtons}>
-            <button className={`${styles.header__loginBtn} baseButton mainButton`} onClick={open}>
-              Войти или зарегистрироваться
-            </button>
+            {user ? (
+              <>
+                <button className={`${styles.header__loginBtn} baseButton outlineButton`} onClick={handleLogout}>
+                  Выйти
+                </button>
+                <span className={styles.header__userName}>
+                  {user.first_name} {user.last_name}
+                </span>
+              </>
+            ) : (
+              <button className={`${styles.header__loginBtn} baseButton mainButton`} onClick={open}>
+                Войти или зарегистрироваться
+              </button>
+            )}
 
             {/* {(WINDOW_WIDTH >= 1024 || pathname != "/") && (
               <Toggle

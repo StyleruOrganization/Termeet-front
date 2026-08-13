@@ -1,8 +1,7 @@
 import { useRef } from "react";
 import { useToastStore } from "@/features/ToastContainer";
 import TgOutlineIcon from "@assets/icons/tg-outline.svg";
-import { copyTextToClipboard } from "@shared/libs";
-import { useInView } from "@shared/libs/hooks/useinView";
+import { copyTextToClipboard, useInView } from "@shared/libs";
 import { TEAM_MEMBERS } from "./../../lib/consts/consts";
 import styles from "./TeamMemberCard.module.css";
 

@@ -2,6 +2,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Suspense } from "react";
 import { BrowserRouter as Router } from "react-router";
+import { useRestoreSession } from "@/entities/User";
 import { ToastContainer } from "@/features/ToastContainer";
 import { useTheme } from "@/shared/libs";
 import { Loader } from "@/shared/ui";
@@ -15,6 +16,7 @@ import "./styles/variables.css";
 
 export const App = () => {
   useTheme();
+  useRestoreSession();
   return (
     <QueryClientProvider client={queryClient}>
       <Suspense fallback={<Loader message='Загрузка ...' />}>

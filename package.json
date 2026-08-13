@@ -29,10 +29,10 @@
   },
   "lint-staged": {
     "*.{js,jsx,mjs,ts,tsx}": [
-      "npm run lint:eslint",
-      "prettier --write ."
+      "eslint --fix --max-warnings=0 --no-warn-ignored",
+      "prettier --write"
     ],
-    "*.css": "npm run stylelint:fix"
+    "*.css": "stylelint --fix --cache-location ./node_modules/.stylelintcache"
   },
   "devDependencies": {
     "@cerios/openapi-to-zod": "^1.5.1",

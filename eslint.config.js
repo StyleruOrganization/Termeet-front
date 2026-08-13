@@ -70,12 +70,7 @@ export default [
       "import/no-cycle": "error",
       // Enforces FSD layer import rules (e.g., features cannot import pages)
       "fsd/forbidden-imports": "error",
-
-      // Disallows relative imports between slices/layers, use aliases (@)
-      // Allows relative imports within the same slice by default (configurable)
       "fsd/no-relative-imports": "error",
-
-      // Enforces importing only via public API (index files)
       "fsd/no-public-api-sidestep": "error",
 
       // Prevents direct imports between slices in the same layer

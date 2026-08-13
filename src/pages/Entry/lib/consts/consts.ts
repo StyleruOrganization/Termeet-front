@@ -1,3 +1,4 @@
+import { generateTimeOptions } from "@/shared/libs";
 import danekCv from "@assets/cvs/Danek.pdf";
 import kirillCv from "@assets/cvs/Kirill.pdf";
 import timofeyCv from "@assets/cvs/Timofey.pdf";
@@ -12,7 +13,6 @@ import kolyaPhoto from "@assets/team/kolya.png";
 import kseniaMPhoto from "@assets/team/kseniam.png";
 import kseniaShPhoto from "@assets/team/kseniash.png";
 import timofeyPhoto from "@assets/team/timofey.png";
-import { generateTimeOptions } from "@shared/libs/times/generateTimeOptions";
 
 export const MOCK_PEOPLES = ["Дмитрий Лобанев", "Кирилл Белоусов", "Артем Шевчук", "Ламин Ямаль"];
 export const NOTIFICATIONS = [

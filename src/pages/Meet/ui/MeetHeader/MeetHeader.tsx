@@ -11,7 +11,7 @@ import type { MeetHeaderProps } from "./MeetHeader.types";
 
 const WINDOW_WIDTH = window.innerWidth;
 
-export const MeetHeader = ({ duration, description, name, link }: MeetHeaderProps) => {
+export const MeetHeader = ({ duration, description, name, link, canManage }: MeetHeaderProps) => {
   // isExpanded = true - описание раскрыто
   const [isExpanded, setIsExpanded] = useState(false);
   const [isDescPopupOpen, setIsDescPopupOpen] = useState(false);
@@ -35,15 +35,19 @@ export const MeetHeader = ({ duration, description, name, link }: MeetHeaderProp
       <div className={styles.MeetHeader__Info}>
         <span className={styles.MeetHeader__Info__Title}>{name}</span>
         <span className={styles.MeetHeader__Info__Duration}>{duration}</span>
-        <button
-          onClick={() => {
-            navigateWithParams(`/meet/edit/${hash}`);
-            scrollToTop();
-          }}
-          className={styles.MeetHeader__Info__Button}
-        >
-          <Pencil />
-        </button>
+        {canManage ? (
+          <button
+            onClick={() => {
+              navigateWithParams(`/meet/edit/${hash}`);
+              scrollToTop();
+            }}
+            className={styles.MeetHeader__Info__Button}
+            aria-label='Редактировать встречу'
+            data-test-id='meet-edit'
+          >
+            <Pencil />
+          </button>
+        ) : null}
         {(WINDOW_WIDTH < 768 || description) && (
           <button
             onClick={() => {

@@ -22,25 +22,65 @@
 
   font-size: 4rem;
 
-  span {
+  .MeetPeoples__User {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+
+    min-width: 0;
+  }
+
+  .MeetPeoples__UserName {
     overflow: hidden;
+    flex: 1;
 
     cursor: pointer;
 
     font-size: var(--text-body);
 
     line-height: 25px;
+
+    min-width: 0;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  span:hover {
+  .MeetPeoples__UserName:hover {
     color: var(--text-main);
   }
 }
 
 .MeetPeoples__user_hovered {
   color: var(--text-main);
+}
+
+.MeetPeoples__Delete {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  color: var(--text-disabled);
+  background-color: transparent;
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  svg path {
+    fill: currentcolor;
+  }
+
+  &:hover {
+    color: var(--semantics-red-main);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+  }
 }
 
 .StubMessage {

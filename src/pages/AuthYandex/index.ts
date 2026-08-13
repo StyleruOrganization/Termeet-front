@@ -1,0 +1,1 @@
+export { AuthYandex } from "./AuthYandex";

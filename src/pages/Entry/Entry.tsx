@@ -1,9 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router";
-import { isTouchDevice } from "@/shared/libs";
-import { useLoginModalStore } from "@/shared/libs/store/useLoginModalStore";
-import { Container } from "@/shared/ui/Container/Container";
-import { FeedbackForm } from "@/widgets/FeedbackForm/FeedbackForm";
+import { isTouchDevice, useInView, useLoginModalStore } from "@/shared/libs";
+import { Container } from "@/shared/ui";
+import { FeedbackForm } from "@/widgets/FeedbackForm";
 import Arrow from "@assets/icons/arrow.svg";
 import ChatMsgArrow from "@assets/icons/chat-msg-arrow.svg";
 import GmailIcon from "@assets/icons/gmail.svg";
@@ -16,7 +15,6 @@ import TgIcon from "@assets/icons/tg.svg";
 import TrashBinIcon from "@assets/icons/trash-bin.svg";
 import YandexCalendarIcon from "@assets/icons/yandex-calendar.svg";
 import { useToastStore } from "@features/ToastContainer";
-import { useInView } from "@shared/libs/hooks/useinView";
 import styles from "./Entry.module.css";
 import {
   CHAT_ANIMATION_STAGGER,

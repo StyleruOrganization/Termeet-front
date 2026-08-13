@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { useFocusTrap } from "../../../../libs";
+import { useFocusTrap } from "../../../libs";
 
 const DROPDOWN_MARGIN = 8;
 interface DropdownPosition {

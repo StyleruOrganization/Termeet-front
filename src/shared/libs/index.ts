@@ -11,4 +11,7 @@ export { mergeRefs } from "./reactUtils/mergeRefs";
 export { useFocusTrap } from "./hooks/useFocusTrap";
 export { useScrollToTop } from "./hooks/useScrollToTop";
 export { useTheme } from "./hooks/useTheme";
+export { useInView } from "./hooks/useinView";
+export { useColorPalette } from "./hooks/useColorPalette";
+export { useLoginModalStore } from "./store/useLoginModalStore";
 export { copyTextToClipboard } from "./clipboard/copyToClipBoard";

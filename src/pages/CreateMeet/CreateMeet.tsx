@@ -1,5 +1,5 @@
 import { useScrollToTop } from "@/shared/libs";
-import { Container } from "@/shared/ui/Container/Container";
+import { Container } from "@/shared/ui";
 import { useCreateMeet } from "./api/useCreateMeet";
 import styles from "./CreateMeet.module.css";
 import { useCreateMeetStore } from "./model/useCreateMeetStore";

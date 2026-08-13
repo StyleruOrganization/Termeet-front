@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { useDropdownPosition } from "./lib/hooks/useDropdownPosition";
+import { useDropdownPosition } from "./hooks/useDropdownPosition";
 import styles from "./Select.module.css";
 import { Input } from "../Input/Input";
 import type { TimeSelectProps } from "./Select.types";

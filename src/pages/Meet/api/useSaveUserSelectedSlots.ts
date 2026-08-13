@@ -1,76 +1,74 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useMeetStore, MeetQueries } from "@/entities/Meet";
 import { useToastStore } from "@/features/ToastContainer";
-import { apiClient } from "@/shared/api";
+import { apiClient, HttpError } from "@/shared/api";
+
+interface ISaveSlotsPayload {
+  name: string;
+  isEdit?: boolean;
+}
+
+type TimeInfo = Map<
+  string,
+  {
+    timeRanges: [string, string][];
+    userSlots: Map<string, string[]>;
+  }
+>;
+
+const cloneTimeInfo = (source: TimeInfo): TimeInfo => {
+  const copy: TimeInfo = new Map();
+  source.forEach((inner, date) => {
+    copy.set(date, {
+      timeRanges: [...inner.timeRanges],
+      userSlots: new Map(inner.userSlots),
+    });
+  });
+  return copy;
+};
 
 export const useSaveUserSelectedSlots = (meetHash: string, onMutate?: () => void) => {
   const queryClient = useQueryClient();
-  const getNewSelectedSlots = useMeetStore(state => state.getNewSelectedSlots),
-    getPreparedNewSlots = useMeetStore(store => store.getPreparedNewSlots),
-    clearNewSelectedSlots = useMeetStore(store => store.clearNewSelectedSlots),
-    oldTimeInfo = useMeetStore(store => store.timeInfo),
-    oldUsers = useMeetStore(store => store.users),
-    setUsers = useMeetStore(store => store.setUsers),
-    setTimeInfo = useMeetStore(store => store.setTimeInfo),
-    setTimeIsAdded = useMeetStore(store => store.setTimeIsAdded);
-
+  const getNewSelectedSlots = useMeetStore(state => state.getNewSelectedSlots);
+  const getPreparedNewSlots = useMeetStore(store => store.getPreparedNewSlots);
+  const clearNewSelectedSlots = useMeetStore(store => store.clearNewSelectedSlots);
+  const oldTimeInfo = useMeetStore(store => store.timeInfo);
+  const oldUsers = useMeetStore(store => store.users);
+  const setUsers = useMeetStore(store => store.setUsers);
+  const setTimeInfo = useMeetStore(store => store.setTimeInfo);
+  const setTimeIsAdded = useMeetStore(store => store.setTimeIsAdded);
   const addToast = useToastStore(state => state.addToast);
 
   return useMutation({
-    mutationFn: async (userName: string) => {
+    mutationFn: async ({ name, isEdit }: ISaveSlotsPayload) => {
       const preparedSlots = getPreparedNewSlots();
       clearNewSelectedSlots();
+      const endpoint = isEdit ? `/meet/${meetHash}/slots/edit` : `/meet/${meetHash}/slots`;
 
-      return await apiClient.patch(`/meet/${meetHash}/slots`, { name: userName, slots: preparedSlots });
+      return await apiClient.patch(endpoint, { name, slots: preparedSlots });
     },
-    // Оптимистичное обновление
-    onMutate: async userName => {
+    onMutate: async ({ name, isEdit }) => {
       await queryClient.cancelQueries({
         queryKey: MeetQueries.meet(meetHash).queryKey,
       });
 
-      // Глубокое копирование timeInfo
-      const oldTimeInfoCopy: Map<
-        string,
-        {
-          timeRanges: [string, string][];
-          userSlots: Map<string, string[]>;
-        }
-      > = new Map();
+      const previousState = {
+        users: [...(oldUsers || [])],
+        timeInfo: cloneTimeInfo(oldTimeInfo),
+      };
 
-      if (oldTimeInfo.size) {
-        oldTimeInfo.forEach((inner, date) => {
-          oldTimeInfoCopy.set(date, {
-            timeRanges: [...inner.timeRanges],
-            userSlots: new Map(inner.userSlots), // Копируем Map
+      const newTimeInfo = cloneTimeInfo(oldTimeInfo);
+
+      if (isEdit) {
+        newTimeInfo.forEach(inner => {
+          inner.userSlots.forEach((users, time) => {
+            inner.userSlots.set(
+              time,
+              users.filter(user => user !== name),
+            );
           });
         });
       }
-
-      const previousState = {
-        users: [...(oldUsers || [])],
-        timeInfo: oldTimeInfoCopy,
-      };
-
-      // Создаем новую timeInfo для обновления
-      const newTimeInfo: Map<
-        string,
-        {
-          timeRanges: [string, string][];
-          userSlots: Map<string, string[]>;
-        }
-      > = new Map();
-
-      oldTimeInfo.forEach((inner, date) => {
-        const innerCopy = {
-          timeRanges: [...inner.timeRanges],
-          userSlots: new Map(),
-        };
-        inner.userSlots.forEach((users, time) => {
-          innerCopy.userSlots.set(time, [...users]); // Копируем массив
-        });
-        newTimeInfo.set(date, innerCopy);
-      });
 
       const newSelectedEntries = Array.from(getNewSelectedSlots().entries());
 
@@ -81,49 +79,45 @@ export const useSaveUserSelectedSlots = (meetHash: string, onMutate?: () => void
           throw new Error(`No date ${date}`);
         }
 
-        if (!dateInfo.userSlots) {
-          dateInfo.userSlots = new Map();
-        }
-
         for (const time of times) {
-          if (!dateInfo.userSlots?.has(time)) {
-            dateInfo.userSlots?.set(time, []);
+          if (!dateInfo.userSlots.has(time)) {
+            dateInfo.userSlots.set(time, []);
           }
-          dateInfo.userSlots?.set(time, [...(dateInfo.userSlots?.get(time) || []), userName]);
+          dateInfo.userSlots.set(time, [...(dateInfo.userSlots.get(time) || []), name]);
         }
 
         newTimeInfo.set(date, dateInfo);
       }
 
-      setUsers([...(oldUsers || []), userName]);
+      setUsers(isEdit || oldUsers.includes(name) ? [...(oldUsers || [])] : [...(oldUsers || []), name]);
       setTimeInfo(newTimeInfo);
       setTimeIsAdded();
       onMutate?.();
 
       return { previousData: previousState };
     },
-
-    onError: (_, _2, context) => {
+    onError: (error, _payload, context) => {
       if (context?.previousData) {
-        addToast({
-          type: "error",
-          message: "Ошибка при сохранении выбранных временных слотов",
-          id: "slots-update-error",
-        });
-        // Откатываем стор
         setTimeInfo(context.previousData.timeInfo);
         setUsers(context.previousData.users);
       }
-    },
 
-    // При успехе - инвалидируем кеш React Query для синхронизации с сервером
-    onSuccess: () => {
+      const isForbidden = error instanceof HttpError && error.status === 403;
+      addToast({
+        type: "error",
+        message: isForbidden
+          ? "Не получилось сохранить слоты. Возможно, это время уже записано"
+          : "Ошибка при сохранении выбранных временных слотов",
+        id: "slots-update-error",
+      });
+    },
+    onSuccess: (_data, payload) => {
       queryClient.invalidateQueries({
         queryKey: MeetQueries.meet(meetHash).queryKey,
       });
       addToast({
         type: "success",
-        message: "Выбранные временные слоты успешно сохранены",
+        message: payload.isEdit ? "Ваше время обновлено" : "Выбранные временные слоты успешно сохранены",
         id: "slots-updated",
       });
     },

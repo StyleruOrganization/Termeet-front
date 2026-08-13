@@ -6,5 +6,6 @@ export type { ITextAreaProps } from "./TextArea/TextArea.types";
 export { Loader } from "./Loader/Loader";
 export { Toggle } from "./Toogle/Toggle";
 export { Select } from "./Select/Select";
+export { Container } from "./Container/Container";
 export { CollapseContainer } from "./CollapseContainer/CollapseContainer";
 export { Onboarding, type OnboardingProps } from "./Onboarding/Onboarding";

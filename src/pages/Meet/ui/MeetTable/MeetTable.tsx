@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "react-router";
+import { useParams, useSearchParams } from "react-router";
 import { useToastStore } from "@/features/ToastContainer";
 import { generateTimeOptions, isMoreOrEqThan30Min, copyTextToClipboard } from "@/shared/libs";
 import { Toggle } from "@/shared/ui";
@@ -8,21 +8,27 @@ import CancelIcon from "@assets/icons/cross.svg";
 import LinkIcon from "@assets/icons/link.svg";
 import { useMeetStore } from "@entities/Meet";
 import styles from "./MeetTable.module.css";
+import { useSaveUserSelectedSlots } from "../../api";
 import { getTimeZone, useColumnWidth } from "../../lib";
 import { TableColumn } from "../TableColumn/TableColumn";
 import type { MeetTableProps } from "./MeetTable.types";
 
 const WINDOW_WIDTH = window.innerWidth;
 
-export const MeetTable = ({ timeRanges, meeting_days }: MeetTableProps) => {
+export const MeetTable = ({ timeRanges, meeting_days, mySlotName }: MeetTableProps) => {
+  const { hash = "" } = useParams();
   const { measureContainerRef, columnWidth, calculateColumnWidth } = useColumnWidth(meeting_days);
   const setHoveredUsers = useMeetStore(store => store.setHoveredUsers);
-  const setHoveredUser = useMeetStore(store => store.setHoveredUser),
-    isEditingMode = useMeetStore(store => store.isEditing),
-    setIsEditing = useMeetStore(store => store.setIsEditing),
-    newSelectedSlots = useMeetStore(store => store.newSelectedSlots),
-    setIsModalOpen = useMeetStore(store => store.setIsModalOpen),
-    clearNewSelectedSlots = useMeetStore(store => store.clearNewSelectedSlots);
+  const setHoveredUser = useMeetStore(store => store.setHoveredUser);
+  const isEditingMode = useMeetStore(store => store.isEditing);
+  const setIsEditing = useMeetStore(store => store.setIsEditing);
+  const startEditingSlots = useMeetStore(store => store.startEditingSlots);
+  const newSelectedSlots = useMeetStore(store => store.newSelectedSlots);
+  const setIsModalOpen = useMeetStore(store => store.setIsModalOpen);
+  const clearNewSelectedSlots = useMeetStore(store => store.clearNewSelectedSlots);
+  const { mutate: saveOwnSlots } = useSaveUserSelectedSlots(hash, () => {
+    setIsEditing(false);
+  });
   const addToast = useToastStore(store => store.addToast);
   const [searchParams, setSearchParams] = useSearchParams();
   // Состояние для управления transition
@@ -175,6 +181,10 @@ export const MeetTable = ({ timeRanges, meeting_days }: MeetTableProps) => {
                 <button
                   disabled={!newSelectedSlots.size}
                   onClick={() => {
+                    if (mySlotName) {
+                      saveOwnSlots({ name: mySlotName, isEdit: true });
+                      return;
+                    }
                     setIsModalOpen(true);
                   }}
                   className={`baseButton approveButton`}
@@ -191,14 +201,14 @@ export const MeetTable = ({ timeRanges, meeting_days }: MeetTableProps) => {
                 {/* <button className={"baseButton secondaryButton"}>Назначить встречу</button> */}
                 <button
                   onClick={() => {
-                    setIsEditing(true);
+                    startEditingSlots(mySlotName);
                   }}
                   className={`baseButton mainButton ${styles.MeetTable__AddTimeButton}`}
                   style={{
                     transition: transitionStyle,
                   }}
                 >
-                  Добавить время
+                  {mySlotName ? "Изменить время" : "Добавить время"}
                 </button>
               </>
             )}

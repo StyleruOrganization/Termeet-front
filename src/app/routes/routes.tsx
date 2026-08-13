@@ -8,6 +8,8 @@ const EntryPage = lazy(() => import("../../pages/Entry").then(module => ({ defau
 const CreateMeetPage = lazy(() => import("../../pages/CreateMeet").then(module => ({ default: module.CreateMeet })));
 const MeetPage = lazy(() => import("../../pages/Meet").then(module => ({ default: module.Meet })));
 const EditMeetPage = lazy(() => import("../../pages/EditMeet").then(module => ({ default: module.EditMeet })));
+const AuthYandexPage = lazy(() => import("../../pages/AuthYandex").then(module => ({ default: module.AuthYandex })));
+const AuthConfirmPage = lazy(() => import("../../pages/AuthConfirm").then(module => ({ default: module.AuthConfirm })));
 const StubPage = lazy(() => import("../../pages/Stub").then(module => ({ default: module.Stub })));
 
 const withSuspense = (Component: React.LazyExoticComponent<() => React.JSX.Element>, message: string) => (
@@ -40,6 +42,8 @@ export const Routing = () => {
             "Мы не нашли встречу, которую ты ищешь",
           )}
         />
+        <Route path='auth/yandex' element={withSuspense(AuthYandexPage, "Входим через Яндекс...")} />
+        <Route path='auth/confirm' element={withSuspense(AuthConfirmPage, "Подтверждаем почту...")} />
         <Route path='*' element={<StubPage message='Мы не нашли страницу, которую ты ищешь' />} />
       </Route>
     </ReactRoutes>

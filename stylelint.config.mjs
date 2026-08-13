@@ -7,6 +7,7 @@ export default {
   rules: {
     "declaration-empty-line-before": null,
     "selector-class-pattern": null,
+    "no-descending-specificity": null,
     "plugin/selector-bem-pattern": {
       preset: "bem",
       componentSelectors: {

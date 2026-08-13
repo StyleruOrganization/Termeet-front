@@ -108,7 +108,7 @@
 
   text-align: center;
 
-  background-color: #EFEFEF;
+  background-color: var(--semantics-gray-hover);
 
   margin-bottom: 44px;
 }
@@ -245,7 +245,7 @@ section h2 {
   flex-direction: column;
 
   span:first-child {
-    color: #DD4442;
+    color: var(--semantics-red-main);
 
     margin-bottom: -4px;
   }
@@ -272,7 +272,7 @@ section h2 {
     left: -5px;
     bottom: 0;
 
-    color: #DADADA;
+    color: var(--semantics-gray-active);
   }
 }
 
@@ -294,7 +294,7 @@ section h2 {
       bottom: 0;
       left: initial;
 
-      color:#96BEFA;
+      color: var(--semantics-blue-300);
 
       transform: scaleX(-1)
     }

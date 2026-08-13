@@ -1,9 +1,10 @@
-import { useLayoutEffect, useReducer } from "react";
-import { useParams, useNavigate } from "react-router";
-import { Container } from "@/shared/ui/Container/Container";
+import { useEffect, useLayoutEffect, useReducer } from "react";
+import { useNavigate, useParams } from "react-router";
+import { canManageMeeting } from "@/entities/Meet";
+import { useToastStore } from "@/features/ToastContainer";
+import { Container, Input, TextArea } from "@/shared/ui";
 import ApproveIcon from "@assets/icons/approve.svg";
 import CancelIcon from "@assets/icons/cross.svg";
-import { Input, TextArea } from "@shared/ui";
 import { useGetMeetInfo } from "./api/useGetMeetInfo";
 import { useUpdateMeetInfo } from "./api/useUpdateMeetInfo";
 import styles from "./EditMeet.module.css";
@@ -66,7 +67,9 @@ const reducer = (state: State, action: Action): State => {
 export const EditMeet = () => {
   const { hash = "" } = useParams();
   const navigate = useNavigate();
+  const addToast = useToastStore(store => store.addToast);
   const meetData = useGetMeetInfo();
+  const canManage = canManageMeeting(meetData.isCreator, meetData.isCreatorAuth);
   const [formState, dispatch] = useReducer(reducer, {
     description: meetData.description,
     name: meetData.name,
@@ -78,6 +81,19 @@ export const EditMeet = () => {
     },
   });
   const { mutate: updateMeetInfo } = useUpdateMeetInfo(hash);
+
+  useEffect(() => {
+    if (canManage) {
+      return;
+    }
+
+    addToast({
+      id: "meet-edit-forbidden",
+      type: "error",
+      message: "Редактировать встречу может только организатор",
+    });
+    navigate(`/meet/${hash}`, { replace: true });
+  }, [addToast, canManage, hash, navigate]);
 
   useLayoutEffect(() => {
     dispatch({ type: "change", payload: { fieldName: "name", value: meetData.name } });
@@ -91,6 +107,10 @@ export const EditMeet = () => {
     meetData.description !== formState.description;
   const isSumbitButtonDisabled =
     !formState.name || Object.values(formState.errors).some(error => error) || !isChangedFields;
+
+  if (!canManage) {
+    return null;
+  }
 
   return (
     <Container>

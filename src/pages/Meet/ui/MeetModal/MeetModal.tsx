@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
-import { ModalWrapper, Input } from "@/shared/ui";
+import { useMeetStore } from "@/entities/Meet";
+import { useSessionStore } from "@/entities/User";
+import { Input, ModalWrapper } from "@/shared/ui";
 import BigIcon from "@assets/icons/bigShadow.svg";
 import PrintIcon from "@assets/icons/print.svg";
 import SmallIcon from "@assets/icons/smallShadow.svg";
-import { useMeetStore } from "@entities/Meet";
 import styles from "./MeetModal.module.css";
 import { useSaveUserSelectedSlots } from "../../api";
 
@@ -12,7 +13,9 @@ const WINDOW_HEIGHT = window.innerHeight;
 
 export const MeetModal = () => {
   const { hash } = useParams();
-  const [userName, setUserName] = useState("");
+  const user = useSessionStore(state => state.user);
+  const defaultName = user ? `${user.first_name} ${user.last_name}`.trim() : "";
+  const [userName, setUserName] = useState(defaultName);
   const [error, setError] = useState("");
   const isOpen = useMeetStore(state => state.isModalOpen);
   const setIsModalOpen = useMeetStore(state => state.setIsModalOpen);
@@ -26,14 +29,14 @@ export const MeetModal = () => {
 
   useEffect(() => {
     if (isOpen) {
-      setUserName("");
-      setError("");
+      setUserName(defaultName);
+      setError(defaultName && users.includes(defaultName) ? "Пользователь с таким именем уже существует!" : "");
 
       setTimeout(() => {
         inputRef.current?.focus();
       }, 100);
     }
-  }, [isOpen]);
+  }, [isOpen, defaultName, users]);
 
   const isValidName = userName.trim().length > 0;
   const isButtonDisabled = !isValidName || !!error;
@@ -63,7 +66,7 @@ export const MeetModal = () => {
           <form
             onSubmit={event => {
               event.preventDefault();
-              saveSelectesSlots(userName.trim());
+              saveSelectesSlots({ name: userName.trim() });
               setUserName("");
             }}
             data-test-id='meet-modal'

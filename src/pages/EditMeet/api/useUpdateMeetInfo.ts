@@ -3,7 +3,7 @@ import { useRef } from "react";
 import { useNavigate } from "react-router";
 import { MeetQueries } from "@/entities/Meet";
 import { useToastStore } from "@/features/ToastContainer";
-import { apiClient } from "@/shared/api";
+import { apiClient, HttpError } from "@/shared/api";
 import type { IEditMeetPayload } from "../model/EditMeet.types";
 
 export const useUpdateMeetInfo = (hash: string) => {
@@ -33,14 +33,17 @@ export const useUpdateMeetInfo = (hash: string) => {
         });
       }, 300);
     },
-    onError: () => {
+    onError: (error: Error) => {
       if (toastTimerRef.current) {
         clearTimeout(toastTimerRef.current);
       }
       removeToast("wait-meet-update");
       addToast({
         type: "error",
-        message: "Не удалось обновить информацию о встрече",
+        message:
+          error instanceof HttpError && error.status === 403
+            ? "Редактировать встречу может только организатор"
+            : "Не удалось обновить информацию о встрече",
         id: "error-meet-update",
       });
     },

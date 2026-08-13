@@ -19,6 +19,7 @@ export const createMeetStore = (initialState?: Partial<IMeetStore>) => {
     setHoveredUsers: () => {},
     setHoveredUser: () => {},
     setIsEditing: () => {},
+    startEditingSlots: () => {},
     clearNewSelectedSlots: () => {},
     setIsModalOpen: () => {},
     getPreparedNewSlots: () => [],
@@ -141,6 +142,27 @@ export const createMeetStore = (initialState?: Partial<IMeetStore>) => {
       set(() => ({
         isEditing,
       }));
+    },
+    startEditingSlots: userName => {
+      if (!userName) {
+        set({ isEditing: true, newSelectedSlots: new Map() });
+        return;
+      }
+
+      const next = new Map<string, string[]>();
+      get().timeInfo.forEach((inner, date) => {
+        const times: string[] = [];
+        inner.userSlots.forEach((users, time) => {
+          if (users.includes(userName)) {
+            times.push(time);
+          }
+        });
+        if (times.length) {
+          next.set(date, times);
+        }
+      });
+
+      set({ isEditing: true, newSelectedSlots: next });
     },
     clearNewSelectedSlots: () => {
       set(() => ({

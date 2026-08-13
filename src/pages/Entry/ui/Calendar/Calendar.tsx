@@ -1,5 +1,5 @@
+import { useColorPalette } from "@/shared/libs";
 import ToolTipArrowIcon from "@assets/icons/tooltip-arrow.svg";
-import { useColorPalette } from "@shared/libs/hooks/useColorPalette";
 import styles from "./Calendar.module.css";
 
 interface CalendarProps {

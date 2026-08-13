@@ -11,4 +11,11 @@ export default defineConfig([
       "fsd/repetitive-naming": "off",
     },
   },
+  {
+    // Форма фидбека специально вынесена в widgets, хотя пока стоит только на лендинге.
+    files: ["./src/widgets/FeedbackForm/**"],
+    rules: {
+      "fsd/insignificant-slice": "off",
+    },
+  },
 ]);
