@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useMeetStore, MeetQueries } from "@/entities/Meet";
 import { useToastStore } from "@/features/ToastContainer";
 import { apiClient, HttpError } from "@/shared/api";
+import { suppressMeetLiveToasts } from "../lib";
 
 interface ISaveSlotsPayload {
   name: string;
@@ -42,6 +43,7 @@ export const useSaveUserSelectedSlots = (meetHash: string, onMutate?: () => void
 
   return useMutation({
     mutationFn: async ({ name, isEdit }: ISaveSlotsPayload) => {
+      suppressMeetLiveToasts(meetHash);
       const preparedSlots = getPreparedNewSlots();
       clearNewSelectedSlots();
       const endpoint = isEdit ? `/meet/${meetHash}/slots/edit` : `/meet/${meetHash}/slots`;

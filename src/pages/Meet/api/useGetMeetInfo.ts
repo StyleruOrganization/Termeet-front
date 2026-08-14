@@ -3,12 +3,19 @@ import { useMemo } from "react";
 import { MeetQueries } from "@/entities/Meet";
 import { useSessionStore } from "@/entities/User";
 import { transformMeetData } from "../lib";
+import { useMeetLiveSocket } from "../lib/live/useMeetLiveSocket";
+import { useMeetLiveToasts } from "../lib/live/useMeetLiveToasts";
 
 export const useGetMeetInfo = (hash: string, isLocal: boolean) => {
   const userId = useSessionStore(state => state.user?.id ?? "guest");
+  const liveConnected = useMeetLiveSocket(hash, userId);
   const { data } = useSuspenseQuery({
     ...MeetQueries.meet(hash),
     queryKey: [...MeetQueries.meet(hash).queryKey, userId],
+    staleTime: 0,
+    refetchInterval: liveConnected ? false : 5000,
+    refetchIntervalInBackground: false,
+    refetchOnWindowFocus: true,
   });
 
   const transformedMeetData = useMemo(() => {
@@ -29,6 +36,8 @@ export const useGetMeetInfo = (hash: string, isLocal: boolean) => {
       throw error;
     }
   }, [data, hash, isLocal, userId]);
+
+  useMeetLiveToasts(hash, data, transformedMeetData.mySlotName);
 
   return {
     meetData: transformedMeetData,

@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MeetQueries, useMeetStore } from "@/entities/Meet";
 import { useToastStore } from "@/features/ToastContainer";
 import { apiClient, HttpError } from "@/shared/api";
+import { suppressMeetLiveToasts } from "../lib";
 
 export const useDeleteParticipant = (meetHash: string) => {
   const queryClient = useQueryClient();
@@ -13,6 +14,7 @@ export const useDeleteParticipant = (meetHash: string) => {
 
   return useMutation({
     mutationFn: (username: string) => {
+      suppressMeetLiveToasts(meetHash);
       return apiClient.delete(`/meet/${meetHash}/slots/${encodeURIComponent(username)}`);
     },
     onMutate: async username => {

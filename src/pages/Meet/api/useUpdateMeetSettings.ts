@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MeetQueries } from "@/entities/Meet";
 import { useToastStore } from "@/features/ToastContainer";
 import { apiClient } from "@/shared/api";
+import { suppressMeetLiveToasts } from "../lib";
 import type { MeetResponse, MeetSettingsUpdate } from "@/entities/Meet";
 
 export const useUpdateMeetSettings = (hash: string) => {
@@ -10,6 +11,7 @@ export const useUpdateMeetSettings = (hash: string) => {
 
   return useMutation({
     mutationFn: (settings: MeetSettingsUpdate) => {
+      suppressMeetLiveToasts(hash);
       return apiClient.patch<MeetResponse, MeetSettingsUpdate>(`/meet/${hash}/settings`, settings);
     },
     onSuccess: () => {

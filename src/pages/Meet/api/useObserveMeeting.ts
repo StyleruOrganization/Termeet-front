@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MeetQueries } from "@/entities/Meet";
 import { useToastStore } from "@/features/ToastContainer";
 import { apiClient } from "@/shared/api";
+import { suppressMeetLiveToasts } from "../lib";
 import type { MeetResponse } from "@/entities/Meet";
 
 export const useObserveMeeting = (hash: string) => {
@@ -9,7 +10,10 @@ export const useObserveMeeting = (hash: string) => {
   const addToast = useToastStore(state => state.addToast);
 
   return useMutation({
-    mutationFn: () => apiClient.post<MeetResponse>(`/meet/${hash}/observe`),
+    mutationFn: () => {
+      suppressMeetLiveToasts(hash);
+      return apiClient.post<MeetResponse>(`/meet/${hash}/observe`);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: MeetQueries.meet(hash).queryKey });
       addToast({

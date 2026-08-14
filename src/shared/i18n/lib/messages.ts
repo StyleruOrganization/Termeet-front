@@ -110,6 +110,11 @@ export const ru = {
     testerSoon: "Набор тестеров ещё не открыт. Напишите в техподдержку, если хотите помочь",
     deleted: "Аккаунт удалён",
     deleteError: "Не получилось удалить аккаунт. После деплоя бэкенда в dev удаление заработает с кабинета",
+    liveVoted: "{{name}} выбрал время. Можно пересмотреть своё",
+    liveChanged: "{{name}} изменил время. Можно пересмотреть своё",
+    liveRemoved: "{{name}} больше не в списке проголосовавших",
+    liveFinal: "Назначено итоговое время встречи",
+    liveMore: "Ещё {{count}} обновлений по этой встрече",
   },
   home: {
     create: "Создать встречу",
@@ -365,6 +370,11 @@ export const en: typeof ru = {
     testerSoon: "Tester signup is not open yet. Write to support if you want to help",
     deleted: "Account deleted",
     deleteError: "Could not delete the account. After the backend deploy to dev, deletion from the cabinet will work",
+    liveVoted: "{{name}} picked a time. You can revise yours",
+    liveChanged: "{{name}} changed their time. You can revise yours",
+    liveRemoved: "{{name}} is no longer on the voters list",
+    liveFinal: "The meeting time has been set",
+    liveMore: "{{count}} more updates on this meeting",
   },
   home: {
     create: "Create meeting",
@@ -623,6 +633,11 @@ export const de: typeof ru = {
     deleted: "Konto gelöscht",
     deleteError:
       "Konto konnte nicht gelöscht werden. Nach dem Backend-Deploy nach dev funktioniert das Löschen im Konto",
+    liveVoted: "{{name}} hat eine Zeit gewählt. Sie können Ihre noch anpassen",
+    liveChanged: "{{name}} hat die Zeit geändert. Sie können Ihre noch anpassen",
+    liveRemoved: "{{name}} ist nicht mehr in der Liste der Abstimmenden",
+    liveFinal: "Die endgültige Meetingzeit wurde festgelegt",
+    liveMore: "Noch {{count}} Updates zu diesem Meeting",
   },
   home: {
     create: "Meeting erstellen",

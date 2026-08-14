@@ -118,6 +118,7 @@ export default defineConfig(({ mode }) => ({
         // Локальный бэк: VITE_API_PROXY=http://127.0.0.1:8000 pnpm dev
         target: process.env.VITE_API_PROXY || "https://termeet-dev.ru",
         changeOrigin: true,
+        ws: true,
         // Важно: не переписываем путь
         rewrite: path => path,
         secure: !process.env.VITE_API_PROXY,

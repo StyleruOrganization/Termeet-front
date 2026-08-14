@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MeetQueries, useMeetStore } from "@/entities/Meet";
 import { useToastStore } from "@/features/ToastContainer";
 import { apiClient, HttpError } from "@/shared/api";
+import { suppressMeetLiveToasts } from "../lib";
 import type { MeetResponse } from "@/entities/Meet";
 
 export const useSetFinalTime = (hash: string) => {
@@ -13,6 +14,7 @@ export const useSetFinalTime = (hash: string) => {
 
   return useMutation({
     mutationFn: () => {
+      suppressMeetLiveToasts(hash);
       return apiClient.patch<MeetResponse, { slots: [string, string][] }>(`/meet/${hash}/final`, {
         slots: getPreparedNewSlots(),
       });
