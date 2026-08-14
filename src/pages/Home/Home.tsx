@@ -6,7 +6,7 @@ import { Container } from "@/shared/ui";
 import Arrow from "@assets/icons/arrow.svg";
 import styles from "./Home.module.css";
 
-type DateFilter = "all" | "today" | "byDate" | "noTime";
+type DateFilter = "all" | "today" | "byDate";
 type RoleFilter = "all" | UserMeetingRole;
 type HomeTab = "meetings" | "history";
 
@@ -14,6 +14,7 @@ const ROLE_LABEL: Record<UserMeetingRole, string> = {
   owner: "Создатель",
   participant: "Участник",
   observer: "Наблюдатель",
+  invited: "Вас пригласили",
 };
 
 const weekdayShort = ["вс", "пн", "вт", "ср", "чт", "пт", "сб"];
@@ -75,11 +76,14 @@ export const Home = () => {
   const todayKey = toDayKey(new Date());
 
   const visibleMeetings = useMemo(() => {
-    if (tab === "history") {
-      return [];
-    }
-
     return meetings.filter(meeting => {
+      const isFinal = Boolean(meeting.hasFinal);
+      if (tab === "history" && !isFinal) {
+        return false;
+      }
+      if (tab === "meetings" && isFinal) {
+        return false;
+      }
       if (roleFilter !== "all" && meeting.role !== roleFilter) {
         return false;
       }
@@ -90,9 +94,6 @@ export const Home = () => {
       }
       if (dateFilter === "byDate" && selectedDay) {
         return meeting.dataRange?.some(range => range[0]?.slice(0, 10) === selectedDay);
-      }
-      if (dateFilter === "noTime") {
-        return !meeting.duration;
       }
       return true;
     });
@@ -119,6 +120,11 @@ export const Home = () => {
             selectedDay={selectedDay}
             onMonthChange={setMonth}
             onSelectDay={day => {
+              if (selectedDay === day) {
+                setSelectedDay(null);
+                setDateFilter("all");
+                return;
+              }
               setSelectedDay(day);
               setDateFilter("byDate");
             }}
@@ -146,51 +152,47 @@ export const Home = () => {
             </button>
           </div>
 
-          {tab === "meetings" ? (
-            <>
-              <div className={styles.Home__Filters}>
-                {(
-                  [
-                    ["all", "Все"],
-                    ["today", "Сегодня"],
-                    ["byDate", "По дате"],
-                    ["noTime", "Без времени"],
-                  ] as const
-                ).map(([id, label]) => (
-                  <button
-                    key={id}
-                    type='button'
-                    className={`${styles.Home__Chip} ${dateFilter === id ? styles.Home__Chip_active : ""}`}
-                    onClick={() => setDateFilter(id)}
-                  >
-                    {label}
-                  </button>
-                ))}
-              </div>
-              <div className={styles.Home__Filters}>
-                {(
-                  [
-                    ["all", "Все роли"],
-                    ["owner", "Я создатель"],
-                    ["participant", "Я участник"],
-                    ["observer", "Я наблюдатель"],
-                  ] as const
-                ).map(([id, label]) => (
-                  <button
-                    key={id}
-                    type='button'
-                    className={`${styles.Home__Chip} ${roleFilter === id ? styles.Home__Chip_active : ""}`}
-                    onClick={() => setRoleFilter(id)}
-                  >
-                    {label}
-                  </button>
-                ))}
-              </div>
-            </>
-          ) : null}
+          <div className={styles.Home__Filters}>
+            {(
+              [
+                ["all", "Все"],
+                ["today", "Сегодня"],
+                ["byDate", "День в календаре"],
+              ] as const
+            ).map(([id, label]) => (
+              <button
+                key={id}
+                type='button'
+                className={`${styles.Home__Chip} ${dateFilter === id ? styles.Home__Chip_active : ""}`}
+                onClick={() => setDateFilter(id)}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+          <div className={styles.Home__Filters}>
+            {(
+              [
+                ["all", "Все роли"],
+                ["owner", "Я создатель"],
+                ["participant", "Я участник"],
+                ["observer", "Я наблюдатель"],
+                ["invited", "Вас пригласили"],
+              ] as const
+            ).map(([id, label]) => (
+              <button
+                key={id}
+                type='button'
+                className={`${styles.Home__Chip} ${roleFilter === id ? styles.Home__Chip_active : ""}`}
+                onClick={() => setRoleFilter(id)}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
 
-          {tab === "history" ? (
-            <p className={styles.Home__Empty}>История появится, когда встречам можно будет назначать итоговое время</p>
+          {tab === "history" && grouped.length === 0 && !isLoading && !isError ? (
+            <p className={styles.Home__Empty}>Здесь появятся встречи, у которых уже назначено итоговое время</p>
           ) : isLoading ? (
             <p className={styles.Home__Empty}>Загружаем встречи…</p>
           ) : isError ? (
@@ -214,9 +216,11 @@ export const Home = () => {
                     >
                       <span className={styles.Home__CardName}>{meeting.name}</span>
                       <span className={styles.Home__CardMeta}>
-                        {meeting.duration || "Время не указано"} · {ROLE_LABEL[meeting.role]}
+                        {meeting.hasFinal ? "Время назначено" : "Ждём время"} · {ROLE_LABEL[meeting.role]}
+                        {meeting.duration ? ` · ${meeting.duration}` : ""}
                       </span>
                     </button>
+                    <PeopleSnippet names={meeting.participantNames ?? []} count={meeting.participantCount ?? 0} />
                     {meeting.link ? (
                       <a
                         className={`${styles.Home__Join} baseButton mainButton`}
@@ -246,6 +250,36 @@ export const Home = () => {
   );
 };
 
+const PeopleSnippet = ({ names, count }: { names: string[]; count: number }) => {
+  const [open, setOpen] = useState(false);
+  const shown = count || names.length;
+  if (!shown) {
+    return <span className={styles.Home__PeopleEmpty}>Пока никто не выбрал время</span>;
+  }
+
+  return (
+    <div className={styles.Home__People}>
+      <button
+        type='button'
+        className={styles.Home__PeopleToggle}
+        onClick={event => {
+          event.stopPropagation();
+          setOpen(current => !current);
+        }}
+      >
+        {shown} {shown === 1 ? "участник" : shown < 5 ? "участника" : "участников"}
+      </button>
+      {open ? (
+        <ul className={styles.Home__PeopleList}>
+          {names.map(name => (
+            <li key={name}>{name}</li>
+          ))}
+        </ul>
+      ) : null}
+    </div>
+  );
+};
+
 const HomeCalendar = ({
   month,
   markedDays,
@@ -259,6 +293,7 @@ const HomeCalendar = ({
   onMonthChange: (next: Date) => void;
   onSelectDay: (day: string) => void;
 }) => {
+  const todayKey = toDayKey(new Date());
   const year = month.getFullYear();
   const monthIndex = month.getMonth();
   const firstWeekday = (new Date(year, monthIndex, 1).getDay() + 6) % 7;
@@ -299,14 +334,16 @@ const HomeCalendar = ({
           const key = `${year}-${`${monthIndex + 1}`.padStart(2, "0")}-${`${day}`.padStart(2, "0")}`;
           const isSelected = selectedDay === key;
           const isMarked = markedDays.has(key);
+          const isToday = key === todayKey;
           return (
             <button
               key={key}
               type='button'
-              className={`${styles.HomeCalendar__Day} ${isSelected ? styles.HomeCalendar__Day_selected : ""} ${isMarked && !isSelected ? styles.HomeCalendar__Day_marked : ""}`}
+              className={`${styles.HomeCalendar__Day} ${isSelected ? styles.HomeCalendar__Day_selected : ""} ${isToday && !isSelected ? styles.HomeCalendar__Day_today : ""}`}
               onClick={() => onSelectDay(key)}
             >
               {day}
+              {isMarked ? <span className={styles.HomeCalendar__Dot} /> : null}
             </button>
           );
         })}

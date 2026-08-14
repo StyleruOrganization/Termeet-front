@@ -11,10 +11,12 @@ import {
   type IUser,
 } from "@/entities/User";
 import { useToastStore } from "@/features/ToastContainer";
+import { TIMES } from "@/shared/consts";
 import { useTheme } from "@/shared/libs";
 import { Container, Input, ModalWrapper, Select } from "@/shared/ui";
 import { FeedbackForm } from "@/widgets/FeedbackForm";
 import Arrow from "@assets/icons/arrow.svg";
+import stubImage from "@assets/img/stub.png";
 import styles from "./Profile.module.css";
 import { TemplateWeekModal } from "./ui/TemplateWeekModal/TemplateWeekModal";
 
@@ -51,6 +53,23 @@ const TIME_OPTIONS = Array.from({ length: 48 }, (_, index) => {
 });
 const END_TIME_OPTIONS = [...TIME_OPTIONS.slice(1), "24:00"];
 const LANGUAGE_KEY = "termeet.language";
+const GRID_WINDOW_KEY = "termeet.gridWindow";
+
+const readGridWindow = () => {
+  try {
+    const raw = localStorage.getItem(GRID_WINDOW_KEY);
+    if (!raw) {
+      return { start: "10 : 00", end: "19 : 00" };
+    }
+    const parsed = JSON.parse(raw) as { start?: string; end?: string };
+    return {
+      start: parsed.start || "10 : 00",
+      end: parsed.end || "19 : 00",
+    };
+  } catch {
+    return { start: "10 : 00", end: "19 : 00" };
+  }
+};
 
 export const Profile = () => {
   const navigate = useNavigate();
@@ -110,8 +129,10 @@ const ProfileSettings = ({ user, onOpenSupport }: { user: IUser; onOpenSupport: 
   const updateSettings = useSessionStore(state => state.updateSettings);
   const addToast = useToastStore(state => state.addToast);
   const [timezone, setTimezone] = useState(user.timezone || "UTC +3:00 (Москва)");
+  const [passwordOpen, setPasswordOpen] = useState(false);
+  const [passwordSending, setPasswordSending] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
-  const [deleteStep, setDeleteStep] = useState<"reason" | "confirm">("reason");
+  const [deleteStep, setDeleteStep] = useState<"warn" | "reason">("warn");
 
   return (
     <div className={styles.Profile__Stack}>
@@ -153,27 +174,8 @@ const ProfileSettings = ({ user, onOpenSupport }: { user: IUser; onOpenSupport: 
             Отправить письмо ещё раз
           </button>
         ) : null}
-        <button
-          type='button'
-          className={styles.Profile__Row}
-          onClick={async () => {
-            try {
-              await resetPasswordRequest(user.email);
-              addToast({
-                id: "reset-sent",
-                type: "success",
-                message: "Ссылка для смены пароля ушла на почту",
-              });
-            } catch {
-              addToast({
-                id: "reset-sent-error",
-                type: "error",
-                message: "Не получилось отправить письмо для смены пароля",
-              });
-            }
-          }}
-        >
-          <span>Пароль</span>
+        <button type='button' className={styles.Profile__Row} onClick={() => setPasswordOpen(true)}>
+          <span>Смена пароля</span>
           <Arrow className={styles.Profile__RowArrow} />
         </button>
       </section>
@@ -199,18 +201,22 @@ const ProfileSettings = ({ user, onOpenSupport }: { user: IUser; onOpenSupport: 
         />
       </section>
       <AvailabilityTemplateSettings user={user} />
+      <GridWindowSettings />
       <section>
         <h2 className={styles.Profile__SectionTitle}>Удаление аккаунта</h2>
+        <p className={styles.Profile__Hint}>
+          После удаления нельзя будет войти в этот профиль. Встречи, где вы организатор, пропадут для всех, кто ходил по
+          ссылке.
+        </p>
         <button
           type='button'
-          className={styles.Profile__Row}
+          className={`baseButton outlineButton ${styles.Profile__DeleteButton}`}
           onClick={() => {
-            setDeleteStep("reason");
+            setDeleteStep("warn");
             setDeleteOpen(true);
           }}
         >
-          <span>Ваши встречи будут удалены навсегда</span>
-          <Arrow className={styles.Profile__RowArrow} />
+          Удалить аккаунт
         </button>
       </section>
       <button
@@ -224,58 +230,87 @@ const ProfileSettings = ({ user, onOpenSupport }: { user: IUser; onOpenSupport: 
       >
         Выйти из аккаунта
       </button>
-      <ModalWrapper isOpen={deleteOpen} onClose={() => setDeleteOpen(false)} isAnimate>
-        {deleteStep === "reason" ? (
-          <div className={styles.Profile__Modal}>
-            <h2>Уточните причину</h2>
-            <p>Возможно мы сможем помочь — и профиль не придётся удалять</p>
-            <button type='button' className={styles.Profile__Row} onClick={() => setDeleteStep("confirm")}>
-              Слишком много уведомлений
-              <Arrow className={styles.Profile__RowArrow} />
-            </button>
-            <button type='button' className={styles.Profile__Row} onClick={() => setDeleteStep("confirm")}>
-              Мои друзья не пользуются Termeet
-              <Arrow className={styles.Profile__RowArrow} />
-            </button>
-            <button type='button' className={styles.Profile__Row} onClick={() => setDeleteStep("confirm")}>
-              Не разобрался
-              <Arrow className={styles.Profile__RowArrow} />
-            </button>
-            <button type='button' className={styles.Profile__Row} onClick={() => setDeleteStep("confirm")}>
-              Я нашёл другое приложение
-              <Arrow className={styles.Profile__RowArrow} />
-            </button>
-            <button type='button' className='baseButton mainButton' onClick={() => setDeleteOpen(false)}>
-              Закрыть
-            </button>
-          </div>
-        ) : (
-          <div className={styles.Profile__Modal}>
-            <h2>Удаление аккаунта</h2>
-            <p>Удаление аккаунта пока нельзя сделать из кабинета. Напишите в техподдержку, если это правда нужно.</p>
+      <ModalWrapper compact isOpen={passwordOpen} onClose={() => setPasswordOpen(false)} isAnimate>
+        <div className={styles.Profile__Modal}>
+          <h2>Смена пароля</h2>
+          <p>
+            На {user.email} придёт письмо со ссылкой. По ней можно задать новый пароль. Само поле «Пароль» письмо не
+            отправляет — только эта кнопка.
+          </p>
+          <div className={styles.Profile__ModalActions}>
             <button
               type='button'
               className='baseButton mainButton'
-              onClick={() => {
-                setDeleteOpen(false);
-                onOpenSupport();
+              disabled={passwordSending}
+              onClick={async () => {
+                setPasswordSending(true);
+                try {
+                  await resetPasswordRequest(user.email);
+                  setPasswordOpen(false);
+                  addToast({
+                    id: "reset-sent",
+                    type: "success",
+                    message: "Ссылка для смены пароля ушла на почту",
+                  });
+                } catch {
+                  addToast({
+                    id: "reset-sent-error",
+                    type: "error",
+                    message: "Не получилось отправить письмо для смены пароля",
+                  });
+                } finally {
+                  setPasswordSending(false);
+                }
               }}
             >
-              Написать в поддержку
+              Отправить ссылку на почту
             </button>
-            <button
-              type='button'
-              className='baseButton outlineButton'
-              onClick={() => {
-                addToast({
-                  id: "delete-unavailable",
-                  type: "info",
-                  message: "Удаление аккаунта ещё не подключено на сервере",
-                });
-              }}
-            >
-              Удалить аккаунт
+            <button type='button' className='baseButton secondaryButton' onClick={() => setPasswordOpen(false)}>
+              Отменить
             </button>
+          </div>
+        </div>
+      </ModalWrapper>
+      <ModalWrapper compact isOpen={deleteOpen} onClose={() => setDeleteOpen(false)} isAnimate>
+        {deleteStep === "warn" ? (
+          <div className={styles.Profile__Modal}>
+            <h2>Удалить аккаунт?</h2>
+            <ul className={styles.Profile__ModalList}>
+              <li>Войти в этот профиль больше не получится</li>
+              <li>Встречи, где вы организатор, пропадут</li>
+              <li>Слоты, которые вы ставили как участник, останутся под именем на встрече</li>
+            </ul>
+            <div className={styles.Profile__ModalActions}>
+              <button type='button' className='baseButton outlineButton' onClick={() => setDeleteStep("reason")}>
+                Продолжить удаление
+              </button>
+              <button type='button' className='baseButton secondaryButton' onClick={() => setDeleteOpen(false)}>
+                Оставить аккаунт
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className={styles.Profile__Modal}>
+            <h2>Почему удаляете?</h2>
+            <p>Можно написать в поддержку — иногда проще выключить уведомления, чем сносить профиль.</p>
+            <p className={styles.Profile__Hint}>
+              Само удаление из кабинета пока не подключено на сервере. Если профиль правда нужно убрать, напишите нам.
+            </p>
+            <div className={styles.Profile__ModalActions}>
+              <button
+                type='button'
+                className='baseButton mainButton'
+                onClick={() => {
+                  setDeleteOpen(false);
+                  onOpenSupport();
+                }}
+              >
+                Написать в поддержку
+              </button>
+              <button type='button' className='baseButton secondaryButton' onClick={() => setDeleteOpen(false)}>
+                Закрыть
+              </button>
+            </div>
           </div>
         )}
       </ModalWrapper>
@@ -310,8 +345,9 @@ const AvailabilityTemplateSettings = ({ user }: { user: IUser }) => {
     <section>
       <h2 className={styles.Profile__SectionTitle}>Обычное время</h2>
       <p className={styles.Profile__Hint}>
-        Можно быстро закрасить все дни одним интервалом и потом поправить календарь недели: в понедельник одно время, в
-        субботу другое.
+        Это ваши типичные часы, не окно конкретной встречи. На новой встрече, если вы ещё не голосовали, Termeet может
+        предложить закрасить сетку этим шаблоном. Сначала задайте интервал на все дни, потом откройте календарь недели и
+        поправьте субботу или понедельник отдельно.
       </p>
       <div className={styles.Profile__Interval}>
         <Select
@@ -373,6 +409,52 @@ const AvailabilityTemplateSettings = ({ user }: { user: IUser }) => {
         onClose={() => setWeekOpen(false)}
         onSave={saveTemplate}
       />
+    </section>
+  );
+};
+
+const GridWindowSettings = () => {
+  const addToast = useToastStore(state => state.addToast);
+  const saved = readGridWindow();
+  const [start, setStart] = useState(saved.start);
+  const [end, setEnd] = useState(saved.end);
+
+  return (
+    <section>
+      <h2 className={styles.Profile__SectionTitle}>Часы сетки при создании</h2>
+      <p className={styles.Profile__Hint}>
+        На странице создания встречи окно «с какого по какой час» остаётся у всех, в том числе у гостя. Здесь можно
+        запомнить свои привычные часы — они подставятся в форму, когда вы залогинены. Пока это только на этом
+        устройстве.
+      </p>
+      <div className={styles.Profile__Interval}>
+        <Select
+          name='grid-start'
+          className={styles.Profile__IntervalSelect}
+          options={TIMES}
+          value={start}
+          disabledFunc={value => value.replaceAll(" ", "") >= end.replaceAll(" ", "")}
+          onChange={setStart}
+        />
+        <Select
+          name='grid-end'
+          className={styles.Profile__IntervalSelect}
+          options={TIMES}
+          value={end}
+          disabledFunc={value => value.replaceAll(" ", "") <= start.replaceAll(" ", "")}
+          onChange={setEnd}
+        />
+      </div>
+      <button
+        type='button'
+        className={`baseButton mainButton ${styles.Profile__SaveTemplate}`}
+        onClick={() => {
+          localStorage.setItem(GRID_WINDOW_KEY, JSON.stringify({ start, end }));
+          addToast({ id: "grid-window-saved", type: "success", message: "Часы сетки запомнили на этом устройстве" });
+        }}
+      >
+        Запомнить для создания
+      </button>
     </section>
   );
 };
@@ -449,7 +531,7 @@ const AppearanceSettings = () => {
 const Placeholder = ({ title }: { title: string }) => {
   return (
     <div className={styles.Profile__Placeholder}>
-      <div className={styles.Profile__Puzzle} aria-hidden />
+      <img className={styles.Profile__StubImage} src={stubImage} alt='' />
       <p>{title}</p>
     </div>
   );

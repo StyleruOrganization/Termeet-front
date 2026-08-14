@@ -22,9 +22,15 @@ export const TableCell = ({
 }: TableCellProps) => {
   const setHoveredUsers = useMeetStore(store => store.setHoveredUsers),
     isEditingMode = useMeetStore(store => store.isEditing),
+    isFinalizing = useMeetStore(store => store.isFinalizing),
     hoveredUser = useMeetStore(store => store.hoveredUser),
     newSelectedSlots = useMeetStore(store => store.newSelectedSlots.get(id.split("T")[0])),
     allUsers = useMeetStore(store => store.users);
+  const finalTimes = useMeetStore(store => store.finalSlot.get(id.split("T")[0]) ?? []);
+  const cellTime = id.includes("T") ? id.split("T")[1] : "";
+  const isSavedFinal = Boolean(cellTime && finalTimes.includes(cellTime));
+  const isPickingFinal = Boolean(isFinalizing && cellTime && newSelectedSlots?.includes(cellTime));
+  const finalColor = "#8060DD";
 
   const cellRef = useRef<HTMLDivElement>(null);
 
@@ -44,8 +50,14 @@ export const TableCell = ({
   console.log("variableColors", variableColors);
 
   const isDisabled = useMemo(() => {
-    return isTimeZoneDisabled || (isBeforeCurrentTime && users?.length == 0) || (isBeforeCurrentTime && isEditingMode);
-  }, [isTimeZoneDisabled, isBeforeCurrentTime, users, isEditingMode]);
+    if (isTimeZoneDisabled || (isBeforeCurrentTime && users?.length == 0) || (isBeforeCurrentTime && isEditingMode)) {
+      return true;
+    }
+    if (isFinalizing && (!users || users.length === 0)) {
+      return true;
+    }
+    return false;
+  }, [isTimeZoneDisabled, isBeforeCurrentTime, users, isEditingMode, isFinalizing]);
 
   const timeInterval = useMemo(() => {
     if (isTimeZoneDisabled) return;
@@ -152,28 +164,37 @@ export const TableCell = ({
 
   // Без такой страшилищи хз как
   const colorCell = useMemo(() => {
+    if (isPickingFinal || (!isEditingMode && isSavedFinal)) {
+      return finalColor;
+    }
     return users?.includes(hoveredUser) || (isEditingMode && newSelectedSlots?.includes(id.split("T")[1]))
       ? "var(--semantics-blue-950)"
       : users?.length && !isEditingMode && !hoveredUser && variableColors?.color
         ? variableColors?.color
         : "var(--fill-bg)";
-  }, [id, isEditingMode, newSelectedSlots, users, variableColors, hoveredUser]);
+  }, [id, isEditingMode, newSelectedSlots, users, variableColors, hoveredUser, isPickingFinal, isSavedFinal]);
 
   const colorBorder = useMemo(() => {
+    if (isPickingFinal || (!isEditingMode && isSavedFinal)) {
+      return finalColor;
+    }
     return users?.includes(hoveredUser) || (isEditingMode && newSelectedSlots?.includes(id.split("T")[1]))
       ? "var(--semantics-blue-950)"
       : users?.length && !isEditingMode && !hoveredUser && variableColors?.color
         ? variableColors?.color
         : "var(--semantics-gray-default)";
-  }, [id, isEditingMode, newSelectedSlots, users, variableColors, hoveredUser]);
+  }, [id, isEditingMode, newSelectedSlots, users, variableColors, hoveredUser, isPickingFinal, isSavedFinal]);
 
   const hoverColor = useMemo(() => {
+    if (isFinalizing) {
+      return finalColor;
+    }
     return isEditingMode && newSelectedSlots?.includes(id.split("T")[1])
       ? "var(--semantics-blue-950)"
       : users?.length
         ? variableColors?.hoverColor
         : "var(--semantics-blue-950)";
-  }, [isEditingMode, newSelectedSlots, users, variableColors, id]);
+  }, [isEditingMode, isFinalizing, newSelectedSlots, users, variableColors, id]);
 
   return (
     <div

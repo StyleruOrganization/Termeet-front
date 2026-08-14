@@ -13,8 +13,9 @@ export function MeetProvider({ children, ...initialState }: MeetProviderProps) {
       timeInfo: initialState.timeInfo,
       timeRanges: initialState.timeRanges,
       users: initialState.users,
+      finalSlot: initialState.finalSlot,
     });
-  }, [initialState.timeInfo, initialState.timeRanges, initialState.users, store]);
+  }, [initialState.timeInfo, initialState.timeRanges, initialState.users, initialState.finalSlot, store]);
 
   return <MeetContext.Provider value={store}>{children}</MeetContext.Provider>;
 }

@@ -6,6 +6,7 @@ const openMeetingPermissions = {
   canEditSettings: false,
   canVote: true,
   canObserve: false,
+  canSetFinal: false,
   isObserver: false,
 };
 
@@ -24,6 +25,7 @@ export const getMeetPermissions = (meet: Pick<IMeet, "permissions" | "isCreator"
     canEditSettings: meet.isCreator,
     canVote: true,
     canObserve: false,
+    canSetFinal: meet.isCreator,
     isObserver: false,
   };
 };

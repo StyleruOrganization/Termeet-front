@@ -2,7 +2,8 @@ import { useEffect, useLayoutEffect, useReducer } from "react";
 import { useNavigate, useParams } from "react-router";
 import { canEditMeet } from "@/entities/Meet";
 import { useToastStore } from "@/features/ToastContainer";
-import { Container, Input, TextArea } from "@/shared/ui";
+import { DURATIONS } from "@/shared/consts";
+import { Container, Input, Select, TextArea } from "@/shared/ui";
 import ApproveIcon from "@assets/icons/approve.svg";
 import CancelIcon from "@assets/icons/cross.svg";
 import { useGetMeetInfo } from "./api/useGetMeetInfo";
@@ -25,6 +26,7 @@ const validators: Record<keyof Omit<State, "errors">, (value: string) => string 
     if (!name.trim()) return "Название встречи обязательно";
     return null;
   },
+  duration: () => null,
 };
 
 const reducer = (state: State, action: Action): State => {
@@ -74,6 +76,7 @@ export const EditMeet = () => {
     description: meetData.description,
     name: meetData.name,
     link: meetData.link,
+    duration: meetData.duration || "",
     errors: {
       name: undefined,
       description: undefined,
@@ -99,12 +102,14 @@ export const EditMeet = () => {
     dispatch({ type: "change", payload: { fieldName: "name", value: meetData.name } });
     dispatch({ type: "change", payload: { fieldName: "description", value: meetData.description || "" } });
     dispatch({ type: "change", payload: { fieldName: "link", value: meetData.link || "" } });
-  }, [meetData.name, meetData.description, meetData.link]);
+    dispatch({ type: "change", payload: { fieldName: "duration", value: meetData.duration || "" } });
+  }, [meetData.name, meetData.description, meetData.link, meetData.duration]);
 
   const isChangedFields =
     meetData.link !== formState.link ||
     meetData.name !== formState.name ||
-    meetData.description !== formState.description;
+    meetData.description !== formState.description ||
+    (meetData.duration || "") !== formState.duration;
   const isSumbitButtonDisabled =
     !formState.name || Object.values(formState.errors).some(error => error) || !isChangedFields;
 
@@ -159,15 +164,16 @@ export const EditMeet = () => {
               </div>
             ))}
           </div>
-          {meetData?.duration ? (
-            <Input
-              name='timeDuration'
-              label='Продолжительность встречи'
-              className={styles.MeetingForm__InputDuration}
-              disabled
-              value={meetData.duration}
-            />
-          ) : null}
+          <Select
+            name='timeDuration'
+            label='Продолжительность встречи'
+            options={DURATIONS}
+            value={formState.duration}
+            placeholder='Выберите'
+            onChange={value => {
+              dispatch({ type: "change", payload: { fieldName: "duration", value } });
+            }}
+          />
           <Input
             name='link'
             label='Ссылка на встречу'
@@ -195,6 +201,7 @@ export const EditMeet = () => {
                 name: formState.name,
                 description: formState.description,
                 link: formState.link,
+                duration: formState.duration,
               });
             }}
             type='submit'

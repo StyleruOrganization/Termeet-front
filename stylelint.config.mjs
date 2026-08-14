@@ -8,6 +8,12 @@ export default {
     "declaration-empty-line-before": null,
     "selector-class-pattern": null,
     "no-descending-specificity": null,
+    "selector-pseudo-class-no-unknown": [
+      true,
+      {
+        ignorePseudoClasses: ["global", "local"],
+      },
+    ],
     "plugin/selector-bem-pattern": {
       preset: "bem",
       componentSelectors: {

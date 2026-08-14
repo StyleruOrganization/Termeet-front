@@ -1,4 +1,6 @@
 import { getMeetPermissions } from "@/entities/Meet";
+import { useSessionStore } from "@/entities/User";
+import { useLoginModalStore } from "@/shared/libs";
 import styles from "./MeetInfo.module.css";
 import { MeetHeader } from "../MeetHeader/MeetHeader";
 import { MeetModal } from "../MeetModal/MeetModal";
@@ -11,6 +13,8 @@ const WINDOW_WIDTH = window.innerWidth;
 
 export const MeetInfo = ({ data, hash }: IMeetInfoProps) => {
   const permissions = getMeetPermissions(data);
+  const user = useSessionStore(state => state.user);
+  const openLogin = useLoginModalStore(state => state.open);
 
   return (
     <>
@@ -26,6 +30,27 @@ export const MeetInfo = ({ data, hash }: IMeetInfoProps) => {
             />
           ) : null}
         </div>
+        {data.finalSlot.size > 0 ? (
+          <p className={styles.MeetInfo__Banner}>
+            Итоговое время уже назначено. Новые слоты не принимают — смотрите фиолетовые ячейки на сетке.
+          </p>
+        ) : null}
+        {permissions.isObserver ? (
+          <p className={styles.MeetInfo__Banner}>
+            Вы наблюдаете за этой встречей. Когда сохраните время, пропадёте из наблюдателей и появитесь в участниках.
+          </p>
+        ) : null}
+        {data.requireLoginToVote && !user ? (
+          <div className={styles.MeetInfo__LoginHint}>
+            <p>
+              Организатор включил голосование только для тех, кто вошёл в Termeet. Сетку можно смотреть без аккаунта,
+              сохранить своё время — после входа.
+            </p>
+            <button type='button' className='baseButton mainButton' onClick={openLogin}>
+              Войти, чтобы выбрать время
+            </button>
+          </div>
+        ) : null}
         <MeetPeoples
           users={data.users}
           userAuth={data.userAuth}
@@ -38,7 +63,7 @@ export const MeetInfo = ({ data, hash }: IMeetInfoProps) => {
         <MeetPrivacy hash={hash} data={data} />
         {WINDOW_WIDTH >= 768 ? <Onboarding /> : null}
       </div>
-      <MeetModal />
+      <MeetModal mySlotName={data.mySlotName} />
     </>
   );
 };

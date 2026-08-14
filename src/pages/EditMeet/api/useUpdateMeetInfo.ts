@@ -17,7 +17,7 @@ export const useUpdateMeetInfo = (hash: string) => {
       const oldState = queryClient.getQueryData(MeetQueries.meet(hash).queryKey);
       return apiClient.patch(`/meet/${hash}`, {
         dataRange: oldState?.data_range,
-        duration: oldState?.duration,
+        duration: data.duration,
         link: data.link?.trim(),
         name: data.name.trim(),
         description: data.description?.trim(),

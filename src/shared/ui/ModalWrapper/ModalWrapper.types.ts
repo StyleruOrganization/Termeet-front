@@ -11,4 +11,6 @@ export interface IModalWrapperProps extends React.PropsWithChildren {
   isAnimate?: boolean;
   /** Ширина скроллбара, хз меняется ли она, но так надежнее будет */
   scrollbarWidth?: number;
+  /** Уже окно для коротких диалогов (пароль, удаление), не на всю ширину встречи */
+  compact?: boolean;
 }

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams, useSearchParams } from "react-router";
-import { useSessionStore, hasAvailability } from "@/entities/User";
+import { useSessionStore, hasAvailability, getProfileDisplayName } from "@/entities/User";
 import { useToastStore } from "@/features/ToastContainer";
 import { generateTimeOptions, isMoreOrEqThan30Min, copyTextToClipboard, useLoginModalStore } from "@/shared/libs";
 import { Toggle } from "@/shared/ui";
@@ -9,8 +9,8 @@ import CancelIcon from "@assets/icons/cross.svg";
 import LinkIcon from "@assets/icons/link.svg";
 import { useMeetStore } from "@entities/Meet";
 import styles from "./MeetTable.module.css";
-import { useObserveMeeting, useSaveUserSelectedSlots } from "../../api";
-import { getTimeZone, useColumnWidth } from "../../lib";
+import { useObserveMeeting, useSaveUserSelectedSlots, useSetFinalTime } from "../../api";
+import { getTimeZone, useColumnWidth, buildBestFinalPrefill } from "../../lib";
 import { buildPrefillFromTemplate } from "../../lib/prefill/buildPrefillFromTemplate";
 import { TableColumn } from "../TableColumn/TableColumn";
 import type { MeetTableProps } from "./MeetTable.types";
@@ -23,7 +23,8 @@ export const MeetTable = ({
   mySlotName,
   canVote,
   canObserve,
-  isObserver,
+  canSetFinal,
+  hasFinal,
 }: MeetTableProps) => {
   const { hash = "" } = useParams();
   const { measureContainerRef, columnWidth, calculateColumnWidth } = useColumnWidth(meeting_days);
@@ -32,13 +33,17 @@ export const MeetTable = ({
   const isEditingMode = useMeetStore(store => store.isEditing);
   const setIsEditing = useMeetStore(store => store.setIsEditing);
   const startEditingSlots = useMeetStore(store => store.startEditingSlots);
+  const startFinalizing = useMeetStore(store => store.startFinalizing);
+  const isFinalizing = useMeetStore(store => store.isFinalizing);
   const newSelectedSlots = useMeetStore(store => store.newSelectedSlots);
+  const users = useMeetStore(store => store.users);
   const setIsModalOpen = useMeetStore(store => store.setIsModalOpen);
   const clearNewSelectedSlots = useMeetStore(store => store.clearNewSelectedSlots);
   const { mutate: saveOwnSlots } = useSaveUserSelectedSlots(hash, () => {
     setIsEditing(false);
   });
   const { mutate: observeMeeting, isPending: isObservePending } = useObserveMeeting(hash);
+  const { mutate: saveFinalTime, isPending: isFinalPending } = useSetFinalTime(hash);
   const openLogin = useLoginModalStore(state => state.open);
   const addToast = useToastStore(store => store.addToast);
   const user = useSessionStore(state => state.user);
@@ -191,48 +196,101 @@ export const MeetTable = ({
                 >
                   <CancelIcon className={styles.MeetTable__CancelIcon} /> <span>Отменить</span>
                 </button>
-                <button
-                  disabled={mySlotName ? false : !newSelectedSlots.size}
-                  onClick={() => {
-                    if (mySlotName) {
-                      saveOwnSlots({ name: mySlotName, isEdit: true });
-                      return;
-                    }
-                    setIsModalOpen(true);
-                  }}
-                  className={`baseButton approveButton`}
-                  style={{
-                    transition: transitionStyle,
-                  }}
-                >
-                  <ApproveIcon />
-                  <span>Сохранить</span>
-                </button>
+                {isFinalizing ? (
+                  <button
+                    disabled={!newSelectedSlots.size || isFinalPending}
+                    onClick={() => saveFinalTime()}
+                    className={`baseButton approveButton`}
+                    style={{
+                      transition: transitionStyle,
+                    }}
+                  >
+                    <ApproveIcon />
+                    <span>Назначить это время</span>
+                  </button>
+                ) : (
+                  <>
+                    <button
+                      disabled={mySlotName ? false : !newSelectedSlots.size}
+                      onClick={() => {
+                        if (mySlotName) {
+                          saveOwnSlots({ name: mySlotName, isEdit: true });
+                          return;
+                        }
+                        const profileName = user ? getProfileDisplayName(user) : "";
+                        if (user && profileName && !users.includes(profileName)) {
+                          saveOwnSlots({ name: profileName });
+                          return;
+                        }
+                        setIsModalOpen(true);
+                      }}
+                      className={`baseButton approveButton`}
+                      style={{
+                        transition: transitionStyle,
+                      }}
+                    >
+                      <ApproveIcon />
+                      <span>Сохранить</span>
+                    </button>
+                    {user ? (
+                      <button type='button' className={styles.MeetTable__NameLink} onClick={() => setIsModalOpen(true)}>
+                        Сохранить под другим именем
+                      </button>
+                    ) : null}
+                  </>
+                )}
               </>
             ) : (
               <>
-                {/* <button className={"baseButton secondaryButton"}>Назначить встречу</button> */}
-                <button
-                  onClick={() => {
-                    if (!canVote) {
-                      openLogin();
+                {canSetFinal ? (
+                  <button
+                    type='button'
+                    className={`baseButton secondaryButton ${styles.MeetTable__AddTimeButton}`}
+                    onClick={() => {
+                      const { prefill, people } = buildBestFinalPrefill(timeInfo);
+                      if (!prefill.size) {
+                        addToast({
+                          id: "final-empty",
+                          type: "info",
+                          message: "Сначала кто-то должен выбрать слоты — итоговое время берётся из них",
+                        });
+                        return;
+                      }
+                      startFinalizing(prefill);
                       addToast({
-                        id: "meet-login-to-vote",
+                        id: "final-hint",
                         type: "info",
-                        message: "Чтобы выбрать время, войдите в аккаунт",
+                        message: `Подсказали день и часы, где пересекается больше всего людей (${people}). Если таких дней несколько — берём самый ранний. Можно поправить сетку, но только в один день`,
                       });
-                      return;
-                    }
-                    startEditingSlots(mySlotName);
-                  }}
-                  className={`baseButton mainButton ${styles.MeetTable__AddTimeButton}`}
-                  style={{
-                    transition: transitionStyle,
-                  }}
-                >
-                  {mySlotName ? "Изменить время" : "Добавить время"}
-                </button>
-                {!mySlotName && canVote && hasAvailability(user?.availability_template ?? []) ? (
+                    }}
+                  >
+                    {hasFinal ? "Изменить итоговое время" : "Назначить время"}
+                  </button>
+                ) : null}
+                {!hasFinal ? (
+                  <button
+                    onClick={() => {
+                      if (!canVote) {
+                        openLogin();
+                        addToast({
+                          id: "meet-login-to-vote",
+                          type: "info",
+                          message:
+                            "Организатор разрешил выбирать время только после входа. Сетку можно смотреть, сохранить слоты — когда войдёте",
+                        });
+                        return;
+                      }
+                      startEditingSlots(mySlotName);
+                    }}
+                    className={`baseButton mainButton ${styles.MeetTable__AddTimeButton}`}
+                    style={{
+                      transition: transitionStyle,
+                    }}
+                  >
+                    {mySlotName ? "Изменить время" : "Добавить время"}
+                  </button>
+                ) : null}
+                {!hasFinal && !mySlotName && canVote && hasAvailability(user?.availability_template ?? []) ? (
                   <button
                     type='button'
                     className={`baseButton outlineButton ${styles.MeetTable__AddTimeButton}`}
@@ -255,7 +313,7 @@ export const MeetTable = ({
                     Подставить шаблон
                   </button>
                 ) : null}
-                {canObserve ? (
+                {!hasFinal && canObserve ? (
                   <button
                     type='button'
                     className={`baseButton outlineButton ${styles.MeetTable__AddTimeButton}`}
@@ -264,9 +322,6 @@ export const MeetTable = ({
                   >
                     Наблюдать
                   </button>
-                ) : null}
-                {isObserver && !mySlotName ? (
-                  <span className={styles.MeetTable__ObserverHint}>Вы наблюдатель</span>
                 ) : null}
               </>
             )}

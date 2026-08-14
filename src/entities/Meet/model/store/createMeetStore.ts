@@ -5,6 +5,7 @@ export const createMeetStore = (initialState?: Partial<IMeetStore>) => {
   const DEFAULT_PROPS: IMeetStore = {
     newSelectedSlots: new Map(),
     isEditing: false,
+    isFinalizing: false,
     hoveredUsers: {
       users: [],
       isEmptySlot: false,
@@ -15,11 +16,13 @@ export const createMeetStore = (initialState?: Partial<IMeetStore>) => {
     timeRanges: [],
     users: [],
     timeIsAdded: false,
+    finalSlot: new Map(),
     setSelectNewSell: () => {},
     setHoveredUsers: () => {},
     setHoveredUser: () => {},
     setIsEditing: () => {},
     startEditingSlots: () => {},
+    startFinalizing: () => {},
     clearNewSelectedSlots: () => {},
     setIsModalOpen: () => {},
     getPreparedNewSlots: () => [],
@@ -50,6 +53,13 @@ export const createMeetStore = (initialState?: Partial<IMeetStore>) => {
             newSelectedSlots.set(date, currentSelectedTimes.filter(timeValue => timeValue != time) || []);
           }
         } else {
+          if (state.isFinalizing) {
+            Array.from(newSelectedSlots.keys()).forEach(key => {
+              if (key !== date) {
+                newSelectedSlots.delete(key);
+              }
+            });
+          }
           newSelectedSlots.set(date, [...currentSelectedTimes, time]);
         }
         return {
@@ -141,18 +151,19 @@ export const createMeetStore = (initialState?: Partial<IMeetStore>) => {
     setIsEditing: isEditing => {
       set(() => ({
         isEditing,
+        isFinalizing: isEditing ? get().isFinalizing : false,
       }));
     },
     startEditingSlots: (userName, preset) => {
       if (preset) {
         const next = new Map<string, string[]>();
         preset.forEach((times, date) => next.set(date, [...times]));
-        set({ isEditing: true, newSelectedSlots: next });
+        set({ isEditing: true, isFinalizing: false, newSelectedSlots: next });
         return;
       }
 
       if (!userName) {
-        set({ isEditing: true, newSelectedSlots: new Map() });
+        set({ isEditing: true, isFinalizing: false, newSelectedSlots: new Map() });
         return;
       }
 
@@ -169,7 +180,12 @@ export const createMeetStore = (initialState?: Partial<IMeetStore>) => {
         }
       });
 
-      set({ isEditing: true, newSelectedSlots: next });
+      set({ isEditing: true, isFinalizing: false, newSelectedSlots: next });
+    },
+    startFinalizing: preset => {
+      const next = new Map<string, string[]>();
+      preset?.forEach((times, date) => next.set(date, [...times]));
+      set({ isEditing: true, isFinalizing: true, newSelectedSlots: next });
     },
     clearNewSelectedSlots: () => {
       set(() => ({

@@ -28,12 +28,14 @@ export interface IMeet {
   anyoneCanEdit: boolean;
   anyoneCanDeleteParticipants: boolean;
   requireLoginToVote: boolean;
+  anyoneCanSetFinal: boolean;
   permissions: {
     canEditMeet: boolean;
     canDeleteParticipants: boolean;
     canEditSettings: boolean;
     canVote: boolean;
     canObserve: boolean;
+    canSetFinal: boolean;
     isObserver: boolean;
   };
   /**
@@ -49,6 +51,10 @@ export interface IMeet {
    * Гость и человек без своих слотов — null.
    */
   mySlotName: string | null;
+  /**
+   * Итоговое время: дата → часы ячеек. Пустая карта — ещё не назначили.
+   */
+  finalSlot: Map<string, string[]>;
 }
 
 export interface IMeetStore {
@@ -73,6 +79,7 @@ export interface IMeetStore {
    * preset — готовая сетка (шаблон времени), без сохранения на сервер.
    */
   startEditingSlots: (userName?: string | null, preset?: Map<string, string[]>) => void;
+  startFinalizing: (preset?: Map<string, string[]>) => void;
   /**
    * Очищаем новые выбранные слоты
    */
@@ -118,6 +125,7 @@ export interface IMeetStore {
    * true если пользователь выбирает время
    */
   isEditing: boolean;
+  isFinalizing: boolean;
   /**
    * Пользователи которых нужно выделить при наведении на слот
    */
@@ -131,4 +139,5 @@ export interface IMeetStore {
   hoveredUser: string;
   isModalOpen: boolean;
   timeIsAdded: boolean;
+  finalSlot: Map<string, string[]>;
 }

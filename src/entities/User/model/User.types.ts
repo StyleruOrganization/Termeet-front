@@ -47,7 +47,13 @@ export interface IRegisterPayload {
 
 export type SessionStatus = "idle" | "loading" | "authenticated" | "anonymous";
 
-export type UserMeetingRole = "owner" | "participant" | "observer";
+export interface IUserSearchItem {
+  id: string;
+  first_name: string;
+  last_name: string;
+}
+
+export type UserMeetingRole = "owner" | "participant" | "observer" | "invited";
 
 export interface IUserMeeting {
   hash: string;
@@ -57,4 +63,7 @@ export interface IUserMeeting {
   link?: string | null;
   role: UserMeetingRole;
   dataRange: [string, string][];
+  hasFinal?: boolean;
+  participantNames?: string[];
+  participantCount?: number;
 }

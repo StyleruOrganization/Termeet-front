@@ -40,6 +40,14 @@
   flex-wrap: wrap;
   gap: 8px;
   flex: 1;
+  align-items: center;
+}
+
+.MeetTable__ButtonsEdit :global(.baseButton) {
+  flex: 0 0 auto;
+
+  width: auto;
+  padding: 14px 16px;
 }
 
 .MeetTable__ShareButton {
@@ -75,19 +83,20 @@
 }
 
 .MeetTable__AddTimeButton {
+  width: auto;
   padding: 14px 16px;
-  width: fit-content;
 
   border-radius: 160px;
 }
 
-.MeetTable__ObserverHint {
-  color: var(--text-secondary);
+.MeetTable__NameLink {
+  padding: 0;
 
-  align-self: center;
+  color: var(--semantics-blue-700);
 
-  font-size: var(--text-body);
-  white-space: nowrap;
+  background: none;
+
+  font-size: 3rem;
 }
 
 .MeetTable__ButtonsWrapper {
@@ -126,6 +135,16 @@
     width: 100%;
 
     border-radius: 16px;
+  }
+
+  .MeetTable__ButtonsEdit :global(.baseButton) {
+    width: 100%;
+  }
+
+  .MeetTable__NameLink {
+    width: 100%;
+
+    text-align: center;
   }
 
   .MeetTable__ButtonsWrapper {

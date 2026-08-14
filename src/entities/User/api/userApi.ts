@@ -6,6 +6,7 @@ import type {
   ITokenInfo,
   IUser,
   IUserMeeting,
+  IUserSearchItem,
   IUserSettingsUpdate,
 } from "../model/User.types";
 
@@ -69,10 +70,26 @@ export const resendVerificationRequest = () => {
   return apiClient.post<{ detail: string }>("/auth/confirm-email");
 };
 
+export const searchUsersRequest = (query: string) => {
+  return apiClient.get<IUserSearchItem[]>(`/users/search?q=${encodeURIComponent(query)}`);
+};
+
 export const getMyMeetingsRequest = async () => {
-  const data = await apiClient.get<Array<IUserMeeting & { data_range?: [string, string][] }>>("/users/me/meetings");
+  const data = await apiClient.get<
+    Array<
+      IUserMeeting & {
+        data_range?: [string, string][];
+        has_final?: boolean;
+        participant_names?: string[];
+        participant_count?: number;
+      }
+    >
+  >("/users/me/meetings");
   return data.map(item => ({
     ...item,
     dataRange: item.dataRange ?? item.data_range ?? [],
+    hasFinal: item.hasFinal ?? item.has_final ?? false,
+    participantNames: item.participantNames ?? item.participant_names ?? [],
+    participantCount: item.participantCount ?? item.participant_count ?? item.participantNames?.length ?? 0,
   }));
 };

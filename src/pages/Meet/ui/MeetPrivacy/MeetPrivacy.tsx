@@ -17,12 +17,15 @@ export const MeetPrivacy = ({ hash, data }: MeetPrivacyProps) => {
   }
 
   const save = (
-    patch: Partial<Pick<IMeet, "anyoneCanEdit" | "anyoneCanDeleteParticipants" | "requireLoginToVote">>,
+    patch: Partial<
+      Pick<IMeet, "anyoneCanEdit" | "anyoneCanDeleteParticipants" | "requireLoginToVote" | "anyoneCanSetFinal">
+    >,
   ) => {
     mutate({
       anyoneCanEdit: patch.anyoneCanEdit ?? data.anyoneCanEdit,
       anyoneCanDeleteParticipants: patch.anyoneCanDeleteParticipants ?? data.anyoneCanDeleteParticipants,
       requireLoginToVote: patch.requireLoginToVote ?? data.requireLoginToVote,
+      anyoneCanSetFinal: patch.anyoneCanSetFinal ?? data.anyoneCanSetFinal,
     });
   };
 
@@ -46,6 +49,12 @@ export const MeetPrivacy = ({ hash, data }: MeetPrivacyProps) => {
         checked={data.requireLoginToVote}
         disabled={isPending}
         onToggle={() => save({ requireLoginToVote: !data.requireLoginToVote })}
+      />
+      <PrivacyRow
+        label='Итоговое время могут назначать все, у кого есть аккаунт'
+        checked={data.anyoneCanSetFinal}
+        disabled={isPending}
+        onToggle={() => save({ anyoneCanSetFinal: !data.anyoneCanSetFinal })}
       />
     </section>
   );

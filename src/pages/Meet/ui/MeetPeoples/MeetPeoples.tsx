@@ -69,8 +69,12 @@ export const MeetPeoples = ({
                     >
                       {user}
                     </span>
-                    {showAuthBadge && userAuth[user] ? (
-                      <span className={styles.MeetPeoples__Badge}>аккаунт</span>
+                    {user === mySlotName ? <span className={styles.MeetPeoples__Badge}>Я</span> : null}
+                    {user !== mySlotName && user === organizerName ? (
+                      <span className={styles.MeetPeoples__Badge}>Создатель</span>
+                    ) : null}
+                    {showAuthBadge && user !== mySlotName && userAuth[user] ? (
+                      <span className={styles.MeetPeoples__Badge}>С аккаунтом</span>
                     ) : null}
                     {canDeleteThis ? (
                       <button

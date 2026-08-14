@@ -127,6 +127,7 @@ export const useCreateMeet = ({ onSuccess: onSuccessExternal }: { onSuccess: () 
       link: formData.link?.trim() || null,
       duration: formData.timeDuration,
       dataRange: prepareDateRanges(formData.dates, formData.timeStart, formData.timeEnd),
+      invitedUserIds: formData.invitedUsers.map(item => item.id),
     };
 
     console.log("preparedData", preparedData);

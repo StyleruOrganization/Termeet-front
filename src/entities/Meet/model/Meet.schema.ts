@@ -4,6 +4,7 @@ export interface MeetPermissions {
   canEditSettings: boolean;
   canVote: boolean;
   canObserve: boolean;
+  canSetFinal: boolean;
   isObserver: boolean;
 }
 
@@ -33,6 +34,8 @@ export interface MeetResponse {
   anyoneCanEdit?: boolean;
   anyoneCanDeleteParticipants?: boolean;
   requireLoginToVote?: boolean;
+  anyoneCanSetFinal?: boolean;
+  finalSlot?: [string, string][] | null;
   organizerName?: string | null;
   observers?: ObserverUser[];
   permissions?: MeetPermissions;
@@ -44,12 +47,14 @@ export interface MeetCreate {
   link?: string | null;
   duration?: string | null;
   dataRange: string[][];
+  invitedUserIds?: string[];
 }
 
 export interface MeetSettingsUpdate {
   anyoneCanEdit: boolean;
   anyoneCanDeleteParticipants: boolean;
   requireLoginToVote: boolean;
+  anyoneCanSetFinal?: boolean;
 }
 
 export interface ApiError {

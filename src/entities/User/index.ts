@@ -4,6 +4,7 @@ export type {
   IRegisterPayload,
   ITokenInfo,
   IUserMeeting,
+  IUserSearchItem,
   UserMeetingRole,
   IAvailabilityInterval,
   IUserSettingsUpdate,
@@ -23,6 +24,7 @@ export {
   formatAvailabilitySummary,
   hasAvailability,
 } from "./lib/availability";
+export { getProfileDisplayName } from "./lib/displayName";
 export {
   loginRequest,
   registerRequest,
@@ -35,4 +37,5 @@ export {
   resetPasswordVerifyRequest,
   resendVerificationRequest,
   getMyMeetingsRequest,
+  searchUsersRequest,
 } from "./api/userApi";

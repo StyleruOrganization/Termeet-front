@@ -7,4 +7,38 @@
   flex-direction: column
 }
 
+.MeetInfo__Banner {
+  padding: 12px 16px;
 
+  color: var(--text-main);
+  background-color: var(--semantics-blue-100);
+  border-radius: 16px;
+
+  font-size: var(--text-body);
+}
+
+.MeetInfo__LoginHint {
+  display: flex;
+  gap: 12px;
+  flex-direction: column;
+
+  padding: 12px 16px;
+
+  color: var(--text-main);
+  background-color: var(--fill-controls);
+  border: 1px solid var(--semantics-gray-hover);
+  border-radius: 16px;
+
+  font-size: var(--text-body);
+}
+
+.MeetInfo__LoginHint :global(.baseButton) {
+  width: fit-content;
+  padding: 12px 16px;
+}
+
+@media (width < 768px) {
+  .MeetInfo__LoginHint :global(.baseButton) {
+    width: 100%;
+  }
+}

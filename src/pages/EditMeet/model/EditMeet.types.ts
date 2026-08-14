@@ -1,6 +1,6 @@
 import type { IMeet } from "@entities/Meet";
 
-export type IEditMeetPayload = Pick<IMeet, "description" | "name" | "link">;
+export type IEditMeetPayload = Pick<IMeet, "description" | "name" | "link" | "duration">;
 
 export interface State extends IEditMeetPayload {
   errors: Partial<Pick<IMeet, "description" | "name" | "link">>;

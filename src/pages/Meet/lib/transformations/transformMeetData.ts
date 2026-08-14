@@ -225,12 +225,14 @@ export const transformMeetData = (meetData: MeetResponse, isLocal: boolean, curr
     anyoneCanEdit: meetData.anyoneCanEdit ?? !meetData.isCreatorAuth,
     anyoneCanDeleteParticipants: meetData.anyoneCanDeleteParticipants ?? !meetData.isCreatorAuth,
     requireLoginToVote: meetData.requireLoginToVote ?? false,
+    anyoneCanSetFinal: meetData.anyoneCanSetFinal ?? false,
     permissions: meetData.permissions ?? {
       canEditMeet: meetData.isCreator || !meetData.isCreatorAuth,
       canDeleteParticipants: meetData.isCreator || !meetData.isCreatorAuth,
       canEditSettings: Boolean(meetData.isCreator && meetData.isCreatorAuth),
       canVote: true,
       canObserve: false,
+      canSetFinal: Boolean(meetData.isCreator),
       isObserver: false,
     },
     isCreator: meetData.isCreator,
@@ -239,6 +241,27 @@ export const transformMeetData = (meetData: MeetResponse, isLocal: boolean, curr
       currentUserId && currentUserId !== "guest"
         ? (meetData.slots.find(slot => (slot.userId ?? slot.user_id) === currentUserId)?.name ?? null)
         : null,
+    finalSlot: (() => {
+      const result = new Map<string, string[]>();
+      const preparedFinal = (meetData.finalSlot ?? []).map(([startTime, endTime]) => [
+        convertUTCToTimezone(startTime, timeZoneOffset),
+        convertUTCToTimezone(endTime, timeZoneOffset),
+      ]);
+      preparedFinal.forEach(([startTimeRange, endTimeRange]) => {
+        const [startDate, startTime] = startTimeRange.split("T");
+        const [, endTime] = endTimeRange.split("T");
+        const timeOptions = generateTimeOptions(startTime, endTime);
+        const current = result.get(startDate) ?? [];
+        timeOptions.forEach(time => {
+          const key = `${time[0].toString().padStart(2, "0")}:${time[1].toString().padStart(2, "0")}`;
+          if (!current.includes(key)) {
+            current.push(key);
+          }
+        });
+        result.set(startDate, current);
+      });
+      return result;
+    })(),
   };
 
   return processedData;

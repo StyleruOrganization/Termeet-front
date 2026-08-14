@@ -22,7 +22,7 @@ export const ToastContainer = () => {
           key={toast.id}
         >
           {toast.type === "success" && <CheckIcon />}
-          {toast.type === "error" && <></>}
+          {toast.type === "error" && <CrossIcon />}
           {toast.type === "wait" && <RefreshIcon className={style.Toast__IconWait} />}
           <p>{toast.message}</p>
           <button className={style.Toast__Close} onClick={() => removeToast(toast.id)}>

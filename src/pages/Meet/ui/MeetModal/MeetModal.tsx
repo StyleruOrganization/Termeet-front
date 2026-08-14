@@ -11,7 +11,7 @@ import { useSaveUserSelectedSlots } from "../../api";
 
 const WINDOW_HEIGHT = window.innerHeight;
 
-export const MeetModal = () => {
+export const MeetModal = ({ mySlotName }: { mySlotName: string | null }) => {
   const { hash } = useParams();
   const user = useSessionStore(state => state.user);
   const defaultName = user ? `${user.first_name} ${user.last_name}`.trim() : "";
@@ -66,13 +66,17 @@ export const MeetModal = () => {
           <form
             onSubmit={event => {
               event.preventDefault();
-              saveSelectesSlots({ name: userName.trim() });
+              saveSelectesSlots({ name: userName.trim(), isEdit: Boolean(mySlotName) });
               setUserName("");
             }}
             data-test-id='meet-modal'
             className={styles.MeetModal__Form}
           >
-            <div className={styles.MeetModal__Heading}>Слоты заполнены! Осталось заполнить информацию о&nbsp;себе</div>
+            <div className={styles.MeetModal__Heading}>
+              {user
+                ? "Как показать ваше имя на этой встрече?"
+                : "Слоты заполнены! Осталось заполнить информацию о себе"}
+            </div>
             <Input
               ref={inputRef}
               label='Как тебя зовут?'

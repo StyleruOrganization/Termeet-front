@@ -54,8 +54,18 @@
 .EditMeetPage__Buttons{
   display: flex;
   gap: 8px;
+  flex-flow: row nowrap;
 
   align-self: start;
+}
+
+.EditMeetPage__Buttons :global(.baseButton) {
+  flex: 0 0 auto;
+
+  width: auto;
+  padding: 16px 20px;
+
+  white-space: nowrap;
 }
 
 .EditMeetPage__CancelIcon{
@@ -68,6 +78,8 @@
     bottom: 0;
     left: 0;
 
+    flex-flow: column wrap;
+
     width: 100%;
     padding: 10px 10px 32px;
 
@@ -76,6 +88,10 @@
 
     border-top-left-radius: 16px;
     border-top-right-radius: 16px;
+  }
+
+  .EditMeetPage__Buttons :global(.baseButton) {
+    width: 100%;
   }
 
   .EditMeetPage__MeetingForm{

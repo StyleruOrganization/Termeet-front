@@ -52,6 +52,7 @@ export const useCreateMeetStore = create<MeetingFormState>((set, get) => ({
     description: "",
     link: "",
     timeDuration: "",
+    invitedUsers: [],
   },
   lastCorrectedValues: {
     timeStart: "10 : 00",
@@ -192,6 +193,7 @@ export const useCreateMeetStore = create<MeetingFormState>((set, get) => ({
         description: "",
         link: "",
         timeDuration: "",
+        invitedUsers: [],
       },
       lastCorrectedValues: {
         timeStart: "10 : 00",
@@ -199,6 +201,28 @@ export const useCreateMeetStore = create<MeetingFormState>((set, get) => ({
       },
       errors: {},
     }),
+
+  addInvitedUser: user => {
+    set(state => {
+      if (state.values.invitedUsers.some(item => item.id === user.id)) {
+        return state;
+      }
+      return {
+        values: {
+          ...state.values,
+          invitedUsers: [...state.values.invitedUsers, user],
+        },
+      };
+    });
+  },
+  removeInvitedUser: id => {
+    set(state => ({
+      values: {
+        ...state.values,
+        invitedUsers: state.values.invitedUsers.filter(item => item.id !== id),
+      },
+    }));
+  },
 
   clearErrors: () => set({ errors: {} }),
   clearError: name =>

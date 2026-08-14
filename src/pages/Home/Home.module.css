@@ -80,6 +80,8 @@
 }
 
 .Home__GroupTitle {
+  margin: 0;
+
   color: var(--text-secondary);
 
   font-size: var(--text-body);
@@ -152,6 +154,52 @@
   font-size: 3rem;
 }
 
+.Home__People {
+  position: relative;
+
+  flex-shrink: 0;
+}
+
+.Home__PeopleToggle {
+  padding: 6px 10px;
+
+  color: var(--text-secondary);
+  background-color: var(--fill-bg);
+  border: 1px solid var(--semantics-gray-hover);
+  border-radius: 12px;
+
+  font-size: 3rem;
+}
+
+.Home__PeopleList {
+  position: absolute;
+  z-index: 3;
+  top: calc(100% + 4px);
+  right: 0;
+
+  display: flex;
+  gap: 4px;
+  flex-direction: column;
+
+  padding: 8px 12px;
+
+  color: var(--text-main);
+  background-color: var(--fill-controls);
+  border: 1px solid var(--semantics-gray-hover);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 12%);
+
+  font-size: 3rem;
+
+  min-width: 160px;
+}
+
+.Home__PeopleEmpty {
+  color: var(--text-secondary);
+
+  font-size: 3rem;
+}
+
 .Home__CardArrow {
   flex-shrink: 0;
 
@@ -162,11 +210,11 @@
 }
 
 .HomeCalendar {
-  padding: 16px;
+  --cell-size: 40px;
+  padding: 20px 24px;
 
   background-color: var(--fill-controls);
-  border: 1px solid var(--semantics-gray-hover);
-  border-radius: 24px;
+  border-radius: 16px;
 }
 
 .HomeCalendar__Header {
@@ -176,10 +224,10 @@
 
   color: var(--text-main);
 
-  font-size: var(--text-body);
+  font-size: 4rem;
   font-weight: 700;
 
-  margin-bottom: 12px;
+  margin-bottom: 16px;
   text-transform: capitalize;
 }
 
@@ -205,47 +253,143 @@
 .HomeCalendar__Week,
 .HomeCalendar__Grid {
   display: grid;
-  gap: 4px;
+  gap: 8px 0;
 
   grid-template-columns: repeat(7, 1fr);
+  justify-items: center;
 }
 
 .HomeCalendar__Week {
+  padding: 12px 0;
+
   text-align: center;
 
-  color: var(--text-secondary);
+  color: var(--text-main);
 
-  font-size: 3rem;
+  font-size: var(--text-body);
   margin-bottom: 8px;
 }
 
 .HomeCalendar__Day {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: var(--cell-size);
+  height: var(--cell-size);
   padding: 0;
 
   color: var(--text-main);
-  border-radius: 50%;
+  border-radius: 8px;
+  border: 1px solid transparent;
 
-  aspect-ratio: 1;
   background: none;
 
-  font-size: 3rem;
+  font-size: var(--text-body);
 }
 
-.HomeCalendar__Day_marked {
+.HomeCalendar__Day:hover {
+  background-color: var(--components-hover);
+}
+
+.HomeCalendar__Day_today {
   background-color: var(--semantics-blue-100);
+
+  border-color: var(--semantics-blue-300);
 }
 
 .HomeCalendar__Day_selected {
-  color: var(--light);
+  color: var(--fill-bg);
   background-color: var(--semantics-blue-950);
+
+  border-color: var(--semantics-blue-950);
+}
+
+.HomeCalendar__Day_selected:hover {
+  background-color: var(--semantics-blue-1000);
+
+  border-color: var(--semantics-blue-1000);
+}
+
+.HomeCalendar__Dot {
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+
+  width: 5px;
+  height: 5px;
+
+  background-color: var(--semantics-blue-950);
+  border-radius: 50%;
+
+  transform: translateX(-50%);
+}
+
+.HomeCalendar__Day_selected .HomeCalendar__Dot {
+  background-color: var(--fill-bg);
 }
 
 @media (width < 1024px) {
   .Home {
+    display: flex;
+    gap: 16px;
     flex-direction: column;
   }
 
   .Home__Sidebar {
     width: 100%;
+  }
+}
+
+@media (width < 768px) {
+  .HomeCalendar {
+    --cell-size: 32px;
+    padding: 16px 12px;
+  }
+
+  .HomeCalendar__Header {
+    font-size: var(--text-body);
+    margin-bottom: 8px;
+  }
+
+  .HomeCalendar__Week {
+    padding: 4px 0;
+
+    font-size: 3rem;
+    margin-bottom: 4px;
+  }
+
+  .Home__Tab {
+    font-size: var(--text-body);
+  }
+
+  .Home__Chip {
+    padding: 6px 12px;
+
+    font-size: 3rem;
+  }
+
+  .Home__Card {
+    flex-wrap: wrap;
+
+    padding: 12px;
+  }
+
+  .Home__CardBody {
+    flex-basis: calc(100% - 40px);
+  }
+
+  .Home__Join {
+    width: 100%;
+  }
+
+  .Home__Group {
+    gap: 8px;
+  }
+
+  .Home__Content {
+    gap: 12px;
   }
 }

@@ -29,6 +29,10 @@
 }
 
 .Profile__Nav {
+  position: sticky;
+  top: 16px;
+  z-index: 2;
+
   display: flex;
   gap: 4px;
   flex-direction: column;
@@ -225,12 +229,11 @@
   min-height: 280px;
 }
 
-.Profile__Puzzle {
-  width: 88px;
-  height: 88px;
+.Profile__StubImage {
+  width: 160px;
+  height: auto;
 
-  background-color: var(--semantics-blue-200);
-  border-radius: 24px;
+  object-fit: contain;
 }
 
 .Profile__Modal {
@@ -238,7 +241,8 @@
   gap: 12px;
   flex-direction: column;
 
-  min-width: min(420px, 80vw);
+  width: 100%;
+  padding: 8px;
 }
 
 .Profile__Modal h2 {
@@ -253,15 +257,49 @@
   font-size: var(--text-body);
 }
 
+.Profile__ModalList {
+  display: flex;
+  gap: 8px;
+  flex-direction: column;
+
+  padding-left: 20px;
+
+  color: var(--text-secondary);
+
+  font-size: var(--text-body);
+}
+
+.Profile__ModalActions {
+  display: flex;
+  gap: 8px;
+  flex-direction: column;
+
+  margin-top: 8px;
+}
+
+.Profile__DeleteButton {
+  width: fit-content;
+  padding: 12px 16px;
+
+  margin-top: 4px;
+}
+
 @media (width < 768px) {
   .Profile {
     flex-direction: column;
   }
 
   .Profile__Nav {
+    position: sticky;
+    top: 0;
+
     flex-direction: row;
     overflow: auto hidden;
 
+    width: 100%;
+  }
+
+  .Profile__DeleteButton {
     width: 100%;
   }
 

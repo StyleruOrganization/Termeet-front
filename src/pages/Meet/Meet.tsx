@@ -25,7 +25,12 @@ export function Meet() {
 
   return (
     <Container>
-      <MeetProvider timeInfo={meetData.timeInfo} timeRanges={meetData.timeRanges} users={meetData.users}>
+      <MeetProvider
+        timeInfo={meetData.timeInfo}
+        timeRanges={meetData.timeRanges}
+        users={meetData.users}
+        finalSlot={meetData.finalSlot}
+      >
         <div className={styles.MeetPage}>
           {WINDOW_WIDTH < 768 ? (
             <div className={styles.MeetPage__HeaderWrapper_Mobile}>
@@ -48,7 +53,8 @@ export function Meet() {
             mySlotName={meetData.mySlotName}
             canVote={permissions.canVote}
             canObserve={permissions.canObserve}
-            isObserver={permissions.isObserver}
+            canSetFinal={permissions.canSetFinal}
+            hasFinal={meetData.finalSlot.size > 0}
           />
           <MeetPrefillModal
             hash={hash}

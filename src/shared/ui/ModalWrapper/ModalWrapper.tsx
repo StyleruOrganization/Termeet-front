@@ -13,6 +13,7 @@ export const ModalWrapper = ({
   isAnimate = false,
   animationDuration = 300,
   scrollbarWidth = window.innerWidth - document.documentElement.clientWidth,
+  compact = false,
 }: IModalWrapperProps) => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [isVisible, setVisible] = useState(false);
@@ -102,7 +103,7 @@ export const ModalWrapper = ({
       ref={modalRef}
     >
       <div
-        className={`${styles.ModalWrapper__ModalContainer} ${isOpen && isVisible ? styles.ModalWrapper__ModalContainer_Opened : ""}`}
+        className={`${styles.ModalWrapper__ModalContainer} ${compact ? styles.ModalWrapper__ModalContainer_compact : ""} ${isOpen && isVisible ? styles.ModalWrapper__ModalContainer_Opened : ""}`}
         role='dialog'
         aria-modal='true'
         aria-hidden={!isOpen}
