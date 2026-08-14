@@ -10,6 +10,12 @@
   min-width: 0
 }
 
+.Input__FieldWrap {
+  position: relative;
+
+  width: 100%;
+}
+
 .Input__Field {
   position: relative;
 
@@ -40,6 +46,40 @@
 
 .Input__Field:disabled {
   color: var(--text-disabled)
+}
+
+.Input__Field_withToggle {
+  padding-right: 48px;
+}
+
+.Input__TogglePassword {
+  position: absolute;
+  top: 50%;
+  right: 16px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 0;
+
+  color: var(--text-secondary);
+  border: none;
+
+  transform: translateY(-50%);
+
+  background: none;
+
+  cursor: pointer;
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  &:hover {
+    color: var(--text-main);
+  }
 }
 
 .Input__Error .Input__Field {
