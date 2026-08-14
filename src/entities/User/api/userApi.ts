@@ -60,6 +60,17 @@ export const yandexCallbackRequest = (code: string, state?: string | null) => {
   });
 };
 
+export const yandexClientRequest = () => {
+  return apiClient.get<{ client_id: string; scope: string }>("/auth/yandex/client");
+};
+
+export const yandexTokenRequest = (accessToken: string, expiresIn?: number) => {
+  return apiClient.post<ITokenInfo, { access_token: string; expires_in?: number }>("/auth/yandex/token", {
+    access_token: accessToken,
+    ...(expiresIn ? { expires_in: expiresIn } : {}),
+  });
+};
+
 export const getMeRequest = async () => {
   const user = await apiClient.get<RawUser>("/users/me");
   return normalizeUser(user);

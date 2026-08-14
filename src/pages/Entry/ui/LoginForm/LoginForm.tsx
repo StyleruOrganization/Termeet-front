@@ -1,4 +1,4 @@
-import { type FormEvent, useState } from "react";
+import { type FormEvent, useCallback, useState } from "react";
 import { loginRequest, registerRequest, resetPasswordRequest, useSessionStore } from "@/entities/User";
 import { HttpError } from "@/shared/api";
 import { useLoginModalStore } from "@/shared/libs";
@@ -7,6 +7,7 @@ import TermeetLogo from "@assets/icons/logo.svg";
 import YandexLogo from "@assets/icons/YandexID.svg";
 import { useToastStore } from "@features/ToastContainer";
 import styles from "./LoginForm.module.css";
+import { useYandexSuggest } from "../../lib/useYandexSuggest";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -57,6 +58,21 @@ export const LoginForm = () => {
   const applyAccessToken = useSessionStore(state => state.applyAccessToken);
   const close = useLoginModalStore(state => state.close);
   const addToast = useToastStore(state => state.addToast);
+
+  const handleSuggestLogin = useCallback(
+    async (accessToken: string) => {
+      await applyAccessToken(accessToken);
+      close();
+      addToast({
+        id: "auth-success",
+        type: "success",
+        message: "Вы вошли через Яндекс",
+      });
+    },
+    [addToast, applyAccessToken, close],
+  );
+
+  useYandexSuggest(handleSuggestLogin);
 
   const values = { email, password, passwordRepeat, firstName, lastName };
 

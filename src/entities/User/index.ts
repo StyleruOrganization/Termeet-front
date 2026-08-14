@@ -33,6 +33,8 @@ export {
   registerRequest,
   logoutRequest,
   yandexCallbackRequest,
+  yandexClientRequest,
+  yandexTokenRequest,
   getMeRequest,
   updateMeRequest,
   confirmEmailRequest,
