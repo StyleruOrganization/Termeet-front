@@ -13,3 +13,23 @@
     margin-bottom: 32px;
   }
 }
+
+.NoMeetPage__Error {
+  overflow: auto;
+
+  margin: 0 0 24px;
+  padding: 12px;
+
+  text-align: left;
+
+  color: var(--semantics-red-main);
+  background-color: var(--fill-controls);
+  border-radius: 8px;
+
+  font-size: 3rem;
+  line-height: 1.4;
+
+  max-height: 240px;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}

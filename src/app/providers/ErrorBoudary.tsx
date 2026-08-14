@@ -13,9 +13,14 @@ export const CustomErrorBoudary = ({ errorMessage, children }: ICustomErrorBouda
   return (
     <ErrorBoundary
       resetKeys={[pathname]}
-      fallback={<Stub message={errorMessage} />}
+      fallbackRender={({ error }) => {
+        const err = error instanceof Error ? error : new Error(String(error));
+        console.error("[ErrorBoundary] pathname=", pathname, err.message, err.stack, error);
+        return <Stub message={errorMessage} error={err} />;
+      }}
       onError={(error: unknown) => {
         const err = error instanceof Error ? error : new Error(String(error));
+        console.error("[ErrorBoundary] onError", err.message, err.stack, error);
         reportClientError({ message: err.message, stack: err.stack });
       }}
     >

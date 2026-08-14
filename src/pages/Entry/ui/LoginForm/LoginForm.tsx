@@ -2,7 +2,7 @@ import { type FormEvent, useState } from "react";
 import { loginRequest, registerRequest, resetPasswordRequest, useSessionStore } from "@/entities/User";
 import { HttpError } from "@/shared/api";
 import { useLoginModalStore } from "@/shared/libs";
-import { Input, Toggle } from "@/shared/ui";
+import { Input, PasswordHints, Toggle, isPasswordValid } from "@/shared/ui";
 import TermeetLogo from "@assets/icons/logo.svg";
 import YandexLogo from "@assets/icons/YandexID.svg";
 import { useToastStore } from "@features/ToastContainer";
@@ -64,8 +64,8 @@ export const LoginForm = () => {
     if (name === "email" && !EMAIL_REGEX.test(nextValues.email.trim())) {
       return "Введите корректный email";
     }
-    if (name === "password" && nextValues.password.length < 6) {
-      return "Пароль не короче 6 символов";
+    if (name === "password" && view === "register" && !isPasswordValid(nextValues.password)) {
+      return "Пароль не подходит под требования";
     }
     if (view !== "register") {
       return undefined;
@@ -302,7 +302,9 @@ export const LoginForm = () => {
                   }
                 }}
                 {...bindField("password")}
+                error={view === "register" ? undefined : fieldErrors.password}
               />
+              {view === "register" && <PasswordHints value={password} highlight={Boolean(fieldErrors.password)} />}
               {view === "login" && (
                 <button
                   className={styles.LoginForm__Forgot}

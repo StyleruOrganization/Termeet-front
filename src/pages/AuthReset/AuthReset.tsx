@@ -2,7 +2,7 @@ import { type FormEvent, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import { resetPasswordVerifyRequest, useSessionStore } from "@/entities/User";
 import { HttpError } from "@/shared/api";
-import { Input } from "@/shared/ui";
+import { Input, PasswordHints, isPasswordValid } from "@/shared/ui";
 import TermeetLogo from "@assets/icons/logo.svg";
 import { useToastStore } from "@features/ToastContainer";
 import styles from "./AuthReset.module.css";
@@ -26,8 +26,8 @@ export const AuthReset = () => {
   const values = { password, passwordRepeat };
 
   const getFieldError = (name: FieldName, nextValues = values): string | undefined => {
-    if (name === "password" && nextValues.password.length < 6) {
-      return "Пароль не короче 6 символов";
+    if (name === "password" && !isPasswordValid(nextValues.password)) {
+      return "Пароль не подходит под требования";
     }
     if (name === "passwordRepeat" && nextValues.password !== nextValues.passwordRepeat) {
       return "Пароли не совпадают";
@@ -146,7 +146,9 @@ export const AuthReset = () => {
               }
             }}
             {...bindField("password")}
+            error={undefined}
           />
+          <PasswordHints value={password} highlight={Boolean(fieldErrors.password)} />
           <Input
             name='passwordRepeat'
             type='password'

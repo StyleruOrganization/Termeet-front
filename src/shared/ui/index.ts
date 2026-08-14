@@ -1,5 +1,7 @@
 export { Input } from "./Input/Input";
 export type { IInputProps } from "./Input/Input.types";
+export { PasswordHints } from "./PasswordHints/PasswordHints";
+export { isPasswordValid } from "./PasswordHints/passwordRules";
 export { ModalWrapper } from "./ModalWrapper/ModalWrapper";
 export { TextArea } from "./TextArea/TextArea";
 export type { ITextAreaProps } from "./TextArea/TextArea.types";

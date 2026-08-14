@@ -7,6 +7,14 @@ const getMinutes = (time: string) => {
 };
 
 export const transformMeetData = (meetData: MeetResponse, isLocal: boolean, currentUserId?: string | null): IMeet => {
+  console.log("[transformMeetData] start", {
+    isLocal,
+    currentUserId,
+    keys: meetData ? Object.keys(meetData) : meetData,
+    dataRange: meetData?.dataRange,
+    data_range: meetData?.data_range,
+  });
+
   const meetingDays = new Set<string>();
   const users = new Set<string>();
   const timeRanges: IMeet["timeRanges"] = [];
@@ -14,6 +22,7 @@ export const transformMeetData = (meetData: MeetResponse, isLocal: boolean, curr
 
   const timeZoneOffset = isLocal ? -new Date().getTimezoneOffset() / 60 : 3;
   const dateRanges = getMeetDateRange(meetData);
+  console.log("[transformMeetData] dateRanges", timeZoneOffset, dateRanges);
   // Переводим UTC в нужное время - это дни в которые проходит встреча
   const preparedMeetDataDataRanges = dateRanges.map(([startTime, endTime]) => [
     convertUTCToTimezone(startTime, timeZoneOffset),
@@ -273,6 +282,14 @@ export const transformMeetData = (meetData: MeetResponse, isLocal: boolean, curr
       return result;
     })(),
   };
+
+  console.log("[transformMeetData] done", {
+    meeting_days: processedData.meeting_days,
+    timeRanges: processedData.timeRanges,
+    timeInfoKeys: Array.from(processedData.timeInfo.keys()),
+    users: processedData.users,
+    finalSlotSize: processedData.finalSlot.size,
+  });
 
   return processedData;
 };

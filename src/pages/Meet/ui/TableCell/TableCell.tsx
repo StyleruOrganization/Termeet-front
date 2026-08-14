@@ -10,6 +10,7 @@ const ARROW_HEIGHT = 14; // высота стрелки
 const OFFSET_Y = 4; // отступ от ячейки
 const TOOLTIP_DISABLED_HEIGHT = 72 + ARROW_HEIGHT + OFFSET_Y;
 const TOOLTIP_USUAL_HEIGHT = 40 + ARROW_HEIGHT + OFFSET_Y;
+const EMPTY_FINAL_TIMES: string[] = [];
 
 export const TableCell = ({
   id,
@@ -26,7 +27,7 @@ export const TableCell = ({
     hoveredUser = useMeetStore(store => store.hoveredUser),
     newSelectedSlots = useMeetStore(store => store.newSelectedSlots.get(id.split("T")[0])),
     allUsers = useMeetStore(store => store.users);
-  const finalTimes = useMeetStore(store => store.finalSlot.get(id.split("T")[0]) ?? []);
+  const finalTimes = useMeetStore(store => store.finalSlot.get(id.split("T")[0]) ?? EMPTY_FINAL_TIMES);
   const cellTime = id.includes("T") ? id.split("T")[1] : "";
   const isSavedFinal = Boolean(cellTime && finalTimes.includes(cellTime));
   const isPickingFinal = Boolean(isFinalizing && cellTime && newSelectedSlots?.includes(cellTime));

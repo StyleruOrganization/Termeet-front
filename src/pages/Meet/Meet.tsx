@@ -17,11 +17,22 @@ export function Meet() {
   const isLocalTime = searchParams.get("localTime") === "true" || searchParams.get("localTime") == null;
   const { meetData } = useGetMeetInfo(hash, isLocalTime);
 
+  console.log("[Meet] render", {
+    hash,
+    isLocalTime,
+    WINDOW_WIDTH,
+    meetData,
+    timeRanges: meetData?.timeRanges,
+    meeting_days: meetData?.meeting_days,
+    finalSlot: meetData?.finalSlot,
+  });
+
   if (!hash || !meetData) {
     return <h1>Необходим идентификатор встречи</h1>;
   }
 
   const permissions = getMeetPermissions(meetData);
+  console.log("[Meet] permissions", permissions);
 
   return (
     <Container>
