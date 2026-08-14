@@ -1,0 +1,66 @@
+.AuthReset {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  margin: 0 auto;
+  padding: 32px 16px;
+
+  max-width: 480px;
+}
+
+.AuthReset__Logo {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  margin-bottom: 32px;
+
+  svg {
+    height: 16px;
+    width: 16px;
+  }
+}
+
+.AuthReset__Form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+
+  width: 100%;
+}
+
+.AuthReset__Hint {
+  width: 100%;
+
+  text-align: center;
+
+  color: var(--text-main);
+
+  font-size: var(--text-body);
+  line-height: 1.4;
+}
+
+.AuthReset__Fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  width: 100%;
+}
+
+.AuthReset__Error {
+  width: 100%;
+
+  color: var(--semantics-red-main);
+
+  font-size: 3rem;
+  line-height: 1.25;
+  margin-left: 6px;
+}

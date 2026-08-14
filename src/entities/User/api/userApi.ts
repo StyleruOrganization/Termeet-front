@@ -6,7 +6,7 @@ export const loginRequest = (payload: ILoginPayload) => {
 };
 
 export const registerRequest = (payload: IRegisterPayload) => {
-  return apiClient.post<IUser, IRegisterPayload>("/auth/register", payload);
+  return apiClient.post<ITokenInfo & Partial<IUser>, IRegisterPayload>("/auth/register", payload);
 };
 
 export const logoutRequest = () => {
@@ -23,4 +23,15 @@ export const getMeRequest = () => {
 
 export const confirmEmailRequest = (token: string) => {
   return apiClient.post<{ detail: string }>(`/auth/confirm-email/verify?token=${encodeURIComponent(token)}`);
+};
+
+export const resetPasswordRequest = (email: string) => {
+  return apiClient.post<{ detail: string }, { email: string }>("/auth/reset-password", { email });
+};
+
+export const resetPasswordVerifyRequest = (token: string, password: string) => {
+  return apiClient.post<ITokenInfo, { password: string }>(
+    `/auth/reset-password/verify?token=${encodeURIComponent(token)}`,
+    { password },
+  );
 };

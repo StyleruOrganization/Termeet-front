@@ -8,4 +8,6 @@ export {
   yandexCallbackRequest,
   getMeRequest,
   confirmEmailRequest,
+  resetPasswordRequest,
+  resetPasswordVerifyRequest,
 } from "./api/userApi";

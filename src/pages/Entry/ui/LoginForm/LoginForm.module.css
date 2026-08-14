@@ -89,6 +89,38 @@
     margin-left: 6px;
 }
 
+.LoginForm__Forgot {
+    width: auto;
+    padding: 0;
+
+    text-align: left;
+
+    color: var(--semantics-blue-700);
+    border: none;
+
+    align-self: flex-start;
+
+    background: none;
+
+    cursor: pointer;
+
+    font-size: 3rem;
+    line-height: 1.25;
+
+    margin-left: 6px;
+}
+
+.LoginForm__Hint {
+    width: 100%;
+
+    text-align: center;
+
+    color: var(--text-main);
+
+    font-size: var(--text-body);
+    line-height: 1.4;
+}
+
 @media (width < 768px) {
     .LoginForm {
         padding: 16px 16px 32px;

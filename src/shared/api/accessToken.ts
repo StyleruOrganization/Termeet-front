@@ -17,7 +17,14 @@ export const notifyUnauthorized = () => {
   onUnauthorized?.();
 };
 
-const SKIP_REFRESH_PREFIXES = ["/auth/login", "/auth/register", "/auth/refresh", "/auth/yandex", "/auth/logout"];
+const SKIP_REFRESH_PREFIXES = [
+  "/auth/login",
+  "/auth/register",
+  "/auth/refresh",
+  "/auth/yandex",
+  "/auth/logout",
+  "/auth/reset-password",
+];
 
 export const shouldAttemptRefresh = (endpoint: string) => {
   return !SKIP_REFRESH_PREFIXES.some(prefix => endpoint.startsWith(prefix));

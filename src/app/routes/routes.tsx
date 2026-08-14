@@ -10,6 +10,7 @@ const MeetPage = lazy(() => import("../../pages/Meet").then(module => ({ default
 const EditMeetPage = lazy(() => import("../../pages/EditMeet").then(module => ({ default: module.EditMeet })));
 const AuthYandexPage = lazy(() => import("../../pages/AuthYandex").then(module => ({ default: module.AuthYandex })));
 const AuthConfirmPage = lazy(() => import("../../pages/AuthConfirm").then(module => ({ default: module.AuthConfirm })));
+const AuthResetPage = lazy(() => import("../../pages/AuthReset").then(module => ({ default: module.AuthReset })));
 const StubPage = lazy(() => import("../../pages/Stub").then(module => ({ default: module.Stub })));
 
 const withSuspense = (Component: React.LazyExoticComponent<() => React.JSX.Element>, message: string) => (
@@ -44,6 +45,7 @@ export const Routing = () => {
         />
         <Route path='auth/yandex' element={withSuspense(AuthYandexPage, "Входим через Яндекс...")} />
         <Route path='auth/confirm' element={withSuspense(AuthConfirmPage, "Подтверждаем почту...")} />
+        <Route path='auth/reset' element={withSuspense(AuthResetPage, "Обновляем пароль...")} />
         <Route path='*' element={<StubPage message='Мы не нашли страницу, которую ты ищешь' />} />
       </Route>
     </ReactRoutes>
