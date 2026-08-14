@@ -14,8 +14,16 @@ type AuthView = "login" | "register" | "forgot" | "forgotSent";
 type FieldName = "email" | "password" | "passwordRepeat" | "firstName" | "lastName";
 type FieldErrors = Partial<Record<FieldName, string>>;
 
-const getAuthErrorMessage = (error: unknown) => {
+const getAuthErrorMessage = (error: unknown, view: AuthView) => {
   if (error instanceof HttpError) {
+    if (error.status === 404) {
+      return "Нет аккаунта с этой почтой";
+    }
+    if (error.status === 503) {
+      return view === "register"
+        ? "Аккаунт создан, но письмо не отправилось. Войдите и запросите письмо ещё раз в кабинете"
+        : "Не получилось отправить письмо. Почтовый сервер не ответил, попробуйте позже";
+    }
     if (error.status === 401) {
       return "Неверный email или пароль";
     }
@@ -28,6 +36,9 @@ const getAuthErrorMessage = (error: unknown) => {
     if (error.detail) {
       return error.detail;
     }
+  }
+  if (view === "forgot") {
+    return "Не получилось отправить письмо. Попробуйте ещё раз";
   }
   return "Не получилось войти. Попробуйте ещё раз";
 };
@@ -177,7 +188,7 @@ export const LoginForm = () => {
       const tokens = await loginRequest({ email: normalizedEmail, password });
       await finishAuth(tokens.access_token, "Вы вошли");
     } catch (error) {
-      setFormError(getAuthErrorMessage(error));
+      setFormError(getAuthErrorMessage(error, view));
     } finally {
       setIsPending(false);
     }
@@ -204,7 +215,7 @@ export const LoginForm = () => {
           <>
             <p className={styles.LoginForm__Hint}>
               {view === "forgotSent"
-                ? "Если аккаунт с этой почтой есть, мы отправили ссылку для нового пароля"
+                ? "Ссылка для нового пароля отправлена на почту"
                 : "Введите почту — отправим ссылку для нового пароля"}
             </p>
             {view === "forgot" && (
