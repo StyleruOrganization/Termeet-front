@@ -37,6 +37,7 @@
 
 .MeetTable__ButtonsEdit {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   flex: 1;
 }
@@ -78,6 +79,15 @@
   width: fit-content;
 
   border-radius: 160px;
+}
+
+.MeetTable__ObserverHint {
+  color: var(--text-secondary);
+
+  align-self: center;
+
+  font-size: var(--text-body);
+  white-space: nowrap;
 }
 
 .MeetTable__ButtonsWrapper {

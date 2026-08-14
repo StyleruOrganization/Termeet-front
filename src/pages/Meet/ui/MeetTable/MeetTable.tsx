@@ -1,21 +1,30 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams, useSearchParams } from "react-router";
+import { useSessionStore, hasAvailability } from "@/entities/User";
 import { useToastStore } from "@/features/ToastContainer";
-import { generateTimeOptions, isMoreOrEqThan30Min, copyTextToClipboard } from "@/shared/libs";
+import { generateTimeOptions, isMoreOrEqThan30Min, copyTextToClipboard, useLoginModalStore } from "@/shared/libs";
 import { Toggle } from "@/shared/ui";
 import ApproveIcon from "@assets/icons/approve.svg";
 import CancelIcon from "@assets/icons/cross.svg";
 import LinkIcon from "@assets/icons/link.svg";
 import { useMeetStore } from "@entities/Meet";
 import styles from "./MeetTable.module.css";
-import { useSaveUserSelectedSlots } from "../../api";
+import { useObserveMeeting, useSaveUserSelectedSlots } from "../../api";
 import { getTimeZone, useColumnWidth } from "../../lib";
+import { buildPrefillFromTemplate } from "../../lib/prefill/buildPrefillFromTemplate";
 import { TableColumn } from "../TableColumn/TableColumn";
 import type { MeetTableProps } from "./MeetTable.types";
 
 const WINDOW_WIDTH = window.innerWidth;
 
-export const MeetTable = ({ timeRanges, meeting_days, mySlotName }: MeetTableProps) => {
+export const MeetTable = ({
+  timeRanges,
+  meeting_days,
+  mySlotName,
+  canVote,
+  canObserve,
+  isObserver,
+}: MeetTableProps) => {
   const { hash = "" } = useParams();
   const { measureContainerRef, columnWidth, calculateColumnWidth } = useColumnWidth(meeting_days);
   const setHoveredUsers = useMeetStore(store => store.setHoveredUsers);
@@ -29,7 +38,11 @@ export const MeetTable = ({ timeRanges, meeting_days, mySlotName }: MeetTablePro
   const { mutate: saveOwnSlots } = useSaveUserSelectedSlots(hash, () => {
     setIsEditing(false);
   });
+  const { mutate: observeMeeting, isPending: isObservePending } = useObserveMeeting(hash);
+  const openLogin = useLoginModalStore(state => state.open);
   const addToast = useToastStore(store => store.addToast);
+  const user = useSessionStore(state => state.user);
+  const timeInfo = useMeetStore(store => store.timeInfo);
   const [searchParams, setSearchParams] = useSearchParams();
   // Состояние для управления transition
   const [disableTransition, setDisableTransition] = useState(false);
@@ -179,7 +192,7 @@ export const MeetTable = ({ timeRanges, meeting_days, mySlotName }: MeetTablePro
                   <CancelIcon className={styles.MeetTable__CancelIcon} /> <span>Отменить</span>
                 </button>
                 <button
-                  disabled={!newSelectedSlots.size}
+                  disabled={mySlotName ? false : !newSelectedSlots.size}
                   onClick={() => {
                     if (mySlotName) {
                       saveOwnSlots({ name: mySlotName, isEdit: true });
@@ -201,6 +214,15 @@ export const MeetTable = ({ timeRanges, meeting_days, mySlotName }: MeetTablePro
                 {/* <button className={"baseButton secondaryButton"}>Назначить встречу</button> */}
                 <button
                   onClick={() => {
+                    if (!canVote) {
+                      openLogin();
+                      addToast({
+                        id: "meet-login-to-vote",
+                        type: "info",
+                        message: "Чтобы выбрать время, войдите в аккаунт",
+                      });
+                      return;
+                    }
                     startEditingSlots(mySlotName);
                   }}
                   className={`baseButton mainButton ${styles.MeetTable__AddTimeButton}`}
@@ -210,6 +232,42 @@ export const MeetTable = ({ timeRanges, meeting_days, mySlotName }: MeetTablePro
                 >
                   {mySlotName ? "Изменить время" : "Добавить время"}
                 </button>
+                {!mySlotName && canVote && hasAvailability(user?.availability_template ?? []) ? (
+                  <button
+                    type='button'
+                    className={`baseButton outlineButton ${styles.MeetTable__AddTimeButton}`}
+                    style={{
+                      transition: transitionStyle,
+                    }}
+                    onClick={() => {
+                      const prefill = buildPrefillFromTemplate(timeInfo, user?.availability_template ?? []);
+                      if (!prefill.size) {
+                        addToast({
+                          id: "prefill-empty",
+                          type: "info",
+                          message: "Шаблон не пересекается с окном этой встречи",
+                        });
+                        return;
+                      }
+                      startEditingSlots(null, prefill);
+                    }}
+                  >
+                    Подставить шаблон
+                  </button>
+                ) : null}
+                {canObserve ? (
+                  <button
+                    type='button'
+                    className={`baseButton outlineButton ${styles.MeetTable__AddTimeButton}`}
+                    disabled={isObservePending}
+                    onClick={() => observeMeeting()}
+                  >
+                    Наблюдать
+                  </button>
+                ) : null}
+                {isObserver && !mySlotName ? (
+                  <span className={styles.MeetTable__ObserverHint}>Вы наблюдатель</span>
+                ) : null}
               </>
             )}
           </div>

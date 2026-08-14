@@ -15,8 +15,8 @@ export const useTheme = () => {
   const getInitialTheme = useCallback((): Theme => {
     const savedTheme = localStorage.getItem("theme") as Theme | null;
 
-    if (savedTheme && (savedTheme === "light" || savedTheme === "dark")) {
-      return "light";
+    if (savedTheme === "light" || savedTheme === "dark") {
+      return savedTheme;
     }
 
     return getSystemTheme();

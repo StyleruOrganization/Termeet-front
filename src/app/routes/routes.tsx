@@ -4,10 +4,11 @@ import { Loader } from "@/shared/ui";
 import { Layout } from "../layouts/Layout";
 import { CustomErrorBoudary } from "../providers/ErrorBoudary";
 
-const EntryPage = lazy(() => import("../../pages/Entry").then(module => ({ default: module.Entry })));
+const HomePage = lazy(() => import("./RootPage").then(module => ({ default: module.RootPage })));
 const CreateMeetPage = lazy(() => import("../../pages/CreateMeet").then(module => ({ default: module.CreateMeet })));
 const MeetPage = lazy(() => import("../../pages/Meet").then(module => ({ default: module.Meet })));
 const EditMeetPage = lazy(() => import("../../pages/EditMeet").then(module => ({ default: module.EditMeet })));
+const ProfilePage = lazy(() => import("../../pages/Profile").then(module => ({ default: module.Profile })));
 const AuthYandexPage = lazy(() => import("../../pages/AuthYandex").then(module => ({ default: module.AuthYandex })));
 const AuthConfirmPage = lazy(() => import("../../pages/AuthConfirm").then(module => ({ default: module.AuthConfirm })));
 const AuthResetPage = lazy(() => import("../../pages/AuthReset").then(module => ({ default: module.AuthReset })));
@@ -27,7 +28,7 @@ export const Routing = () => {
   return (
     <ReactRoutes>
       <Route path='/' element={<Layout />}>
-        <Route index element={withSuspense(EntryPage, "Загружаем страницу...")} />
+        <Route index element={withSuspense(HomePage, "Загружаем страницу...")} />
         <Route path='create' element={withSuspense(CreateMeetPage, "Загружаем страницу...")} />
         <Route
           path='meet/:hash'
@@ -43,6 +44,7 @@ export const Routing = () => {
             "Мы не нашли встречу, которую ты ищешь",
           )}
         />
+        <Route path='profile' element={withSuspense(ProfilePage, "Загружаем кабинет...")} />
         <Route path='auth/yandex' element={withSuspense(AuthYandexPage, "Входим через Яндекс...")} />
         <Route path='auth/confirm' element={withSuspense(AuthConfirmPage, "Подтверждаем почту...")} />
         <Route path='auth/reset' element={withSuspense(AuthResetPage, "Обновляем пароль...")} />

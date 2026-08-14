@@ -121,6 +121,31 @@ button.header__loginBtn {
   white-space: nowrap;
 }
 
+.header__authPlaceholder {
+  display: block;
+
+  min-height: 40px;
+
+  min-width: 202px;
+}
+
+.header__profileLink {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
+  text-decoration: none;
+
+  color: var(--text-main);
+}
+
+.header__userIcon {
+  width: 24px;
+  height: 24px;
+
+  color: var(--text-main);
+}
+
 @media (width < 1024px) {
   header {
     padding: 16px 16px 0; 

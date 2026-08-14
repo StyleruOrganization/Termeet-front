@@ -20,6 +20,23 @@ export interface IMeet {
    */
   users: string[];
   /**
+   * Кто из списка сохранил слоты из аккаунта
+   */
+  userAuth: Record<string, boolean>;
+  organizerName: string | null;
+  observers: string[];
+  anyoneCanEdit: boolean;
+  anyoneCanDeleteParticipants: boolean;
+  requireLoginToVote: boolean;
+  permissions: {
+    canEditMeet: boolean;
+    canDeleteParticipants: boolean;
+    canEditSettings: boolean;
+    canVote: boolean;
+    canObserve: boolean;
+    isObserver: boolean;
+  };
+  /**
    * Ключ - дата, значение - промежутки которые могут быть выбраны пользователем. Максимум два. (Смещения из-за часовых поясов)
    * И слоты - мапа ключ - время, значение - массив пользователей
    */
@@ -53,8 +70,9 @@ export interface IMeetStore {
   setIsEditing: (isEditing: boolean) => void;
   /**
    * Вход в режим выбора слотов. Если передано имя — подставляем уже сохранённые слоты этого участника.
+   * preset — готовая сетка (шаблон времени), без сохранения на сервер.
    */
-  startEditingSlots: (userName?: string | null) => void;
+  startEditingSlots: (userName?: string | null, preset?: Map<string, string[]>) => void;
   /**
    * Очищаем новые выбранные слоты
    */

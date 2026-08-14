@@ -45,6 +45,19 @@
     white-space: nowrap;
   }
 
+  .MeetPeoples__Badge {
+    flex-shrink: 0;
+
+    padding: 2px 8px;
+
+    color: var(--semantics-blue-950);
+    background-color: var(--semantics-blue-100);
+    border-radius: 8px;
+
+    font-size: 2.5rem;
+    line-height: 1.2;
+  }
+
   .MeetPeoples__UserName:hover {
     color: var(--text-main);
   }

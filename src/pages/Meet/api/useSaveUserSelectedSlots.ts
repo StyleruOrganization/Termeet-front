@@ -45,7 +45,8 @@ export const useSaveUserSelectedSlots = (meetHash: string, onMutate?: () => void
       clearNewSelectedSlots();
       const endpoint = isEdit ? `/meet/${meetHash}/slots/edit` : `/meet/${meetHash}/slots`;
 
-      return await apiClient.patch(endpoint, { name, slots: preparedSlots });
+      await apiClient.patch(endpoint, { name, slots: preparedSlots });
+      return { empty: preparedSlots.length === 0 };
     },
     onMutate: async ({ name, isEdit }) => {
       await queryClient.cancelQueries({
@@ -89,7 +90,16 @@ export const useSaveUserSelectedSlots = (meetHash: string, onMutate?: () => void
         newTimeInfo.set(date, dateInfo);
       }
 
-      setUsers(isEdit || oldUsers.includes(name) ? [...(oldUsers || [])] : [...(oldUsers || []), name]);
+      const newSelectedEntries = Array.from(getNewSelectedSlots().entries());
+      const hasSlots = newSelectedEntries.some(([, times]) => times.length > 0);
+
+      setUsers(
+        isEdit && !hasSlots
+          ? oldUsers.filter(user => user !== name)
+          : isEdit || oldUsers.includes(name)
+            ? [...(oldUsers || [])]
+            : [...(oldUsers || []), name],
+      );
       setTimeInfo(newTimeInfo);
       setTimeIsAdded();
       onMutate?.();
@@ -111,13 +121,17 @@ export const useSaveUserSelectedSlots = (meetHash: string, onMutate?: () => void
         id: "slots-update-error",
       });
     },
-    onSuccess: (_data, payload) => {
+    onSuccess: (data, payload) => {
       queryClient.invalidateQueries({
         queryKey: MeetQueries.meet(meetHash).queryKey,
       });
       addToast({
         type: "success",
-        message: payload.isEdit ? "Ваше время обновлено" : "Выбранные временные слоты успешно сохранены",
+        message: payload.isEdit
+          ? data.empty
+            ? "Вы больше не в списке проголосовавших"
+            : "Ваше время обновлено"
+          : "Выбранные временные слоты успешно сохранены",
         id: "slots-updated",
       });
     },

@@ -21,7 +21,9 @@ export const transformMeetData = (meetData: MeetResponse, isLocal: boolean, curr
   // Также поступаем и со слотами
   const preparedMeetDataTimeSlots = meetData.slots.map(userInfo => {
     const { name, slots } = userInfo;
-    users.add(name);
+    if (slots.length) {
+      users.add(name);
+    }
     const convertedSlots: [string, string][] = slots.map(([startTime, endTime]) => [
       convertUTCToTimezone(startTime, timeZoneOffset),
       convertUTCToTimezone(endTime, timeZoneOffset),
@@ -215,6 +217,22 @@ export const transformMeetData = (meetData: MeetResponse, isLocal: boolean, curr
     }),
     timeInfo,
     users: Array.from(users),
+    userAuth: Object.fromEntries(
+      meetData.slots.map(slot => [slot.name, Boolean(slot.isAuth || slot.userId || slot.user_id)]),
+    ),
+    organizerName: meetData.organizerName ?? null,
+    observers: (meetData.observers ?? []).map(observer => observer.name),
+    anyoneCanEdit: meetData.anyoneCanEdit ?? !meetData.isCreatorAuth,
+    anyoneCanDeleteParticipants: meetData.anyoneCanDeleteParticipants ?? !meetData.isCreatorAuth,
+    requireLoginToVote: meetData.requireLoginToVote ?? false,
+    permissions: meetData.permissions ?? {
+      canEditMeet: meetData.isCreator || !meetData.isCreatorAuth,
+      canDeleteParticipants: meetData.isCreator || !meetData.isCreatorAuth,
+      canEditSettings: Boolean(meetData.isCreator && meetData.isCreatorAuth),
+      canVote: true,
+      canObserve: false,
+      isObserver: false,
+    },
     isCreator: meetData.isCreator,
     isCreatorAuth: meetData.isCreatorAuth,
     mySlotName:

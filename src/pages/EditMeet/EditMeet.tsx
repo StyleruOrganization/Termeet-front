@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useReducer } from "react";
 import { useNavigate, useParams } from "react-router";
-import { canManageMeeting } from "@/entities/Meet";
+import { canEditMeet } from "@/entities/Meet";
 import { useToastStore } from "@/features/ToastContainer";
 import { Container, Input, TextArea } from "@/shared/ui";
 import ApproveIcon from "@assets/icons/approve.svg";
@@ -69,7 +69,7 @@ export const EditMeet = () => {
   const navigate = useNavigate();
   const addToast = useToastStore(store => store.addToast);
   const meetData = useGetMeetInfo();
-  const canManage = canManageMeeting(meetData.isCreator, meetData.isCreatorAuth);
+  const canManage = canEditMeet(meetData);
   const [formState, dispatch] = useReducer(reducer, {
     description: meetData.description,
     name: meetData.name,

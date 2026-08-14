@@ -1,10 +1,11 @@
 import { useParams, useSearchParams } from "react-router";
-import { MeetProvider, canManageMeeting } from "@/entities/Meet";
+import { MeetProvider, getMeetPermissions } from "@/entities/Meet";
 import { Container } from "@/shared/ui";
 import { useGetMeetInfo } from "./api/useGetMeetInfo";
 import styles from "./Meet.module.css";
 import { MeetHeader } from "./ui/MeetHeader/MeetHeader";
 import { MeetInfo } from "./ui/MeetInfo/MeetInfo";
+import { MeetPrefillModal } from "./ui/MeetPrefillModal/MeetPrefillModal";
 import { MeetTable } from "./ui/MeetTable/MeetTable";
 import { Onboarding } from "./ui/Onboarding/Onboarding";
 
@@ -20,7 +21,7 @@ export function Meet() {
     return <h1>Необходим идентификатор встречи</h1>;
   }
 
-  const canManage = canManageMeeting(meetData.isCreator, meetData.isCreatorAuth);
+  const permissions = getMeetPermissions(meetData);
 
   return (
     <Container>
@@ -33,18 +34,27 @@ export function Meet() {
                 description={meetData.description}
                 name={meetData.name}
                 link={meetData.link}
-                canManage={canManage}
+                canManage={permissions.canEditMeet}
               />
             </div>
           ) : null}
           <div className={styles.MeetPage__InfoWrapper}>
-            <MeetInfo data={meetData} />
+            <MeetInfo hash={hash} data={meetData} />
           </div>
           <MeetTable
             key={isLocalTime ? "local" : "moscow"}
             meeting_days={meetData.meeting_days}
             timeRanges={meetData.timeRanges}
             mySlotName={meetData.mySlotName}
+            canVote={permissions.canVote}
+            canObserve={permissions.canObserve}
+            isObserver={permissions.isObserver}
+          />
+          <MeetPrefillModal
+            hash={hash}
+            canVote={permissions.canVote}
+            mySlotName={meetData.mySlotName}
+            timeInfo={meetData.timeInfo}
           />
           {WINDOW_WIDTH < 768 ? <Onboarding /> : null}
         </div>

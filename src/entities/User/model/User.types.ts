@@ -1,3 +1,10 @@
+export interface IAvailabilityInterval {
+  /** 1 = понедельник … 7 = воскресенье. Нет поля — интервал для всех дней. */
+  weekday?: number | null;
+  start: string;
+  end: string;
+}
+
 export interface IUser {
   id: string;
   first_name: string;
@@ -7,6 +14,17 @@ export interface IUser {
   is_verified: boolean;
   email: string;
   additional_emails?: string[] | null;
+  timezone?: string;
+  theme?: "light" | "dark";
+  suggest_prefill?: boolean;
+  availability_template?: IAvailabilityInterval[];
+}
+
+export interface IUserSettingsUpdate {
+  timezone?: string;
+  theme?: "light" | "dark";
+  suggest_prefill?: boolean;
+  availability_template?: IAvailabilityInterval[];
 }
 
 export interface ITokenInfo {
@@ -28,3 +46,15 @@ export interface IRegisterPayload {
 }
 
 export type SessionStatus = "idle" | "loading" | "authenticated" | "anonymous";
+
+export type UserMeetingRole = "owner" | "participant" | "observer";
+
+export interface IUserMeeting {
+  hash: string;
+  name: string;
+  description?: string | null;
+  duration?: string | null;
+  link?: string | null;
+  role: UserMeetingRole;
+  dataRange: [string, string][];
+}

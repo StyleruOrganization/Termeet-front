@@ -143,7 +143,14 @@ export const createMeetStore = (initialState?: Partial<IMeetStore>) => {
         isEditing,
       }));
     },
-    startEditingSlots: userName => {
+    startEditingSlots: (userName, preset) => {
+      if (preset) {
+        const next = new Map<string, string[]>();
+        preset.forEach((times, date) => next.set(date, [...times]));
+        set({ isEditing: true, newSelectedSlots: next });
+        return;
+      }
+
       if (!userName) {
         set({ isEditing: true, newSelectedSlots: new Map() });
         return;

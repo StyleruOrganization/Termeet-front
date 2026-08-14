@@ -6,7 +6,7 @@ import { convertUTCToTimezone } from "@/shared/libs";
 
 export const useGetMeetInfo = (): Pick<
   IMeet,
-  "name" | "description" | "link" | "timeRanges" | "duration" | "isCreator" | "isCreatorAuth"
+  "name" | "description" | "link" | "timeRanges" | "duration" | "isCreator" | "isCreatorAuth" | "permissions"
 > => {
   const { hash = "" } = useParams();
   const userId = useSessionStore(state => state.user?.id ?? "guest");
@@ -52,5 +52,6 @@ export const useGetMeetInfo = (): Pick<
     duration: meetData.duration || "",
     isCreator: meetData.isCreator,
     isCreatorAuth: meetData.isCreatorAuth,
+    permissions: meetData.permissions,
   };
 };

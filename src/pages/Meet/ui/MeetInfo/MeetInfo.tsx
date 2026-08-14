@@ -1,15 +1,16 @@
-import { canManageMeeting } from "@/entities/Meet";
+import { getMeetPermissions } from "@/entities/Meet";
 import styles from "./MeetInfo.module.css";
 import { MeetHeader } from "../MeetHeader/MeetHeader";
 import { MeetModal } from "../MeetModal/MeetModal";
 import { MeetPeoples } from "../MeetPeoples/MeetPeoples";
+import { MeetPrivacy } from "../MeetPrivacy/MeetPrivacy";
 import { Onboarding } from "../Onboarding/Onboarding";
 import type { IMeetInfoProps } from "./MeetInfo.types";
 
 const WINDOW_WIDTH = window.innerWidth;
 
-export const MeetInfo = ({ data }: IMeetInfoProps) => {
-  const canManage = canManageMeeting(data.isCreator, data.isCreatorAuth);
+export const MeetInfo = ({ data, hash }: IMeetInfoProps) => {
+  const permissions = getMeetPermissions(data);
 
   return (
     <>
@@ -21,11 +22,20 @@ export const MeetInfo = ({ data }: IMeetInfoProps) => {
               description={data.description}
               name={data.name}
               link={data.link}
-              canManage={canManage}
+              canManage={permissions.canEditMeet}
             />
           ) : null}
         </div>
-        <MeetPeoples users={data.users} canManage={canManage} />
+        <MeetPeoples
+          users={data.users}
+          userAuth={data.userAuth}
+          organizerName={data.organizerName}
+          mySlotName={data.mySlotName}
+          observers={data.observers}
+          isCreator={data.isCreator}
+          data={data}
+        />
+        <MeetPrivacy hash={hash} data={data} />
         {WINDOW_WIDTH >= 768 ? <Onboarding /> : null}
       </div>
       <MeetModal />

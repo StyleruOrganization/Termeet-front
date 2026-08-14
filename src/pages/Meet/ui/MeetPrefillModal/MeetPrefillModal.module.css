@@ -1,0 +1,19 @@
+.MeetPrefillModal {
+  display: flex;
+  gap: 12px;
+  flex-direction: column;
+
+  min-width: min(420px, 80vw);
+}
+
+.MeetPrefillModal h2 {
+  color: var(--text-main);
+
+  font-size: var(--text-heading);
+}
+
+.MeetPrefillModal p {
+  color: var(--text-main);
+
+  font-size: var(--text-body);
+}

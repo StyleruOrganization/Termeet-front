@@ -1,0 +1,69 @@
+.MeetPrivacy {
+  display: flex;
+  gap: 12px;
+  flex-direction: column;
+
+  padding: 22px;
+
+  background-color: var(--fill-controls);
+  border: 1px solid var(--semantics-gray-hover);
+  border-radius: 32px;
+}
+
+.MeetPrivacy__Title {
+  color: var(--text-main);
+
+  font-size: var(--text-heading);
+  font-weight: 800;
+}
+
+.MeetPrivacy__Row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+
+  color: var(--text-main);
+
+  font-size: var(--text-body);
+  line-height: 1.3;
+}
+
+.MeetPrivacy__Switch {
+  flex-shrink: 0;
+
+  width: 44px;
+  height: 24px;
+  padding: 2px;
+
+  background-color: var(--semantics-gray-active);
+  border-radius: 160px;
+
+  transition: background-color 0.2s ease;
+}
+
+.MeetPrivacy__Switch::after {
+  display: block;
+
+  width: 20px;
+  height: 20px;
+
+  background-color: var(--light);
+  border-radius: 50%;
+
+  transition: transform 0.2s ease;
+
+  content: "";
+}
+
+.MeetPrivacy__Switch_on {
+  background-color: var(--semantics-blue-950);
+}
+
+.MeetPrivacy__Switch_on::after {
+  transform: translateX(20px);
+}
+
+.MeetPrivacy__Switch:disabled {
+  opacity: 0.5;
+}

@@ -1,12 +1,11 @@
-import { Outlet, useLocation, useNavigate } from "react-router";
+import { Link, Outlet, useLocation, useNavigate } from "react-router";
 import { useSessionStore } from "@/entities/User";
 import { LoginForm, useActiveSectionStore } from "@/pages/Entry";
 import { useLoginModalStore } from "@/shared/libs";
 import { ModalWrapper } from "@/shared/ui";
-import { useToastStore } from "@features/ToastContainer";
+import UserIcon from "@assets/icons/user.svg";
 import styles from "./Layout.module.css";
 
-// Global Styles
 import "../styles/reset.css";
 import "../styles/global.css";
 import "../styles/fonts.css";
@@ -20,17 +19,9 @@ export const Layout = () => {
   const { isOpen, open, close } = useLoginModalStore();
   const { activeSection } = useActiveSectionStore();
   const user = useSessionStore(state => state.user);
-  const logout = useSessionStore(state => state.logout);
-  const addToast = useToastStore(state => state.addToast);
-
-  const handleLogout = async () => {
-    await logout();
-    addToast({
-      id: "logout-success",
-      type: "info",
-      message: "Вы вышли из аккаунта",
-    });
-  };
+  const status = useSessionStore(state => state.status);
+  const sessionReady = status === "authenticated" || status === "anonymous";
+  const isLanding = pathname === "/" && !user;
 
   return (
     <>
@@ -61,21 +52,7 @@ export const Layout = () => {
               termeet
             </h1>
           </button>
-          {/* {pathname == "/" && WINDOW_WIDTH < 1024 ? (
-            <Toggle
-              className={styles.toogleTheme}
-              classNameActive={styles.activeTheme}
-              classNameOption={styles.themeOption}
-              LeftLabel={<MoonIcon />}
-              RightLabel={<SunIcon />}
-              onChange={value => {
-                const newTheme = value === "left" ? "dark" : "light";
-                setTheme(newTheme);
-              }}
-              defaultActive={theme == "dark" ? "left" : "right"}
-            />
-          ) : null} */}
-          {pathname == "/" && (
+          {isLanding ? (
             <div className={styles.header__groupAnchors}>
               <a className={activeSection == "features" ? styles.activeAnchor : ""} href='#features'>
                 Удобства
@@ -87,44 +64,25 @@ export const Layout = () => {
                 О нас
               </a>
             </div>
-          )}
+          ) : null}
 
           <div className={styles.header__groupButtons}>
-            {user ? (
-              <>
-                <button className={`${styles.header__loginBtn} baseButton outlineButton`} onClick={handleLogout}>
-                  Выйти
-                </button>
-                <span className={styles.header__userName}>
-                  {user.first_name} {user.last_name}
-                </span>
-              </>
+            {!sessionReady ? (
+              <span className={styles.header__authPlaceholder} aria-hidden />
+            ) : user ? (
+              <Link to='/profile' className={styles.header__profileLink}>
+                <span className={styles.header__userName}>{user.first_name}</span>
+                <UserIcon className={styles.header__userIcon} />
+              </Link>
             ) : (
               <button className={`${styles.header__loginBtn} baseButton mainButton`} onClick={open}>
                 Войти или зарегистрироваться
               </button>
             )}
-
-            {/* {(WINDOW_WIDTH >= 1024 || pathname != "/") && (
-              <Toggle
-                className={styles.toogleTheme}
-                classNameActive={styles.activeTheme}
-                classNameOption={styles.themeOption}
-                LeftLabel={<MoonIcon />}
-                RightLabel={<SunIcon />}
-                onChange={value => {
-                  const newTheme = value === "left" ? "dark" : "light";
-                  setTheme(newTheme);
-                }}
-                defaultActive={theme == "dark" ? "left" : "right"}
-              />
-            )} */}
           </div>
         </header>
       </div>
-      <>
-        <Outlet />
-      </>
+      <Outlet />
 
       <ModalWrapper isOpen={isOpen} onClose={close}>
         <LoginForm />

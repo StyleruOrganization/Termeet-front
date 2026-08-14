@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { refreshAccessToken, setAccessToken, setOnUnauthorized } from "@/shared/api";
-import { getMeRequest, logoutRequest } from "../../api/userApi";
-import type { IUser, SessionStatus } from "../User.types";
+import { getMeRequest, logoutRequest, updateMeRequest } from "../../api/userApi";
+import type { IUser, IUserSettingsUpdate, SessionStatus } from "../User.types";
 
 interface ISessionStore {
   user: IUser | null;
@@ -11,6 +11,7 @@ interface ISessionStore {
   restore: () => Promise<void>;
   logout: () => Promise<void>;
   clear: () => void;
+  updateSettings: (payload: IUserSettingsUpdate) => Promise<IUser>;
 }
 
 export const useSessionStore = create<ISessionStore>((set, get) => ({
@@ -50,6 +51,11 @@ export const useSessionStore = create<ISessionStore>((set, get) => ({
       // cookie already gone
     }
     get().clear();
+  },
+  updateSettings: async payload => {
+    const user = await updateMeRequest(payload);
+    set({ user, status: "authenticated" });
+    return user;
   },
   clear: () => {
     setAccessToken(null);
