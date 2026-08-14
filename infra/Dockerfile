@@ -1,7 +1,7 @@
 FROM node:24-alpine AS builder
 
 WORKDIR /app
-RUN npm install -g pnpm@8.15.8
+RUN npm install -g pnpm@9
 
 COPY package.json pnpm-lock.yaml* ./
 RUN pnpm config set registry https://registry.npmjs.org/
