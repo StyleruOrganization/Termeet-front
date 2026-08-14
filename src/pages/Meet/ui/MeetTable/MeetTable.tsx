@@ -10,7 +10,7 @@ import LinkIcon from "@assets/icons/link.svg";
 import { useMeetStore } from "@entities/Meet";
 import styles from "./MeetTable.module.css";
 import { useObserveMeeting, useSaveUserSelectedSlots, useSetFinalTime } from "../../api";
-import { getTimeZone, useColumnWidth, buildBestFinalPrefill } from "../../lib";
+import { getTimeZone, useColumnWidth, buildBestFinalPrefill, peopleAtSelection } from "../../lib";
 import { buildPrefillFromTemplate } from "../../lib/prefill/buildPrefillFromTemplate";
 import { TableColumn } from "../TableColumn/TableColumn";
 import type { MeetTableProps } from "./MeetTable.types";
@@ -48,6 +48,7 @@ export const MeetTable = ({
   const addToast = useToastStore(store => store.addToast);
   const user = useSessionStore(state => state.user);
   const timeInfo = useMeetStore(store => store.timeInfo);
+  const hoveredUsers = useMeetStore(store => store.hoveredUsers);
   const [searchParams, setSearchParams] = useSearchParams();
   // Состояние для управления transition
   const [disableTransition, setDisableTransition] = useState(false);
@@ -83,6 +84,8 @@ export const MeetTable = ({
     ? "none"
     : "background-color 0.3s ease-in-out, color 0.3s ease-in-out, opacity 0.3s ease-in-out";
 
+  const selectionPeople = useMemo(() => peopleAtSelection(timeInfo, newSelectedSlots), [timeInfo, newSelectedSlots]);
+
   const isLocalTime = searchParams.get("localTime") === "true" || searchParams.get("localTime") == null;
   const timeOptions = useMemo(() => {
     return timeRanges.map(([startTime, endTime]) => {
@@ -111,13 +114,16 @@ export const MeetTable = ({
   }, [calculateColumnWidth]);
 
   useEffect(() => {
+    if (isFinalizing) {
+      return;
+    }
     const cancelHoveredUsers = () => {
       setHoveredUsers([], false);
       setHoveredUser("");
     };
     window.addEventListener("click", cancelHoveredUsers);
     return () => window.removeEventListener("click", cancelHoveredUsers);
-  }, [setHoveredUsers, setHoveredUser]);
+  }, [isFinalizing, setHoveredUsers, setHoveredUser]);
 
   return (
     <div className={styles.MeetTableWrapper}>
@@ -182,12 +188,23 @@ export const MeetTable = ({
             </button>
           ) : null}
           <div className={styles.MeetTable__ButtonsEdit}>
+            {isFinalizing && WINDOW_WIDTH < 768 ? (
+              <p className={styles.MeetTable__FinalHint}>
+                {hoveredUsers.isEmptySlot
+                  ? "В этом слоте никто не отметился"
+                  : hoveredUsers.users.length
+                    ? `Могут: ${hoveredUsers.users.join(", ")} (${hoveredUsers.users.length} из ${users.length})`
+                    : "Нажмите слот или проведите пальцем — внизу видно, кто может прийти"}
+              </p>
+            ) : null}
             {isEditingMode ? (
               <>
                 <button
                   onClick={() => {
                     setIsEditing(false);
                     clearNewSelectedSlots();
+                    setHoveredUsers([], false);
+                    setHoveredUser("");
                   }}
                   className={`baseButton cancelButton`}
                   style={{
@@ -206,7 +223,10 @@ export const MeetTable = ({
                     }}
                   >
                     <ApproveIcon />
-                    <span>Назначить это время</span>
+                    <span>
+                      Назначить это время
+                      {selectionPeople.length ? ` · ${selectionPeople.length} из ${users.length}` : ""}
+                    </span>
                   </button>
                 ) : (
                   <>
@@ -257,10 +277,15 @@ export const MeetTable = ({
                         return;
                       }
                       startFinalizing(prefill);
+                      const canAttend = peopleAtSelection(timeInfo, prefill);
+                      setHoveredUsers(canAttend, canAttend.length === 0);
                       addToast({
                         id: "final-hint",
                         type: "info",
-                        message: `Подсказали день и часы, где пересекается больше всего людей (${people}). Если таких дней несколько — берём самый ранний. Можно поправить сетку, но только в один день`,
+                        message:
+                          WINDOW_WIDTH < 768
+                            ? "Подсказали самое плотное пересечение. Проведите пальцем по сетке, как при выборе своего времени. Внизу видно, кто может прийти"
+                            : `Подсказали день и часы, где пересекается больше всего людей (${people}). Наведите на слот — в списке участников подсветим, кто может. Итог только в один день`,
                       });
                     }}
                   >

@@ -22,6 +22,7 @@ export const MeetPeoples = ({
   const setHoveredUser = useMeetStore(store => store.setHoveredUser);
   const hoveredUsers = useMeetStore(store => store.hoveredUsers);
   const hoveredUser = useMeetStore(store => store.hoveredUser);
+  const isFinalizing = useMeetStore(store => store.isFinalizing);
   const { mutate: deleteParticipant, isPending } = useDeleteParticipant(hash);
   const permissions = getMeetPermissions(data);
   const canDelete = permissions.canDeleteParticipants;
@@ -42,6 +43,11 @@ export const MeetPeoples = ({
         Title={
           <h3 className={styles.MeetPeoples__Title}>
             Участники: <span className={styles.MeetPeoples__Count}>{users.length}</span>
+            {isFinalizing && hasHoveredUser ? (
+              <span className={styles.MeetPeoples__LiveCount}>
+                в этом времени {hoveredUsers.isEmptySlot ? 0 : hoveredUsers.users.length}
+              </span>
+            ) : null}
           </h3>
         }
         Content={
@@ -65,7 +71,7 @@ export const MeetPeoples = ({
                       style={{
                         color: shouldDim ? "var(--text-disabled)" : "var(--text-main)",
                       }}
-                      className={`${styles.MeetPeoples__UserName} ${isHovered ? styles.MeetPeoples__user_hovered : ""}`}
+                      className={`${styles.MeetPeoples__UserName} ${isHovered ? styles.MeetPeoples__user_hovered : ""} ${isFinalizing && isHovered ? styles.MeetPeoples__UserName_can : ""}`}
                     >
                       {user}
                     </span>

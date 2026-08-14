@@ -2,7 +2,7 @@ import { useMemo, useState, useRef, useEffect, useCallback } from "react";
 import ToolTipArrowIcon from "@assets/icons/tooltip-arrow.svg";
 import { useMeetStore } from "@entities/Meet";
 import styles from "./TableCell.module.css";
-import { useColorPalette } from "../../lib";
+import { peopleAtSelection, useColorPalette } from "../../lib";
 import type { TableCellProps } from "./TableCell.types";
 
 const TOOLTIP_WIDTH = 118;
@@ -26,6 +26,8 @@ export const TableCell = ({
     isFinalizing = useMeetStore(store => store.isFinalizing),
     hoveredUser = useMeetStore(store => store.hoveredUser),
     newSelectedSlots = useMeetStore(store => store.newSelectedSlots.get(id.split("T")[0])),
+    allSelectedSlots = useMeetStore(store => store.newSelectedSlots),
+    timeInfo = useMeetStore(store => store.timeInfo),
     allUsers = useMeetStore(store => store.users);
   const finalTimes = useMeetStore(store => store.finalSlot.get(id.split("T")[0]) ?? EMPTY_FINAL_TIMES);
   const cellTime = id.includes("T") ? id.split("T")[1] : "";
@@ -124,21 +126,54 @@ export const TableCell = ({
     }
   }, [columnRef, cellRef, isTimeZoneDisabled, isBeforeCurrentTime]);
 
-  // Показываем тултип при наведении на десктопе и при клике на мобилах
-  const handleMoveCell: React.MouseEventHandler = e => {
-    e.preventDefault();
+  const previewAttendees = () => {
+    setHoveredUsers(users || [], !users?.length);
+  };
+
+  const previewSelection = () => {
+    const people = peopleAtSelection(timeInfo, allSelectedSlots);
+    setHoveredUsers(people, people.length === 0);
+  };
+
+  const handlePointerMove: React.PointerEventHandler = e => {
+    if (isFinalizing) {
+      previewAttendees();
+      if (e.pointerType === "mouse") {
+        setIsTooltipVisible(true);
+      }
+      return;
+    }
 
     if (isEditingMode && !isDisabled) return;
 
-    setHoveredUsers(users || [], users?.length == 0 ? true : false);
+    e.preventDefault();
+    previewAttendees();
+    setIsTooltipVisible(true);
+  };
+
+  const handleClick: React.MouseEventHandler = e => {
+    e.preventDefault();
+    if (isFinalizing) {
+      previewAttendees();
+      return;
+    }
+    if (isEditingMode && !isDisabled) return;
+    previewAttendees();
     setIsTooltipVisible(true);
   };
 
   const handlePointerLeave: React.PointerEventHandler = e => {
     e.preventDefault();
-    setHoveredUsers([], false);
     setIsTooltipVisible(false);
     setTooltipPosition({ top: 0, left: 0, arrowDirection: "" });
+    if (isFinalizing && e.pointerType !== "mouse") {
+      return;
+    }
+    if (isFinalizing) {
+      previewSelection();
+      return;
+    }
+    setHoveredUsers([], false);
   };
 
   // Пересчитываем позицию при изменении видимости тултипа или скролле
@@ -232,8 +267,8 @@ export const TableCell = ({
         } as React.CSSProperties
       }
       ref={cellRef}
-      onClick={handleMoveCell}
-      onPointerMove={handleMoveCell}
+      onClick={handleClick}
+      onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
       data-first-cell={isFirstCell}
       data-last-cell={isLastCell}
