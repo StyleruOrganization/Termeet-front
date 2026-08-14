@@ -90,7 +90,6 @@ export const useSaveUserSelectedSlots = (meetHash: string, onMutate?: () => void
         newTimeInfo.set(date, dateInfo);
       }
 
-      const newSelectedEntries = Array.from(getNewSelectedSlots().entries());
       const hasSlots = newSelectedEntries.some(([, times]) => times.length > 0);
 
       setUsers(
