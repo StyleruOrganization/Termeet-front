@@ -48,6 +48,7 @@ export const MeetTable = ({
   const addToast = useToastStore(store => store.addToast);
   const user = useSessionStore(state => state.user);
   const timeInfo = useMeetStore(store => store.timeInfo);
+  const duration = useMeetStore(store => store.duration);
   const hoveredUsers = useMeetStore(store => store.hoveredUsers);
   const [searchParams, setSearchParams] = useSearchParams();
   // Состояние для управления transition
@@ -267,7 +268,7 @@ export const MeetTable = ({
                     type='button'
                     className={`baseButton secondaryButton ${styles.MeetTable__AddTimeButton}`}
                     onClick={() => {
-                      const { prefill, people } = buildBestFinalPrefill(timeInfo);
+                      const { prefill, people } = buildBestFinalPrefill(timeInfo, duration);
                       if (!prefill.size) {
                         addToast({
                           id: "final-empty",
@@ -284,8 +285,12 @@ export const MeetTable = ({
                         type: "info",
                         message:
                           WINDOW_WIDTH < 768
-                            ? "Подсказали самое плотное пересечение. Проведите пальцем по сетке, как при выборе своего времени. Внизу видно, кто может прийти"
-                            : `Подсказали день и часы, где пересекается больше всего людей (${people}). Наведите на слот — в списке участников подсветим, кто может. Итог только в один день`,
+                            ? duration
+                              ? `Подсказали пересечение не длиннее ${duration}. Проведите пальцем по сетке, как при выборе своего времени. Внизу видно, кто может прийти`
+                              : "Подсказали самое плотное пересечение. Проведите пальцем по сетке, как при выборе своего времени. Внизу видно, кто может прийти"
+                            : duration
+                              ? `Подсказали окно на ${duration}, где пересекается больше всего людей (${people}). Наведите на слот — в списке подсветим, кто может. Длиннее продолжительности выбрать нельзя`
+                              : `Подсказали день и часы, где пересекается больше всего людей (${people}). Наведите на слот — в списке участников подсветим, кто может. Итог только в один день`,
                       });
                     }}
                   >

@@ -1,5 +1,6 @@
 import { createStore } from "zustand";
 import { isSlotInPast } from "@/shared/libs";
+import { clampFinalTimes } from "../../lib/clampFinalTimes";
 import type { IMeet, IMeetStore } from "../Meet.types";
 
 const slotsOfUser = (timeInfo: IMeet["timeInfo"], userName: string) => {
@@ -34,6 +35,7 @@ export const createMeetStore = (initialState?: Partial<IMeetStore>) => {
     users: [],
     timeIsAdded: false,
     finalSlot: new Map(),
+    duration: undefined,
     setSelectNewSell: () => {},
     setHoveredUsers: () => {},
     setHoveredUser: () => {},
@@ -80,8 +82,10 @@ export const createMeetStore = (initialState?: Partial<IMeetStore>) => {
                 newSelectedSlots.delete(key);
               }
             });
+            newSelectedSlots.set(date, clampFinalTimes([...currentSelectedTimes, time], time, state.duration));
+          } else {
+            newSelectedSlots.set(date, [...currentSelectedTimes, time]);
           }
-          newSelectedSlots.set(date, [...currentSelectedTimes, time]);
         }
         return {
           newSelectedSlots,

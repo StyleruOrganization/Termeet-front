@@ -1,7 +1,7 @@
 .MeetingForm {
   display: flex;
   flex-direction: column;
-  gap: 24px
+  gap: 24px;
 }
 
 .MeetingForm__InputsTimes {
@@ -41,11 +41,60 @@
 
   background-color: var(--semantics-blue-950);
 
-  /* transform: translateY(-50%); */
   animation: blink 1s step-end infinite;
 
   content: '';
   pointer-events: none;
+}
+
+.MeetingForm__ToggleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  color: var(--text-main);
+
+  font-size: var(--text-body);
+}
+
+.MeetingForm__Switch {
+  width: 44px;
+  height: 24px;
+  padding: 2px;
+
+  background-color: var(--semantics-gray-active);
+  border-radius: 160px;
+}
+
+.MeetingForm__Switch::after {
+  display: block;
+
+  width: 20px;
+  height: 20px;
+
+  background-color: var(--light);
+  border-radius: 50%;
+
+  transition: transform 0.2s ease;
+
+  content: "";
+}
+
+.MeetingForm__Switch_on {
+  background-color: var(--semantics-blue-950);
+}
+
+.MeetingForm__Switch_on::after {
+  transform: translateX(20px);
+}
+
+.MeetingForm__Hint {
+  margin: -12px 0 0;
+
+  color: var(--text-main);
+
+  font-size: 3rem;
+  line-height: 1.4;
 }
 
 /* Анимация мигания курсора */

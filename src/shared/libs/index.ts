@@ -5,6 +5,8 @@ export { convertUTCToTimezone } from "./times/convertUTCToTimezone";
 export { isTimeBefore } from "./times/isTimeBefore";
 export { isSlotInPast, isDateBeforeToday, startOfToday } from "./times/isSlotInPast";
 export { timeToMinutes } from "./times/timeToMinutes";
+export { minutesToTime } from "./times/minutesToTime";
+export { durationToMinutes, maxFinalCells } from "./times/durationToMinutes";
 export { isTouchDevice } from "./devices/isTouchDevice";
 export { debounce } from "./funcWrappers/debounce";
 export { throttle } from "./funcWrappers/throttle";

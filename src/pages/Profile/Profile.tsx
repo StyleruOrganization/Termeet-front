@@ -9,6 +9,7 @@ import {
   getAvailabilityDayRows,
   hasAvailability,
   isNineToSixEveryDay,
+  useShowOnboarding,
   type IAvailabilityInterval,
   type IUser,
 } from "@/entities/User";
@@ -19,7 +20,7 @@ import { useTheme } from "@/shared/libs";
 import { Container, Input, ModalWrapper, Select, TextArea } from "@/shared/ui";
 import { FeedbackForm } from "@/widgets/FeedbackForm";
 import Arrow from "@assets/icons/arrow.svg";
-import stubImage from "@assets/img/stub.png";
+import YandexLogo from "@assets/icons/YandexID.svg";
 import styles from "./Profile.module.css";
 import { TemplateWeekModal } from "./ui/TemplateWeekModal/TemplateWeekModal";
 
@@ -99,8 +100,8 @@ export const Profile = () => {
         </nav>
         <div className={styles.Profile__Content}>
           {tab === "profile" ? <ProfileSettings user={user} /> : null}
-          {tab === "notifications" ? <Placeholder title={t("profile.stubNotifications")} /> : null}
-          {tab === "integrations" ? <Placeholder title={t("profile.stubIntegrations")} /> : null}
+          {tab === "notifications" ? <NotificationSettings user={user} /> : null}
+          {tab === "integrations" ? <IntegrationsSettings user={user} /> : null}
           {tab === "appearance" ? <AppearanceSettings /> : null}
           {tab === "support" ? <FeedbackForm /> : null}
         </div>
@@ -534,6 +535,86 @@ const GridWindowSettings = ({ user }: { user: IUser }) => {
   );
 };
 
+const NotificationSettings = ({ user }: { user: IUser }) => {
+  const updateSettings = useSessionStore(state => state.updateSettings);
+  const addToast = useToastStore(state => state.addToast);
+  const { t } = useTranslation();
+  const notifyVote = user.notify_on_vote ?? true;
+  const notifyFinal = user.notify_on_final ?? true;
+
+  const toggle = async (payload: { notify_on_vote?: boolean; notify_on_final?: boolean }) => {
+    try {
+      await updateSettings(payload);
+    } catch {
+      addToast({ id: "notify-toggle-error", type: "error", message: t("toast.notifyError") });
+    }
+  };
+
+  return (
+    <div className={styles.Profile__Stack}>
+      <section>
+        <h2 className={styles.Profile__SectionTitle}>{t("profile.notifyTitle")}</h2>
+        <p className={styles.Profile__Hint}>{t("profile.notifyHint")}</p>
+        <label className={styles.Profile__ToggleRow}>
+          <span>{t("profile.notifyVote")}</span>
+          <button
+            type='button'
+            role='switch'
+            aria-checked={notifyVote}
+            className={`${styles.Profile__Switch} ${notifyVote ? styles.Profile__Switch_on : ""}`}
+            onClick={() => toggle({ notify_on_vote: !notifyVote })}
+          />
+        </label>
+        <label className={styles.Profile__ToggleRow}>
+          <span>{t("profile.notifyFinal")}</span>
+          <button
+            type='button'
+            role='switch'
+            aria-checked={notifyFinal}
+            className={`${styles.Profile__Switch} ${notifyFinal ? styles.Profile__Switch_on : ""}`}
+            onClick={() => toggle({ notify_on_final: !notifyFinal })}
+          />
+        </label>
+      </section>
+    </div>
+  );
+};
+
+const IntegrationsSettings = ({ user }: { user: IUser }) => {
+  const { t } = useTranslation();
+  const hasYandex = Boolean(user.has_yandex);
+  const hasTelemost = Boolean(user.has_telemost);
+
+  return (
+    <div className={styles.Profile__Stack}>
+      <section>
+        <h2 className={styles.Profile__SectionTitle}>{t("profile.yandexTitle")}</h2>
+        <p className={styles.Profile__Hint}>{t("profile.yandexHint")}</p>
+        <div className={styles.Profile__Row}>
+          <span className={styles.Profile__IntegrationName}>
+            <YandexLogo />
+            {hasYandex ? t("profile.yandexConnected") : t("profile.yandexDisconnected")}
+          </span>
+          {hasTelemost ? (
+            <span className={styles.Profile__IntegrationStatus}>{t("profile.yandexTelemost")}</span>
+          ) : null}
+        </div>
+        <p className={styles.Profile__Hint}>{t("profile.yandex360")}</p>
+        <button
+          type='button'
+          className={`baseButton ${hasYandex ? "outlineButton" : "mainButton"} ${styles.Profile__SaveTemplate}`}
+          onClick={() => {
+            window.location.assign("/api/auth/yandex/url?intent=link");
+          }}
+        >
+          <YandexLogo />
+          <span>{hasYandex ? t("profile.yandexReconnect") : t("profile.yandexConnect")}</span>
+        </button>
+      </section>
+    </div>
+  );
+};
+
 const AppearanceSettings = () => {
   const { theme, setTheme } = useTheme();
   const userTheme = useSessionStore(state => state.user?.theme);
@@ -542,6 +623,7 @@ const AppearanceSettings = () => {
   const { t, i18n } = useTranslation();
   const locale = parseLocale(i18n.language);
   const currentTheme = userTheme ?? theme;
+  const { enabled: showOnboarding, setEnabled: setShowOnboarding } = useShowOnboarding();
 
   return (
     <div className={styles.Profile__Stack}>
@@ -559,6 +641,22 @@ const AppearanceSettings = () => {
               await updateSettings({ theme: next });
             } catch {
               addToast({ id: "theme-saved-error", type: "error", message: t("toast.themeError") });
+            }
+          }}
+        />
+      </label>
+      <label className={styles.Profile__ToggleRow}>
+        <span>{t("profile.showOnboarding")}</span>
+        <button
+          type='button'
+          role='switch'
+          aria-checked={showOnboarding}
+          className={`${styles.Profile__Switch} ${showOnboarding ? styles.Profile__Switch_on : ""}`}
+          onClick={async () => {
+            try {
+              await setShowOnboarding(!showOnboarding);
+            } catch {
+              addToast({ id: "onboarding-toggle-error", type: "error", message: t("toast.onboardingError") });
             }
           }}
         />
@@ -588,15 +686,6 @@ const AppearanceSettings = () => {
         {t("profile.tester")}
         <Arrow className={styles.Profile__RowArrow} />
       </button>
-    </div>
-  );
-};
-
-const Placeholder = ({ title }: { title: string }) => {
-  return (
-    <div className={styles.Profile__Placeholder}>
-      <img className={styles.Profile__StubImage} src={stubImage} alt='' />
-      <p>{title}</p>
     </div>
   );
 };

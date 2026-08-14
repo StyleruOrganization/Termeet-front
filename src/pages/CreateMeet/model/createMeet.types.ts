@@ -7,6 +7,7 @@ export type ICreateMeet = {
   link?: string;
   timeDuration?: string;
   invitedUsers: { id: string; name: string }[];
+  createTelemost: boolean;
 };
 
 interface CalendarDateRange {
@@ -36,6 +37,7 @@ export interface MeetingFormState {
   setDate: ({ start, end }: { start: Date | null; end: Date | null }, overrideCurrentInterval?: boolean) => void;
   addInvitedUser: (user: { id: string; name: string }) => void;
   removeInvitedUser: (id: string) => void;
+  setCreateTelemost: (value: boolean) => void;
   /** Валидирует поле ввода и ошибку выставляет сразу в поле нужное в объекте errors */
   validateField: (name: keyof ICreateMeet) => void;
 }

@@ -15,6 +15,11 @@ type RawUser = IUser & {
   availabilityTemplate?: IAvailabilityInterval[];
   gridWindowStart?: string;
   gridWindowEnd?: string;
+  notifyOnVote?: boolean;
+  notifyOnFinal?: boolean;
+  hasYandex?: boolean;
+  hasTelemost?: boolean;
+  showOnboarding?: boolean;
 };
 
 export const normalizeUser = (raw: RawUser): IUser => {
@@ -28,6 +33,11 @@ export const normalizeUser = (raw: RawUser): IUser => {
     locale,
     grid_window_start: raw.grid_window_start ?? raw.gridWindowStart ?? "10 : 00",
     grid_window_end: raw.grid_window_end ?? raw.gridWindowEnd ?? "19 : 00",
+    notify_on_vote: raw.notify_on_vote ?? raw.notifyOnVote ?? true,
+    notify_on_final: raw.notify_on_final ?? raw.notifyOnFinal ?? true,
+    has_yandex: raw.has_yandex ?? raw.hasYandex ?? false,
+    has_telemost: raw.has_telemost ?? raw.hasTelemost ?? false,
+    show_onboarding: raw.show_onboarding ?? raw.showOnboarding ?? true,
   };
 };
 
@@ -43,8 +53,11 @@ export const logoutRequest = () => {
   return apiClient.post<{ detail: string }>("/auth/logout");
 };
 
-export const yandexCallbackRequest = (code: string) => {
-  return apiClient.post<ITokenInfo, { code: string }>("/auth/yandex/callback", { code });
+export const yandexCallbackRequest = (code: string, state?: string | null) => {
+  return apiClient.post<ITokenInfo, { code: string; state?: string }>("/auth/yandex/callback", {
+    code,
+    ...(state ? { state } : {}),
+  });
 };
 
 export const getMeRequest = async () => {

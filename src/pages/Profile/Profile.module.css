@@ -282,6 +282,23 @@
   transform: translateX(20px);
 }
 
+.Profile__IntegrationName {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+}
+
+.Profile__IntegrationName svg {
+  height: 16px;
+  width: 16px;
+}
+
+.Profile__IntegrationStatus {
+  color: var(--text-secondary);
+
+  font-size: 3rem;
+}
+
 .Profile__Placeholder {
   display: flex;
   gap: 16px;
@@ -366,11 +383,24 @@
     position: sticky;
     top: 12px;
 
-    flex-flow: row wrap;
-    overflow: hidden;
+    overflow: auto hidden;
+    flex-flow: row nowrap;
 
     width: 100%;
     padding: 4px;
+
+    -webkit-overflow-scrolling: touch;
+
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    touch-action: pan-x pan-y;
+  }
+
+  .Profile__Nav::-webkit-scrollbar {
+    display: none;
+
+    width: 0;
+    height: 0;
   }
 
   .Profile__DeleteButton {
@@ -396,9 +426,11 @@
   }
 
   .Profile__NavItem {
-    flex: 1 1 auto;
+    flex: 0 0 auto;
 
     padding: 8px 10px;
+
+    white-space: nowrap;
   }
 
   .Profile__Placeholder {

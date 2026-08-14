@@ -1,36 +1,36 @@
 import { useEffect, useState } from "react";
+import { useShowOnboarding } from "@/entities/User";
 import { Onboarding as BaseOnboarding } from "@/shared/ui";
 import { useCreateMeetStore } from "../../model";
 import { ONBOARDING_TEXTS, ONBOARDING_ITEMS_IDS } from "../../model/constants";
 
 export const Onboarding = () => {
-  const meetTitle = useCreateMeetStore(store => store.values.title);
-  const choosenDates = useCreateMeetStore(store => store.values.dates);
+  const { enabled, hide } = useShowOnboarding();
+  const meetTitle = useCreateMeetStore(state => state.values.title);
+  const choosenDates = useCreateMeetStore(state => state.values.dates);
   const [completedItems, setCompletedItems] = useState<(keyof typeof ONBOARDING_ITEMS_IDS)[]>([]);
 
   useEffect(() => {
-    let newCompletedItems: typeof completedItems = [];
-    console.log("MEET TITLE", meetTitle);
-    if (meetTitle != "") {
-      newCompletedItems.push(ONBOARDING_ITEMS_IDS.NAME);
-    } else {
-      newCompletedItems = newCompletedItems.filter(item => item != ONBOARDING_ITEMS_IDS.NAME);
-    }
-
+    const next: (keyof typeof ONBOARDING_ITEMS_IDS)[] = [];
     if (choosenDates.length > 0) {
-      newCompletedItems.push(ONBOARDING_ITEMS_IDS.DATES);
-    } else {
-      newCompletedItems = newCompletedItems.filter(item => item != ONBOARDING_ITEMS_IDS.DATES);
+      next.push(ONBOARDING_ITEMS_IDS.DATES);
     }
-
-    setCompletedItems([...newCompletedItems]);
+    if (meetTitle != "") {
+      next.push(ONBOARDING_ITEMS_IDS.NAME);
+    }
+    setCompletedItems(next);
   }, [meetTitle, choosenDates]);
+
+  if (!enabled) {
+    return null;
+  }
 
   return (
     <BaseOnboarding
       items={ONBOARDING_TEXTS}
       title='Как создать встречу'
       completedItems={completedItems}
+      onHide={hide}
       CongratulationContent={
         <>
           Поздравляем! <br />

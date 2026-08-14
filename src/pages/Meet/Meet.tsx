@@ -41,6 +41,7 @@ export function Meet() {
         timeRanges={meetData.timeRanges}
         users={meetData.users}
         finalSlot={meetData.finalSlot}
+        duration={meetData.duration}
       >
         <div className={styles.MeetPage}>
           {WINDOW_WIDTH < 768 ? (

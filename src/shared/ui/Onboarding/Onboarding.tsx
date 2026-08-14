@@ -8,9 +8,10 @@ export interface OnboardingProps {
   completedItems: string[];
   title: string;
   CongratulationContent?: React.ReactNode;
+  onHide?: () => void;
 }
 
-export const Onboarding = ({ items, title, completedItems, CongratulationContent }: OnboardingProps) => {
+export const Onboarding = ({ items, title, completedItems, CongratulationContent, onHide }: OnboardingProps) => {
   const allCompleted = items.length === completedItems.length;
   const [showCongratulations, setShowCongratulations] = useState(false);
 
@@ -25,8 +26,10 @@ export const Onboarding = ({ items, title, completedItems, CongratulationContent
       setShowCongratulations(false);
     }
   }, [allCompleted]);
-  console.log("Items", items);
-  console.log("completedItems in Base Onboarding", completedItems);
+
+  const hideButtonHeight = onHide && !showCongratulations ? 28 : 0;
+  const stepsHeight = 25 * items.length + 8 * Math.max(items.length - 1, 0) + hideButtonHeight;
+
   return (
     <CollapseContainer
       className={styles.Onboarding}
@@ -49,6 +52,11 @@ export const Onboarding = ({ items, title, completedItems, CongratulationContent
                   <span className={styles.Onboarding__Item__Text}>{text}</span>
                 </div>
               ))}
+              {onHide ? (
+                <button type='button' className={styles.Onboarding__Hide} onClick={onHide}>
+                  Больше не показывать
+                </button>
+              ) : null}
             </>
           ) : (
             <div className={styles.CongratulationContainer}>
@@ -59,7 +67,7 @@ export const Onboarding = ({ items, title, completedItems, CongratulationContent
         </div>
       }
       initialExpanded
-      maxHeight={items.length == completedItems.length ? 108 : 25 * items.length + 8 * (items.length - 1)}
+      maxHeight={showCongratulations ? 108 : stepsHeight}
     />
   );
 };

@@ -35,7 +35,9 @@ export const useSetFinalTime = (hash: string) => {
         type: "error",
         message:
           error instanceof HttpError && error.status === 400
-            ? "Итоговое время должно быть в один день и среди уже выбранных слотов"
+            ? error.detail?.toLowerCase().includes("duration")
+              ? "Итоговое время не может быть длиннее продолжительности встречи"
+              : "Итоговое время должно быть в один день и среди уже выбранных слотов"
             : "Не получилось назначить время",
       });
     },

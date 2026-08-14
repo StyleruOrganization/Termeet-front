@@ -144,4 +144,8 @@ export interface IMeetStore {
   isModalOpen: boolean;
   timeIsAdded: boolean;
   finalSlot: Map<string, string[]>;
+  /**
+   * Продолжительность встречи («1 час»). Нет — итоговое время без лимита длины.
+   */
+  duration?: string;
 }

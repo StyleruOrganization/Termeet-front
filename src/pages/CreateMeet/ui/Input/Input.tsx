@@ -1,7 +1,9 @@
 import { Input as InputBase, type IInputProps } from "@shared/ui";
 import { type CreateMeetFields, useCreateMeetStore } from "../../model";
 
-export const Input = ({ name, ...props }: IInputProps & { name: CreateMeetFields }) => {
+type TextMeetField = Exclude<CreateMeetFields, "dates" | "invitedUsers" | "createTelemost">;
+
+export const Input = ({ name, ...props }: IInputProps & { name: TextMeetField }) => {
   const setValue = useCreateMeetStore(state => state.setValue);
   const validateField = useCreateMeetStore(state => state.validateField);
   const error = useCreateMeetStore(state => state.errors[name]);
@@ -29,7 +31,7 @@ export const Input = ({ name, ...props }: IInputProps & { name: CreateMeetFields
       onBlur={() => {
         validateField(name);
       }}
-      value={inputValue}
+      value={typeof inputValue === "string" ? inputValue : ""}
     />
   );
 };

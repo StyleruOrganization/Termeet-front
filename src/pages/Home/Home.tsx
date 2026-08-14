@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { getMyMeetingsRequest, useSessionStore, type IUserMeeting, type UserMeetingRole } from "@/entities/User";
 import { LOCALE_BCP, parseLocale, useTranslation } from "@/shared/i18n";
@@ -263,17 +263,97 @@ export const Home = () => {
 const PeopleSnippet = ({ names, count }: { names: string[]; count: number }) => {
   const { t, i18n } = useTranslation();
   const shown = count || names.length;
+  const rootRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLUListElement>(null);
+  const [open, setOpen] = useState(false);
+  const [pos, setPos] = useState<{ top: number; left: number } | null>(null);
+
+  const updatePos = useCallback(() => {
+    const root = rootRef.current;
+    const list = listRef.current;
+    if (!root || !list) {
+      return;
+    }
+    const rect = root.getBoundingClientRect();
+    const margin = 8;
+    const width = list.offsetWidth;
+    const height = list.offsetHeight;
+    const left = Math.min(Math.max(margin, rect.right - width), window.innerWidth - width - margin);
+    const below = rect.bottom + 4;
+    const top = below + height <= window.innerHeight - margin ? below : Math.max(margin, rect.top - height - 4);
+    setPos({ top, left });
+  }, []);
+
+  useLayoutEffect(() => {
+    if (!open) {
+      setPos(null);
+      return;
+    }
+    updatePos();
+  }, [open, updatePos, names.length]);
+
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+    const onPointerDown = (event: PointerEvent) => {
+      if (rootRef.current?.contains(event.target as Node)) {
+        return;
+      }
+      setOpen(false);
+    };
+    const onReposition = () => updatePos();
+    document.addEventListener("pointerdown", onPointerDown);
+    window.addEventListener("scroll", onReposition, true);
+    window.addEventListener("resize", onReposition);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+      window.removeEventListener("scroll", onReposition, true);
+      window.removeEventListener("resize", onReposition);
+    };
+  }, [open, updatePos]);
+
   if (!shown) {
     return <span className={styles.Home__PeopleEmpty}>{t("home.noPeople")}</span>;
   }
 
+  const canHover = () => window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
   return (
-    <div className={styles.Home__People} tabIndex={0}>
-      <span className={styles.Home__PeopleToggle}>
+    <div
+      className={styles.Home__People}
+      ref={rootRef}
+      onMouseEnter={() => {
+        if (canHover()) {
+          setOpen(true);
+        }
+      }}
+      onMouseLeave={() => {
+        if (canHover()) {
+          setOpen(false);
+        }
+      }}
+    >
+      <button
+        type='button'
+        className={styles.Home__PeopleToggle}
+        aria-expanded={open}
+        onClick={() => {
+          if (canHover()) {
+            return;
+          }
+          setOpen(value => !value);
+        }}
+      >
         {shown} {t(peopleWordKey(shown, parseLocale(i18n.language)))}
-      </span>
+      </button>
       {names.length > 0 ? (
-        <ul className={styles.Home__PeopleList}>
+        <ul
+          ref={listRef}
+          className={`${styles.Home__PeopleList} ${open && pos ? styles.Home__PeopleList_open : ""}`}
+          style={pos ? { top: pos.top, left: pos.left } : undefined}
+          aria-hidden={!open}
+        >
           {names.map(name => (
             <li key={name}>{name}</li>
           ))}

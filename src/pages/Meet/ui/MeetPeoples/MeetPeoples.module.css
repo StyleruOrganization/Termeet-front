@@ -11,14 +11,6 @@
   margin-left: 8px;
 }
 
-.MeetPeoples__LiveCount {
-  color: var(--semantics-blue-950);
-
-  font-size: var(--text-body);
-  font-weight: 600;
-  margin-left: 8px;
-}
-
 .MeetPeoples__Users__Container {
   display: flex;
   flex-direction: column;
@@ -74,6 +66,10 @@
     color: var(--text-main);
 
     font-weight: 700;
+  }
+
+  .MeetPeoples__UserName_dim {
+    color: var(--text-disabled);
   }
 }
 

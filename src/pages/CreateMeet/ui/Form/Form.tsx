@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useSessionStore } from "@/entities/User";
 import { TIMES, DURATIONS } from "@/shared/consts";
 import { useTranslation } from "@/shared/i18n";
-import { isTimeBefore } from "@shared/libs";
+import { isTimeBefore, useLoginModalStore } from "@shared/libs";
 import styles from "./Form.module.css";
 import { isDurationValid } from "../../lib";
 import { useCreateMeetStore } from "../../model";
@@ -17,6 +17,9 @@ export const Form = () => {
   const setTime = useCreateMeetStore(state => state.setTime);
   const timeStart = useCreateMeetStore(state => state.values.timeStart);
   const timeEnd = useCreateMeetStore(state => state.values.timeEnd);
+  const createTelemost = useCreateMeetStore(state => state.values.createTelemost);
+  const setCreateTelemost = useCreateMeetStore(state => state.setCreateTelemost);
+  const openLogin = useLoginModalStore(state => state.open);
 
   useEffect(() => {
     if (!user) {
@@ -29,6 +32,27 @@ export const Form = () => {
       setTime("timeEnd", user.grid_window_end);
     }
   }, [setTime, user]);
+
+  const canCreateTelemost = Boolean(user?.has_telemost);
+  const telemostHint = !user
+    ? t("create.telemostNeedLogin")
+    : user.has_telemost
+      ? t("create.telemostHint")
+      : user.has_yandex
+        ? t("create.telemostNeedScope")
+        : t("create.telemostNeedYandex");
+
+  const handleTelemostToggle = () => {
+    if (canCreateTelemost) {
+      setCreateTelemost(!createTelemost);
+      return;
+    }
+    if (!user) {
+      openLogin();
+      return;
+    }
+    window.location.assign("/api/auth/yandex/url?intent=link");
+  };
 
   return (
     <div data-test-id='meeting-form' className={styles.MeetingForm}>
@@ -73,6 +97,17 @@ export const Form = () => {
         disabledFunc={duration => !isDurationValid(duration, timeStart, timeEnd)}
       />
       <InvitePeople />
+      <label className={styles.MeetingForm__ToggleRow}>
+        <span>{t("create.telemost")}</span>
+        <button
+          type='button'
+          role='switch'
+          aria-checked={createTelemost && canCreateTelemost}
+          className={`${styles.MeetingForm__Switch} ${createTelemost && canCreateTelemost ? styles.MeetingForm__Switch_on : ""}`}
+          onClick={handleTelemostToggle}
+        />
+      </label>
+      <p className={styles.MeetingForm__Hint}>{telemostHint}</p>
       <Input name='link' label={t("create.link")} placeholder='https://telemost.yandex.ru/j/122' />
     </div>
   );

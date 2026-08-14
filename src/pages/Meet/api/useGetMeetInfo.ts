@@ -8,13 +8,11 @@ import { useMeetLiveToasts } from "../lib/live/useMeetLiveToasts";
 
 export const useGetMeetInfo = (hash: string, isLocal: boolean) => {
   const userId = useSessionStore(state => state.user?.id ?? "guest");
-  const liveConnected = useMeetLiveSocket(hash, userId);
+  useMeetLiveSocket(hash, userId);
   const { data } = useSuspenseQuery({
     ...MeetQueries.meet(hash),
     queryKey: [...MeetQueries.meet(hash).queryKey, userId],
     staleTime: 0,
-    refetchInterval: liveConnected ? false : 5000,
-    refetchIntervalInBackground: false,
     refetchOnWindowFocus: true,
   });
 

@@ -84,10 +84,26 @@ export const ru = {
     deleteForever: "Удалить навсегда",
     deleteBack: "Назад",
     themeLight: "Светлая тема",
+    showOnboarding: "Подсказки на страницах создания и встречи",
     language: "Язык",
     tester: "Стать тестером",
     stubNotifications: "Раздел уведомлений уже в разработке!",
     stubIntegrations: "Раздел интеграций уже в разработке!",
+    notifyTitle: "Письма на почту",
+    notifyHint:
+      "Письма уходят на почту аккаунта. Гость без входа письмо не получит — у него нет адреса в профиле. Если SMTP на сервере не настроен, встречи всё равно сохраняются, просто письмо не придёт.",
+    notifyVote: "Когда участник выбрал время",
+    notifyFinal: "Когда назначили итоговое время",
+    yandexTitle: "Яндекс",
+    yandexHint:
+      "Через Яндекс ID можно входить и создавать комнату Телемоста. Если регистрировались паролем — привяжите тот же Яндекс здесь. API Телемоста работает только в Яндекс 360 для бизнеса; личный аккаунт комнату через API не создаст, ссылку можно вставить вручную.",
+    yandexConnected: "Яндекс подключён",
+    yandexDisconnected: "Яндекс не подключён",
+    yandexTelemost: "Телемост разрешён",
+    yandexConnect: "Подключить Яндекс",
+    yandexReconnect: "Подключить Телемост заново",
+    yandex360:
+      "Автосоздание комнаты — для организаций с Яндекс 360. С личного Яндекса откройте telemost.yandex.ru и вставьте ссылку в поле встречи.",
   },
   toast: {
     nameSaved: "Имя сохранено в аккаунте",
@@ -115,6 +131,8 @@ export const ru = {
     liveRemoved: "{{name}} больше не в списке проголосовавших",
     liveFinal: "Назначено итоговое время встречи",
     liveMore: "Ещё {{count}} обновлений по этой встрече",
+    notifyError: "Не получилось сохранить уведомления. Попробуйте ещё раз",
+    onboardingError: "Не получилось сохранить подсказки. Попробуйте ещё раз",
   },
   home: {
     create: "Создать встречу",
@@ -202,6 +220,14 @@ export const ru = {
     invitePlaceholder: "Имя или фамилия",
     inviteHint: "После создания встреча появится у них на главной в фильтре «Вас пригласили»",
     inviteEmpty: "Никого не нашли",
+    telemost: "Создать комнату в Яндекс Телемосте",
+    telemostHint:
+      "После создания в поле ссылки появится join-ссылка Телемоста. Комната через API — только для Яндекс 360 для бизнеса.",
+    telemostNeedLogin:
+      "Войдите через Яндекс, чтобы Termeet сам создал комнату. Ссылку с telemost.yandex.ru можно вставить и без входа.",
+    telemostNeedYandex: "Привяжите Яндекс в кабинете — тогда тогл создаст комнату. Или вставьте ссылку вручную.",
+    telemostNeedScope:
+      "Яндекс уже есть, но нет права создавать конференции. Нажмите тогл — откроется повторное разрешение Яндекса.",
   },
   entry: {
     heroTitle: "Планируй встречи легко",
@@ -344,10 +370,26 @@ export const en: typeof ru = {
     deleteForever: "Delete forever",
     deleteBack: "Back",
     themeLight: "Light theme",
+    showOnboarding: "Hints on create and meeting pages",
     language: "Language",
     tester: "Become a tester",
     stubNotifications: "Notifications are already in development!",
     stubIntegrations: "Integrations are already in development!",
+    notifyTitle: "Email notifications",
+    notifyHint:
+      "Mail goes to the address on your account. A guest without a login will not get mail — there is no address in a profile. If SMTP is not set up on the server, meetings still save, the letter just does not arrive.",
+    notifyVote: "When a participant picks time",
+    notifyFinal: "When the final time is set",
+    yandexTitle: "Yandex",
+    yandexHint:
+      "Yandex ID is used to sign in and to create a Telemost room. If you registered with a password, link the same Yandex here. The Telemost API works only with Yandex 360 for Business; a personal account cannot create a room via API — paste the link by hand.",
+    yandexConnected: "Yandex connected",
+    yandexDisconnected: "Yandex is not connected",
+    yandexTelemost: "Telemost allowed",
+    yandexConnect: "Connect Yandex",
+    yandexReconnect: "Reconnect Telemost",
+    yandex360:
+      "Auto-creating a room is for Yandex 360 organizations. From a personal Yandex open telemost.yandex.ru and paste the link into the meeting field.",
   },
   toast: {
     nameSaved: "Name saved to your account",
@@ -375,6 +417,8 @@ export const en: typeof ru = {
     liveRemoved: "{{name}} is no longer on the voters list",
     liveFinal: "The meeting time has been set",
     liveMore: "{{count}} more updates on this meeting",
+    notifyError: "Could not save notification settings. Try again",
+    onboardingError: "Could not save the hints setting. Try again",
   },
   home: {
     create: "Create meeting",
@@ -463,6 +507,14 @@ export const en: typeof ru = {
     invitePlaceholder: "First or last name",
     inviteHint: "After you create the meeting it will show up on their home in the “You were invited” filter",
     inviteEmpty: "No one found",
+    telemost: "Create a Yandex Telemost room",
+    telemostHint:
+      "After creation the meeting link field will get the Telemost join URL. Rooms via API are only for Yandex 360 for Business.",
+    telemostNeedLogin:
+      "Sign in with Yandex so Termeet can create the room. You can still paste a link from telemost.yandex.ru without signing in.",
+    telemostNeedYandex: "Link Yandex in your profile — then the toggle will create a room. Or paste a link by hand.",
+    telemostNeedScope:
+      "Yandex is already linked, but creating conferences is not allowed. Press the toggle to grant it again.",
   },
   entry: {
     heroTitle: "Plan meetings easily",
@@ -606,10 +658,26 @@ export const de: typeof ru = {
     deleteForever: "Endgültig löschen",
     deleteBack: "Zurück",
     themeLight: "Helles Theme",
+    showOnboarding: "Hinweise auf den Seiten «Meeting erstellen» und «Meeting»",
     language: "Sprache",
     tester: "Tester werden",
     stubNotifications: "Benachrichtigungen sind schon in Arbeit!",
     stubIntegrations: "Integrationen sind schon in Arbeit!",
+    notifyTitle: "E-Mail-Benachrichtigungen",
+    notifyHint:
+      "Mails gehen an die Adresse im Konto. Ein Gast ohne Login bekommt keine Mail — im Profil gibt es keine Adresse. Wenn SMTP auf dem Server fehlt, werden Meetings trotzdem gespeichert, die Mail kommt nur nicht an.",
+    notifyVote: "Wenn ein Teilnehmer eine Zeit wählt",
+    notifyFinal: "Wenn die endgültige Zeit feststeht",
+    yandexTitle: "Yandex",
+    yandexHint:
+      "Über Yandex ID können Sie sich anmelden und einen Telemost-Raum anlegen. Bei Registrierung mit Passwort binden Sie dasselbe Yandex hier. Die Telemost-API gilt nur für Yandex 360 for Business; ein privates Konto kann den Raum nicht per API anlegen — Link per Hand einfügen.",
+    yandexConnected: "Yandex verbunden",
+    yandexDisconnected: "Yandex nicht verbunden",
+    yandexTelemost: "Telemost erlaubt",
+    yandexConnect: "Yandex verbinden",
+    yandexReconnect: "Telemost erneut verbinden",
+    yandex360:
+      "Automatische Räume gelten für Yandex-360-Organisationen. Mit privatem Yandex telemost.yandex.ru öffnen und den Link ins Meeting-Feld einfügen.",
   },
   toast: {
     nameSaved: "Name im Konto gespeichert",
@@ -638,6 +706,8 @@ export const de: typeof ru = {
     liveRemoved: "{{name}} ist nicht mehr in der Liste der Abstimmenden",
     liveFinal: "Die endgültige Meetingzeit wurde festgelegt",
     liveMore: "Noch {{count}} Updates zu diesem Meeting",
+    notifyError: "Benachrichtigungen konnten nicht gespeichert werden. Nochmal versuchen",
+    onboardingError: "Hinweise konnten nicht gespeichert werden. Nochmal versuchen",
   },
   home: {
     create: "Meeting erstellen",
@@ -729,6 +799,14 @@ export const de: typeof ru = {
     inviteHint:
       "Nach dem Erstellen erscheint das Meeting bei ihnen auf der Startseite im Filter „Sie wurden eingeladen“",
     inviteEmpty: "Niemand gefunden",
+    telemost: "Yandex-Telemost-Raum erstellen",
+    telemostHint:
+      "Nach dem Erstellen steht die Telemost-Join-URL im Linkfeld. Räume per API nur für Yandex 360 for Business.",
+    telemostNeedLogin:
+      "Mit Yandex anmelden, damit Termeet den Raum anlegt. Den Link von telemost.yandex.ru können Sie auch ohne Login einfügen.",
+    telemostNeedYandex: "Yandex im Profil verbinden — dann legt der Schalter den Raum an. Oder Link per Hand einfügen.",
+    telemostNeedScope:
+      "Yandex ist schon verbunden, aber Konferenzen anzulegen ist nicht erlaubt. Schalter drücken, um die Rechte erneut zu geben.",
   },
   entry: {
     heroTitle: "Meetings leicht planen",

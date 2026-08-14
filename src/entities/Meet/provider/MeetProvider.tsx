@@ -14,18 +14,27 @@ export function MeetProvider({ children, ...initialState }: MeetProviderProps) {
       timeRanges: initialState.timeRanges,
       users: initialState.users,
       finalSlot: initialState.finalSlot,
+      duration: initialState.duration,
     };
     const current = store.getState();
     if (
       current.timeInfo === nextState.timeInfo &&
       current.timeRanges === nextState.timeRanges &&
       current.users === nextState.users &&
-      current.finalSlot === nextState.finalSlot
+      current.finalSlot === nextState.finalSlot &&
+      current.duration === nextState.duration
     ) {
       return;
     }
     store.setState(nextState);
-  }, [initialState.timeInfo, initialState.timeRanges, initialState.users, initialState.finalSlot, store]);
+  }, [
+    initialState.timeInfo,
+    initialState.timeRanges,
+    initialState.users,
+    initialState.finalSlot,
+    initialState.duration,
+    store,
+  ]);
 
   return <MeetContext.Provider value={store}>{children}</MeetContext.Provider>;
 }

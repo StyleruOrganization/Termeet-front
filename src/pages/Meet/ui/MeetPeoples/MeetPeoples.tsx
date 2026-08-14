@@ -43,11 +43,6 @@ export const MeetPeoples = ({
         Title={
           <h3 className={styles.MeetPeoples__Title}>
             Участники: <span className={styles.MeetPeoples__Count}>{users.length}</span>
-            {isFinalizing && hasHoveredUser ? (
-              <span className={styles.MeetPeoples__LiveCount}>
-                в этом времени {hoveredUsers.isEmptySlot ? 0 : hoveredUsers.users.length}
-              </span>
-            ) : null}
           </h3>
         }
         Content={
@@ -56,7 +51,10 @@ export const MeetPeoples = ({
               {users.map(user => {
                 const isHovered = hoveredUsers.users.includes(user);
                 const shouldDim =
-                  (hasHoveredUser && !isHovered) || (hoveredUser && hoveredUser !== user) || hoveredUsers.isEmptySlot;
+                  !isFinalizing &&
+                  Boolean(
+                    (hasHoveredUser && !isHovered) || (hoveredUser && hoveredUser !== user) || hoveredUsers.isEmptySlot,
+                  );
                 const canDeleteThis = canDelete && user !== mySlotName && user !== organizerName;
 
                 return (
@@ -68,10 +66,7 @@ export const MeetPeoples = ({
                       onPointerLeave={() => {
                         if (!isTouch) handlePersonChoose("");
                       }}
-                      style={{
-                        color: shouldDim ? "var(--text-disabled)" : "var(--text-main)",
-                      }}
-                      className={`${styles.MeetPeoples__UserName} ${isHovered ? styles.MeetPeoples__user_hovered : ""} ${isFinalizing && isHovered ? styles.MeetPeoples__UserName_can : ""}`}
+                      className={`${styles.MeetPeoples__UserName} ${isHovered ? styles.MeetPeoples__user_hovered : ""} ${isFinalizing && isHovered ? styles.MeetPeoples__UserName_can : ""} ${shouldDim ? styles.MeetPeoples__UserName_dim : ""}`}
                     >
                       {user}
                     </span>

@@ -57,6 +57,7 @@ export interface MeetCreate {
   duration?: string | null;
   dataRange: string[][];
   invitedUserIds?: string[];
+  createTelemost?: boolean;
 }
 
 export interface MeetSettingsUpdate {

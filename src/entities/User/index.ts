@@ -12,6 +12,7 @@ export type {
 export { useSessionStore } from "./model/store/useSessionStore";
 export { useRestoreSession } from "./lib/useRestoreSession";
 export { useSyncUserPreferences } from "./lib/useSyncUserPreferences";
+export { useShowOnboarding } from "./lib/useShowOnboarding";
 export {
   WEEKDAY_SHORT,
   TEMPLATE_TIMES,

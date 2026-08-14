@@ -21,6 +21,11 @@ export interface IUser {
   locale?: "ru" | "en" | "de";
   grid_window_start?: string;
   grid_window_end?: string;
+  notify_on_vote?: boolean;
+  notify_on_final?: boolean;
+  has_yandex?: boolean;
+  has_telemost?: boolean;
+  show_onboarding?: boolean;
 }
 
 export interface IUserSettingsUpdate {
@@ -33,6 +38,9 @@ export interface IUserSettingsUpdate {
   locale?: "ru" | "en" | "de";
   grid_window_start?: string;
   grid_window_end?: string;
+  notify_on_vote?: boolean;
+  notify_on_final?: boolean;
+  show_onboarding?: boolean;
 }
 
 export interface ITokenInfo {

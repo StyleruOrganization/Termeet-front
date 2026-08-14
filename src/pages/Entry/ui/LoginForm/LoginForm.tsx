@@ -377,19 +377,44 @@ export const LoginForm = () => {
 
             {formError && <span className={styles.LoginForm__Error}>{formError}</span>}
 
+            <p className={styles.LoginForm__Benefit}>
+              {view === "register"
+                ? "Через Яндекс сразу будут Телемост и письма о встрече. Пароль тоже можно — Яндекс потом привяжется в кабинете."
+                : "Яндекс открывает Телемост и уведомления. Если вы уже с паролем — привяжите Яндекс в кабинете."}
+            </p>
+
             <div className={styles.LoginForm__FL16}>
-              <button className='baseButton mainButton' type='submit' disabled={isPending}>
-                {view === "register" ? "Зарегистрироваться" : "Войти"}
-              </button>
-              <button
-                className='baseButton outlineButton'
-                type='button'
-                onClick={handleYandexLogin}
-                disabled={isPending}
-              >
-                <YandexLogo />
-                <span>Войти с помощью Яндекс</span>
-              </button>
+              {view === "register" ? (
+                <>
+                  <button
+                    className='baseButton mainButton'
+                    type='button'
+                    onClick={handleYandexLogin}
+                    disabled={isPending}
+                  >
+                    <YandexLogo />
+                    <span>Зарегистрироваться через Яндекс</span>
+                  </button>
+                  <button className='baseButton outlineButton' type='submit' disabled={isPending}>
+                    Зарегистрироваться с паролем
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button className='baseButton mainButton' type='submit' disabled={isPending}>
+                    Войти
+                  </button>
+                  <button
+                    className='baseButton outlineButton'
+                    type='button'
+                    onClick={handleYandexLogin}
+                    disabled={isPending}
+                  >
+                    <YandexLogo />
+                    <span>Войти с помощью Яндекс</span>
+                  </button>
+                </>
+              )}
             </div>
           </>
         )}

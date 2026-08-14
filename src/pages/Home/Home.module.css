@@ -172,18 +172,19 @@
   border: 1px solid var(--semantics-gray-hover);
   border-radius: 12px;
 
-  cursor: default;
+  cursor: pointer;
 
   font-size: 3rem;
 }
 
 .Home__PeopleList {
-  position: absolute;
-  z-index: 3;
-  top: calc(100% + 4px);
-  right: 0;
+  position: fixed;
+  z-index: 8;
+  top: 0;
+  left: 0;
 
-  display: none;
+  display: flex;
+  visibility: hidden;
   gap: 4px;
   flex-direction: column;
 
@@ -197,12 +198,20 @@
 
   font-size: 3rem;
 
+  max-width: min(240px, calc(100vw - 16px));
   min-width: 160px;
+
+  pointer-events: none;
 }
 
-.Home__People:hover .Home__PeopleList,
-.Home__People:focus-within .Home__PeopleList {
-  display: flex;
+.Home__PeopleList li {
+  overflow-wrap: anywhere;
+}
+
+.Home__PeopleList_open {
+  visibility: visible;
+
+  pointer-events: auto;
 }
 
 .Home__PeopleEmpty {

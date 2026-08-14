@@ -44,7 +44,20 @@
 .Onboarding__Item__Text {
   color: var(--text-main);
 
-  font-size: var(--text-body)
+  font-size: var(--text-body);
+}
+
+.Onboarding__Hide {
+  padding: 0;
+
+  color: var(--text-secondary);
+
+  align-self: flex-start;
+
+  background: none;
+
+  font-size: 3rem;
+  line-height: 1.4;
 }
 
 .Onboarding__Congratulate__Text {

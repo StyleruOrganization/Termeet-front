@@ -1,4 +1,4 @@
-import { timeToMinutes } from "@shared/libs";
+import { durationToMinutes, timeToMinutes } from "@shared/libs";
 
 /**
  * Форматирует ввод времени, автоматически добавляя двоеточие
@@ -53,20 +53,4 @@ export const isDurationValid = (duration: string, timeStart: string, timeEnd: st
   const availableMinutes = endMinutes - startMinutes;
 
   return durationMinutes <= availableMinutes;
-};
-
-const durationToMinutes = (duration: string): number => {
-  const normalized = duration.trim().toLowerCase();
-
-  if (normalized.includes("мин")) {
-    const value = parseFloat(normalized.replace("мин", "").trim());
-    return value;
-  }
-
-  if (normalized.includes("час")) {
-    const value = parseFloat(normalized.replace("часа", "").replace("час", "").trim().replace(",", "."));
-    return value * 60;
-  }
-
-  return 0;
 };

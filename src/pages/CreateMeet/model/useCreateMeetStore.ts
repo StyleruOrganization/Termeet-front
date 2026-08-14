@@ -17,7 +17,7 @@ const validators: {
     return undefined;
   },
   link: (value: string) => {
-    if (value.trim().length > 128) return "Размер ссылки не должен превышать 128 символов";
+    if (value.trim().length > 256) return "Размер ссылки не должен превышать 256 символов";
     if (value && !/^https?:\/\/.+/.test(value)) return "Введите корректную ссылку (http:// или https://)";
     return undefined;
   },
@@ -54,6 +54,7 @@ export const useCreateMeetStore = create<MeetingFormState>((set, get) => ({
     link: "",
     timeDuration: "",
     invitedUsers: [],
+    createTelemost: false,
   },
   lastCorrectedValues: {
     timeStart: "10 : 00",
@@ -204,6 +205,7 @@ export const useCreateMeetStore = create<MeetingFormState>((set, get) => ({
         link: "",
         timeDuration: "",
         invitedUsers: [],
+        createTelemost: false,
       },
       lastCorrectedValues: {
         timeStart: "10 : 00",
@@ -230,6 +232,14 @@ export const useCreateMeetStore = create<MeetingFormState>((set, get) => ({
       values: {
         ...state.values,
         invitedUsers: state.values.invitedUsers.filter(item => item.id !== id),
+      },
+    }));
+  },
+  setCreateTelemost: value => {
+    set(state => ({
+      values: {
+        ...state.values,
+        createTelemost: value,
       },
     }));
   },

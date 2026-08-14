@@ -1,7 +1,9 @@
 import { TextArea as TextAreaBase, type ITextAreaProps } from "@shared/ui";
 import { type CreateMeetFields, useCreateMeetStore } from "../../model";
 
-export const TextArea = ({ name, ...textAreaProps }: ITextAreaProps & { name: CreateMeetFields }) => {
+type TextMeetField = Exclude<CreateMeetFields, "dates" | "invitedUsers" | "createTelemost">;
+
+export const TextArea = ({ name, ...textAreaProps }: ITextAreaProps & { name: TextMeetField }) => {
   const setValue = useCreateMeetStore(state => state.setValue);
   const validateField = useCreateMeetStore(state => state.validateField);
   const error = useCreateMeetStore(state => state.errors[name]);
@@ -13,7 +15,7 @@ export const TextArea = ({ name, ...textAreaProps }: ITextAreaProps & { name: Cr
       {...textAreaProps}
       error={error}
       name={name}
-      value={textAreaValue}
+      value={typeof textAreaValue === "string" ? textAreaValue : ""}
       onChange={event => {
         setValue(name, event.target.value);
       }}
