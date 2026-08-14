@@ -78,12 +78,16 @@
   color: var(--text-disabled);
   background-color: transparent;
 
+  transition: color 0.3s ease-in-out;
+
   svg {
     width: 16px;
     height: 16px;
   }
 
   svg path {
+    transition: fill 0.3s ease-in-out;
+
     fill: currentcolor;
   }
 

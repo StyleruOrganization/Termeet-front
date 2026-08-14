@@ -3,6 +3,7 @@ export { generateTimeOptions } from "./times/generateTimeOptions";
 export { isMoreOrEqThan30Min } from "./times/isMoreOrEqThan30Min";
 export { convertUTCToTimezone } from "./times/convertUTCToTimezone";
 export { isTimeBefore } from "./times/isTimeBefore";
+export { isSlotInPast, isDateBeforeToday, startOfToday } from "./times/isSlotInPast";
 export { timeToMinutes } from "./times/timeToMinutes";
 export { isTouchDevice } from "./devices/isTouchDevice";
 export { debounce } from "./funcWrappers/debounce";

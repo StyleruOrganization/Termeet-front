@@ -1,31 +1,39 @@
 .TemplateWeekModal {
   display: flex;
-  gap: 16px;
+  gap: 12px;
   flex-direction: column;
 
   width: 100%;
-  padding: 32px 24px 24px;
+  padding: 8px 24px 24px;
 }
 
 .TemplateWeekModal h2 {
+  margin: 0;
+  padding-right: 48px;
+
   color: var(--text-main);
 
   font-size: var(--text-heading);
 }
 
 .TemplateWeekModal p {
+  margin: 0;
+
   color: var(--text-main);
 
   font-size: var(--text-body);
 }
 
-.TemplateWeekModal__Grid {
+.TemplateWeekModal__Table {
   display: flex;
-  overflow: auto;
+  overflow: hidden;
 
-  max-height: min(70vh, 640px);
+  background-color: var(--fill-controls);
+  border: 1px solid var(--semantics-gray-hover);
+  border-radius: 32px;
 
-  touch-action: none;
+  font-size: 3rem;
+
   user-select: none;
 }
 
@@ -34,30 +42,60 @@
   flex-direction: column;
   flex-shrink: 0;
 
-  width: 44px;
-}
-
-.TemplateWeekModal__Corner,
-.TemplateWeekModal__DayTitle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  height: 36px;
+  width: 64px;
+  padding-top: 44px;
 
   color: var(--text-main);
 
-  font-size: var(--text-body);
+  align-self: start;
+}
+
+.TemplateWeekModal__Columns {
+  display: flex;
+  overflow: auto hidden;
+  flex: 1;
+
+  min-width: 0;
+  -webkit-overflow-scrolling: touch;
+
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  touch-action: pan-x pan-y;
+}
+
+.TemplateWeekModal__Columns::-webkit-scrollbar {
+  display: none;
+
+  width: 0;
+  height: 0;
+}
+
+.TemplateWeekModal__DayTitle {
+  display: flex;
+  overflow: hidden;
+  justify-content: center;
+  align-items: center;
+
+  color: var(--text-main);
+
+  font-size: 3rem;
   font-weight: 700;
+  line-height: 100%;
+  margin-top: 4px;
+
+  min-height: 40px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .TemplateWeekModal__TimeLabel {
   display: flex;
+  justify-content: center;
   align-items: center;
-  justify-content: flex-end;
 
   height: 20px;
-  padding-right: 6px;
+
+  text-align: center;
 
   color: var(--text-main);
 
@@ -66,10 +104,12 @@
 
 .TemplateWeekModal__Day {
   display: flex;
-  flex: 1;
+  flex: 0 0 92px;
   flex-direction: column;
 
-  min-width: 36px;
+  width: 92px;
+
+  min-width: 92px;
 }
 
 .TemplateWeekModal__Cell {
@@ -95,6 +135,22 @@
   border-color: var(--semantics-blue-950);
 }
 
+.TemplateWeekModal__Day:first-child [data-first-cell="true"] {
+  border-top-left-radius: 32px;
+}
+
+.TemplateWeekModal__Day:last-child [data-first-cell="true"] {
+  border-top-right-radius: 32px;
+}
+
+.TemplateWeekModal__Day:first-child [data-last-cell="true"] {
+  border-bottom-left-radius: 32px;
+}
+
+.TemplateWeekModal__Day:last-child [data-last-cell="true"] {
+  border-bottom-right-radius: 32px;
+}
+
 .TemplateWeekModal__Buttons {
   display: flex;
   gap: 8px;
@@ -103,6 +159,36 @@
 
 @media (width < 768px) {
   .TemplateWeekModal {
-    padding: 48px 12px 16px;
+    padding: 12px 12px 16px;
+  }
+
+  .TemplateWeekModal__Table {
+    border-radius: 20px;
+  }
+
+  .TemplateWeekModal__Times {
+    width: 48px;
+  }
+
+  .TemplateWeekModal__Day {
+    flex-basis: 92px;
+
+    width: 92px;
+  }
+
+  .TemplateWeekModal__Day:first-child [data-first-cell="true"] {
+    border-top-left-radius: 20px;
+  }
+
+  .TemplateWeekModal__Day:last-child [data-first-cell="true"] {
+    border-top-right-radius: 20px;
+  }
+
+  .TemplateWeekModal__Day:first-child [data-last-cell="true"] {
+    border-bottom-left-radius: 20px;
+  }
+
+  .TemplateWeekModal__Day:last-child [data-last-cell="true"] {
+    border-bottom-right-radius: 20px;
   }
 }

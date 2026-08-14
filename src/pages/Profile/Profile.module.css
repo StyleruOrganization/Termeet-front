@@ -30,31 +30,31 @@
 
 .Profile__Nav {
   position: sticky;
-  top: 16px;
+  top: 24px;
   z-index: 2;
 
   display: flex;
-  gap: 4px;
+  gap: 2px;
   flex-direction: column;
 
-  width: 240px;
-  padding: 8px;
+  width: 200px;
+  padding: 4px;
 
   background-color: var(--fill-controls);
-  border-radius: 24px;
+  border-radius: 16px;
 }
 
 .Profile__NavItem {
-  padding: 12px 16px;
+  padding: 8px 12px;
 
   text-align: left;
 
   color: var(--text-main);
-  border-radius: 16px;
+  border-radius: 12px;
 
   background: none;
 
-  font-size: var(--text-body);
+  font-size: 3rem;
 }
 
 .Profile__NavItem_active {
@@ -64,6 +64,8 @@
 
 .Profile__Content {
   flex: 1;
+
+  width: 100%;
 
   min-width: 0;
 }
@@ -234,7 +236,7 @@
   background-color: var(--fill-bg);
   border-radius: 160px;
 
-  font-size: var(--text-small);
+  font-size: 3rem;
 }
 
 .Profile__ToggleRow {
@@ -294,12 +296,14 @@
   font-size: var(--text-heading);
   font-weight: 700;
 
-  min-height: 280px;
+  min-height: 400px;
 }
 
 .Profile__StubImage {
-  width: 160px;
+  width: min(320px, 70vw);
   height: auto;
+
+  max-width: 100%;
 
   object-fit: contain;
 }
@@ -355,16 +359,18 @@
 @media (width < 768px) {
   .Profile {
     flex-direction: column;
+    align-items: stretch;
   }
 
   .Profile__Nav {
     position: sticky;
-    top: 0;
+    top: 12px;
 
-    flex-direction: row;
-    overflow: auto hidden;
+    flex-flow: row wrap;
+    overflow: hidden;
 
     width: 100%;
+    padding: 4px;
   }
 
   .Profile__DeleteButton {
@@ -390,6 +396,20 @@
   }
 
   .Profile__NavItem {
-    flex-shrink: 0;
+    flex: 1 1 auto;
+
+    padding: 8px 10px;
+  }
+
+  .Profile__Placeholder {
+    gap: 12px;
+
+    font-size: var(--text-body);
+
+    min-height: 260px;
+  }
+
+  .Profile__StubImage {
+    width: min(240px, 64vw);
   }
 }

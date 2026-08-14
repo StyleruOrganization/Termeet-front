@@ -1,5 +1,5 @@
 import { cellInIntervals, intervalsForWeekday, isoWeekdayFromDate, type IAvailabilityInterval } from "@/entities/User";
-import { generateTimeOptions } from "@/shared/libs";
+import { generateTimeOptions, isSlotInPast } from "@/shared/libs";
 import type { IMeet } from "@/entities/Meet";
 
 export const buildPrefillFromTemplate = (
@@ -21,7 +21,7 @@ export const buildPrefillFromTemplate = (
     inner.timeRanges.forEach(([startTime, endTime]) => {
       generateTimeOptions(startTime, endTime).forEach(([hours, minutes]) => {
         const key = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
-        if (cellInIntervals(key, weekdayIntervals) && !times.includes(key)) {
+        if (cellInIntervals(key, weekdayIntervals) && !times.includes(key) && !isSlotInPast(`${date}T${key}`)) {
           times.push(key);
         }
       });

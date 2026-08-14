@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Calendar as ReactCalendar } from "react-calendar";
 import Arrrow from "@assets/icons/arrow.svg";
-import { isTouchDevice } from "@shared/libs";
+import { isTouchDevice, isDateBeforeToday, startOfToday } from "@shared/libs";
 import styles from "./Calendar.module.css";
 import { useCalendarData, formatMonthYearHeading, formatWeekday } from "../../lib";
 import "./overWriteCalendar.css";
 
 export const Calendar = ({
-  minDate = new Date(),
+  minDate = startOfToday(),
   value = new Date(),
   suggestMessage,
 }: {
@@ -27,6 +27,9 @@ export const Calendar = ({
   } = useCalendarData();
   const isTouch = isTouchDevice();
   const handlePointerMove = (date: Date) => {
+    if (isDateBeforeToday(date)) {
+      return;
+    }
     if (selectedDateForInterval && hoveredDate?.toDateString() !== date.toDateString()) {
       console.log("IN POINTER MOVE");
 
@@ -47,6 +50,7 @@ export const Calendar = ({
         nextAriaLabel='Go to next'
         prevAriaLabel='Go to prev'
         minDate={minDate}
+        tileDisabled={({ date }) => isDateBeforeToday(date)}
         value={value}
         next2Label={null}
         prev2Label={null}
@@ -57,6 +61,9 @@ export const Calendar = ({
         }}
         formatShortWeekday={formatWeekday}
         onClickDay={date => {
+          if (isDateBeforeToday(date)) {
+            return;
+          }
           const dateInExistInterval = selectedDates.find(({ start, end }) => {
             return start <= date && date <= end;
           });

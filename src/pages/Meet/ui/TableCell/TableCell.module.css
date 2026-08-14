@@ -1,4 +1,8 @@
 .TableCell {
+  position: relative;
+
+  overflow: hidden;
+
   width: 100%;
   height: 20px;
   
@@ -15,14 +19,24 @@
 }
 
 .TableCell_disabled {
-  background: repeating-linear-gradient(
-    -45deg,           /* угол наклона 45 градусов */
-    var(--semantics-gray-default) 0,                  /* цвет полоски */
-    var(--semantics-gray-default) 2px,                  /* цвет полоски */
-    var(--fill-bg) 2px,                             /* начало прозрачного промежутка */
-    var(--fill-bg) 8px  
-  );
   cursor: default;
+}
+
+.TableCell_striped::after {
+  position: absolute;
+
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--semantics-gray-default) 0,
+    var(--semantics-gray-default) 2px,
+    transparent 2px,
+    transparent 8px
+  );
+
+  content: "";
+  inset: 0;
+
+  pointer-events: none;
 }
 
 .TableCell_disabled:hover {

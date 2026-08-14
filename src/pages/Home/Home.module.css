@@ -158,15 +158,21 @@
   position: relative;
 
   flex-shrink: 0;
+
+  outline: none;
 }
 
 .Home__PeopleToggle {
+  display: inline-block;
+
   padding: 6px 10px;
 
   color: var(--text-secondary);
   background-color: var(--fill-bg);
   border: 1px solid var(--semantics-gray-hover);
   border-radius: 12px;
+
+  cursor: default;
 
   font-size: 3rem;
 }
@@ -177,7 +183,7 @@
   top: calc(100% + 4px);
   right: 0;
 
-  display: flex;
+  display: none;
   gap: 4px;
   flex-direction: column;
 
@@ -192,6 +198,11 @@
   font-size: 3rem;
 
   min-width: 160px;
+}
+
+.Home__People:hover .Home__PeopleList,
+.Home__People:focus-within .Home__PeopleList {
+  display: flex;
 }
 
 .Home__PeopleEmpty {
@@ -214,6 +225,7 @@
   padding: 20px 24px;
 
   background-color: var(--fill-controls);
+  border: 1px solid var(--semantics-gray-hover);
   border-radius: 16px;
 }
 
@@ -260,14 +272,13 @@
 }
 
 .HomeCalendar__Week {
-  padding: 12px 0;
+  padding: 8px 0;
 
   text-align: center;
 
-  color: var(--text-main);
+  color: var(--text-secondary);
 
-  font-size: var(--text-body);
-  margin-bottom: 8px;
+  font-size: 3rem;
 }
 
 .HomeCalendar__Day {
@@ -292,6 +303,10 @@
 
 .HomeCalendar__Day:hover {
   background-color: var(--components-hover);
+}
+
+.HomeCalendar__Day:active {
+  transform: scale(0.95);
 }
 
 .HomeCalendar__Day_today {
@@ -329,6 +344,29 @@
 
 .HomeCalendar__Day_selected .HomeCalendar__Dot {
   background-color: var(--fill-bg);
+}
+
+.HomeCalendar__Hint {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
+  margin: 12px 0 0;
+
+  color: var(--text-secondary);
+
+  font-size: 3rem;
+  line-height: 1.4;
+}
+
+.HomeCalendar__HintDot {
+  flex-shrink: 0;
+
+  width: 5px;
+  height: 5px;
+
+  background-color: var(--semantics-blue-950);
+  border-radius: 50%;
 }
 
 @media (width < 1024px) {

@@ -3,17 +3,36 @@
   gap: 12px;
   flex-direction: column;
 
-  min-width: min(420px, 80vw);
+  width: 100%;
 }
 
 .MeetPrefillModal h2 {
+  margin: 0;
+  padding-right: 40px;
+
   color: var(--text-main);
 
   font-size: var(--text-heading);
 }
 
 .MeetPrefillModal p {
-  color: var(--text-main);
+  margin: 0;
+
+  color: var(--text-secondary);
 
   font-size: var(--text-body);
+}
+
+.MeetPrefillModal__Actions {
+  display: flex;
+  gap: 8px;
+  flex-direction: column;
+
+  margin-top: 8px;
+}
+
+@media (width < 768px) {
+  .MeetPrefillModal h2 {
+    padding-right: 36px;
+  }
 }

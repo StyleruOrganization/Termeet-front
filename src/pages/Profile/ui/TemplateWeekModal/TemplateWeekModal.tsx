@@ -60,15 +60,16 @@ export const TemplateWeekModal = ({ isOpen, intervals, onClose, onSave }: Templa
     if (!cell) {
       return;
     }
-    event.preventDefault();
-    event.currentTarget.setPointerCapture(event.pointerId);
+    if (event.pointerType === "mouse") {
+      event.currentTarget.setPointerCapture(event.pointerId);
+    }
     const selected = week.get(cell.weekday)?.includes(cell.time) ?? false;
-    dragRef.current = { remove: selected };
+    dragRef.current = event.pointerType === "mouse" ? { remove: selected } : null;
     toggleCell(cell.weekday, cell.time, selected);
   };
 
   const handlePointerMove: React.PointerEventHandler<HTMLDivElement> = event => {
-    if (!dragRef.current) {
+    if (!dragRef.current || event.pointerType !== "mouse") {
       return;
     }
     const cell = parseCell(
@@ -101,38 +102,41 @@ export const TemplateWeekModal = ({ isOpen, intervals, onClose, onSave }: Templa
           Зажмите и проведите по ячейкам — как на встрече. Понедельник отдельно от субботы. На встрече подставятся часы
           того дня недели, который выпал в сетке.
         </p>
-        <div
-          className={styles.TemplateWeekModal__Grid}
-          onPointerDown={handlePointerDown}
-          onPointerMove={handlePointerMove}
-          onPointerUp={handlePointerUp}
-          onPointerCancel={handlePointerUp}
-        >
+        <div className={styles.TemplateWeekModal__Table}>
           <div className={styles.TemplateWeekModal__Times}>
-            <span className={styles.TemplateWeekModal__Corner} />
             {TEMPLATE_TIMES.map(time => (
               <span key={time} className={styles.TemplateWeekModal__TimeLabel}>
                 {time.endsWith(":00") ? time : ""}
               </span>
             ))}
           </div>
-          {WEEKDAY_SHORT.map((label, index) => {
-            const weekday = index + 1;
-            const selected = new Set(week.get(weekday) ?? []);
-            return (
-              <div key={weekday} className={styles.TemplateWeekModal__Day}>
-                <span className={styles.TemplateWeekModal__DayTitle}>{label}</span>
-                {TEMPLATE_TIMES.map(time => (
-                  <div
-                    key={time}
-                    data-week-cell={`${weekday}T${time}`}
-                    className={`${styles.TemplateWeekModal__Cell} ${selected.has(time) ? styles.TemplateWeekModal__Cell_selected : ""}`}
-                    aria-label={`${label} ${time}`}
-                  />
-                ))}
-              </div>
-            );
-          })}
+          <div
+            className={styles.TemplateWeekModal__Columns}
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            onPointerCancel={handlePointerUp}
+          >
+            {WEEKDAY_SHORT.map((label, index) => {
+              const weekday = index + 1;
+              const selected = new Set(week.get(weekday) ?? []);
+              return (
+                <div key={weekday} className={styles.TemplateWeekModal__Day}>
+                  <span className={styles.TemplateWeekModal__DayTitle}>{label}</span>
+                  {TEMPLATE_TIMES.map((time, timeIndex) => (
+                    <div
+                      key={time}
+                      data-week-cell={`${weekday}T${time}`}
+                      data-first-cell={timeIndex === 0}
+                      data-last-cell={timeIndex === TEMPLATE_TIMES.length - 1}
+                      className={`${styles.TemplateWeekModal__Cell} ${selected.has(time) ? styles.TemplateWeekModal__Cell_selected : ""}`}
+                      aria-label={`${label} ${time}`}
+                    />
+                  ))}
+                </div>
+              );
+            })}
+          </div>
         </div>
         <div className={styles.TemplateWeekModal__Buttons}>
           <button

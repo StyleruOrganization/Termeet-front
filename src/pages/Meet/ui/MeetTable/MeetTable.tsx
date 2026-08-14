@@ -232,9 +232,9 @@ export const MeetTable = ({
                       <ApproveIcon />
                       <span>Сохранить</span>
                     </button>
-                    {user ? (
+                    {user && mySlotName ? (
                       <button type='button' className={styles.MeetTable__NameLink} onClick={() => setIsModalOpen(true)}>
-                        Сохранить под другим именем
+                        Изменить имя
                       </button>
                     ) : null}
                   </>
@@ -288,6 +288,11 @@ export const MeetTable = ({
                     }}
                   >
                     {mySlotName ? "Изменить время" : "Добавить время"}
+                  </button>
+                ) : null}
+                {!hasFinal && user && mySlotName ? (
+                  <button type='button' className={styles.MeetTable__NameLink} onClick={() => setIsModalOpen(true)}>
+                    Изменить имя
                   </button>
                 ) : null}
                 {!hasFinal && !mySlotName && canVote && hasAvailability(user?.availability_template ?? []) ? (

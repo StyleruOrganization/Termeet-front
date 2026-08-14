@@ -48,40 +48,42 @@ export const MeetPrefillModal = ({ hash, canVote, mySlotName, timeInfo }: MeetPr
   };
 
   return (
-    <ModalWrapper isOpen={isOpen} onClose={closeForVisit} isAnimate>
+    <ModalWrapper compact isOpen={isOpen} onClose={closeForVisit} isAnimate>
       <div className={styles.MeetPrefillModal}>
         <h2>{t("prefill.title")}</h2>
         <p>{t("prefill.body")}</p>
-        <button
-          type='button'
-          className='baseButton mainButton'
-          onClick={() => {
-            closeForVisit();
-            startEditingSlots(null, prefill);
-          }}
-        >
-          {t("prefill.yes")}
-        </button>
-        <button
-          type='button'
-          className='baseButton outlineButton'
-          onClick={() => {
-            closeForVisit();
-            startEditingSlots();
-          }}
-        >
-          {t("prefill.no")}
-        </button>
-        <button
-          type='button'
-          className='baseButton secondaryButton'
-          onClick={() => {
-            closeForVisit();
-            updateSettings({ suggest_prefill: false }).catch(() => undefined);
-          }}
-        >
-          {t("prefill.never")}
-        </button>
+        <div className={styles.MeetPrefillModal__Actions}>
+          <button
+            type='button'
+            className='baseButton mainButton'
+            onClick={() => {
+              closeForVisit();
+              startEditingSlots(null, prefill);
+            }}
+          >
+            {t("prefill.yes")}
+          </button>
+          <button
+            type='button'
+            className='baseButton outlineButton'
+            onClick={() => {
+              closeForVisit();
+              startEditingSlots();
+            }}
+          >
+            {t("prefill.no")}
+          </button>
+          <button
+            type='button'
+            className='baseButton secondaryButton'
+            onClick={() => {
+              closeForVisit();
+              updateSettings({ suggest_prefill: false }).catch(() => undefined);
+            }}
+          >
+            {t("prefill.never")}
+          </button>
+        </div>
       </div>
     </ModalWrapper>
   );

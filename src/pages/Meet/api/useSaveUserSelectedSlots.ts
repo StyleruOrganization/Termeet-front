@@ -6,6 +6,7 @@ import { apiClient, HttpError } from "@/shared/api";
 interface ISaveSlotsPayload {
   name: string;
   isEdit?: boolean;
+  previousName?: string;
 }
 
 type TimeInfo = Map<
@@ -48,7 +49,7 @@ export const useSaveUserSelectedSlots = (meetHash: string, onMutate?: () => void
       await apiClient.patch(endpoint, { name, slots: preparedSlots });
       return { empty: preparedSlots.length === 0 };
     },
-    onMutate: async ({ name, isEdit }) => {
+    onMutate: async ({ name, isEdit, previousName }) => {
       await queryClient.cancelQueries({
         queryKey: MeetQueries.meet(meetHash).queryKey,
       });
@@ -59,13 +60,14 @@ export const useSaveUserSelectedSlots = (meetHash: string, onMutate?: () => void
       };
 
       const newTimeInfo = cloneTimeInfo(oldTimeInfo);
+      const oldName = previousName || name;
 
       if (isEdit) {
         newTimeInfo.forEach(inner => {
           inner.userSlots.forEach((users, time) => {
             inner.userSlots.set(
               time,
-              users.filter(user => user !== name),
+              users.filter(user => user !== oldName),
             );
           });
         });
@@ -92,13 +94,19 @@ export const useSaveUserSelectedSlots = (meetHash: string, onMutate?: () => void
 
       const hasSlots = newSelectedEntries.some(([, times]) => times.length > 0);
 
-      setUsers(
-        isEdit && !hasSlots
-          ? oldUsers.filter(user => user !== name)
-          : isEdit || oldUsers.includes(name)
-            ? [...(oldUsers || [])]
-            : [...(oldUsers || []), name],
-      );
+      let nextUsers = [...(oldUsers || [])];
+      if (isEdit && !hasSlots) {
+        nextUsers = nextUsers.filter(user => user !== oldName);
+      } else if (isEdit && oldName !== name) {
+        nextUsers = nextUsers.map(user => (user === oldName ? name : user));
+        if (!nextUsers.includes(name)) {
+          nextUsers.push(name);
+        }
+      } else if (!isEdit && !nextUsers.includes(name)) {
+        nextUsers.push(name);
+      }
+
+      setUsers(nextUsers);
       setTimeInfo(newTimeInfo);
       setTimeIsAdded();
       onMutate?.();
@@ -129,7 +137,9 @@ export const useSaveUserSelectedSlots = (meetHash: string, onMutate?: () => void
         message: payload.isEdit
           ? data.empty
             ? "Вы больше не в списке проголосовавших"
-            : "Ваше время обновлено"
+            : payload.previousName && payload.previousName !== payload.name
+              ? "Имя на встрече обновлено"
+              : "Ваше время обновлено"
           : "Выбранные временные слоты успешно сохранены",
         id: "slots-updated",
       });

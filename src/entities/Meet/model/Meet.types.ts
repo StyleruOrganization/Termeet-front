@@ -79,6 +79,10 @@ export interface IMeetStore {
    * preset — готовая сетка (шаблон времени), без сохранения на сервер.
    */
   startEditingSlots: (userName?: string | null, preset?: Map<string, string[]>) => void;
+  /**
+   * Подставить в черновик уже сохранённые слоты, не включая режим правки сетки (смена имени).
+   */
+  fillSelectedSlotsFromUser: (userName: string) => void;
   startFinalizing: (preset?: Map<string, string[]>) => void;
   /**
    * Очищаем новые выбранные слоты

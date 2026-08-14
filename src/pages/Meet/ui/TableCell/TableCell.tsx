@@ -48,10 +48,8 @@ export const TableCell = ({
     totalPersons: allUsers.length,
   });
 
-  console.log("variableColors", variableColors);
-
   const isDisabled = useMemo(() => {
-    if (isTimeZoneDisabled || (isBeforeCurrentTime && users?.length == 0) || (isBeforeCurrentTime && isEditingMode)) {
+    if (isTimeZoneDisabled || (isBeforeCurrentTime && (isEditingMode || isFinalizing || !users?.length))) {
       return true;
     }
     if (isFinalizing && (!users || users.length === 0)) {
@@ -166,6 +164,10 @@ export const TableCell = ({
     return;
   }, [isTooltipVisible, users, id, calculateTooltipPosition]);
 
+  const hasVotes = Boolean(users?.length);
+  const showHeatmap =
+    hasVotes && !hoveredUser && Boolean(variableColors?.color) && (!isEditingMode || isBeforeCurrentTime);
+
   // Без такой страшилищи хз как
   const colorCell = useMemo(() => {
     if (isPickingFinal || (!isEditingMode && isSavedFinal)) {
@@ -173,10 +175,20 @@ export const TableCell = ({
     }
     return users?.includes(hoveredUser) || (isEditingMode && newSelectedSlots?.includes(id.split("T")[1]))
       ? "var(--semantics-blue-950)"
-      : users?.length && !isEditingMode && !hoveredUser && variableColors?.color
+      : showHeatmap
         ? variableColors?.color
         : "var(--fill-bg)";
-  }, [id, isEditingMode, newSelectedSlots, users, variableColors, hoveredUser, isPickingFinal, isSavedFinal]);
+  }, [
+    id,
+    isEditingMode,
+    newSelectedSlots,
+    users,
+    variableColors,
+    hoveredUser,
+    isPickingFinal,
+    isSavedFinal,
+    showHeatmap,
+  ]);
 
   const colorBorder = useMemo(() => {
     if (isPickingFinal || (!isEditingMode && isSavedFinal)) {
@@ -184,10 +196,20 @@ export const TableCell = ({
     }
     return users?.includes(hoveredUser) || (isEditingMode && newSelectedSlots?.includes(id.split("T")[1]))
       ? "var(--semantics-blue-950)"
-      : users?.length && !isEditingMode && !hoveredUser && variableColors?.color
+      : showHeatmap
         ? variableColors?.color
         : "var(--semantics-gray-default)";
-  }, [id, isEditingMode, newSelectedSlots, users, variableColors, hoveredUser, isPickingFinal, isSavedFinal]);
+  }, [
+    id,
+    isEditingMode,
+    newSelectedSlots,
+    users,
+    variableColors,
+    hoveredUser,
+    isPickingFinal,
+    isSavedFinal,
+    showHeatmap,
+  ]);
 
   const hoverColor = useMemo(() => {
     if (isFinalizing) {
@@ -217,7 +239,7 @@ export const TableCell = ({
       data-last-cell={isLastCell}
       data-disabled-cell={isDisabled}
       data-id={id}
-      className={styles.TableCell + (isDisabled ? " " + styles.TableCell_disabled : "")}
+      className={`${styles.TableCell}${isDisabled ? ` ${styles.TableCell_disabled}` : ""}${isTimeZoneDisabled || isBeforeCurrentTime ? ` ${styles.TableCell_striped}` : ""}`}
     >
       {isTooltipVisible && tooltipPosition.left !== 0 && tooltipPosition.top !== 0 && (
         <div

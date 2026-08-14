@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { isDateBeforeToday, startOfToday } from "@/shared/libs";
 import { isDurationValid } from "../lib/formatting/timeFormatters";
 import type { MeetingFormState, ICreateMeet } from "./createMeet.types";
 
@@ -80,18 +81,27 @@ export const useCreateMeetStore = create<MeetingFormState>((set, get) => ({
         },
       }));
     }
+    const today = startOfToday();
+    const rangeStart = isDateBeforeToday(start) ? today : start;
+    const rangeEnd = isDateBeforeToday(end) ? today : end;
+    if (rangeEnd < rangeStart) {
+      return;
+    }
     if (!overrideCurrentInterval) {
       const currentIntervals = get().values.dates;
       // Это интервалы без тех которые попали внутрь нового интервала
       const newIntervals: typeof currentIntervals = [];
 
       currentIntervals.forEach(interval => {
-        if ((interval.start < start && interval.end < start) || (interval.start > end && interval.end > end)) {
+        if (
+          (interval.start < rangeStart && interval.end < rangeStart) ||
+          (interval.start > rangeEnd && interval.end > rangeEnd)
+        ) {
           console.log("Пушим старый интервал так как он не пересекается с выбранным");
           newIntervals.push({ start: interval.start, end: interval.end });
         }
       });
-      newIntervals.push({ start, end });
+      newIntervals.push({ start: rangeStart, end: rangeEnd });
 
       console.log("Всего интервалов получилось", newIntervals.length);
       return set(state => ({
@@ -105,9 +115,9 @@ export const useCreateMeetStore = create<MeetingFormState>((set, get) => ({
         values: {
           ...state.values,
           dates: state.values.dates.map(interval =>
-            interval.start?.toDateString() === start?.toDateString() ||
-            interval.end?.toDateString() === end?.toDateString()
-              ? { start, end }
+            interval.start?.toDateString() === rangeStart?.toDateString() ||
+            interval.end?.toDateString() === rangeEnd?.toDateString()
+              ? { start: rangeStart, end: rangeEnd }
               : interval,
           ),
         },

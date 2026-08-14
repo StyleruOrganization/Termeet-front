@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import { useMeetStore } from "@/entities/Meet";
 import { useSessionStore } from "@/entities/User";
@@ -14,29 +14,34 @@ const WINDOW_HEIGHT = window.innerHeight;
 export const MeetModal = ({ mySlotName }: { mySlotName: string | null }) => {
   const { hash } = useParams();
   const user = useSessionStore(state => state.user);
-  const defaultName = user ? `${user.first_name} ${user.last_name}`.trim() : "";
+  const defaultName = mySlotName || (user ? `${user.first_name} ${user.last_name}`.trim() : "");
   const [userName, setUserName] = useState(defaultName);
   const [error, setError] = useState("");
   const isOpen = useMeetStore(state => state.isModalOpen);
-  const setIsModalOpen = useMeetStore(state => state.setIsModalOpen);
+  const isEditing = useMeetStore(state => state.isEditing);
+  const setIsModalOpen = useMeetStore(store => store.setIsModalOpen);
   const setIsEditingMode = useMeetStore(store => store.setIsEditing);
+  const fillSelectedSlotsFromUser = useMeetStore(store => store.fillSelectedSlotsFromUser);
   const users = useMeetStore(store => store.users);
   const { mutate: saveSelectesSlots } = useSaveUserSelectedSlots(hash || "", () => {
     setIsEditingMode(false);
     setIsModalOpen(false);
   });
   const inputRef = useRef<HTMLInputElement>(null);
+  const isRename = Boolean(user && mySlotName);
+
+  const nameTaken = useCallback((value: string) => users.includes(value) && value !== mySlotName, [users, mySlotName]);
 
   useEffect(() => {
     if (isOpen) {
       setUserName(defaultName);
-      setError(defaultName && users.includes(defaultName) ? "Пользователь с таким именем уже существует!" : "");
+      setError(defaultName && nameTaken(defaultName) ? "Пользователь с таким именем уже существует!" : "");
 
       setTimeout(() => {
         inputRef.current?.focus();
       }, 100);
     }
-  }, [isOpen, defaultName, users]);
+  }, [isOpen, defaultName, users, mySlotName, nameTaken]);
 
   const isValidName = userName.trim().length > 0;
   const isButtonDisabled = !isValidName || !!error;
@@ -66,7 +71,15 @@ export const MeetModal = ({ mySlotName }: { mySlotName: string | null }) => {
           <form
             onSubmit={event => {
               event.preventDefault();
-              saveSelectesSlots({ name: userName.trim(), isEdit: Boolean(mySlotName) });
+              const nextName = userName.trim();
+              if (isRename && mySlotName && !isEditing) {
+                fillSelectedSlotsFromUser(mySlotName);
+              }
+              saveSelectesSlots({
+                name: nextName,
+                isEdit: isRename,
+                previousName: isRename && mySlotName ? mySlotName : undefined,
+              });
               setUserName("");
             }}
             data-test-id='meet-modal'
@@ -87,7 +100,7 @@ export const MeetModal = ({ mySlotName }: { mySlotName: string | null }) => {
               onChange={e => {
                 setUserName(e.target.value);
 
-                if (users.includes(e.target.value)) {
+                if (nameTaken(e.target.value)) {
                   setError("Пользователь с таким именем уже существует!");
                 } else {
                   setError("");
@@ -97,7 +110,7 @@ export const MeetModal = ({ mySlotName }: { mySlotName: string | null }) => {
             />
             <div className={styles.MeetModal__Buttons}>
               <button type='submit' disabled={isButtonDisabled} className={"baseButton mainButton"}>
-                Сохранить слоты
+                {isRename ? "Сохранить имя" : "Сохранить слоты"}
               </button>
               <button
                 onClick={() => {

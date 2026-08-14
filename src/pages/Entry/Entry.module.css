@@ -700,6 +700,22 @@ section h2 {
   }
 }
 
+.MeetPeoples__TrashBinIcon {
+  flex-shrink: 0;
+
+  width: 16px;
+  height: 16px;
+
+  color: var(--text-disabled);
+
+  transition: color 0.3s ease-in-out;
+}
+
+.MeetPeoples__Users__Container span:hover .MeetPeoples__TrashBinIcon,
+.MeetPeoples__TrashBinIcon:hover {
+  color: var(--semantics-red-main);
+}
+
 .MeetPeoples__expanded .MeetPeoples__Users__Container {
   max-height: 150px; /* Достаточно большое значение */
   opacity: 1;
@@ -1009,6 +1025,8 @@ footer {
   }
 
   .EntryPage__Footer__FeedbackFromWrapper {
+    width: 100%;
+
     grid-column: 1/2;
     grid-row: 1/2;
   }

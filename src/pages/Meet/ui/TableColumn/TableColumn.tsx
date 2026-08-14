@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, memo } from "react";
-import { MONTHS_GENITIVE } from "@/shared/libs";
+import { MONTHS_GENITIVE, isSlotInPast } from "@/shared/libs";
 import styles from "./TableColumn.module.css";
 import { getCellIds, useColumnData } from "../../lib";
 import { TableCell } from "../TableCell/TableCell";
@@ -183,7 +183,7 @@ export const TableColumn = memo(({ columnId, columnWidth, timeRanges }: TableCol
               {cellsRange.map((cell, cellIndex) => {
                 const key = cell.split("T")[1];
                 const selectedPersons = userSlots?.get(key) || [];
-                const isBeforeCurrentTime = new Date(cell).getTime() < Date.now();
+                const isBeforeCurrentTime = isSlotInPast(cell);
                 return (
                   <TableCell
                     columnRef={columnRef}

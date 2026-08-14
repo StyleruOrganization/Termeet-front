@@ -1,5 +1,22 @@
 import { createStore } from "zustand";
-import type { IMeetStore } from "../Meet.types";
+import { isSlotInPast } from "@/shared/libs";
+import type { IMeet, IMeetStore } from "../Meet.types";
+
+const slotsOfUser = (timeInfo: IMeet["timeInfo"], userName: string) => {
+  const next = new Map<string, string[]>();
+  timeInfo.forEach((inner, date) => {
+    const times: string[] = [];
+    inner.userSlots.forEach((users, time) => {
+      if (users.includes(userName)) {
+        times.push(time);
+      }
+    });
+    if (times.length) {
+      next.set(date, times);
+    }
+  });
+  return next;
+};
 
 export const createMeetStore = (initialState?: Partial<IMeetStore>) => {
   const DEFAULT_PROPS: IMeetStore = {
@@ -22,6 +39,7 @@ export const createMeetStore = (initialState?: Partial<IMeetStore>) => {
     setHoveredUser: () => {},
     setIsEditing: () => {},
     startEditingSlots: () => {},
+    fillSelectedSlotsFromUser: () => {},
     startFinalizing: () => {},
     clearNewSelectedSlots: () => {},
     setIsModalOpen: () => {},
@@ -36,6 +54,9 @@ export const createMeetStore = (initialState?: Partial<IMeetStore>) => {
     ...DEFAULT_PROPS,
     ...initialState,
     setSelectNewSell: (date, time, isRemove = false) => {
+      if (isSlotInPast(`${date}T${time}`)) {
+        return;
+      }
       set(state => {
         console.log("setSelectNewSell", date, time, isRemove);
         const newSelectedSlots = new Map(state.newSelectedSlots);
@@ -167,20 +188,10 @@ export const createMeetStore = (initialState?: Partial<IMeetStore>) => {
         return;
       }
 
-      const next = new Map<string, string[]>();
-      get().timeInfo.forEach((inner, date) => {
-        const times: string[] = [];
-        inner.userSlots.forEach((users, time) => {
-          if (users.includes(userName)) {
-            times.push(time);
-          }
-        });
-        if (times.length) {
-          next.set(date, times);
-        }
-      });
-
-      set({ isEditing: true, isFinalizing: false, newSelectedSlots: next });
+      set({ isEditing: true, isFinalizing: false, newSelectedSlots: slotsOfUser(get().timeInfo, userName) });
+    },
+    fillSelectedSlotsFromUser: userName => {
+      set({ newSelectedSlots: slotsOfUser(get().timeInfo, userName) });
     },
     startFinalizing: preset => {
       const next = new Map<string, string[]>();

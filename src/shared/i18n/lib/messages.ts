@@ -142,6 +142,7 @@ export const ru = {
     prevMonth: "Предыдущий месяц",
     nextMonth: "Следующий месяц",
     noDate: "Дата не указана",
+    dotHint: "Точка под числом — в этот день есть встреча",
   },
   login: {
     wrong: "Неверный email или пароль",
@@ -396,6 +397,7 @@ export const en: typeof ru = {
     prevMonth: "Previous month",
     nextMonth: "Next month",
     noDate: "No date",
+    dotHint: "A dot under the number means you have a meeting that day",
   },
   login: {
     wrong: "Wrong email or password",
@@ -654,6 +656,7 @@ export const de: typeof ru = {
     prevMonth: "Vorheriger Monat",
     nextMonth: "Nächster Monat",
     noDate: "Kein Datum",
+    dotHint: "Ein Punkt unter der Zahl heißt: an diesem Tag gibt es ein Meeting",
   },
   login: {
     wrong: "Falsche E-Mail oder Passwort",

@@ -262,25 +262,17 @@ export const Home = () => {
 
 const PeopleSnippet = ({ names, count }: { names: string[]; count: number }) => {
   const { t, i18n } = useTranslation();
-  const [open, setOpen] = useState(false);
   const shown = count || names.length;
   if (!shown) {
     return <span className={styles.Home__PeopleEmpty}>{t("home.noPeople")}</span>;
   }
 
   return (
-    <div className={styles.Home__People}>
-      <button
-        type='button'
-        className={styles.Home__PeopleToggle}
-        onClick={event => {
-          event.stopPropagation();
-          setOpen(current => !current);
-        }}
-      >
+    <div className={styles.Home__People} tabIndex={0}>
+      <span className={styles.Home__PeopleToggle}>
         {shown} {t(peopleWordKey(shown, parseLocale(i18n.language)))}
-      </button>
-      {open ? (
+      </span>
+      {names.length > 0 ? (
         <ul className={styles.Home__PeopleList}>
           {names.map(name => (
             <li key={name}>{name}</li>
@@ -362,6 +354,10 @@ const HomeCalendar = ({
           );
         })}
       </div>
+      <p className={styles.HomeCalendar__Hint}>
+        <span className={styles.HomeCalendar__HintDot} aria-hidden />
+        {t("home.dotHint")}
+      </p>
     </div>
   );
 };
