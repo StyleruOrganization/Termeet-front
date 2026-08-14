@@ -22,6 +22,8 @@ export {
   weekMapToIntervals,
   fillWeekWithInterval,
   formatAvailabilitySummary,
+  getAvailabilityDayRows,
+  isNineToSixEveryDay,
   hasAvailability,
 } from "./lib/availability";
 export { getProfileDisplayName } from "./lib/displayName";
@@ -38,4 +40,5 @@ export {
   resendVerificationRequest,
   getMyMeetingsRequest,
   searchUsersRequest,
+  deleteAccountRequest,
 } from "./api/userApi";

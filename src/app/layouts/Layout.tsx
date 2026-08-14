@@ -1,6 +1,7 @@
 import { Link, Outlet, useLocation, useNavigate } from "react-router";
 import { useSessionStore } from "@/entities/User";
 import { LoginForm, useActiveSectionStore } from "@/pages/Entry";
+import { useTranslation } from "@/shared/i18n";
 import { useLoginModalStore } from "@/shared/libs";
 import { ModalWrapper } from "@/shared/ui";
 import UserIcon from "@assets/icons/user.svg";
@@ -22,6 +23,7 @@ export const Layout = () => {
   const status = useSessionStore(state => state.status);
   const sessionReady = status === "authenticated" || status === "anonymous";
   const isLanding = pathname === "/" && !user;
+  const { t } = useTranslation();
 
   return (
     <>
@@ -55,13 +57,13 @@ export const Layout = () => {
           {isLanding ? (
             <div className={styles.header__groupAnchors}>
               <a className={activeSection == "features" ? styles.activeAnchor : ""} href='#features'>
-                Удобства
+                {t("layout.features")}
               </a>
               <a className={activeSection == "advantages" ? styles.activeAnchor : ""} href='#advantages'>
-                Возможности
+                {t("layout.advantages")}
               </a>
               <a className={activeSection == "team" ? styles.activeAnchor : ""} href='#team-info'>
-                О нас
+                {t("layout.about")}
               </a>
             </div>
           ) : null}
@@ -76,7 +78,7 @@ export const Layout = () => {
               </Link>
             ) : (
               <button className={`${styles.header__loginBtn} baseButton mainButton`} onClick={open}>
-                Войти или зарегистрироваться
+                {t("layout.login")}
               </button>
             )}
           </div>

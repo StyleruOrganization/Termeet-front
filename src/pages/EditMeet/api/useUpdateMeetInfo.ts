@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRef } from "react";
 import { useNavigate } from "react-router";
-import { MeetQueries } from "@/entities/Meet";
+import { MeetQueries, getMeetDateRange, type MeetResponse } from "@/entities/Meet";
 import { useToastStore } from "@/features/ToastContainer";
 import { apiClient, HttpError } from "@/shared/api";
 import type { IEditMeetPayload } from "../model/EditMeet.types";
@@ -14,9 +14,9 @@ export const useUpdateMeetInfo = (hash: string) => {
   const startShowLoaderTime = useRef<number>(null);
   return useMutation({
     mutationFn: (data: IEditMeetPayload) => {
-      const oldState = queryClient.getQueryData(MeetQueries.meet(hash).queryKey);
+      const oldState = queryClient.getQueryData<MeetResponse>(MeetQueries.meet(hash).queryKey);
       return apiClient.patch(`/meet/${hash}`, {
-        dataRange: oldState?.data_range,
+        dataRange: oldState ? getMeetDateRange(oldState) : undefined,
         duration: data.duration,
         link: data.link?.trim(),
         name: data.name.trim(),

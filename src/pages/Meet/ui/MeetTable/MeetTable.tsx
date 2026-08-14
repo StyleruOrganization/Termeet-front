@@ -127,7 +127,7 @@ export const MeetTable = ({
             <div key={indexPeriods}>
               <div
                 style={{
-                  marginBottom: `${isMoreOrEqThan30Min(timePeriodOpitions[timePeriodOpitions.length - 1], timeRanges[indexPeriods][1]) ? 20 : 0}px`,
+                  marginBottom: `${isMoreOrEqThan30Min(timePeriodOpitions[timePeriodOpitions.length - 1], timeRanges[indexPeriods]?.[1]) ? 20 : 0}px`,
                 }}
                 className={styles.MeetTable__TimesPeriod}
                 key={`period-${indexPeriods}`}

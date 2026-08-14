@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { BrowserRouter as Router } from "react-router";
 import { useRestoreSession, useSyncUserPreferences } from "@/entities/User";
 import { ToastContainer } from "@/features/ToastContainer";
+import { useTranslation } from "@/shared/i18n";
 import { useTheme } from "@/shared/libs";
 import { Loader } from "@/shared/ui";
 import { queryClient } from "@shared/api";
@@ -18,9 +19,10 @@ export const App = () => {
   useTheme();
   useRestoreSession();
   useSyncUserPreferences();
+  const { t } = useTranslation();
   return (
     <QueryClientProvider client={queryClient}>
-      <Suspense fallback={<Loader message='Загрузка ...' />}>
+      <Suspense fallback={<Loader message={t("loader")} />}>
         <Router>
           <ScrollRestoration />
           <Routing />

@@ -301,7 +301,7 @@
 }
 
 .HomeCalendar__Day_selected {
-  color: var(--fill-bg);
+  color: var(--light);
   background-color: var(--semantics-blue-950);
 
   border-color: var(--semantics-blue-950);

@@ -50,6 +50,8 @@
 .Onboarding__Congratulate__Text {
   text-align: center;
 
+  color: var(--text-main);
+
   font-size: var(--text-body);
 }
 

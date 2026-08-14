@@ -51,7 +51,7 @@
 }
 
 [data-theme="dark"] .MeetModal__HeaderBg::after {
-  background-image: radial-gradient(circle at 6px 6px, #2b2b2c 2px, transparent 2px);
+  background-image: radial-gradient(circle at 6px 6px, var(--fill-controls) 2px, transparent 2px);
 }
 
 .MeetModal__HeaderBg__SmallIcon {
@@ -75,9 +75,7 @@
 }
 
 [data-theme="dark"] .MeetModal__HeaderBg__SmallIcon, [data-theme="dark"] .MeetModal__HeaderBg__BigIcon{
-  /* Не хочу тащить переменную еще одну */
-  /* stylelint-disable-next-line */ 
-  color: #1C2651;
+  color: var(--semantics-blue-50);
 }
 
 .MeetModal__PrintIcon{

@@ -66,6 +66,8 @@
 }
 
 .Notification__Content__Title {
+    color: var(--text-main);
+
     font-weight: 700;
 }
 

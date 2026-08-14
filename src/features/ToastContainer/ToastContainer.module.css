@@ -65,7 +65,7 @@
 .Toast__Success {
   border-left: 4px solid var(--semantics-green-active);
 
-  svg {
+  > svg {
     color: var(--semantics-green-active);
   }
 }
@@ -73,7 +73,7 @@
 .Toast__Error {
   border-left: 4px solid var(--semantics-red-active);
 
-  svg {
+  > svg {
     color: var(--semantics-red-active);
 
     transform: rotate(45deg);
@@ -83,7 +83,7 @@
 .Toast__Warning {
   border-left: 4px solid var(--semantics-yellow-hover);
 
-  svg {
+  > svg {
     color: var(--semantics-yellow-hover);
   }
 }
@@ -92,7 +92,7 @@
 .Toast__Info {
   border-left: 4px solid var(--semantics-blue-950);
 
-  svg {
+  > svg {
     color: var(--semantics-blue-950);
   }
 }
@@ -108,7 +108,7 @@
 
   padding: 4px;
 
-  color: var(--text-secondary);
+  color: var(--text-main);
   border-radius: 10px;
 
   cursor: pointer;
@@ -116,6 +116,8 @@
   svg {
     width: 16px;
     height: 16px;
+
+    color: var(--text-main);
 
     transform: rotate(45deg);
   }

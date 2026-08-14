@@ -21,26 +21,30 @@
     font-size: 16px;
 
     a {
-        color: var(--semantics-blue-700);
+        color: var(--text-link);
 
-        transition: color 0.2s ease-in-out;
+        transition: opacity 0.2s ease-in-out;
 
         &:hover {
-            color: var(--semantics-blue-800);
+            opacity: 0.8;
         }
 
         &:active {
-            color: var(--semantics-blue-900);
+            opacity: 0.7;
         }
     }
 
     h3 {
+        color: var(--text-main);
+
         font-size: 20px;
         font-weight: 700;
         margin-bottom: 8px;
     }
     
     p {
+        color: var(--text-main);
+
         margin-bottom: 24px;
     }
 }

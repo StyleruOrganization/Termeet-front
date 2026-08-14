@@ -1,5 +1,5 @@
+import { getMeetDateRange, type IMeet, type MeetResponse } from "@/entities/Meet";
 import { convertUTCToTimezone, generateTimeOptions } from "@/shared/libs";
-import type { IMeet, MeetResponse } from "@/entities/Meet";
 
 const getMinutes = (time: string) => {
   const [hours, minutes] = time.split(":").map(Number);
@@ -13,13 +13,14 @@ export const transformMeetData = (meetData: MeetResponse, isLocal: boolean, curr
   const timeInfo: IMeet["timeInfo"] = new Map();
 
   const timeZoneOffset = isLocal ? -new Date().getTimezoneOffset() / 60 : 3;
+  const dateRanges = getMeetDateRange(meetData);
   // Переводим UTC в нужное время - это дни в которые проходит встреча
-  const preparedMeetDataDataRanges = meetData.data_range.map(([startTime, endTime]) => [
+  const preparedMeetDataDataRanges = dateRanges.map(([startTime, endTime]) => [
     convertUTCToTimezone(startTime, timeZoneOffset),
     convertUTCToTimezone(endTime, timeZoneOffset),
   ]);
   // Также поступаем и со слотами
-  const preparedMeetDataTimeSlots = meetData.slots.map(userInfo => {
+  const preparedMeetDataTimeSlots = (meetData.slots ?? []).map(userInfo => {
     const { name, slots } = userInfo;
     if (slots.length) {
       users.add(name);
@@ -218,7 +219,7 @@ export const transformMeetData = (meetData: MeetResponse, isLocal: boolean, curr
     timeInfo,
     users: Array.from(users),
     userAuth: Object.fromEntries(
-      meetData.slots.map(slot => [slot.name, Boolean(slot.isAuth || slot.userId || slot.user_id)]),
+      (meetData.slots ?? []).map(slot => [slot.name, Boolean(slot.isAuth || slot.userId || slot.user_id)]),
     ),
     organizerName: meetData.organizerName ?? null,
     observers: (meetData.observers ?? []).map(observer => observer.name),
@@ -239,7 +240,7 @@ export const transformMeetData = (meetData: MeetResponse, isLocal: boolean, curr
     isCreatorAuth: meetData.isCreatorAuth,
     mySlotName:
       currentUserId && currentUserId !== "guest"
-        ? (meetData.slots.find(slot => (slot.userId ?? slot.user_id) === currentUserId)?.name ?? null)
+        ? ((meetData.slots ?? []).find(slot => (slot.userId ?? slot.user_id) === currentUserId)?.name ?? null)
         : null,
     finalSlot: (() => {
       const result = new Map<string, string[]>();

@@ -9,6 +9,8 @@ export default defineConfig([
       "fsd/segments-by-purpose": "off",
       "fsd/no-segmentless-slices": "off",
       "fsd/repetitive-naming": "off",
+      // shared/i18n держит словарь в lib и локаль в model — это не FSD-сегменты.
+      "fsd/no-reserved-folder-names": "off",
     },
   },
   {

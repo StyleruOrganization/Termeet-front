@@ -143,6 +143,34 @@ export const formatAvailabilitySummary = (intervals: IAvailabilityInterval[]) =>
     .join("; ");
 };
 
+export const getAvailabilityDayRows = (intervals: IAvailabilityInterval[]) => {
+  const week = intervalsToWeekMap(intervals);
+  const rows: { weekday: number; ranges: string[] }[] = [];
+  for (let weekday = 1; weekday <= 7; weekday += 1) {
+    const ranges = mergeTimesToIntervals(week.get(weekday) ?? [], weekday).map(
+      interval => `${interval.start}–${interval.end}`,
+    );
+    if (ranges.length) {
+      rows.push({ weekday, ranges });
+    }
+  }
+  return rows;
+};
+
+export const isNineToSixEveryDay = (intervals: IAvailabilityInterval[]) => {
+  if (!hasAvailability(intervals)) {
+    return false;
+  }
+  const expected = expandInterval("09:00", "18:00").join(",");
+  const week = intervalsToWeekMap(intervals);
+  for (let weekday = 1; weekday <= 7; weekday += 1) {
+    if ((week.get(weekday) ?? []).join(",") !== expected) {
+      return false;
+    }
+  }
+  return true;
+};
+
 export const hasAvailability = (intervals: IAvailabilityInterval[]) => {
   return weekMapToIntervals(intervalsToWeekMap(intervals)).length > 0;
 };

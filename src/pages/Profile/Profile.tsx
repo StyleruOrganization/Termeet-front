@@ -1,19 +1,22 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import {
+  deleteAccountRequest,
   resendVerificationRequest,
   resetPasswordRequest,
   useSessionStore,
   fillWeekWithInterval,
-  formatAvailabilitySummary,
+  getAvailabilityDayRows,
   hasAvailability,
+  isNineToSixEveryDay,
   type IAvailabilityInterval,
   type IUser,
 } from "@/entities/User";
 import { useToastStore } from "@/features/ToastContainer";
 import { TIMES } from "@/shared/consts";
+import { LOCALE_LABEL, LOCALES, changeAppLocale, parseLocale, useTranslation } from "@/shared/i18n";
 import { useTheme } from "@/shared/libs";
-import { Container, Input, ModalWrapper, Select } from "@/shared/ui";
+import { Container, Input, ModalWrapper, Select, TextArea } from "@/shared/ui";
 import { FeedbackForm } from "@/widgets/FeedbackForm";
 import Arrow from "@assets/icons/arrow.svg";
 import stubImage from "@assets/img/stub.png";
@@ -21,14 +24,6 @@ import styles from "./Profile.module.css";
 import { TemplateWeekModal } from "./ui/TemplateWeekModal/TemplateWeekModal";
 
 type ProfileTab = "profile" | "notifications" | "integrations" | "appearance" | "support";
-
-const TABS: { id: ProfileTab; label: string }[] = [
-  { id: "profile", label: "Профиль" },
-  { id: "notifications", label: "Уведомления" },
-  { id: "integrations", label: "Интеграции" },
-  { id: "appearance", label: "Оформление" },
-  { id: "support", label: "Тех поддержка" },
-];
 
 const TIMEZONES = [
   "UTC +2:00 (Калининград)",
@@ -52,30 +47,13 @@ const TIME_OPTIONS = Array.from({ length: 48 }, (_, index) => {
   return `${hours}:${minutes}`;
 });
 const END_TIME_OPTIONS = [...TIME_OPTIONS.slice(1), "24:00"];
-const LANGUAGE_KEY = "termeet.language";
-const GRID_WINDOW_KEY = "termeet.gridWindow";
-
-const readGridWindow = () => {
-  try {
-    const raw = localStorage.getItem(GRID_WINDOW_KEY);
-    if (!raw) {
-      return { start: "10 : 00", end: "19 : 00" };
-    }
-    const parsed = JSON.parse(raw) as { start?: string; end?: string };
-    return {
-      start: parsed.start || "10 : 00",
-      end: parsed.end || "19 : 00",
-    };
-  } catch {
-    return { start: "10 : 00", end: "19 : 00" };
-  }
-};
 
 export const Profile = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const user = useSessionStore(state => state.user);
   const status = useSessionStore(state => state.status);
+  const { t } = useTranslation();
   const tab = (searchParams.get("tab") as ProfileTab) || "profile";
 
   useEffect(() => {
@@ -92,15 +70,23 @@ export const Profile = () => {
     setSearchParams(next === "profile" ? {} : { tab: next }, { replace: true });
   };
 
+  const tabs: { id: ProfileTab; label: string }[] = [
+    { id: "profile", label: t("profile.tabProfile") },
+    { id: "notifications", label: t("profile.tabNotifications") },
+    { id: "integrations", label: t("profile.tabIntegrations") },
+    { id: "appearance", label: t("profile.tabAppearance") },
+    { id: "support", label: t("profile.tabSupport") },
+  ];
+
   return (
     <Container>
       <button type='button' className={styles.Profile__Back} onClick={() => navigate("/")}>
         <Arrow className={styles.Profile__BackIcon} />
-        Личный кабинет
+        {t("profile.back")}
       </button>
       <div className={styles.Profile}>
-        <nav className={styles.Profile__Nav} aria-label='Разделы кабинета'>
-          {TABS.map(item => (
+        <nav className={styles.Profile__Nav} aria-label={t("profile.navAria")}>
+          {tabs.map(item => (
             <button
               key={item.id}
               type='button'
@@ -112,9 +98,9 @@ export const Profile = () => {
           ))}
         </nav>
         <div className={styles.Profile__Content}>
-          {tab === "profile" ? <ProfileSettings user={user} onOpenSupport={() => setTab("support")} /> : null}
-          {tab === "notifications" ? <Placeholder title='Раздел уведомлений уже в разработке!' /> : null}
-          {tab === "integrations" ? <Placeholder title='Раздел интеграций уже в разработке!' /> : null}
+          {tab === "profile" ? <ProfileSettings user={user} /> : null}
+          {tab === "notifications" ? <Placeholder title={t("profile.stubNotifications")} /> : null}
+          {tab === "integrations" ? <Placeholder title={t("profile.stubIntegrations")} /> : null}
           {tab === "appearance" ? <AppearanceSettings /> : null}
           {tab === "support" ? <FeedbackForm /> : null}
         </div>
@@ -123,32 +109,78 @@ export const Profile = () => {
   );
 };
 
-const ProfileSettings = ({ user, onOpenSupport }: { user: IUser; onOpenSupport: () => void }) => {
+const ProfileSettings = ({ user }: { user: IUser }) => {
   const navigate = useNavigate();
   const logout = useSessionStore(state => state.logout);
   const updateSettings = useSessionStore(state => state.updateSettings);
   const addToast = useToastStore(state => state.addToast);
+  const { t } = useTranslation();
+  const [firstName, setFirstName] = useState(user.first_name);
+  const [lastName, setLastName] = useState(user.last_name);
+  const [nameSaving, setNameSaving] = useState(false);
   const [timezone, setTimezone] = useState(user.timezone || "UTC +3:00 (Москва)");
   const [passwordOpen, setPasswordOpen] = useState(false);
   const [passwordSending, setPasswordSending] = useState(false);
+  const [logoutOpen, setLogoutOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
-  const [deleteStep, setDeleteStep] = useState<"warn" | "reason">("warn");
+  const [deleteStep, setDeleteStep] = useState<"warn" | "reason" | "confirm">("warn");
+  const [deleteReason, setDeleteReason] = useState("");
+  const [deleteEmail, setDeleteEmail] = useState("");
+  const [deleteSaving, setDeleteSaving] = useState(false);
+
+  const nameDirty = firstName.trim() !== user.first_name || lastName.trim() !== user.last_name;
 
   return (
     <div className={styles.Profile__Stack}>
       <section>
-        <h2 className={styles.Profile__SectionTitle}>Имя</h2>
-        <Input name='first_name' value={user.first_name} readOnly />
+        <h2 className={styles.Profile__SectionTitle}>{t("profile.nameTitle")}</h2>
+        <Input
+          name='first_name'
+          label={t("profile.firstName")}
+          value={firstName}
+          onChange={event => setFirstName(event.target.value)}
+        />
         <div className={styles.Profile__FieldGap} />
-        <Input name='last_name' value={user.last_name} readOnly />
+        <Input
+          name='last_name'
+          label={t("profile.lastName")}
+          value={lastName}
+          onChange={event => setLastName(event.target.value)}
+        />
+        {nameDirty ? (
+          <button
+            type='button'
+            className={`baseButton mainButton ${styles.Profile__SaveTemplate}`}
+            disabled={nameSaving}
+            onClick={async () => {
+              const nextFirst = firstName.trim();
+              const nextLast = lastName.trim();
+              if (!nextFirst || !nextLast) {
+                addToast({ id: "name-empty", type: "warning", message: t("toast.nameEmpty") });
+                return;
+              }
+              setNameSaving(true);
+              try {
+                await updateSettings({ first_name: nextFirst, last_name: nextLast });
+                addToast({ id: "name-saved", type: "success", message: t("toast.nameSaved") });
+              } catch {
+                addToast({ id: "name-saved-error", type: "error", message: t("toast.nameError") });
+              } finally {
+                setNameSaving(false);
+              }
+            }}
+          >
+            {t("profile.saveName")}
+          </button>
+        ) : null}
       </section>
       <section>
-        <h2 className={styles.Profile__SectionTitle}>Безопасность и вход</h2>
+        <h2 className={styles.Profile__SectionTitle}>{t("profile.security")}</h2>
         <Input
           name='email'
           value={user.email}
           readOnly
-          error={user.is_verified ? undefined : "Требуется подтверждение почты"}
+          error={user.is_verified ? undefined : t("profile.emailConfirm")}
         />
         {!user.is_verified ? (
           <button
@@ -157,30 +189,22 @@ const ProfileSettings = ({ user, onOpenSupport }: { user: IUser; onOpenSupport: 
             onClick={async () => {
               try {
                 await resendVerificationRequest();
-                addToast({
-                  id: "verify-resent",
-                  type: "success",
-                  message: "Письмо с подтверждением отправлено ещё раз",
-                });
+                addToast({ id: "verify-resent", type: "success", message: t("toast.verifyResent") });
               } catch {
-                addToast({
-                  id: "verify-resent-error",
-                  type: "error",
-                  message: "Не получилось отправить письмо. Проверьте почту через пару минут",
-                });
+                addToast({ id: "verify-resent-error", type: "error", message: t("toast.verifyError") });
               }
             }}
           >
-            Отправить письмо ещё раз
+            {t("profile.resend")}
           </button>
         ) : null}
         <button type='button' className={styles.Profile__Row} onClick={() => setPasswordOpen(true)}>
-          <span>Смена пароля</span>
+          <span>{t("profile.changePassword")}</span>
           <Arrow className={styles.Profile__RowArrow} />
         </button>
       </section>
       <section>
-        <h2 className={styles.Profile__SectionTitle}>Часовой пояс</h2>
+        <h2 className={styles.Profile__SectionTitle}>{t("profile.timezone")}</h2>
         <Select
           name='timezone'
           options={TIMEZONES}
@@ -189,54 +213,38 @@ const ProfileSettings = ({ user, onOpenSupport }: { user: IUser; onOpenSupport: 
             setTimezone(value);
             try {
               await updateSettings({ timezone: value });
-              addToast({ id: "tz-saved", type: "success", message: "Часовой пояс сохранён в аккаунте" });
+              addToast({ id: "tz-saved", type: "success", message: t("toast.tzSaved") });
             } catch {
-              addToast({
-                id: "tz-saved-error",
-                type: "error",
-                message: "Не получилось сохранить пояс на сервере. Попробуйте ещё раз",
-              });
+              addToast({ id: "tz-saved-error", type: "error", message: t("toast.tzError") });
             }
           }}
         />
       </section>
       <AvailabilityTemplateSettings user={user} />
-      <GridWindowSettings />
+      <GridWindowSettings user={user} />
       <section>
-        <h2 className={styles.Profile__SectionTitle}>Удаление аккаунта</h2>
-        <p className={styles.Profile__Hint}>
-          После удаления нельзя будет войти в этот профиль. Встречи, где вы организатор, пропадут для всех, кто ходил по
-          ссылке.
-        </p>
+        <h2 className={styles.Profile__SectionTitle}>{t("profile.deleteTitle")}</h2>
+        <p className={styles.Profile__Hint}>{t("profile.deleteHint")}</p>
         <button
           type='button'
           className={`baseButton outlineButton ${styles.Profile__DeleteButton}`}
           onClick={() => {
             setDeleteStep("warn");
+            setDeleteReason("");
+            setDeleteEmail("");
             setDeleteOpen(true);
           }}
         >
-          Удалить аккаунт
+          {t("profile.deleteButton")}
         </button>
       </section>
-      <button
-        type='button'
-        className='baseButton secondaryButton'
-        onClick={async () => {
-          await logout();
-          addToast({ id: "logout-success", type: "info", message: "Вы вышли из аккаунта" });
-          navigate("/");
-        }}
-      >
-        Выйти из аккаунта
+      <button type='button' className='baseButton secondaryButton' onClick={() => setLogoutOpen(true)}>
+        {t("profile.logout")}
       </button>
       <ModalWrapper compact isOpen={passwordOpen} onClose={() => setPasswordOpen(false)} isAnimate>
         <div className={styles.Profile__Modal}>
-          <h2>Смена пароля</h2>
-          <p>
-            На {user.email} придёт письмо со ссылкой. По ней можно задать новый пароль. Само поле «Пароль» письмо не
-            отправляет — только эта кнопка.
-          </p>
+          <h2>{t("profile.passwordTitle")}</h2>
+          <p>{t("profile.passwordBody", { email: user.email })}</p>
           <div className={styles.Profile__ModalActions}>
             <button
               type='button'
@@ -247,26 +255,40 @@ const ProfileSettings = ({ user, onOpenSupport }: { user: IUser; onOpenSupport: 
                 try {
                   await resetPasswordRequest(user.email);
                   setPasswordOpen(false);
-                  addToast({
-                    id: "reset-sent",
-                    type: "success",
-                    message: "Ссылка для смены пароля ушла на почту",
-                  });
+                  addToast({ id: "reset-sent", type: "success", message: t("toast.resetSent") });
                 } catch {
-                  addToast({
-                    id: "reset-sent-error",
-                    type: "error",
-                    message: "Не получилось отправить письмо для смены пароля",
-                  });
+                  addToast({ id: "reset-sent-error", type: "error", message: t("toast.resetError") });
                 } finally {
                   setPasswordSending(false);
                 }
               }}
             >
-              Отправить ссылку на почту
+              {t("profile.passwordSend")}
             </button>
             <button type='button' className='baseButton secondaryButton' onClick={() => setPasswordOpen(false)}>
-              Отменить
+              {t("profile.cancel")}
+            </button>
+          </div>
+        </div>
+      </ModalWrapper>
+      <ModalWrapper compact isOpen={logoutOpen} onClose={() => setLogoutOpen(false)} isAnimate>
+        <div className={styles.Profile__Modal}>
+          <h2>{t("profile.logoutTitle")}</h2>
+          <p>{t("profile.logoutBody")}</p>
+          <div className={styles.Profile__ModalActions}>
+            <button
+              type='button'
+              className='baseButton mainButton'
+              onClick={async () => {
+                await logout();
+                addToast({ id: "logout-success", type: "info", message: t("toast.logoutOk") });
+                navigate("/");
+              }}
+            >
+              {t("profile.logoutConfirm")}
+            </button>
+            <button type='button' className='baseButton secondaryButton' onClick={() => setLogoutOpen(false)}>
+              {t("profile.stay")}
             </button>
           </div>
         </div>
@@ -274,45 +296,81 @@ const ProfileSettings = ({ user, onOpenSupport }: { user: IUser; onOpenSupport: 
       <ModalWrapper compact isOpen={deleteOpen} onClose={() => setDeleteOpen(false)} isAnimate>
         {deleteStep === "warn" ? (
           <div className={styles.Profile__Modal}>
-            <h2>Удалить аккаунт?</h2>
+            <h2>{t("profile.deleteWarnTitle")}</h2>
             <ul className={styles.Profile__ModalList}>
-              <li>Войти в этот профиль больше не получится</li>
-              <li>Встречи, где вы организатор, пропадут</li>
-              <li>Слоты, которые вы ставили как участник, останутся под именем на встрече</li>
+              <li>{t("profile.deleteWarn1")}</li>
+              <li>{t("profile.deleteWarn2")}</li>
+              <li>{t("profile.deleteWarn3")}</li>
             </ul>
             <div className={styles.Profile__ModalActions}>
               <button type='button' className='baseButton outlineButton' onClick={() => setDeleteStep("reason")}>
-                Продолжить удаление
+                {t("profile.deleteContinue")}
               </button>
               <button type='button' className='baseButton secondaryButton' onClick={() => setDeleteOpen(false)}>
-                Оставить аккаунт
+                {t("profile.keepAccount")}
               </button>
             </div>
           </div>
-        ) : (
+        ) : null}
+        {deleteStep === "reason" ? (
           <div className={styles.Profile__Modal}>
-            <h2>Почему удаляете?</h2>
-            <p>Можно написать в поддержку — иногда проще выключить уведомления, чем сносить профиль.</p>
-            <p className={styles.Profile__Hint}>
-              Само удаление из кабинета пока не подключено на сервере. Если профиль правда нужно убрать, напишите нам.
-            </p>
+            <h2>{t("profile.deleteReasonTitle")}</h2>
+            <p>{t("profile.deleteReasonBody")}</p>
+            <TextArea
+              name='delete-reason'
+              label=''
+              placeholder={t("profile.deleteReasonPlaceholder")}
+              value={deleteReason}
+              onChange={event => setDeleteReason(event.target.value)}
+            />
+            <div className={styles.Profile__ModalActions}>
+              <button type='button' className='baseButton mainButton' onClick={() => setDeleteStep("confirm")}>
+                {t("profile.deleteReasonNext")}
+              </button>
+              <button type='button' className='baseButton secondaryButton' onClick={() => setDeleteStep("warn")}>
+                {t("profile.deleteBack")}
+              </button>
+            </div>
+          </div>
+        ) : null}
+        {deleteStep === "confirm" ? (
+          <div className={styles.Profile__Modal}>
+            <h2>{t("profile.deleteConfirmTitle")}</h2>
+            <p>{t("profile.deleteConfirmBody", { email: user.email })}</p>
+            <Input
+              name='delete-email'
+              placeholder={t("profile.deleteConfirmPlaceholder")}
+              value={deleteEmail}
+              onChange={event => setDeleteEmail(event.target.value)}
+            />
             <div className={styles.Profile__ModalActions}>
               <button
                 type='button'
-                className='baseButton mainButton'
-                onClick={() => {
-                  setDeleteOpen(false);
-                  onOpenSupport();
+                className={`baseButton outlineButton ${styles.Profile__DeleteButton}`}
+                disabled={deleteSaving || deleteEmail.trim().toLowerCase() !== user.email.toLowerCase()}
+                onClick={async () => {
+                  setDeleteSaving(true);
+                  try {
+                    await deleteAccountRequest();
+                    useSessionStore.getState().clear();
+                    setDeleteOpen(false);
+                    addToast({ id: "account-deleted", type: "info", message: t("toast.deleted") });
+                    navigate("/");
+                  } catch {
+                    addToast({ id: "account-deleted-error", type: "error", message: t("toast.deleteError") });
+                  } finally {
+                    setDeleteSaving(false);
+                  }
                 }}
               >
-                Написать в поддержку
+                {t("profile.deleteForever")}
               </button>
-              <button type='button' className='baseButton secondaryButton' onClick={() => setDeleteOpen(false)}>
-                Закрыть
+              <button type='button' className='baseButton secondaryButton' onClick={() => setDeleteStep("reason")}>
+                {t("profile.deleteBack")}
               </button>
             </div>
           </div>
-        )}
+        ) : null}
       </ModalWrapper>
     </div>
   );
@@ -321,34 +379,28 @@ const ProfileSettings = ({ user, onOpenSupport }: { user: IUser; onOpenSupport: 
 const AvailabilityTemplateSettings = ({ user }: { user: IUser }) => {
   const updateSettings = useSessionStore(state => state.updateSettings);
   const addToast = useToastStore(state => state.addToast);
+  const { t } = useTranslation();
   const savedTemplate = user.availability_template ?? [];
   const [quickStart, setQuickStart] = useState("09:00");
   const [quickEnd, setQuickEnd] = useState("18:00");
   const [weekOpen, setWeekOpen] = useState(false);
   const suggestPrefill = user.suggest_prefill !== false;
-  const summary = formatAvailabilitySummary(savedTemplate);
+  const dayRows = getAvailabilityDayRows(savedTemplate);
+  const showDayRows = hasAvailability(savedTemplate) && !isNineToSixEveryDay(savedTemplate);
 
   const saveTemplate = async (next: IAvailabilityInterval[]) => {
     try {
       await updateSettings({ availability_template: next });
-      addToast({ id: "template-saved", type: "success", message: "Шаблон времени сохранён в аккаунте" });
+      addToast({ id: "template-saved", type: "success", message: t("toast.templateSaved") });
     } catch {
-      addToast({
-        id: "template-saved-error",
-        type: "error",
-        message: "Не получилось сохранить шаблон. Попробуйте ещё раз",
-      });
+      addToast({ id: "template-saved-error", type: "error", message: t("toast.templateError") });
     }
   };
 
   return (
     <section>
-      <h2 className={styles.Profile__SectionTitle}>Обычное время</h2>
-      <p className={styles.Profile__Hint}>
-        Это ваши типичные часы, не окно конкретной встречи. На новой встрече, если вы ещё не голосовали, Termeet может
-        предложить закрасить сетку этим шаблоном. Сначала задайте интервал на все дни, потом откройте календарь недели и
-        поправьте субботу или понедельник отдельно.
-      </p>
+      <h2 className={styles.Profile__SectionTitle}>{t("profile.templateTitle")}</h2>
+      <p className={styles.Profile__Hint}>{t("profile.templateHint")}</p>
       <div className={styles.Profile__Interval}>
         <Select
           name='template-start'
@@ -367,24 +419,45 @@ const AvailabilityTemplateSettings = ({ user }: { user: IUser }) => {
           onChange={setQuickEnd}
         />
       </div>
-      <button
-        type='button'
-        className={`baseButton mainButton ${styles.Profile__SaveTemplate}`}
-        onClick={() => saveTemplate(fillWeekWithInterval(quickStart, quickEnd))}
-      >
-        Заполнить все дни
-      </button>
-      <button type='button' className={styles.Profile__LinkButton} onClick={() => setWeekOpen(true)}>
-        Открыть календарь недели
-      </button>
-      {summary ? <p className={styles.Profile__Hint}>Сейчас: {summary}</p> : null}
-      {hasAvailability(savedTemplate) ? (
-        <button type='button' className={styles.Profile__LinkButton} onClick={() => saveTemplate([])}>
-          Очистить шаблон
+      <div className={styles.Profile__TemplateActions}>
+        <button
+          type='button'
+          className='baseButton mainButton'
+          onClick={() => saveTemplate(fillWeekWithInterval(quickStart, quickEnd))}
+        >
+          {t("profile.fillWeek")}
         </button>
+        <button type='button' className='baseButton secondaryButton' onClick={() => setWeekOpen(true)}>
+          {t("profile.openWeek")}
+        </button>
+        {hasAvailability(savedTemplate) ? (
+          <button type='button' className='baseButton outlineButton' onClick={() => saveTemplate([])}>
+            {t("profile.clearTemplate")}
+          </button>
+        ) : null}
+      </div>
+      {isNineToSixEveryDay(savedTemplate) ? (
+        <p className={styles.Profile__Hint}>{t("profile.everyDayNineSix")}</p>
+      ) : null}
+      {showDayRows ? (
+        <div className={styles.Profile__WeekSummary}>
+          <p className={styles.Profile__WeekSummaryTitle}>{t("profile.templateNow")}</p>
+          {dayRows.map(row => (
+            <div key={row.weekday} className={styles.Profile__WeekSummaryRow}>
+              <span className={styles.Profile__WeekSummaryDay}>{t(`week.full${row.weekday}`)}</span>
+              <span className={styles.Profile__WeekSummaryRanges}>
+                {row.ranges.map(range => (
+                  <span key={range} className={styles.Profile__RangeChip}>
+                    {range}
+                  </span>
+                ))}
+              </span>
+            </div>
+          ))}
+        </div>
       ) : null}
       <label className={styles.Profile__ToggleRow}>
-        <span>Предлагать предзаполнение на встрече</span>
+        <span>{t("profile.suggestPrefill")}</span>
         <button
           type='button'
           role='switch'
@@ -394,11 +467,7 @@ const AvailabilityTemplateSettings = ({ user }: { user: IUser }) => {
             try {
               await updateSettings({ suggest_prefill: !suggestPrefill });
             } catch {
-              addToast({
-                id: "prefill-toggle-error",
-                type: "error",
-                message: "Не получилось сохранить настройку",
-              });
+              addToast({ id: "prefill-toggle-error", type: "error", message: t("toast.prefillError") });
             }
           }}
         />
@@ -413,20 +482,22 @@ const AvailabilityTemplateSettings = ({ user }: { user: IUser }) => {
   );
 };
 
-const GridWindowSettings = () => {
+const GridWindowSettings = ({ user }: { user: IUser }) => {
+  const updateSettings = useSessionStore(state => state.updateSettings);
   const addToast = useToastStore(state => state.addToast);
-  const saved = readGridWindow();
-  const [start, setStart] = useState(saved.start);
-  const [end, setEnd] = useState(saved.end);
+  const { t } = useTranslation();
+  const [start, setStart] = useState(user.grid_window_start || "10 : 00");
+  const [end, setEnd] = useState(user.grid_window_end || "19 : 00");
+
+  useEffect(() => {
+    setStart(user.grid_window_start || "10 : 00");
+    setEnd(user.grid_window_end || "19 : 00");
+  }, [user.grid_window_start, user.grid_window_end]);
 
   return (
     <section>
-      <h2 className={styles.Profile__SectionTitle}>Часы сетки при создании</h2>
-      <p className={styles.Profile__Hint}>
-        На странице создания встречи окно «с какого по какой час» остаётся у всех, в том числе у гостя. Здесь можно
-        запомнить свои привычные часы — они подставятся в форму, когда вы залогинены. Пока это только на этом
-        устройстве.
-      </p>
+      <h2 className={styles.Profile__SectionTitle}>{t("profile.gridTitle")}</h2>
+      <p className={styles.Profile__Hint}>{t("profile.gridHint")}</p>
       <div className={styles.Profile__Interval}>
         <Select
           name='grid-start'
@@ -448,12 +519,16 @@ const GridWindowSettings = () => {
       <button
         type='button'
         className={`baseButton mainButton ${styles.Profile__SaveTemplate}`}
-        onClick={() => {
-          localStorage.setItem(GRID_WINDOW_KEY, JSON.stringify({ start, end }));
-          addToast({ id: "grid-window-saved", type: "success", message: "Часы сетки запомнили на этом устройстве" });
+        onClick={async () => {
+          try {
+            await updateSettings({ grid_window_start: start, grid_window_end: end });
+            addToast({ id: "grid-window-saved", type: "success", message: t("toast.gridSaved") });
+          } catch {
+            addToast({ id: "grid-window-error", type: "error", message: t("toast.gridError") });
+          }
         }}
       >
-        Запомнить для создания
+        {t("profile.gridSave")}
       </button>
     </section>
   );
@@ -464,13 +539,14 @@ const AppearanceSettings = () => {
   const userTheme = useSessionStore(state => state.user?.theme);
   const updateSettings = useSessionStore(state => state.updateSettings);
   const addToast = useToastStore(state => state.addToast);
-  const [language, setLanguage] = useState(() => localStorage.getItem(LANGUAGE_KEY) || "Русский");
+  const { t, i18n } = useTranslation();
+  const locale = parseLocale(i18n.language);
   const currentTheme = userTheme ?? theme;
 
   return (
     <div className={styles.Profile__Stack}>
       <label className={styles.Profile__ToggleRow}>
-        <span>Светлая тема</span>
+        <span>{t("profile.themeLight")}</span>
         <button
           type='button'
           role='switch'
@@ -482,30 +558,24 @@ const AppearanceSettings = () => {
             try {
               await updateSettings({ theme: next });
             } catch {
-              addToast({
-                id: "theme-saved-error",
-                type: "error",
-                message: "Тема сменилась на этом устройстве, но на сервер не ушла",
-              });
+              addToast({ id: "theme-saved-error", type: "error", message: t("toast.themeError") });
             }
           }}
         />
       </label>
       <section>
-        <h2 className={styles.Profile__SectionTitle}>Язык</h2>
+        <h2 className={styles.Profile__SectionTitle}>{t("profile.language")}</h2>
         <Select
           name='language'
-          options={["Русский", "English", "Deutsch"]}
-          value={language}
-          onChange={value => {
-            setLanguage(value);
-            localStorage.setItem(LANGUAGE_KEY, value);
-            if (value !== "Русский") {
-              addToast({
-                id: "lang-soon",
-                type: "info",
-                message: "Пока интерфейс только на русском. Запомнили выбор на этом устройстве",
-              });
+          options={LOCALES.map(item => LOCALE_LABEL[item])}
+          value={LOCALE_LABEL[locale]}
+          onChange={async value => {
+            const next = parseLocale(value);
+            await changeAppLocale(next);
+            try {
+              await updateSettings({ locale: next });
+            } catch {
+              addToast({ id: "lang-saved-error", type: "error", message: t("toast.langError") });
             }
           }}
         />
@@ -513,15 +583,9 @@ const AppearanceSettings = () => {
       <button
         type='button'
         className={styles.Profile__Row}
-        onClick={() =>
-          addToast({
-            id: "tester-soon",
-            type: "info",
-            message: "Набор тестеров ещё не открыт. Напишите в техподдержку, если хотите помочь",
-          })
-        }
+        onClick={() => addToast({ id: "tester-soon", type: "info", message: t("toast.testerSoon") })}
       >
-        Стать тестером
+        {t("profile.tester")}
         <Arrow className={styles.Profile__RowArrow} />
       </button>
     </div>

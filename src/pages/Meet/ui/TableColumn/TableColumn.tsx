@@ -27,8 +27,8 @@ export const TableColumn = memo(({ columnId, columnWidth, timeRanges }: TableCol
 
   const disabledBeforeCells = useMemo(() => {
     return getCellIds({
-      startTime: timeRanges[0][0],
-      endTime: timeRanges[0][1],
+      startTime: timeRanges[0]?.[0] ?? "",
+      endTime: timeRanges[0]?.[1] ?? "",
       date: columnId,
     });
   }, [timeRanges, columnId]);

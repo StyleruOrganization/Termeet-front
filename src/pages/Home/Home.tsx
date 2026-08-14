@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 import { getMyMeetingsRequest, useSessionStore, type IUserMeeting, type UserMeetingRole } from "@/entities/User";
+import { LOCALE_BCP, parseLocale, useTranslation } from "@/shared/i18n";
 import { Container } from "@/shared/ui";
 import Arrow from "@assets/icons/arrow.svg";
 import styles from "./Home.module.css";
@@ -10,16 +11,12 @@ type DateFilter = "all" | "today" | "byDate";
 type RoleFilter = "all" | UserMeetingRole;
 type HomeTab = "meetings" | "history";
 
-const ROLE_LABEL: Record<UserMeetingRole, string> = {
-  owner: "Создатель",
-  participant: "Участник",
-  observer: "Наблюдатель",
-  invited: "Вас пригласили",
+const ROLE_LABEL_KEY: Record<UserMeetingRole, string> = {
+  owner: "home.roleOwner",
+  participant: "home.roleParticipant",
+  observer: "home.roleObserver",
+  invited: "home.roleInvited",
 };
-
-const weekdayShort = ["вс", "пн", "вт", "ср", "чт", "пт", "сб"];
-const monthTitle = (date: Date) =>
-  date.toLocaleDateString("ru-RU", { month: "long", year: "numeric" }).replace(" г.", "");
 
 const toDayKey = (value: Date) => {
   const year = value.getFullYear();
@@ -30,16 +27,24 @@ const toDayKey = (value: Date) => {
 
 const firstRangeDay = (meeting: IUserMeeting) => meeting.dataRange?.[0]?.[0]?.slice(0, 10) ?? "";
 
-const formatGroupTitle = (isoDay: string) => {
-  if (!isoDay) {
-    return "Дата не указана";
+const peopleWordKey = (count: number, locale: string) => {
+  if (locale !== "ru") {
+    return count === 1 ? "home.people1" : "home.people5";
   }
-  const date = new Date(`${isoDay}T00:00:00`);
-  const weekday = weekdayShort[date.getDay()];
-  return `${date.toLocaleDateString("ru-RU", { day: "numeric", month: "long" })}, ${weekday}`;
+  const mod10 = count % 10;
+  const mod100 = count % 100;
+  if (mod10 === 1 && mod100 !== 11) {
+    return "home.people1";
+  }
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) {
+    return "home.people2";
+  }
+  return "home.people5";
 };
 
 export const Home = () => {
+  const { t, i18n } = useTranslation();
+  const dateLocale = LOCALE_BCP[parseLocale(i18n.language)];
   const user = useSessionStore(state => state.user);
   const navigate = useNavigate();
   const [month, setMonth] = useState(() => {
@@ -110,6 +115,15 @@ export const Home = () => {
     return Array.from(groups.entries()).sort(([a], [b]) => a.localeCompare(b));
   }, [visibleMeetings]);
 
+  const formatGroupTitle = (isoDay: string) => {
+    if (!isoDay || isoDay === "none") {
+      return t("home.noDate");
+    }
+    const date = new Date(`${isoDay}T00:00:00`);
+    const weekdayKey = ((date.getDay() + 6) % 7) + 1;
+    return `${date.toLocaleDateString(dateLocale, { day: "numeric", month: "long" })}, ${t(`week.${weekdayKey}`)}`;
+  };
+
   return (
     <Container>
       <div className={styles.Home}>
@@ -130,7 +144,7 @@ export const Home = () => {
             }}
           />
           <button type='button' className='baseButton mainButton' onClick={() => navigate("/create")}>
-            Создать встречу
+            {t("home.create")}
           </button>
         </aside>
 
@@ -141,72 +155,68 @@ export const Home = () => {
               className={`${styles.Home__Tab} ${tab === "meetings" ? styles.Home__Tab_active : ""}`}
               onClick={() => setTab("meetings")}
             >
-              Мои встречи
+              {t("home.meetings")}
             </button>
             <button
               type='button'
               className={`${styles.Home__Tab} ${tab === "history" ? styles.Home__Tab_active : ""}`}
               onClick={() => setTab("history")}
             >
-              История
+              {t("home.history")}
             </button>
           </div>
 
           <div className={styles.Home__Filters}>
             {(
               [
-                ["all", "Все"],
-                ["today", "Сегодня"],
-                ["byDate", "День в календаре"],
+                ["all", "home.all"],
+                ["today", "home.today"],
+                ["byDate", "home.byDate"],
               ] as const
-            ).map(([id, label]) => (
+            ).map(([id, labelKey]) => (
               <button
                 key={id}
                 type='button'
                 className={`${styles.Home__Chip} ${dateFilter === id ? styles.Home__Chip_active : ""}`}
                 onClick={() => setDateFilter(id)}
               >
-                {label}
+                {t(labelKey)}
               </button>
             ))}
           </div>
           <div className={styles.Home__Filters}>
             {(
               [
-                ["all", "Все роли"],
-                ["owner", "Я создатель"],
-                ["participant", "Я участник"],
-                ["observer", "Я наблюдатель"],
-                ["invited", "Вас пригласили"],
+                ["all", "home.allRoles"],
+                ["owner", "home.owner"],
+                ["participant", "home.participant"],
+                ["observer", "home.observer"],
+                ["invited", "home.invited"],
               ] as const
-            ).map(([id, label]) => (
+            ).map(([id, labelKey]) => (
               <button
                 key={id}
                 type='button'
                 className={`${styles.Home__Chip} ${roleFilter === id ? styles.Home__Chip_active : ""}`}
                 onClick={() => setRoleFilter(id)}
               >
-                {label}
+                {t(labelKey)}
               </button>
             ))}
           </div>
 
           {tab === "history" && grouped.length === 0 && !isLoading && !isError ? (
-            <p className={styles.Home__Empty}>Здесь появятся встречи, у которых уже назначено итоговое время</p>
+            <p className={styles.Home__Empty}>{t("home.historyEmpty")}</p>
           ) : isLoading ? (
-            <p className={styles.Home__Empty}>Загружаем встречи…</p>
+            <p className={styles.Home__Empty}>{t("home.loading")}</p>
           ) : isError ? (
-            <p className={styles.Home__Empty}>
-              Не получилось загрузить встречи. После деплоя бэкенда в ветку dev список появится сам.
-            </p>
+            <p className={styles.Home__Empty}>{t("home.loadError")}</p>
           ) : grouped.length === 0 ? (
-            <p className={styles.Home__Empty}>
-              {user?.first_name}, пока нет встреч в этом фильтре. Создай первую или открой ссылку.
-            </p>
+            <p className={styles.Home__Empty}>{t("home.emptyFilter", { name: user?.first_name ?? "" })}</p>
           ) : (
             grouped.map(([day, items]) => (
               <div key={day} className={styles.Home__Group}>
-                <h2 className={styles.Home__GroupTitle}>{formatGroupTitle(day === "none" ? "" : day)}</h2>
+                <h2 className={styles.Home__GroupTitle}>{formatGroupTitle(day)}</h2>
                 {items.map(meeting => (
                   <div key={meeting.hash} className={styles.Home__Card}>
                     <button
@@ -216,7 +226,7 @@ export const Home = () => {
                     >
                       <span className={styles.Home__CardName}>{meeting.name}</span>
                       <span className={styles.Home__CardMeta}>
-                        {meeting.hasFinal ? "Время назначено" : "Ждём время"} · {ROLE_LABEL[meeting.role]}
+                        {meeting.hasFinal ? t("home.scheduled") : t("home.waiting")} · {t(ROLE_LABEL_KEY[meeting.role])}
                         {meeting.duration ? ` · ${meeting.duration}` : ""}
                       </span>
                     </button>
@@ -228,13 +238,13 @@ export const Home = () => {
                         target='_blank'
                         rel='noreferrer'
                       >
-                        Подключиться
+                        {t("home.join")}
                       </a>
                     ) : null}
                     <button
                       type='button'
                       className={styles.Home__CardOpen}
-                      aria-label={`Открыть встречу ${meeting.name}`}
+                      aria-label={t("home.openMeet", { name: meeting.name })}
                       onClick={() => navigate(`/meet/${meeting.hash}`)}
                     >
                       <Arrow className={styles.Home__CardArrow} />
@@ -251,10 +261,11 @@ export const Home = () => {
 };
 
 const PeopleSnippet = ({ names, count }: { names: string[]; count: number }) => {
+  const { t, i18n } = useTranslation();
   const [open, setOpen] = useState(false);
   const shown = count || names.length;
   if (!shown) {
-    return <span className={styles.Home__PeopleEmpty}>Пока никто не выбрал время</span>;
+    return <span className={styles.Home__PeopleEmpty}>{t("home.noPeople")}</span>;
   }
 
   return (
@@ -267,7 +278,7 @@ const PeopleSnippet = ({ names, count }: { names: string[]; count: number }) => 
           setOpen(current => !current);
         }}
       >
-        {shown} {shown === 1 ? "участник" : shown < 5 ? "участника" : "участников"}
+        {shown} {t(peopleWordKey(shown, parseLocale(i18n.language)))}
       </button>
       {open ? (
         <ul className={styles.Home__PeopleList}>
@@ -293,6 +304,8 @@ const HomeCalendar = ({
   onMonthChange: (next: Date) => void;
   onSelectDay: (day: string) => void;
 }) => {
+  const { t, i18n } = useTranslation();
+  const dateLocale = LOCALE_BCP[parseLocale(i18n.language)];
   const todayKey = toDayKey(new Date());
   const year = month.getFullYear();
   const monthIndex = month.getMonth();
@@ -301,29 +314,30 @@ const HomeCalendar = ({
   const cells = Array.from({ length: firstWeekday + daysInMonth }, (_, index) =>
     index < firstWeekday ? null : index - firstWeekday + 1,
   );
+  const monthLabel = month.toLocaleDateString(dateLocale, { month: "long", year: "numeric" }).replace(" г.", "");
 
   return (
     <div className={styles.HomeCalendar}>
       <div className={styles.HomeCalendar__Header}>
         <button
           type='button'
-          aria-label='Предыдущий месяц'
+          aria-label={t("home.prevMonth")}
           onClick={() => onMonthChange(new Date(year, monthIndex - 1, 1))}
         >
           <Arrow className={styles.HomeCalendar__ArrowLeft} />
         </button>
-        <span>{monthTitle(month)}</span>
+        <span>{monthLabel}</span>
         <button
           type='button'
-          aria-label='Следующий месяц'
+          aria-label={t("home.nextMonth")}
           onClick={() => onMonthChange(new Date(year, monthIndex + 1, 1))}
         >
           <Arrow />
         </button>
       </div>
       <div className={styles.HomeCalendar__Week}>
-        {["пн", "вт", "ср", "чт", "пт", "сб", "вс"].map(day => (
-          <span key={day}>{day}</span>
+        {([1, 2, 3, 4, 5, 6, 7] as const).map(day => (
+          <span key={day}>{t(`week.${day}`)}</span>
         ))}
       </div>
       <div className={styles.HomeCalendar__Grid}>

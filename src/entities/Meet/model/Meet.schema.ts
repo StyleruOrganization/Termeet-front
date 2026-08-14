@@ -26,9 +26,10 @@ export interface MeetResponse {
   description?: string | null;
   link?: string | null;
   duration?: string | null;
-  data_range: [string, string][];
+  data_range?: [string, string][] | null;
+  dataRange?: [string, string][] | null;
   hash: string;
-  slots: SlotsUser[];
+  slots?: SlotsUser[];
   isCreatorAuth: boolean;
   isCreator: boolean;
   anyoneCanEdit?: boolean;
@@ -40,6 +41,14 @@ export interface MeetResponse {
   observers?: ObserverUser[];
   permissions?: MeetPermissions;
 }
+
+export const getMeetDateRange = (meet: MeetResponse): [string, string][] => {
+  const ranges = meet.dataRange ?? meet.data_range;
+  if (!Array.isArray(ranges)) {
+    return [];
+  }
+  return ranges.filter((range): range is [string, string] => Array.isArray(range) && range.length >= 2);
+};
 
 export interface MeetCreate {
   name: string;

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useMeetStore, type IMeet } from "@/entities/Meet";
-import { formatAvailabilitySummary, useSessionStore } from "@/entities/User";
+import { useSessionStore } from "@/entities/User";
+import { useTranslation } from "@/shared/i18n";
 import { ModalWrapper } from "@/shared/ui";
 import styles from "./MeetPrefillModal.module.css";
 import { buildPrefillFromTemplate } from "../../lib/prefill/buildPrefillFromTemplate";
@@ -20,6 +21,7 @@ export const MeetPrefillModal = ({ hash, canVote, mySlotName, timeInfo }: MeetPr
   const isEditing = useMeetStore(state => state.isEditing);
   const startEditingSlots = useMeetStore(state => state.startEditingSlots);
   const [isOpen, setIsOpen] = useState(false);
+  const { t } = useTranslation();
 
   const template = user?.availability_template;
   const prefill = useMemo(() => buildPrefillFromTemplate(timeInfo, template ?? []), [timeInfo, template]);
@@ -48,11 +50,8 @@ export const MeetPrefillModal = ({ hash, canVote, mySlotName, timeInfo }: MeetPr
   return (
     <ModalWrapper isOpen={isOpen} onClose={closeForVisit} isAnimate>
       <div className={styles.MeetPrefillModal}>
-        <h2>Подставить ваше обычное время?</h2>
-        <p>
-          В кабинете сохранён шаблон: {formatAvailabilitySummary(template ?? []) || "обычное время"}. Можно сразу
-          отметить его на этой встрече и поправить ячейки. Если не нужно — выберите время сами, сетка откроется пустой.
-        </p>
+        <h2>{t("prefill.title")}</h2>
+        <p>{t("prefill.body")}</p>
         <button
           type='button'
           className='baseButton mainButton'
@@ -61,7 +60,7 @@ export const MeetPrefillModal = ({ hash, canVote, mySlotName, timeInfo }: MeetPr
             startEditingSlots(null, prefill);
           }}
         >
-          Да, подставить
+          {t("prefill.yes")}
         </button>
         <button
           type='button'
@@ -71,7 +70,7 @@ export const MeetPrefillModal = ({ hash, canVote, mySlotName, timeInfo }: MeetPr
             startEditingSlots();
           }}
         >
-          Нет, заполню сам
+          {t("prefill.no")}
         </button>
         <button
           type='button'
@@ -81,7 +80,7 @@ export const MeetPrefillModal = ({ hash, canVote, mySlotName, timeInfo }: MeetPr
             updateSettings({ suggest_prefill: false }).catch(() => undefined);
           }}
         >
-          Больше не предлагать
+          {t("prefill.never")}
         </button>
       </div>
     </ModalWrapper>

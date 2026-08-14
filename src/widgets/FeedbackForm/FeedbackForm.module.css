@@ -7,6 +7,8 @@
     min-width: 0;
 
     h2 {
+        color: var(--text-main);
+
         font-size: 20px;
         font-weight: 700;
     }
@@ -146,12 +148,16 @@
     svg {
         width: 32px;
         height: 32px;
+
+        color: var(--text-main);
     }
 
     span {
         display: block;
 
         text-align: center;
+
+        color: var(--text-main);
 
         font-size: 16px;
     }
@@ -208,13 +214,15 @@
 }
 
 .FeedbackForm__FileItem_invalid {
-    border: 1px solid var(--semantics-red, #e53935);
+    border: 1px solid var(--semantics-red-main);
 }
 
 .FeedbackForm__PaperClipUploader {
     position: absolute;
     top: 30px;
     right: 11px;
+
+    color: var(--text-main);
 
     transition: opacity 0.3s ease-in-out;
 

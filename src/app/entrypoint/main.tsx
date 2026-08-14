@@ -1,6 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { reportClientError } from "@/shared/api";
+import "@/shared/i18n";
 import { App } from "../App";
 
 window.addEventListener("error", event => {

@@ -6,7 +6,7 @@
 }
 
 .MeetPeoples__Count {
-  color: var(--semantics-gray-active);
+  color: var(--text-secondary);
 
   margin-left: 8px;
 }

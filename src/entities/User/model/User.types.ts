@@ -18,13 +18,21 @@ export interface IUser {
   theme?: "light" | "dark";
   suggest_prefill?: boolean;
   availability_template?: IAvailabilityInterval[];
+  locale?: "ru" | "en" | "de";
+  grid_window_start?: string;
+  grid_window_end?: string;
 }
 
 export interface IUserSettingsUpdate {
+  first_name?: string;
+  last_name?: string;
   timezone?: string;
   theme?: "light" | "dark";
   suggest_prefill?: boolean;
   availability_template?: IAvailabilityInterval[];
+  locale?: "ru" | "en" | "de";
+  grid_window_start?: string;
+  grid_window_end?: string;
 }
 
 export interface ITokenInfo {

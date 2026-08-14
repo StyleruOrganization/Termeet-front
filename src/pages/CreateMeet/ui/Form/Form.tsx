@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useSessionStore } from "@/entities/User";
 import { TIMES, DURATIONS } from "@/shared/consts";
+import { useTranslation } from "@/shared/i18n";
 import { isTimeBefore } from "@shared/libs";
 import styles from "./Form.module.css";
 import { isDurationValid } from "../../lib";
@@ -10,9 +11,8 @@ import { InvitePeople } from "../InvitePeople/InvitePeople";
 import { TextArea } from "../TextArea/TextArea";
 import { TimeSelect } from "../TimeSelect/TimeSelect";
 
-const GRID_WINDOW_KEY = "termeet.gridWindow";
-
 export const Form = () => {
+  const { t } = useTranslation();
   const user = useSessionStore(state => state.user);
   const setTime = useCreateMeetStore(state => state.setTime);
   const timeStart = useCreateMeetStore(state => state.values.timeStart);
@@ -22,42 +22,33 @@ export const Form = () => {
     if (!user) {
       return;
     }
-    try {
-      const raw = localStorage.getItem(GRID_WINDOW_KEY);
-      if (!raw) {
-        return;
-      }
-      const parsed = JSON.parse(raw) as { start?: string; end?: string };
-      if (parsed.start) {
-        setTime("timeStart", parsed.start);
-      }
-      if (parsed.end) {
-        setTime("timeEnd", parsed.end);
-      }
-    } catch {
-      return;
+    if (user.grid_window_start) {
+      setTime("timeStart", user.grid_window_start);
+    }
+    if (user.grid_window_end) {
+      setTime("timeEnd", user.grid_window_end);
     }
   }, [setTime, user]);
 
   return (
     <div data-test-id='meeting-form' className={styles.MeetingForm}>
       <Input
-        suggestMessage='Укажите название встречи'
+        suggestMessage={t("create.titleHint")}
         name='title'
-        label='Название встречи'
-        placeholder='«Лютый синк»'
+        label={t("create.title")}
+        placeholder={t("create.titlePlaceholder")}
       />
       <TextArea
-        label='Описание встречи'
-        placeholder='Тут можно написать, о чем будет встреча'
+        label={t("create.description")}
+        placeholder={t("create.descriptionPlaceholder")}
         name='description'
-        suggestMessage='Максимальное количество символов — 400.'
+        suggestMessage={t("create.descriptionHint")}
       />
-      <div className={styles.MeetingForm__InputsTimes__Label}>Когда хотите встретиться?</div>
+      <div className={styles.MeetingForm__InputsTimes__Label}>{t("create.when")}</div>
       <div className={styles.MeetingForm__InputsTimes}>
         <TimeSelect
           name='timeStart'
-          placeholder='Выберите'
+          placeholder={t("create.choose")}
           options={TIMES}
           className={styles.MeetingForm__InputTimes__Input}
           disabledFunc={time => !isTimeBefore(time, timeEnd)}
@@ -66,7 +57,7 @@ export const Form = () => {
         <div className={styles.MeetingForm__InputsTimes__Separator} />
         <TimeSelect
           name='timeEnd'
-          placeholder='Выберите'
+          placeholder={t("create.choose")}
           options={TIMES}
           className={styles.MeetingForm__InputTimes__Input}
           disabledFunc={time => isTimeBefore(time, timeStart) || time == timeStart}
@@ -75,14 +66,14 @@ export const Form = () => {
       </div>
       <TimeSelect
         name='timeDuration'
-        label='Продолжительность встречи'
+        label={t("create.duration")}
         className={styles.MeetingForm__InputTimes__Input}
-        placeholder='1 час'
+        placeholder={t("create.durationPlaceholder")}
         options={DURATIONS}
         disabledFunc={duration => !isDurationValid(duration, timeStart, timeEnd)}
       />
       <InvitePeople />
-      <Input name='link' label='Ссылка на встречу' placeholder='https://telemost.yandex.ru/j/122' />
+      <Input name='link' label={t("create.link")} placeholder='https://telemost.yandex.ru/j/122' />
     </div>
   );
 };

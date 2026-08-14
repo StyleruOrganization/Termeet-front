@@ -6,6 +6,8 @@
 
   padding: 12px 0;
 
+  color: var(--text-secondary);
+
   font-size: var(--text-body);
   line-height: 1.25;
 
@@ -22,6 +24,8 @@
 }
 
 .react-calendar__navigation__label__labelText {
+  color: var(--text-main);
+
   font-size: 4rem;
   line-height: 1.25;
 }

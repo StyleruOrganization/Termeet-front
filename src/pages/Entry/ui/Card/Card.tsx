@@ -1,3 +1,4 @@
+import { useTranslation } from "@/shared/i18n";
 import styles from "./Card.module.css";
 
 interface ReasonCardProps {
@@ -10,13 +11,14 @@ interface ReasonCardProps {
 }
 
 export const Card = ({ children, title, description, scrollSnapType: customScrollSnapType, type }: ReasonCardProps) => {
+  const { t } = useTranslation();
   return (
     <div style={{ scrollSnapAlign: customScrollSnapType }} className={`${styles.ReasonCard} ${styles[type]}`}>
       {children}
       <div className={styles.ReasonCard__ContentWrapper}>
         <h3>{title}</h3>
         <p>{description}</p>
-        <a href=''>Попробовать →</a>
+        <a href=''>{t("entry.try")}</a>
       </div>
     </div>
   );

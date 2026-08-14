@@ -13,15 +13,21 @@ import type {
 type RawUser = IUser & {
   suggestPrefill?: boolean;
   availabilityTemplate?: IAvailabilityInterval[];
+  gridWindowStart?: string;
+  gridWindowEnd?: string;
 };
 
 export const normalizeUser = (raw: RawUser): IUser => {
+  const locale = raw.locale === "en" || raw.locale === "de" ? raw.locale : "ru";
   return {
     ...raw,
     timezone: raw.timezone || "UTC +3:00 (Москва)",
     theme: raw.theme === "dark" ? "dark" : "light",
     suggest_prefill: raw.suggest_prefill ?? raw.suggestPrefill ?? true,
     availability_template: raw.availability_template ?? raw.availabilityTemplate ?? [],
+    locale,
+    grid_window_start: raw.grid_window_start ?? raw.gridWindowStart ?? "10 : 00",
+    grid_window_end: raw.grid_window_end ?? raw.gridWindowEnd ?? "19 : 00",
   };
 };
 
@@ -49,6 +55,10 @@ export const getMeRequest = async () => {
 export const updateMeRequest = async (payload: IUserSettingsUpdate) => {
   const user = await apiClient.patch<RawUser, IUserSettingsUpdate>("/users/me", payload);
   return normalizeUser(user);
+};
+
+export const deleteAccountRequest = () => {
+  return apiClient.delete<{ detail: string }>("/users/me");
 };
 
 export const confirmEmailRequest = (token: string) => {

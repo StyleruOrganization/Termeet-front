@@ -118,6 +118,8 @@
     position: relative;
     z-index: 10;
 
+    color: var(--text-main);
+
     font-size: var(--text-display);
     font-weight: 700;
     margin-bottom: 16px;
@@ -126,6 +128,8 @@
   p {
     position: relative;
     z-index: 10;
+
+    color: var(--text-main);
 
     font-size: var(--text-small);
   }
@@ -231,7 +235,7 @@ section h2 {
   height: 34px;
   padding: 8px 10px;
 
-  color: var(--text-inverted);
+  color: var(--light);
   border-radius: 50%; 
 
   background-image: linear-gradient(#FF9A98, #DD4442);
@@ -253,6 +257,7 @@ section h2 {
 
   padding: 7px 10px;
 
+  color: var(--text-main);
   border-radius: 16px;
 
   background-image: linear-gradient(#ECECEC, #DADADA);
@@ -261,7 +266,7 @@ section h2 {
   .ChatContainer__Msg__Content__Link {
     text-decoration: underline;
 
-    color: var(--semantics-blue-700);
+    color: var(--text-link);
 
     /* stylelint-disable-next-line */
     word-break: break-word; 
@@ -272,7 +277,7 @@ section h2 {
     left: -5px;
     bottom: 0;
 
-    color: var(--semantics-gray-active);
+    color: var(--text-secondary);
   }
 }
 
@@ -301,8 +306,18 @@ section h2 {
   }
 
   .ChatContainer__Msg__Author {
+    color: var(--text-main);
+
     background-image: linear-gradient(#C1DBFA, #96BEFA);
   }
+}
+
+[data-theme="dark"] .ChatContainer__Msg__Content {
+  color: var(--text-inverted);
+}
+
+[data-theme="dark"] .ChatContainer_blue .ChatContainer__Msg__Author {
+  color: var(--text-inverted);
 }
 
 .EntryPage__Notifications {
@@ -553,20 +568,20 @@ section h2 {
 .MeetHeader__link {
   width: fit-content;
 
-  color: var(--semantics-blue-600);
+  color: var(--text-link);
 
-  transition: color 0.3s ease-in-out;
+  transition: opacity 0.3s ease-in-out;
 
   cursor: pointer;
 
   font-size: var(--text-body);
 
   &:hover {
-    color: var(--semantics-blue-500);
+    opacity: 0.8;
   }
 
   &:active {
-    color: var(--semantics-blue-400);
+    opacity: 0.7;
   }
 }
 
@@ -613,7 +628,7 @@ section h2 {
 }
 
 .MeetPeoples__Count {
-  color: var(--semantics-gray-active);
+  color: var(--text-secondary);
 
   margin-left: 8px;
 }
@@ -979,10 +994,10 @@ footer {
   }
 
   &:active {
-    color: var(--semantics-blue-700);
+    color: var(--text-link);
 
     svg {
-      color: var(--semantics-blue-700);
+      color: var(--text-link);
     }
   }
 }

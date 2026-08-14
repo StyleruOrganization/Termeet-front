@@ -1,6 +1,6 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useParams, useSearchParams } from "react-router";
-import { MeetQueries, type IMeet } from "@/entities/Meet";
+import { MeetQueries, getMeetDateRange, type IMeet } from "@/entities/Meet";
 import { useSessionStore } from "@/entities/User";
 import { convertUTCToTimezone } from "@/shared/libs";
 
@@ -19,7 +19,7 @@ export const useGetMeetInfo = (): Pick<
   const timeZoneOffset = isLocalTime ? -new Date().getTimezoneOffset() / 60 : 3;
   const timeRanges: IMeet["timeRanges"] = [];
 
-  const preparedMeetDataDataRanges = meetData.data_range.map(([startTime, endTime]) => [
+  const preparedMeetDataDataRanges = getMeetDateRange(meetData).map(([startTime, endTime]) => [
     convertUTCToTimezone(startTime, timeZoneOffset),
     convertUTCToTimezone(endTime, timeZoneOffset),
   ]);

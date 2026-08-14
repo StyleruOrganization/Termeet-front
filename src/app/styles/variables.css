@@ -8,6 +8,7 @@
   --text-secondary: #9f9f9f;
   --text-disabled: #d9d9d9;
   --text-inverted: #f8f8f8;
+  --text-link: #2651cb;
   --components-hover: #ececec;
   --fill-bg: #fff;
   --fill-controls: #f8f8f8;
@@ -44,7 +45,8 @@
 :root[data-theme="dark"] {
   --text-inverted: #2f2f2f;
   --text-disabled: #5d5d5d;
-  --text-secondary: #3d4049;
+  --text-secondary: #9f9f9f;
+  --text-link: #3e81e9;
   --text-main: #ececec;
   --semantics-yellow-main: #e8c200;
   --semantics-yellow-hover: #cb9800;

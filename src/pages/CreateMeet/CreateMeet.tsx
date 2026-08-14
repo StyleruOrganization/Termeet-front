@@ -1,3 +1,4 @@
+import { useTranslation } from "@/shared/i18n";
 import { useScrollToTop } from "@/shared/libs";
 import { Container } from "@/shared/ui";
 import { useCreateMeet } from "./api/useCreateMeet";
@@ -8,6 +9,7 @@ import { Form } from "./ui/Form/Form";
 import { Onboarding } from "./ui/Onboarding/Onboarding";
 
 const CreateButton = () => {
+  const { t } = useTranslation();
   const values = useCreateMeetStore(state => state.values);
   const errors = useCreateMeetStore(state => state.errors);
   const scrollToTop = useScrollToTop();
@@ -25,7 +27,7 @@ const CreateButton = () => {
             scrollToTop();
           }}
         >
-          Создать встречу
+          {t("create.submit")}
         </button>
       </div>
     </>
@@ -33,6 +35,7 @@ const CreateButton = () => {
 };
 
 export function CreateMeet() {
+  const { t } = useTranslation();
   const resetForm = useCreateMeetStore(state => state.resetForm);
 
   const { createMeet } = useCreateMeet({
@@ -51,10 +54,10 @@ export function CreateMeet() {
   return (
     <Container>
       <div className={styles.CreateMeetingPage__Content}>
-        <h1 className={styles.CreateMeetingPage__Content__Title}>Создайте встречу</h1>
+        <h1 className={styles.CreateMeetingPage__Content__Title}>{t("create.pageTitle")}</h1>
         <form className={styles.CreateMeetingPage__Form} onSubmit={handleSubmit}>
           <div className={styles.CreateMeetingPage__Calendar}>
-            <Calendar suggestMessage='Выберите минимум один день' />
+            <Calendar suggestMessage={t("create.pickDays")} />
             <Onboarding />
           </div>
           <div className={styles.CreateMeetingPage__Content__FormWrapper}>
