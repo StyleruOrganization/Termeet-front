@@ -60,8 +60,11 @@ export const TableCell = ({
   }, [isTimeZoneDisabled, isBeforeCurrentTime, users, isEditingMode, isFinalizing]);
 
   const timeInterval = useMemo(() => {
-    if (isTimeZoneDisabled) return;
-    const [hours, minutes] = id.split("T")[1].split(":").map(Number);
+    if (isTimeZoneDisabled || !id.includes("T")) return;
+    const timePart = id.split("T")[1];
+    if (!timePart) return;
+    const [hours, minutes] = timePart.split(":").map(Number);
+    if (Number.isNaN(hours) || Number.isNaN(minutes)) return;
     const totalminutes = hours * 60 + minutes + 30;
 
     return `${hours}:${minutes.toString().padStart(2, "0")} - ${Math.floor(totalminutes / 60)

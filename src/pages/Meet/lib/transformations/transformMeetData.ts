@@ -21,14 +21,17 @@ export const transformMeetData = (meetData: MeetResponse, isLocal: boolean, curr
   ]);
   // Также поступаем и со слотами
   const preparedMeetDataTimeSlots = (meetData.slots ?? []).map(userInfo => {
-    const { name, slots } = userInfo;
-    if (slots.length) {
+    const { name } = userInfo;
+    const slots = Array.isArray(userInfo.slots) ? userInfo.slots : [];
+    if (name && slots.length) {
       users.add(name);
     }
-    const convertedSlots: [string, string][] = slots.map(([startTime, endTime]) => [
-      convertUTCToTimezone(startTime, timeZoneOffset),
-      convertUTCToTimezone(endTime, timeZoneOffset),
-    ]);
+    const convertedSlots: [string, string][] = slots
+      .filter((range): range is [string, string] => Array.isArray(range) && range.length >= 2)
+      .map(([startTime, endTime]) => [
+        convertUTCToTimezone(startTime, timeZoneOffset),
+        convertUTCToTimezone(endTime, timeZoneOffset),
+      ]);
     return {
       ...userInfo,
       slots: convertedSlots,
@@ -37,8 +40,14 @@ export const transformMeetData = (meetData: MeetResponse, isLocal: boolean, curr
 
   // Определяем промежутки времени общие для всех, для отображения времени слева, а также промежутки для каждого дня - инициализируем мапу, ту страшную
   preparedMeetDataDataRanges.forEach(([startTimeRange, endTimeRange]) => {
+    if (!startTimeRange?.includes("T") || !endTimeRange?.includes("T")) {
+      return;
+    }
     const [startDate, startTime] = startTimeRange.split("T");
     const [endDate, endTime] = endTimeRange.split("T");
+    if (!startDate || !startTime || !endDate || !endTime) {
+      return;
+    }
 
     const processedStartTime = startTime.split(":").slice(0, 2).join(":");
     const processedEndTime = endTime.split(":").slice(0, 2).join(":");

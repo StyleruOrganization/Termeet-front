@@ -28,7 +28,7 @@ export const useColumnData = (date: string) => {
 
     if (timeFirstRangeStart && timeFirstRangeEnd) {
       if (
-        !columnData?.timeRanges.some(
+        !columnData?.timeRanges?.some(
           ([startTime, endTime]) => startTime === timeFirstRangeStart && endTime === timeFirstRangeEnd,
         )
       ) {
@@ -48,7 +48,7 @@ export const useColumnData = (date: string) => {
 
     if (timeSecondRangeStart && timeSecondRangeEnd) {
       if (
-        !columnData?.timeRanges.some(
+        !columnData?.timeRanges?.some(
           ([startTime, endTime]) => startTime === timeSecondRangeStart && endTime === timeSecondRangeEnd,
         )
       ) {
