@@ -2,14 +2,12 @@ name: Deploy production
 run-name: "Deploy Production - v${{ inputs.version }}"
 
 on:
-  push:
-    branches: ["main"]
-#  workflow_dispatch:
-#    inputs:
-#      version:
-#        description: 'Version (e.g., 1.2.3)'
-#        required: true
-#        type: string
+ workflow_dispatch:
+   inputs:
+     version:
+       description: 'Version (e.g., 1.2.3)'
+       required: true
+       type: string
 
 jobs:
   deploy:
