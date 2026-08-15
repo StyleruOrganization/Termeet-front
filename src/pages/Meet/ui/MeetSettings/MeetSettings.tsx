@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { getMeetPermissions, type IMeet, type MeetSettingsUpdate } from "@/entities/Meet";
 import { TIMES } from "@/shared/consts";
-import { useNow } from "@/shared/libs";
+import { startOfToday, useNow } from "@/shared/libs";
 import { DatePicker, ModalWrapper, Select } from "@shared/ui";
 import styles from "./MeetSettings.module.css";
 import { useUpdateMeetSettings } from "../../api";
@@ -25,6 +25,21 @@ const OFFSETS = [
 const offsetLabel = (minutes: number) => OFFSETS.find(item => item.minutes === minutes)?.label ?? `за ${minutes} мин`;
 
 const pad = (value: number) => String(value).padStart(2, "0");
+
+const toDayKey = (date: Date) => `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+
+const maxDeadlineFromMeetingDays = (days: string[], now = new Date()) => {
+  const today = startOfToday(now);
+  const lastKey = [...days].sort().pop();
+  if (lastKey) {
+    const [year, month, day] = lastKey.split("-").map(Number);
+    const last = new Date(year, month - 1, day);
+    if (!Number.isNaN(last.getTime()) && last.getTime() >= today.getTime()) {
+      return toDayKey(last);
+    }
+  }
+  return toDayKey(new Date(today.getFullYear() + 1, today.getMonth(), today.getDate()));
+};
 
 const toVoteDeadlineIso = (date: string, time: string): string | null => {
   if (!date.trim()) {
@@ -168,6 +183,8 @@ export const MeetSettings = ({ hash, data }: MeetSettingsProps) => {
 
   const deadlineIso = toVoteDeadlineIso(date, time) ?? data.voteDeadline;
   const hasDeadline = Boolean(deadlineIso);
+  const minDeadlineDate = toDayKey(startOfToday());
+  const maxDeadlineDate = maxDeadlineFromMeetingDays(data.meeting_days);
   const deadlinePassed = Boolean(deadlineIso && now > 0 && new Date(deadlineIso).getTime() <= now);
   const possibleOffsets = OFFSETS.filter(item => offsetStillPossible(item.minutes, deadlineIso, now));
   const offsets = data.remindOffsets.filter(minutes => offsetStillPossible(minutes, deadlineIso, now));
@@ -258,9 +275,14 @@ export const MeetSettings = ({ hash, data }: MeetSettingsProps) => {
                 label='Дата'
                 placeholder='Дата'
                 value={date}
+                min={minDeadlineDate}
+                max={maxDeadlineDate}
                 disabled={isPending}
                 allowEmpty
                 onChange={nextDate => {
+                  if (nextDate && (nextDate < minDeadlineDate || nextDate > maxDeadlineDate)) {
+                    return;
+                  }
                   setDate(nextDate);
                   saveDeadline(nextDate, time);
                 }}

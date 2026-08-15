@@ -1,6 +1,6 @@
 import { createStore } from "zustand";
 import { isSlotInPast } from "@/shared/libs";
-import { clampFinalTimes } from "../../lib/clampFinalTimes";
+import { clampFinalTimes, keepOneFinalInterval, longestContiguousTimes } from "../../lib/clampFinalTimes";
 import type { IMeet, IMeetStore } from "../Meet.types";
 
 const slotsOfUser = (timeInfo: IMeet["timeInfo"], userName: string) => {
@@ -72,6 +72,13 @@ export const createMeetStore = (initialState?: Partial<IMeetStore>) => {
           if (currentSelectedTimes.length == 1 && currentSelectedTimes.includes(time)) {
             console.log("delete time array", time, currentSelectedTimes);
             newSelectedSlots.delete(date);
+          } else if (state.isFinalizing) {
+            const remaining = longestContiguousTimes(currentSelectedTimes.filter(timeValue => timeValue != time));
+            if (!remaining.length) {
+              newSelectedSlots.delete(date);
+            } else {
+              newSelectedSlots.set(date, remaining);
+            }
           } else {
             newSelectedSlots.set(date, currentSelectedTimes.filter(timeValue => timeValue != time) || []);
           }
@@ -198,8 +205,7 @@ export const createMeetStore = (initialState?: Partial<IMeetStore>) => {
       set({ newSelectedSlots: slotsOfUser(get().timeInfo, userName) });
     },
     startFinalizing: preset => {
-      const next = new Map<string, string[]>();
-      preset?.forEach((times, date) => next.set(date, [...times]));
+      const next = keepOneFinalInterval(preset ?? new Map());
       set({ isEditing: true, isFinalizing: true, newSelectedSlots: next });
     },
     clearNewSelectedSlots: () => {

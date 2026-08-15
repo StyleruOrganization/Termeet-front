@@ -11,4 +11,5 @@ export { getMeetDateRange } from "./model/Meet.schema";
 export { MeetQueries } from "./api/Meet.query";
 export { useMeetStore } from "./lib/useMeetStore";
 export { canManageMeeting, canEditMeet, getMeetPermissions } from "./lib/canManageMeeting";
+export { longestContiguousTimes } from "./lib/clampFinalTimes";
 export { MeetProvider } from "./provider/MeetProvider";

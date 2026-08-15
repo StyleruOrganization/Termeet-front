@@ -1,5 +1,5 @@
+import { longestContiguousTimes, type IMeet } from "@/entities/Meet";
 import { maxFinalCells, minutesToTime, timeToMinutes } from "@/shared/libs";
-import type { IMeet } from "@/entities/Meet";
 
 type Candidate = {
   day: string;
@@ -54,19 +54,20 @@ const buildPeakPrefill = (timeInfo: IMeet["timeInfo"]) => {
     if (dayMax === 0) {
       return;
     }
-    const times: string[] = [];
+    const peakTimes: string[] = [];
     inner.userSlots.forEach((users, time) => {
       if (users.length === dayMax) {
-        times.push(time);
+        peakTimes.push(time);
       }
     });
+    const times = longestContiguousTimes(peakTimes);
     const betterPeak = dayMax > bestScore;
     const samePeakMoreCells = dayMax === bestScore && times.length > bestCount;
     if (betterPeak || samePeakMoreCells) {
       bestScore = dayMax;
       bestCount = times.length;
       bestDay = date;
-      bestTimes = times.sort();
+      bestTimes = times;
     }
   });
 

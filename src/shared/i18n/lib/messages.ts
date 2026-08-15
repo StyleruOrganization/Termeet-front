@@ -38,8 +38,7 @@ export const ru = {
     photo: "Фото профиля",
     photoHint: "JPEG, PNG или WebP, до 5 МБ. Его увидят в поиске людей.",
     contactsTitle: "Контакты",
-    contactsHint:
-      "Показываем на заглушке закрытой встречи, если человек не в списке приглашённых. Почта — name@example.com, Telegram — @username или t.me/username, ВКонтакте — vk.com/имя или id. Пустое поле убирает контакт.",
+    contactsHint: "Показываем на заглушке закрытой встречи, если человека не пригласили. Пустое поле убирает контакт.",
     contactEmail: "Почта для связи",
     contactTelegram: "Telegram",
     contactVk: "ВКонтакте",
@@ -64,7 +63,7 @@ export const ru = {
     suggestPrefill: "Предлагать предзаполнение на встрече",
     gridTitle: "Часы сетки при создании",
     gridHint:
-      "Это рамка календаря на странице «Создать встречу»: с какого часа по какой её рисуем. Сохраняется в аккаунте и подставится, когда вы вошли. Гость по-прежнему выбирает часы сам — у него нет профиля.",
+      "Это рамка календаря на странице «Создать встречу»: с какого часа по какой её рисуем. Сохраняется в аккаунте и подставится, когда вы вошли.",
     gridSave: "Сохранить часы сетки",
     deleteTitle: "Удаление аккаунта",
     deleteHint:
@@ -446,8 +445,7 @@ export const en: typeof ru = {
     photo: "Profile photo",
     photoHint: "JPEG, PNG or WebP, up to 5 MB. It shows up in people search.",
     contactsTitle: "Contacts",
-    contactsHint:
-      "Shown on the closed-meeting stub if someone is not on the invite list. Email like name@example.com, Telegram @username or t.me/username, VK vk.com/name or id. An empty field removes the contact.",
+    contactsHint: "Shown on the closed-meeting stub if the person was not invited. An empty field removes the contact.",
     contactEmail: "Contact email",
     contactTelegram: "Telegram",
     contactVk: "VK",
@@ -472,7 +470,7 @@ export const en: typeof ru = {
     suggestPrefill: "Suggest prefill on meetings",
     gridTitle: "Grid hours when creating",
     gridHint:
-      "This is the calendar frame on the create-meeting page: from which hour to which we draw it. It is stored in your account and applied when you are signed in. Guests still pick hours themselves — they have no profile.",
+      "This is the calendar frame on the create-meeting page: from which hour to which we draw it. It is stored in your account and applied when you are signed in.",
     gridSave: "Save grid hours",
     deleteTitle: "Delete account",
     deleteHint:
@@ -855,7 +853,7 @@ export const de: typeof ru = {
     photoHint: "JPEG, PNG oder WebP, bis 5 MB. Es erscheint in der Personensuche.",
     contactsTitle: "Kontakte",
     contactsHint:
-      "Stehen auf der Sperrseite einer geschlossenen Besprechung, wenn jemand nicht eingeladen ist. E-Mail wie name@example.com, Telegram @username oder t.me/username, VK vk.com/name oder id. Ein leeres Feld entfernt den Kontakt.",
+      "Stehen auf der Sperrseite einer geschlossenen Besprechung, wenn jemand nicht eingeladen ist. Ein leeres Feld entfernt den Kontakt.",
     contactEmail: "Kontakt-E-Mail",
     contactTelegram: "Telegram",
     contactVk: "VK",
@@ -880,7 +878,7 @@ export const de: typeof ru = {
     suggestPrefill: "Vorausfüllung im Meeting vorschlagen",
     gridTitle: "Rasterstunden beim Erstellen",
     gridHint:
-      "Das ist der Rahmen des Kalenders auf der Seite „Meeting erstellen“: von welcher bis zu welcher Stunde. Wird im Konto gespeichert und eingesetzt, wenn Sie angemeldet sind. Gäste wählen die Stunden selbst — sie haben kein Profil.",
+      "Das ist der Rahmen des Kalenders auf der Seite „Meeting erstellen“: von welcher bis zu welcher Stunde. Wird im Konto gespeichert und eingesetzt, wenn Sie angemeldet sind.",
     gridSave: "Rasterstunden speichern",
     deleteTitle: "Konto löschen",
     deleteHint:
