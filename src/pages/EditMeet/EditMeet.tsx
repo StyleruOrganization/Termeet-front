@@ -1,11 +1,13 @@
-import { useEffect, useLayoutEffect, useReducer } from "react";
+import { useEffect, useLayoutEffect, useReducer, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { canEditMeet } from "@/entities/Meet";
+import { searchUsersRequest, useSessionStore } from "@/entities/User";
 import { useToastStore } from "@/features/ToastContainer";
 import { DURATIONS } from "@/shared/consts";
-import { Container, Input, Select, TextArea } from "@/shared/ui";
+import { useTranslation } from "@/shared/i18n";
+import { Container, Input, Select, TextArea, UserSearch } from "@/shared/ui";
 import ApproveIcon from "@assets/icons/approve.svg";
-import CancelIcon from "@assets/icons/cross.svg";
+import CrossIcon from "@assets/icons/cross.svg";
 import { useGetMeetInfo } from "./api/useGetMeetInfo";
 import { useUpdateMeetInfo } from "./api/useUpdateMeetInfo";
 import styles from "./EditMeet.module.css";
@@ -70,8 +72,17 @@ export const EditMeet = () => {
   const { hash = "" } = useParams();
   const navigate = useNavigate();
   const addToast = useToastStore(store => store.addToast);
+  const { t } = useTranslation();
+  const currentUserId = useSessionStore(state => state.user?.id);
   const meetData = useGetMeetInfo();
   const canManage = canEditMeet(meetData);
+  const showInvite = Boolean(currentUserId) && (meetData.isClosed || meetData.inviteOnlyVote);
+  const savedInvitedKey = meetData.invitedUsers
+    .map(item => item.id)
+    .slice()
+    .sort()
+    .join(",");
+  const [invitedUsers, setInvitedUsers] = useState(meetData.invitedUsers);
   const [formState, dispatch] = useReducer(reducer, {
     description: meetData.description,
     name: meetData.name,
@@ -103,13 +114,23 @@ export const EditMeet = () => {
     dispatch({ type: "change", payload: { fieldName: "description", value: meetData.description || "" } });
     dispatch({ type: "change", payload: { fieldName: "link", value: meetData.link || "" } });
     dispatch({ type: "change", payload: { fieldName: "duration", value: meetData.duration || "" } });
-  }, [meetData.name, meetData.description, meetData.link, meetData.duration]);
+    setInvitedUsers(meetData.invitedUsers);
+    // savedInvitedKey — стабильный список id; сам массив invitedUsers каждый рендер новый.
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- см. savedInvitedKey
+  }, [meetData.name, meetData.description, meetData.link, meetData.duration, savedInvitedKey]);
 
+  const invitedChanged =
+    invitedUsers
+      .map(item => item.id)
+      .slice()
+      .sort()
+      .join(",") !== savedInvitedKey;
   const isChangedFields =
     meetData.link !== formState.link ||
     meetData.name !== formState.name ||
     meetData.description !== formState.description ||
-    (meetData.duration || "") !== formState.duration;
+    (meetData.duration || "") !== formState.duration ||
+    (showInvite && invitedChanged);
   const isSumbitButtonDisabled =
     !formState.name || Object.values(formState.errors).some(error => error) || !isChangedFields;
 
@@ -185,6 +206,43 @@ export const EditMeet = () => {
             onBlur={e => dispatch({ type: "validate", payload: { fieldName: "link", value: e.target.value } })}
             error={formState.errors.link}
           />
+          {showInvite ? (
+            <div className={styles.EditMeetPage__Invite}>
+              <UserSearch
+                label={t("create.inviteLabel")}
+                placeholder={t("create.invitePlaceholder")}
+                hint={t("create.inviteEditHint")}
+                emptyText={t("create.inviteEmpty")}
+                excludeIds={[currentUserId ?? "", ...invitedUsers.map(item => item.id)]}
+                searchUsers={searchUsersRequest}
+                onPick={item => {
+                  const name = `${item.first_name} ${item.last_name}`.trim();
+                  setInvitedUsers(current =>
+                    current.some(user => user.id === item.id)
+                      ? current
+                      : [...current, { id: item.id, name, hasAvatar: item.has_avatar }],
+                  );
+                }}
+              />
+              {invitedUsers.length ? (
+                <div className={styles.EditMeetPage__Chips}>
+                  {invitedUsers.map(item => (
+                    <div key={item.id} className={styles.EditMeetPage__Chip}>
+                      <span>{item.name}</span>
+                      <button
+                        type='button'
+                        className={styles.EditMeetPage__ChipRemove}
+                        onClick={() => setInvitedUsers(current => current.filter(user => user.id !== item.id))}
+                        aria-label={t("create.inviteRemove", { name: item.name })}
+                      >
+                        <CrossIcon />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              ) : null}
+            </div>
+          ) : null}
         </div>
         <div className={styles.EditMeetPage__Buttons}>
           <button
@@ -193,7 +251,7 @@ export const EditMeet = () => {
             }}
             className='baseButton cancelButton'
           >
-            <CancelIcon className={styles.EditMeetPage__CancelIcon} /> <span>Отменить</span>
+            <CrossIcon className={styles.EditMeetPage__CancelIcon} /> <span>Отменить</span>
           </button>
           <button
             onClick={() => {
@@ -202,6 +260,7 @@ export const EditMeet = () => {
                 description: formState.description,
                 link: formState.link,
                 duration: formState.duration,
+                invitedUserIds: showInvite ? invitedUsers.map(item => item.id) : undefined,
               });
             }}
             type='submit'

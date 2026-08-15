@@ -21,6 +21,8 @@
   gap: 16px;
   flex-direction: column;
 
+  align-self: stretch;
+
   max-width: 100%;
   min-width: 0;
 }
@@ -171,6 +173,8 @@
   gap: 8px;
   flex-direction: column;
 
+  width: 100%;
+
   max-width: 100%;
   min-width: 0;
 }
@@ -189,6 +193,7 @@
   gap: 12px;
   align-items: center;
 
+  width: 100%;
   padding: 16px;
 
   text-align: left;
@@ -727,9 +732,14 @@
     display: flex;
     gap: 16px;
     flex-direction: column;
+    align-items: stretch;
   }
 
   .Home__Sidebar {
+    width: 100%;
+  }
+
+  .Home__Content {
     width: 100%;
   }
 

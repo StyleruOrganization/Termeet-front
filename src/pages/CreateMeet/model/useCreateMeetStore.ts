@@ -66,7 +66,6 @@ const emptyValues = (): ICreateMeet => ({
   lockVoteAfterDeadline: false,
   remindEnabled: false,
   remindOffsets: [],
-  addToCalendar: false,
 });
 
 export const useCreateMeetStore = create<MeetingFormState>((set, get) => ({

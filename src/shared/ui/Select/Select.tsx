@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { useDropdownPosition } from "./hooks/useDropdownPosition";
 import styles from "./Select.module.css";
 import { Input } from "../Input/Input";
@@ -60,42 +61,48 @@ export const Select = ({
         readOnly
         classNameInputWrapper={styles.Select__InputWrapper + (isOpen ? " " + styles.Select__InputWrapper_open : "")}
       />
-      <div
-        style={{
-          top: `${dropdownPosition?.top}px`,
-          left: `${dropdownPosition?.left}px`,
-          right: "auto",
-          minWidth: `${dropdownPosition?.width}px`,
-          visibility: isOpen ? "visible" : "hidden",
-        }}
-        className={styles.Select__Dropdown}
-        ref={dropdownRef}
-      >
-        <ul className={styles.Select__List}>
-          {options.map(option => {
-            if (disabledFunc && disabledFunc(option)) return null;
-            return (
-              <li key={option}>
-                <button
-                  className={`${styles.Select__Option} ${inputValue === option ? styles.TimeSelect__Option_selected : ""}`}
-                  data-test-id={"select-option-" + name}
-                  onClick={event => {
-                    event.preventDefault();
-                    onChangeExternal?.(option);
-                    if (!isControlled) {
-                      setInternalValue(option);
-                    }
-                    closeDropdown();
-                  }}
-                  key={option}
-                >
-                  {option}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
+      {createPortal(
+        <div
+          style={{
+            top: `${dropdownPosition?.top}px`,
+            left: `${dropdownPosition?.left}px`,
+            right: "auto",
+            minWidth: `${dropdownPosition?.width}px`,
+            visibility: isOpen ? "visible" : "hidden",
+            pointerEvents: isOpen ? "auto" : "none",
+          }}
+          className={styles.Select__Dropdown}
+          ref={dropdownRef}
+          aria-hidden={!isOpen}
+        >
+          <ul className={styles.Select__List}>
+            {options.map(option => {
+              if (disabledFunc && disabledFunc(option)) return null;
+              return (
+                <li key={option}>
+                  <button
+                    type='button'
+                    className={`${styles.Select__Option} ${inputValue === option ? styles.TimeSelect__Option_selected : ""}`}
+                    data-test-id={"select-option-" + name}
+                    onClick={event => {
+                      event.preventDefault();
+                      onChangeExternal?.(option);
+                      if (!isControlled) {
+                        setInternalValue(option);
+                      }
+                      closeDropdown();
+                    }}
+                    key={option}
+                  >
+                    {option}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </div>,
+        document.body,
+      )}
     </div>
   );
 };

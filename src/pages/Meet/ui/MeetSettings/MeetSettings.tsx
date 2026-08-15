@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getMeetPermissions, type IMeet, type MeetSettingsUpdate } from "@/entities/Meet";
 import { TIMES } from "@/shared/consts";
 import { useNow } from "@/shared/libs";
-import { Input, ModalWrapper, Select } from "@shared/ui";
+import { DatePicker, ModalWrapper, Select } from "@shared/ui";
 import styles from "./MeetSettings.module.css";
 import { useUpdateMeetSettings } from "../../api";
 
@@ -137,12 +137,26 @@ export const MeetSettings = ({ hash, data }: MeetSettingsProps) => {
   const [date, setDate] = useState(split.date);
   const [time, setTime] = useState(split.time);
   const now = useNow();
+  const pushOptionsRef = useRef<HTMLDivElement>(null);
+  const wasRemindEnabled = useRef(data.remindEnabled);
 
   useEffect(() => {
     const next = splitVoteDeadline(data.voteDeadline);
     setDate(next.date);
     setTime(next.time);
   }, [data.voteDeadline]);
+
+  useEffect(() => {
+    const justEnabled = data.remindEnabled && !wasRemindEnabled.current;
+    wasRemindEnabled.current = data.remindEnabled;
+    if (!justEnabled) {
+      return;
+    }
+    const frame = window.requestAnimationFrame(() => {
+      pushOptionsRef.current?.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [data.remindEnabled]);
 
   if (!permissions.canEditSettings) {
     return null;
@@ -239,14 +253,14 @@ export const MeetSettings = ({ hash, data }: MeetSettingsProps) => {
               Дата и время, до которых нужно выбрать слоты. Можно оставить пустым.
             </p>
             <div className={styles.MeetSettings__Deadline}>
-              <Input
+              <DatePicker
                 name='meet-vote-deadline-date'
-                type='date'
                 label='Дата'
+                placeholder='Дата'
                 value={date}
                 disabled={isPending}
-                onChange={event => {
-                  const nextDate = event.target.value;
+                allowEmpty
+                onChange={nextDate => {
                   setDate(nextDate);
                   saveDeadline(nextDate, time);
                 }}
@@ -317,7 +331,7 @@ export const MeetSettings = ({ hash, data }: MeetSettingsProps) => {
                 />
               )}
               {data.remindEnabled && !deadlinePassed ? (
-                <>
+                <div ref={pushOptionsRef}>
                   {offsets.map((minutes, index) => {
                     const optionMinutes = possibleOffsets
                       .filter(item => item.minutes === minutes || !offsets.includes(item.minutes))
@@ -379,7 +393,7 @@ export const MeetSettings = ({ hash, data }: MeetSettingsProps) => {
                       Добавить пуш
                     </button>
                   ) : null}
-                </>
+                </div>
               ) : null}
             </section>
           ) : null}

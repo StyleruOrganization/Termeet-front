@@ -1,13 +1,19 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useParams, useSearchParams } from "react-router";
-import { MeetQueries, getMeetDateRange, type IMeet } from "@/entities/Meet";
+import { MeetQueries, getMeetDateRange, type IMeet, type InvitedUser } from "@/entities/Meet";
 import { useSessionStore } from "@/entities/User";
 import { convertUTCToTimezone } from "@/shared/libs";
+
+const invitedName = (item: InvitedUser) => `${item.first_name} ${item.last_name}`.trim();
 
 export const useGetMeetInfo = (): Pick<
   IMeet,
   "name" | "description" | "link" | "timeRanges" | "duration" | "isCreator" | "isCreatorAuth" | "permissions"
-> => {
+> & {
+  isClosed: boolean;
+  inviteOnlyVote: boolean;
+  invitedUsers: { id: string; name: string; hasAvatar?: boolean }[];
+} => {
   const { hash = "" } = useParams();
   const userId = useSessionStore(state => state.user?.id ?? "guest");
   const { data: meetData } = useSuspenseQuery({
@@ -44,6 +50,8 @@ export const useGetMeetInfo = (): Pick<
     }
   });
 
+  const invitedRaw = meetData.invitedUsers ?? meetData.invited_users ?? [];
+
   return {
     name: meetData.name,
     description: meetData.description || "",
@@ -53,5 +61,12 @@ export const useGetMeetInfo = (): Pick<
     isCreator: meetData.isCreator,
     isCreatorAuth: meetData.isCreatorAuth,
     permissions: meetData.permissions,
+    isClosed: Boolean(meetData.isClosed),
+    inviteOnlyVote: Boolean(meetData.inviteOnlyVote),
+    invitedUsers: invitedRaw.map(item => ({
+      id: item.id,
+      name: invitedName(item) || item.id,
+      hasAvatar: Boolean(item.has_avatar ?? item.hasAvatar),
+    })),
   };
 };

@@ -29,27 +29,33 @@ export const ClosedMeet = ({ data }: { data: IMeet }) => {
         <p>{t("closed.body", { name: data.name })}</p>
         {data.organizerName ? <p>{t("closed.organizer", { name: data.organizerName })}</p> : null}
         {hasContacts ? (
-          <ul className={styles.ClosedMeet__Contacts}>
-            {contacts?.email ? (
-              <li>
-                <a href={`mailto:${contacts.email}`}>{contacts.email}</a>
-              </li>
-            ) : null}
-            {contacts?.telegram ? (
-              <li>
-                <a href={telegramHref(contacts.telegram)} target='_blank' rel='noreferrer'>
-                  Telegram: {contacts.telegram}
-                </a>
-              </li>
-            ) : null}
-            {contacts?.vk ? (
-              <li>
-                <a href={vkHref(contacts.vk)} target='_blank' rel='noreferrer'>
-                  VK: {contacts.vk}
-                </a>
-              </li>
-            ) : null}
-          </ul>
+          <div>
+            <p className={styles.ClosedMeet__ContactsTitle}>{t("closed.contactsTitle")}</p>
+            <ul className={styles.ClosedMeet__Contacts}>
+              {contacts?.email ? (
+                <li>
+                  <span className={styles.ClosedMeet__Label}>{t("closed.email")}</span>
+                  <a href={`mailto:${contacts.email}`}>{contacts.email}</a>
+                </li>
+              ) : null}
+              {contacts?.telegram ? (
+                <li>
+                  <span className={styles.ClosedMeet__Label}>{t("closed.telegram")}</span>
+                  <a href={telegramHref(contacts.telegram)} target='_blank' rel='noreferrer'>
+                    {contacts.telegram}
+                  </a>
+                </li>
+              ) : null}
+              {contacts?.vk ? (
+                <li>
+                  <span className={styles.ClosedMeet__Label}>{t("closed.vk")}</span>
+                  <a href={vkHref(contacts.vk)} target='_blank' rel='noreferrer'>
+                    {contacts.vk}
+                  </a>
+                </li>
+              ) : null}
+            </ul>
+          </div>
         ) : (
           <p className={styles.ClosedMeet__Empty}>{t("closed.noContacts")}</p>
         )}

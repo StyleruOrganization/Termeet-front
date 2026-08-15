@@ -14,7 +14,7 @@ import {
 import { TIMES } from "@/shared/consts";
 import { LOCALE_BCP, parseLocale, useTranslation } from "@/shared/i18n";
 import { isTimeBefore } from "@/shared/libs";
-import { Container, Input, ModalWrapper, Select } from "@/shared/ui";
+import { Container, DatePicker, Input, ModalWrapper, Select } from "@/shared/ui";
 import ApproveIcon from "@assets/icons/approve.svg";
 import Arrow from "@assets/icons/arrow.svg";
 import ChevronDown from "@assets/icons/chevron-down.svg";
@@ -663,12 +663,12 @@ const YandexEventModal = ({
           value={title}
           onChange={event => setTitle(event.target.value)}
         />
-        <Input
+        <DatePicker
           name='yandex-event-date'
-          type='date'
           label={t("home.yandexDate")}
+          placeholder={t("home.yandexDate")}
           value={date}
-          onChange={event => setDate(event.target.value)}
+          onChange={setDate}
         />
         <div className={styles.Home__YandexFormTimes}>
           <Select

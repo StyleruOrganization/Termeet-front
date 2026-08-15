@@ -9,11 +9,12 @@ interface DropdownPosition {
 }
 
 export const useDropdownPosition = (
-  inputRef: React.RefObject<HTMLDivElement | null>,
+  inputRef: React.RefObject<HTMLElement | null>,
   dropdownRef: React.RefObject<HTMLDivElement | null>,
   name: string,
   onBlur?: (name: string) => void,
   placement: "bottom" | "right" = "bottom",
+  matchTriggerWidth = true,
 ) => {
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownPosition, setDropdownPosition] = useState<DropdownPosition>();
@@ -55,24 +56,37 @@ export const useDropdownPosition = (
     const viewportHeight = window.innerHeight;
     const viewportWidth = window.innerWidth;
     const { height: dropdownHeight, width: measuredWidth } = await measureDropdownSize();
-    const dropdownWidth = Math.max(measuredWidth, rect.width);
+    const dropdownWidth = matchTriggerWidth ? Math.max(measuredWidth, rect.width) : measuredWidth || rect.width;
+
+    const clampLeft = (left: number) => {
+      if (left + dropdownWidth > viewportWidth - DROPDOWN_MARGIN) {
+        left = viewportWidth - dropdownWidth - DROPDOWN_MARGIN;
+      }
+      if (left < DROPDOWN_MARGIN) {
+        left = DROPDOWN_MARGIN;
+      }
+      return left;
+    };
+
+    const clampTop = (top: number) => {
+      if (top + dropdownHeight > viewportHeight - DROPDOWN_MARGIN) {
+        top = viewportHeight - dropdownHeight - DROPDOWN_MARGIN;
+      }
+      if (top < DROPDOWN_MARGIN) {
+        top = DROPDOWN_MARGIN;
+      }
+      return top;
+    };
 
     if (placement === "right") {
       let left = rect.right + DROPDOWN_MARGIN;
       if (left + dropdownWidth > viewportWidth - DROPDOWN_MARGIN) {
         left = rect.left - dropdownWidth - DROPDOWN_MARGIN;
       }
-      if (left < DROPDOWN_MARGIN) {
-        left = DROPDOWN_MARGIN;
-      }
-
-      let top = rect.top;
-      if (top + dropdownHeight > viewportHeight - DROPDOWN_MARGIN) {
-        top = Math.max(DROPDOWN_MARGIN, viewportHeight - dropdownHeight - DROPDOWN_MARGIN);
-      }
+      left = clampLeft(left);
 
       setDropdownPosition({
-        top,
+        top: clampTop(rect.top),
         left,
         width: dropdownWidth,
       });
@@ -90,16 +104,17 @@ export const useDropdownPosition = (
     }
 
     setDropdownPosition({
-      top,
-      left: rect.left + window.scrollX,
-      width: rect.width,
+      top: clampTop(top),
+      left: clampLeft(rect.left),
+      width: matchTriggerWidth ? rect.width : dropdownWidth,
     });
-  }, [inputRef, measureDropdownSize, placement]);
+  }, [inputRef, measureDropdownSize, placement, matchTriggerWidth]);
 
   const openDropdown = useCallback(() => {
-    calculatePosition();
-    setIsOpen(true);
-    inputRef.current?.focus();
+    void calculatePosition().then(() => {
+      setIsOpen(true);
+      inputRef.current?.focus();
+    });
   }, [inputRef, calculatePosition]);
 
   const closeDropdown = useCallback(() => {

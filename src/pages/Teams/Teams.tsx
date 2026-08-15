@@ -152,7 +152,7 @@ export const Teams = () => {
       </button>
       <div className={styles.Teams__Header}>
         <h1 className={styles.Teams__Title}>{t("teams.title")}</h1>
-        <button type='button' className='baseButton mainButton' onClick={openCreate}>
+        <button type='button' className={`baseButton mainButton ${styles.Teams__Create}`} onClick={openCreate}>
           {t("teams.create")}
         </button>
       </div>

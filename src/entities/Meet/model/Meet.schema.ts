@@ -66,6 +66,18 @@ export interface MeetResponse {
   remind_offsets?: number[];
   lockVoteAfterDeadline?: boolean;
   lock_vote_after_deadline?: boolean;
+  invitedUserIds?: string[];
+  invited_user_ids?: string[];
+  invitedUsers?: InvitedUser[];
+  invited_users?: InvitedUser[];
+}
+
+export interface InvitedUser {
+  id: string;
+  first_name: string;
+  last_name: string;
+  has_avatar?: boolean;
+  hasAvatar?: boolean;
 }
 
 export const getMeetDateRange = (meet: MeetResponse): [string, string][] => {
@@ -87,7 +99,6 @@ export interface MeetCreate {
   isClosed?: boolean;
   inviteOnlyVote?: boolean;
   createTelemost?: boolean;
-  addToCalendar?: boolean;
   voteDeadline?: string | null;
   anyoneCanEdit?: boolean;
   anyoneCanDeleteParticipants?: boolean;

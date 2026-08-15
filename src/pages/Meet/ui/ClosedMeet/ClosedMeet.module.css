@@ -22,10 +22,36 @@
   line-height: 1.4;
 }
 
+.ClosedMeet__ContactsTitle {
+  margin: 8px 0 0;
+
+  color: var(--text-main);
+
+  font-size: var(--text-body);
+  font-weight: 700;
+}
+
 .ClosedMeet__Contacts {
   display: flex;
   flex-direction: column;
   gap: 8px;
+
+  margin-top: 8px;
+}
+
+.ClosedMeet__Contacts li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: baseline;
+}
+
+.ClosedMeet__Label {
+  flex-shrink: 0;
+
+  color: var(--text-secondary);
+
+  font-size: var(--text-body);
 }
 
 .ClosedMeet__Contacts a {

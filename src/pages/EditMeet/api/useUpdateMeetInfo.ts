@@ -21,6 +21,7 @@ export const useUpdateMeetInfo = (hash: string) => {
         link: data.link?.trim(),
         name: data.name.trim(),
         description: data.description?.trim(),
+        ...(data.invitedUserIds !== undefined ? { invitedUserIds: data.invitedUserIds } : {}),
       });
     },
     onMutate: () => {

@@ -15,7 +15,6 @@ type TextMeetField = Exclude<
   | "lockVoteAfterDeadline"
   | "remindEnabled"
   | "remindOffsets"
-  | "addToCalendar"
 >;
 
 export const Input = ({ name, ...props }: IInputProps & { name: TextMeetField }) => {

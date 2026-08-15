@@ -72,16 +72,73 @@
   transform: rotate(45deg);
 }
 
+.EditMeetPage__Invite {
+  display: flex;
+  gap: 8px;
+  flex-direction: column;
+}
+
+.EditMeetPage__Chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.EditMeetPage__Chip {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+
+  padding: 4px 4px 4px 12px;
+
+  color: var(--text-main);
+  background-color: var(--fill-controls);
+  border: 1px solid var(--semantics-gray-hover);
+  border-radius: 160px;
+
+  font-size: var(--text-body);
+}
+
+.EditMeetPage__ChipRemove {
+  display: flex;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+
+  width: 28px;
+  height: 28px;
+  padding: 0;
+
+  color: var(--text-main);
+  border-radius: 50%;
+
+  background: none;
+
+  cursor: pointer;
+
+  svg {
+    width: 16px;
+    height: 16px;
+
+    transform: rotate(45deg);
+  }
+
+  &:hover {
+    background-color: var(--components-hover);
+  }
+}
+
 @media (width < 768px) {
   .EditMeetPage__Buttons{
     position: fixed;
+    z-index: 100;
     bottom: 0;
     left: 0;
 
     flex-flow: column wrap;
 
     width: 100%;
-    padding: 10px 10px 32px;
+    padding: 10px 10px calc(32px + env(safe-area-inset-bottom, 0px));
 
     background-color: var(--fill-bg);
     box-shadow: 0 4px 24px rgb(0 0 0 / 12%);
@@ -99,6 +156,6 @@
   }
 
   .EditMeetPage {
-    padding-bottom: 60px;
+    padding-bottom: calc(200px + env(safe-area-inset-bottom, 0px));
   }
 }

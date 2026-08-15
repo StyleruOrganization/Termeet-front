@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSessionStore } from "@/entities/User";
 import { TIMES } from "@/shared/consts";
 import { startOfToday, useNow } from "@/shared/libs";
-import { Input, ModalWrapper, Select } from "@/shared/ui";
+import { DatePicker, ModalWrapper, Select } from "@/shared/ui";
 import styles from "./CreateMeetSettings.module.css";
 import { formatLocalDate, maxVoteDeadlineDay } from "../../lib";
 import { useCreateMeetStore } from "../../model";
@@ -67,6 +67,20 @@ export const CreateMeetSettings = () => {
   const validateField = useCreateMeetStore(state => state.validateField);
   const setClosed = useCreateMeetStore(state => state.setClosed);
   const setInviteOnlyVote = useCreateMeetStore(state => state.setInviteOnlyVote);
+  const pushOptionsRef = useRef<HTMLDivElement>(null);
+  const wasRemindEnabled = useRef(values.remindEnabled);
+
+  useEffect(() => {
+    const justEnabled = values.remindEnabled && !wasRemindEnabled.current;
+    wasRemindEnabled.current = values.remindEnabled;
+    if (!justEnabled) {
+      return;
+    }
+    const frame = window.requestAnimationFrame(() => {
+      pushOptionsRef.current?.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [values.remindEnabled]);
 
   const minDeadlineDate = formatLocalDate(startOfToday());
   const maxDeadlineDate = formatLocalDate(maxVoteDeadlineDay(values.dates));
@@ -113,11 +127,11 @@ export const CreateMeetSettings = () => {
         className={`baseButton outlineButton ${styles.CreateMeetSettings__Open}`}
         onClick={() => setIsOpen(true)}
       >
-        Настройки встречи
+        Расширенные настройки
       </button>
       <ModalWrapper isOpen={isOpen} onClose={() => setIsOpen(false)} isAnimate>
         <div className={styles.CreateMeetSettings}>
-          <h2 className={styles.CreateMeetSettings__Title}>Настройки встречи</h2>
+          <h2 className={styles.CreateMeetSettings__Title}>Расширенные настройки</h2>
 
           {user ? (
             <section className={styles.CreateMeetSettings__Section}>
@@ -158,38 +172,22 @@ export const CreateMeetSettings = () => {
             </section>
           ) : null}
 
-          {user ? (
-            <section className={styles.CreateMeetSettings__Section}>
-              <h3 className={styles.CreateMeetSettings__SectionTitle}>Яндекс Календарь</h3>
-              <SettingsRow
-                label='Записать встречу в Яндекс Календарь'
-                checked={values.addToCalendar}
-                disabled={!user.has_calendar}
-                onToggle={() => patchValues({ addToCalendar: !values.addToCalendar })}
-              />
-              <p className={styles.CreateMeetSettings__Hint}>
-                {user.has_calendar
-                  ? "На первый выбранный день поставим событие на длительность встречи. Когда назначите итоговое время — оно обновится само."
-                  : "Сначала подключите календарь в кабинете. Тогда можно будет писать встречи в Яндекс сразу при создании."}
-              </p>
-            </section>
-          ) : null}
-
           <section className={styles.CreateMeetSettings__Section}>
             <h3 className={styles.CreateMeetSettings__SectionTitle}>Дедлайн голосования</h3>
             <p className={styles.CreateMeetSettings__Hint}>
               Дата и время, до которых нужно выбрать слоты. Можно оставить пустым.
             </p>
             <div className={styles.CreateMeetSettings__Deadline}>
-              <Input
+              <DatePicker
                 name='create-vote-deadline-date'
-                type='date'
                 label='Дата'
+                placeholder='Дата'
                 value={values.voteDeadlineDate}
                 min={minDeadlineDate}
                 max={maxDeadlineDate}
                 error={error}
-                onChange={event => setDeadline(event.target.value, values.voteDeadlineTime)}
+                allowEmpty
+                onChange={next => setDeadline(next, values.voteDeadlineTime)}
                 onBlur={() => validateField("voteDeadlineDate")}
               />
               <Select
@@ -242,7 +240,7 @@ export const CreateMeetSettings = () => {
                 }}
               />
               {values.remindEnabled ? (
-                <>
+                <div ref={pushOptionsRef}>
                   {offsets.map((minutes, index) => {
                     const optionMinutes = possibleOffsets
                       .filter(item => item.minutes === minutes || !offsets.includes(item.minutes))
@@ -304,7 +302,7 @@ export const CreateMeetSettings = () => {
                       Добавить пуш
                     </button>
                   ) : null}
-                </>
+                </div>
               ) : null}
             </section>
           ) : null}

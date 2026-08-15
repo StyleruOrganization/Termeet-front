@@ -19,7 +19,6 @@ export type ICreateMeet = {
   lockVoteAfterDeadline: boolean;
   remindEnabled: boolean;
   remindOffsets: number[];
-  addToCalendar: boolean;
 };
 
 interface CalendarDateRange {

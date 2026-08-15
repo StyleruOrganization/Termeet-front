@@ -31,6 +31,14 @@ export {
 } from "./lib/availability";
 export { getProfileDisplayName } from "./lib/displayName";
 export {
+  CONTACT_EMAIL_PATTERN,
+  CONTACT_TELEGRAM_PATTERN,
+  CONTACT_VK_PATTERN,
+  parseContactEmail,
+  parseContactTelegram,
+  parseContactVk,
+} from "./lib/contacts";
+export {
   loginRequest,
   registerRequest,
   logoutRequest,

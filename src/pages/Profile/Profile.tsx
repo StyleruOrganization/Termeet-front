@@ -11,6 +11,12 @@ import {
   hasAvailability,
   isNineToSixEveryDay,
   useShowOnboarding,
+  CONTACT_EMAIL_PATTERN,
+  CONTACT_TELEGRAM_PATTERN,
+  CONTACT_VK_PATTERN,
+  parseContactEmail,
+  parseContactTelegram,
+  parseContactVk,
   type IAvailabilityInterval,
   type IUser,
 } from "@/entities/User";
@@ -162,6 +168,9 @@ const ProfileSettings = ({ user }: { user: IUser }) => {
   const [contactEmail, setContactEmail] = useState(user.contact_email ?? "");
   const [contactTelegram, setContactTelegram] = useState(user.contact_telegram ?? "");
   const [contactVk, setContactVk] = useState(user.contact_vk ?? "");
+  const [contactEmailError, setContactEmailError] = useState(false);
+  const [contactTelegramError, setContactTelegramError] = useState(false);
+  const [contactVkError, setContactVkError] = useState(false);
   const [contactsSaving, setContactsSaving] = useState(false);
   const [timezone, setTimezone] = useState(user.timezone || "UTC +3:00 (Москва)");
   const [passwordOpen, setPasswordOpen] = useState(false);
@@ -246,38 +255,79 @@ const ProfileSettings = ({ user }: { user: IUser }) => {
         <p className={styles.Profile__Hint}>{t("profile.contactsHint")}</p>
         <Input
           name='contact_email'
+          type='email'
           label={t("profile.contactEmail")}
           placeholder='name@example.com'
+          autoComplete='email'
+          inputMode='email'
+          pattern={CONTACT_EMAIL_PATTERN}
+          title={t("profile.contactEmailError")}
           value={contactEmail}
-          onChange={event => setContactEmail(event.target.value)}
+          error={contactEmailError ? t("profile.contactEmailError") : undefined}
+          onChange={event => {
+            setContactEmail(event.target.value);
+            setContactEmailError(false);
+          }}
+          onBlur={() => setContactEmailError(!parseContactEmail(contactEmail).valid)}
         />
         <div className={styles.Profile__FieldGap} />
         <Input
           name='contact_telegram'
           label={t("profile.contactTelegram")}
           placeholder='@username'
+          autoComplete='off'
+          spellCheck={false}
+          pattern={CONTACT_TELEGRAM_PATTERN}
+          title={t("profile.contactTelegramError")}
           value={contactTelegram}
-          onChange={event => setContactTelegram(event.target.value)}
+          error={contactTelegramError ? t("profile.contactTelegramError") : undefined}
+          onChange={event => {
+            setContactTelegram(event.target.value);
+            setContactTelegramError(false);
+          }}
+          onBlur={() => setContactTelegramError(!parseContactTelegram(contactTelegram).valid)}
         />
         <div className={styles.Profile__FieldGap} />
         <Input
           name='contact_vk'
           label={t("profile.contactVk")}
           placeholder='vk.com/id'
+          autoComplete='off'
+          spellCheck={false}
+          pattern={CONTACT_VK_PATTERN}
+          title={t("profile.contactVkError")}
           value={contactVk}
-          onChange={event => setContactVk(event.target.value)}
+          error={contactVkError ? t("profile.contactVkError") : undefined}
+          onChange={event => {
+            setContactVk(event.target.value);
+            setContactVkError(false);
+          }}
+          onBlur={() => setContactVkError(!parseContactVk(contactVk).valid)}
         />
         <button
           type='button'
           className={`baseButton mainButton ${styles.Profile__SaveTemplate}`}
           disabled={contactsSaving}
           onClick={async () => {
+            const email = parseContactEmail(contactEmail);
+            const telegram = parseContactTelegram(contactTelegram);
+            const vk = parseContactVk(contactVk);
+            setContactEmailError(!email.valid);
+            setContactTelegramError(!telegram.valid);
+            setContactVkError(!vk.valid);
+            if (!email.valid || !telegram.valid || !vk.valid) {
+              addToast({ id: "contacts-invalid", type: "warning", message: t("toast.contactsInvalid") });
+              return;
+            }
+            setContactEmail(email.value ?? "");
+            setContactTelegram(telegram.value ?? "");
+            setContactVk(vk.value ?? "");
             setContactsSaving(true);
             try {
               await updateSettings({
-                contact_email: contactEmail.trim() || null,
-                contact_telegram: contactTelegram.trim() || null,
-                contact_vk: contactVk.trim() || null,
+                contact_email: email.value,
+                contact_telegram: telegram.value,
+                contact_vk: vk.value,
               });
               addToast({ id: "contacts-saved", type: "success", message: t("toast.contactsSaved") });
             } catch {

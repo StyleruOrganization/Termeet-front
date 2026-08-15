@@ -69,19 +69,11 @@ export const useCreateMeet = ({ onSuccess: onSuccessExternal }: { onSuccess: () 
     onSuccessExternal();
     navigate(`/meet/${response.hash}`);
     removeToast("create-meet-wait");
-    const synced = response.calendarSync?.synced ?? 0;
     addToast({
       id: "create-meet-success",
-      message: synced > 0 ? "Встреча создана и записана в Яндекс Календарь" : "Встреча успешно создана",
+      message: "Встреча успешно создана",
       type: "success",
     });
-    if (response.calendarSync && synced === 0) {
-      addToast({
-        id: "create-meet-calendar-miss",
-        message: "В календарь не записалось — проверьте Яндекс в кабинете",
-        type: "warning",
-      });
-    }
   };
 
   const handleError = (error: Error) => {
@@ -152,7 +144,6 @@ export const useCreateMeet = ({ onSuccess: onSuccessExternal }: { onSuccess: () 
       lockVoteAfterDeadline: formData.lockVoteAfterDeadline,
       remindEnabled: formData.remindEnabled,
       remindOffsets: formData.remindOffsets,
-      addToCalendar: formData.addToCalendar,
     };
 
     console.log("preparedData", preparedData);
