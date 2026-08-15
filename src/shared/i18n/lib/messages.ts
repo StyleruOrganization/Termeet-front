@@ -151,6 +151,7 @@ export const ru = {
   home: {
     create: "Создать встречу",
     meetings: "Мои встречи",
+    pending: "Ждём время",
     history: "История",
     all: "Все",
     today: "Сегодня",
@@ -172,6 +173,7 @@ export const ru = {
     join: "Подключиться",
     openMeet: "Открыть встречу {{name}}",
     historyEmpty: "Здесь появятся встречи, у которых уже назначено итоговое время",
+    pendingEmpty: "Нет встреч, которые ещё ждут время. Назначенные смотри во вкладке «Мои встречи».",
     loading: "Загружаем встречи…",
     loadError: "Не получилось загрузить встречи. После деплоя бэкенда в ветку dev список появится сам.",
     emptyFilter: "{{name}}, пока нет встреч в этом фильтре. Создай первую или открой ссылку.",
@@ -463,6 +465,7 @@ export const en: typeof ru = {
   home: {
     create: "Create meeting",
     meetings: "My meetings",
+    pending: "Waiting",
     history: "History",
     all: "All",
     today: "Today",
@@ -484,6 +487,7 @@ export const en: typeof ru = {
     join: "Join",
     openMeet: "Open meeting {{name}}",
     historyEmpty: "Meetings with a final time will appear here",
+    pendingEmpty: "No meetings still waiting for a time. Scheduled ones are in My meetings.",
     loading: "Loading meetings…",
     loadError: "Could not load meetings. After the backend deploy to the dev branch the list will appear.",
     emptyFilter: "{{name}}, no meetings in this filter yet. Create one or open a link.",
@@ -783,6 +787,7 @@ export const de: typeof ru = {
   home: {
     create: "Meeting erstellen",
     meetings: "Meine Meetings",
+    pending: "Zeit offen",
     history: "Verlauf",
     all: "Alle",
     today: "Heute",
@@ -804,6 +809,7 @@ export const de: typeof ru = {
     join: "Beitreten",
     openMeet: "Meeting {{name}} öffnen",
     historyEmpty: "Hier erscheinen Meetings mit festgelegter Zeit",
+    pendingEmpty: "Keine Meetings, die noch auf eine Zeit warten. Festgelegte stehen unter Meine Meetings.",
     loading: "Meetings werden geladen…",
     loadError: "Meetings konnten nicht geladen werden. Nach dem Backend-Deploy auf den Dev-Branch erscheint die Liste.",
     emptyFilter:

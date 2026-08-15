@@ -16,16 +16,9 @@ import Arrow from "@assets/icons/arrow.svg";
 import ChevronDown from "@assets/icons/chevron-down.svg";
 import styles from "./Home.module.css";
 
-type DateFilter = "all" | "today" | "byDate";
-type HomeTab = "meetings" | "history";
+type HomeTab = "meetings" | "pending";
 
 const EMPTY_YANDEX_EVENTS: IYandexCalendarEvent[] = [];
-
-const DATE_OPTIONS = [
-  ["all", "home.all"],
-  ["today", "home.today"],
-  ["byDate", "home.byDate"],
-] as const;
 
 const ROLE_OPTIONS = [
   ["owner", "home.owner"],
@@ -62,6 +55,26 @@ const finalDaysOf = (meeting: IUserMeeting) => {
   return days;
 };
 
+const listDayOf = (meeting: IUserMeeting) => {
+  if (meeting.hasFinal) {
+    const [finalDay] = [...finalDaysOf(meeting)];
+    if (finalDay) {
+      return finalDay;
+    }
+  }
+  return firstRangeDay(meeting) || "none";
+};
+
+const matchesSelectedDay = (meeting: IUserMeeting, day: string) => {
+  if (meeting.hasFinal) {
+    const finalDays = finalDaysOf(meeting);
+    if (finalDays.size > 0) {
+      return finalDays.has(day);
+    }
+  }
+  return Boolean(meeting.dataRange?.some(range => range[0]?.slice(0, 10) === day));
+};
+
 const peopleWordKey = (count: number, locale: string) => {
   if (locale !== "ru") {
     return count === 1 ? "home.people1" : "home.people5";
@@ -88,7 +101,6 @@ export const Home = () => {
   });
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const [tab, setTab] = useState<HomeTab>("meetings");
-  const [dateFilter, setDateFilter] = useState<DateFilter>("all");
   const [roleFilters, setRoleFilters] = useState<UserMeetingRole[]>([]);
   const [filtersOpen, setFiltersOpen] = useState(false);
 
@@ -151,36 +163,26 @@ export const Home = () => {
     return days;
   }, [meetings]);
 
-  const todayKey = toDayKey(new Date());
-
   const visibleMeetings = useMemo(() => {
     return meetings.filter(meeting => {
       const isFinal = Boolean(meeting.hasFinal);
-      if (tab === "history" && !isFinal) {
-        return false;
-      }
-      if (tab === "meetings" && isFinal) {
+      if (tab === "pending" && isFinal) {
         return false;
       }
       if (roleFilters.length > 0 && !roleFilters.includes(meeting.role)) {
         return false;
       }
-
-      const day = firstRangeDay(meeting);
-      if (dateFilter === "today") {
-        return day === todayKey;
-      }
-      if (dateFilter === "byDate" && selectedDay) {
-        return meeting.dataRange?.some(range => range[0]?.slice(0, 10) === selectedDay);
+      if (selectedDay) {
+        return matchesSelectedDay(meeting, selectedDay);
       }
       return true;
     });
-  }, [dateFilter, meetings, roleFilters, selectedDay, tab, todayKey]);
+  }, [meetings, roleFilters, selectedDay, tab]);
 
   const grouped = useMemo(() => {
     const groups = new Map<string, IUserMeeting[]>();
     visibleMeetings.forEach(meeting => {
-      const key = firstRangeDay(meeting) || "none";
+      const key = listDayOf(meeting);
       const list = groups.get(key) ?? [];
       list.push(meeting);
       groups.set(key, list);
@@ -208,13 +210,7 @@ export const Home = () => {
             selectedDay={selectedDay}
             onMonthChange={setMonth}
             onSelectDay={day => {
-              if (selectedDay === day) {
-                setSelectedDay(null);
-                setDateFilter("all");
-                return;
-              }
-              setSelectedDay(day);
-              setDateFilter("byDate");
+              setSelectedDay(current => (current === day ? null : day));
             }}
           />
           {user && calendar && !calendar.has_calendar ? (
@@ -266,15 +262,15 @@ export const Home = () => {
               </button>
               <button
                 type='button'
-                className={`${styles.Home__Tab} ${tab === "history" ? styles.Home__Tab_active : ""}`}
-                onClick={() => setTab("history")}
+                className={`${styles.Home__Tab} ${tab === "pending" ? styles.Home__Tab_active : ""}`}
+                onClick={() => setTab("pending")}
               >
-                {t("home.history")}
+                {t("home.pending")}
               </button>
             </div>
             <button
               type='button'
-              className={`${styles.Home__FilterButton} ${dateFilter !== "all" || roleFilters.length > 0 ? styles.Home__FilterButton_active : ""}`}
+              className={`${styles.Home__FilterButton} ${roleFilters.length > 0 ? styles.Home__FilterButton_active : ""}`}
               onClick={() => setFiltersOpen(true)}
             >
               {t("home.filters")}
@@ -285,15 +281,6 @@ export const Home = () => {
           <ModalWrapper compact isOpen={filtersOpen} onClose={() => setFiltersOpen(false)} isAnimate>
             <div className={styles.Home__FilterSheet}>
               <h2>{t("home.filters")}</h2>
-              <p className={styles.Home__FilterGroupTitle}>{t("home.filterWhen")}</p>
-              {DATE_OPTIONS.map(([id, labelKey]) => (
-                <button key={id} type='button' className={styles.Home__FilterRow} onClick={() => setDateFilter(id)}>
-                  <span>{t(labelKey)}</span>
-                  <span className={`${styles.Home__Check} ${dateFilter === id ? styles.Home__Check_on : ""}`}>
-                    {dateFilter === id ? <ApproveIcon /> : null}
-                  </span>
-                </button>
-              ))}
               <p className={styles.Home__FilterGroupTitle}>{t("home.filterRole")}</p>
               <button type='button' className={styles.Home__FilterRow} onClick={() => setRoleFilters([])}>
                 <span>{t("home.allRoles")}</span>
@@ -328,8 +315,8 @@ export const Home = () => {
             </div>
           </ModalWrapper>
 
-          {tab === "history" && grouped.length === 0 && !isLoading && !isError ? (
-            <p className={styles.Home__Empty}>{t("home.historyEmpty")}</p>
+          {tab === "pending" && grouped.length === 0 && !isLoading && !isError ? (
+            <p className={styles.Home__Empty}>{t("home.pendingEmpty")}</p>
           ) : isLoading ? (
             <p className={styles.Home__Empty}>{t("home.loading")}</p>
           ) : isError ? (
