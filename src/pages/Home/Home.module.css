@@ -418,22 +418,35 @@
   border-color: var(--semantics-blue-1000);
 }
 
-.HomeCalendar__Dot {
+.HomeCalendar__Dots {
   position: absolute;
-  bottom: 4px;
+  bottom: 3px;
   left: 50%;
 
+  display: flex;
+  gap: 3px;
+
+  transform: translateX(-50%);
+}
+
+.HomeCalendar__Dot {
   width: 5px;
   height: 5px;
 
   background-color: var(--semantics-blue-950);
   border-radius: 50%;
+}
 
-  transform: translateX(-50%);
+.HomeCalendar__Dot_yandex {
+  background-color: var(--semantics-yellow-main);
 }
 
 .HomeCalendar__Day_selected .HomeCalendar__Dot {
   background-color: var(--fill-bg);
+}
+
+.HomeCalendar__Day_selected .HomeCalendar__Dot_yandex {
+  background-color: var(--semantics-yellow-main);
 }
 
 .HomeCalendar__Hint {
@@ -457,6 +470,35 @@
 
   background-color: var(--semantics-blue-950);
   border-radius: 50%;
+}
+
+.HomeCalendar__HintDot_yandex {
+  background-color: var(--semantics-yellow-main);
+}
+
+.Home__YandexList {
+  display: flex;
+  gap: 4px;
+  flex-direction: column;
+
+  margin-top: 12px;
+}
+
+.Home__YandexTitle {
+  margin: 0;
+
+  color: var(--text-secondary);
+
+  font-size: 3rem;
+}
+
+.Home__YandexItem {
+  margin: 0;
+
+  color: var(--text-main);
+
+  font-size: 3rem;
+  line-height: 1.35;
 }
 
 @media (width < 1024px) {

@@ -299,6 +299,29 @@
   font-size: 3rem;
 }
 
+.Profile__YandexCard {
+  display: flex;
+  gap: 4px;
+  flex-direction: column;
+
+  padding: 12px 16px;
+
+  background-color: var(--fill-controls);
+  border: 1px solid var(--semantics-gray-hover);
+  border-radius: 16px;
+
+  margin-top: 8px;
+}
+
+.Profile__YandexName {
+  margin: 0;
+
+  color: var(--text-main);
+
+  font-size: var(--text-body);
+  font-weight: 600;
+}
+
 .Profile__Placeholder {
   display: flex;
   gap: 16px;

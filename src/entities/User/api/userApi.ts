@@ -8,6 +8,7 @@ import type {
   IUserMeeting,
   IUserSearchItem,
   IUserSettingsUpdate,
+  IYandexCalendarMonth,
 } from "../model/User.types";
 
 type RawUser = IUser & {
@@ -19,6 +20,10 @@ type RawUser = IUser & {
   notifyOnFinal?: boolean;
   hasYandex?: boolean;
   hasTelemost?: boolean;
+  hasCalendar?: boolean;
+  yandexLogin?: string | null;
+  yandexEmail?: string | null;
+  yandexName?: string | null;
   showOnboarding?: boolean;
 };
 
@@ -37,6 +42,10 @@ export const normalizeUser = (raw: RawUser): IUser => {
     notify_on_final: raw.notify_on_final ?? raw.notifyOnFinal ?? true,
     has_yandex: raw.has_yandex ?? raw.hasYandex ?? false,
     has_telemost: raw.has_telemost ?? raw.hasTelemost ?? false,
+    has_calendar: raw.has_calendar ?? raw.hasCalendar ?? false,
+    yandex_login: raw.yandex_login ?? raw.yandexLogin ?? null,
+    yandex_email: raw.yandex_email ?? raw.yandexEmail ?? null,
+    yandex_name: raw.yandex_name ?? raw.yandexName ?? null,
     show_onboarding: raw.show_onboarding ?? raw.showOnboarding ?? true,
   };
 };
@@ -126,4 +135,15 @@ export const getMyMeetingsRequest = async () => {
     participantNames: item.participantNames ?? item.participant_names ?? [],
     participantCount: item.participantCount ?? item.participant_count ?? item.participantNames?.length ?? 0,
   }));
+};
+
+export const getMyCalendarRequest = async (start: string, end: string) => {
+  const data = await apiClient.get<IYandexCalendarMonth>(
+    `/users/me/calendar?start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}`,
+  );
+  return {
+    events: data.events ?? [],
+    has_calendar: data.has_calendar ?? false,
+    error: data.error ?? null,
+  };
 };

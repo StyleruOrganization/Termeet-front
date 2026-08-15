@@ -25,6 +25,10 @@ export interface IUser {
   notify_on_final?: boolean;
   has_yandex?: boolean;
   has_telemost?: boolean;
+  has_calendar?: boolean;
+  yandex_login?: string | null;
+  yandex_email?: string | null;
+  yandex_name?: string | null;
   show_onboarding?: boolean;
 }
 
@@ -67,6 +71,20 @@ export interface IUserSearchItem {
   id: string;
   first_name: string;
   last_name: string;
+}
+
+export interface IYandexCalendarEvent {
+  id: string;
+  title: string;
+  start: string;
+  end: string;
+  source?: "yandex";
+}
+
+export interface IYandexCalendarMonth {
+  events: IYandexCalendarEvent[];
+  has_calendar?: boolean;
+  error?: string | null;
 }
 
 export type UserMeetingRole = "owner" | "participant" | "observer" | "invited";

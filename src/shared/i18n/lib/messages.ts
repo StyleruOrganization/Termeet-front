@@ -96,14 +96,22 @@ export const ru = {
     notifyFinal: "Когда назначили итоговое время",
     yandexTitle: "Яндекс",
     yandexHint:
-      "Через Яндекс ID можно входить и создавать комнату Телемоста. Если регистрировались паролем — привяжите тот же Яндекс здесь. API Телемоста работает только в Яндекс 360 для бизнеса; личный аккаунт комнату через API не создаст, ссылку можно вставить вручную.",
+      "Через Яндекс ID можно входить и синхронизировать итоговое время с Яндекс Календарём. Если регистрировались паролем — привяжите тот же Яндекс здесь. Ссылку на звонок всегда вставляете сами.",
     yandexConnected: "Яндекс подключён",
     yandexDisconnected: "Яндекс не подключён",
     yandexTelemost: "Телемост разрешён",
+    yandexCalendar: "Календарь разрешён",
     yandexConnect: "Подключить Яндекс",
-    yandexReconnect: "Подключить Телемост заново",
+    yandexReconnect: "Подключить календарь заново",
     yandex360:
       "Автосоздание комнаты — для организаций с Яндекс 360. С личного Яндекса откройте telemost.yandex.ru и вставьте ссылку в поле встречи.",
+    yandexLogin: "Логин",
+    yandexMail: "Почта Яндекса",
+    yandexCalendarOn:
+      "Итоговое время Termeet будет появляться в этом календаре. На главной видны ваши события Яндекса.",
+    yandexCalendarOff:
+      "Яндекс привязан, но нет права на календарь. Нажмите кнопку ниже — Яндекс спросит доступ к календарю. В кабинете OAuth приложения должен быть включён scope calendar:all.",
+    yandexNeedConnect: "Пока Яндекс не привязан: вход по паролю работает, календарь — после кнопки ниже.",
   },
   toast: {
     nameSaved: "Имя сохранено в аккаунте",
@@ -133,6 +141,8 @@ export const ru = {
     liveFinalEdit: "Итоговое время встречи изменили",
     finalSet: "Назначено итоговое время встречи. Новые слоты больше не принимают",
     finalUpdated: "Итоговое время встречи изменили. Участникам с письмами уйдёт уведомление",
+    calendarSynced: "Итоговое время записали в Яндекс Календарь ({{count}})",
+    calendarConflict: "У {{name}} в это время уже есть встреча в Яндекс Календаре — отправили письмо",
     liveInfo: "Организатор обновил данные встречи",
     liveMore: "Ещё {{count}} обновлений по этой встрече",
     notifyError: "Не получилось сохранить уведомления. Попробуйте ещё раз",
@@ -172,7 +182,11 @@ export const ru = {
     prevMonth: "Предыдущий месяц",
     nextMonth: "Следующий месяц",
     noDate: "Дата не указана",
-    dotHint: "Точка под числом — в этот день есть встреча",
+    dotHint: "Синяя точка — встреча Termeet",
+    yandexDotHint: "Жёлтая — событие из Яндекс Календаря",
+    yandexEvents: "Яндекс Календарь",
+    connectCalendar: "Подключите Яндекс Календарь в кабинете — события появятся на сетке, а итог запишется сам.",
+    calendarLoadError: "Не получилось загрузить Яндекс Календарь. Переподключите его в кабинете.",
   },
   login: {
     wrong: "Неверный email или пароль",
@@ -222,6 +236,9 @@ export const ru = {
     pageTitle: "Создайте встречу",
     pickDays: "Выберите минимум один день",
     link: "Ссылка на встречу",
+    linkPlaceholder: "https://…",
+    linkHint:
+      "Вставьте ссылку на звонок сами: Телемост, Zoom, Google Meet — что удобно команде. Termeet комнату не создаёт.",
     choose: "Выберите",
     inviteLabel: "Пригласить из Termeet",
     invitePlaceholder: "Имя или фамилия",
@@ -252,9 +269,9 @@ export const ru = {
     pickTitle: "Подбор удобного времени",
     pickText: "Порекомендуем, в какое время стоит назначить встречу",
     advantages: "Преимущества Termeet",
-    telemostTitle: "Интеграция с Яндекс Календарем и Телемост",
+    telemostTitle: "Интеграция с Яндекс Календарём",
     telemostText:
-      "Больше не нужно создавать звонок отдельно, копировать ссылку и рассылать её вручную. Termeet позволяет уведомлять о финальном времени и создает встречу в Телемосте",
+      "Когда назначите итоговое время, оно появится в Яндекс Календаре у авторизованных участников, которые в это окно могут. Ссылку на звонок вставляете сами.",
     manageTitle: "Удобное управление встречей",
     manageText:
       "Можно изменить название встречи или ее описание, управлять списком участников, редактировать доступное время и уведомлять участников о финальном времени",
@@ -262,7 +279,7 @@ export const ru = {
     meetLink: "Ссылка на встречу",
     calendarTitle: "Управление календарем и историей встреч",
     calendarText:
-      "На главной странице можно подключить уведомления, вести календарь, который синхронизируется с Яндекс.Календарем, Outlook, и Google, а также смотреть историю прошлых и будущих встреч",
+      "На главной видны ваши встречи Termeet и события из Яндекс Календаря. История — встречи с выбранным итоговым временем",
     may12: "12 мая",
     team: "Наша команда",
     advantagesNav: "Преимущества",
@@ -390,14 +407,21 @@ export const en: typeof ru = {
     notifyFinal: "When the final time is set",
     yandexTitle: "Yandex",
     yandexHint:
-      "Yandex ID is used to sign in and to create a Telemost room. If you registered with a password, link the same Yandex here. The Telemost API works only with Yandex 360 for Business; a personal account cannot create a room via API — paste the link by hand.",
+      "Yandex ID is for signing in and syncing the final time to Yandex Calendar. If you registered with a password, link the same Yandex here. You always paste the call link yourself.",
     yandexConnected: "Yandex connected",
     yandexDisconnected: "Yandex is not connected",
     yandexTelemost: "Telemost allowed",
+    yandexCalendar: "Calendar allowed",
     yandexConnect: "Connect Yandex",
-    yandexReconnect: "Reconnect Telemost",
+    yandexReconnect: "Reconnect calendar",
     yandex360:
       "Auto-creating a room is for Yandex 360 organizations. From a personal Yandex open telemost.yandex.ru and paste the link into the meeting field.",
+    yandexLogin: "Login",
+    yandexMail: "Yandex email",
+    yandexCalendarOn: "Termeet final time will appear in this calendar. Your Yandex events show on the home page.",
+    yandexCalendarOff:
+      "Yandex is linked, but calendar access is missing. Use the button below — Yandex will ask for calendar access. The OAuth app must include calendar:all.",
+    yandexNeedConnect: "Yandex is not linked yet: password login works, calendar starts after the button below.",
   },
   toast: {
     nameSaved: "Name saved to your account",
@@ -427,6 +451,8 @@ export const en: typeof ru = {
     liveFinalEdit: "The meeting time was changed",
     finalSet: "The meeting time has been set. New slots are no longer accepted",
     finalUpdated: "The meeting time was changed. People with email notifications on will get a message",
+    calendarSynced: "Final time was written to Yandex Calendar ({{count}})",
+    calendarConflict: "{{name}} already has a Yandex Calendar event then — we emailed them",
     liveInfo: "The organizer updated the meeting details",
     liveMore: "{{count}} more updates on this meeting",
     notifyError: "Could not save notification settings. Try again",
@@ -466,7 +492,11 @@ export const en: typeof ru = {
     prevMonth: "Previous month",
     nextMonth: "Next month",
     noDate: "No date",
-    dotHint: "A dot under the number means you have a meeting that day",
+    dotHint: "A blue dot is a Termeet meeting",
+    yandexDotHint: "Yellow is an event from Yandex Calendar",
+    yandexEvents: "Yandex Calendar",
+    connectCalendar: "Connect Yandex Calendar in your profile — events appear on the grid, and the final time syncs.",
+    calendarLoadError: "Could not load Yandex Calendar. Reconnect it in your profile.",
   },
   login: {
     wrong: "Wrong email or password",
@@ -517,6 +547,9 @@ export const en: typeof ru = {
     pageTitle: "Create a meeting",
     pickDays: "Pick at least one day",
     link: "Meeting link",
+    linkPlaceholder: "https://…",
+    linkHint:
+      "Paste the call link yourself: Telemost, Zoom, Google Meet — whatever the team uses. Termeet does not create a room.",
     choose: "Choose",
     inviteLabel: "Invite from Termeet",
     invitePlaceholder: "First or last name",
@@ -686,12 +719,23 @@ export const de: typeof ru = {
     notifyFinal: "Wenn die endgültige Zeit feststeht",
     yandexTitle: "Yandex",
     yandexHint:
-      "Über Yandex ID können Sie sich anmelden und einen Telemost-Raum anlegen. Bei Registrierung mit Passwort binden Sie dasselbe Yandex hier. Die Telemost-API gilt nur für Yandex 360 for Business; ein privates Konto kann den Raum nicht per API anlegen — Link per Hand einfügen.",
+      "Über Yandex ID können Sie sich anmelden und die Endzeit in den Yandex-Kalender schreiben. Bei Registrierung mit Passwort binden Sie dasselbe Yandex hier. Den Anruflink fügen Sie immer selbst ein.",
     yandexConnected: "Yandex verbunden",
     yandexDisconnected: "Yandex nicht verbunden",
     yandexTelemost: "Telemost erlaubt",
+    yandexCalendar: "Kalender erlaubt",
     yandexConnect: "Yandex verbinden",
-    yandexReconnect: "Telemost erneut verbinden",
+    yandexReconnect: "Kalender erneut verbinden",
+    yandex360:
+      "Automatische Räume gelten für Yandex-360-Organisationen. Mit privatem Yandex telemost.yandex.ru öffnen und den Link ins Meeting-Feld einfügen.",
+    yandexLogin: "Login",
+    yandexMail: "Yandex-E-Mail",
+    yandexCalendarOn:
+      "Die Endzeit von Termeet erscheint in diesem Kalender. Yandex-Termine sehen Sie auf der Startseite.",
+    yandexCalendarOff:
+      "Yandex ist verbunden, aber ohne Kalenderrecht. Button unten — Yandex fragt nach Kalenderzugriff. In der OAuth-App muss calendar:all aktiv sein.",
+    yandexNeedConnect:
+      "Yandex ist noch nicht verbunden: Login mit Passwort geht, der Kalender startet nach dem Button.",
     yandex360:
       "Automatische Räume gelten für Yandex-360-Organisationen. Mit privatem Yandex telemost.yandex.ru öffnen und den Link ins Meeting-Feld einfügen.",
   },
@@ -725,6 +769,8 @@ export const de: typeof ru = {
     finalSet: "Die endgültige Meetingzeit wurde festgelegt. Neue Slots werden nicht mehr angenommen",
     finalUpdated:
       "Die endgültige Meetingzeit wurde geändert. Teilnehmer mit E-Mail-Benachrichtigung bekommen eine Nachricht",
+    calendarSynced: "Endzeit steht im Yandex-Kalender ({{count}})",
+    calendarConflict: "{{name}} hat dann schon einen Yandex-Termin — wir haben eine Mail geschickt",
     liveInfo: "Der Organisator hat die Meetingdaten aktualisiert",
     liveMore: "Noch {{count}} Updates zu diesem Meeting",
     notifyError: "Benachrichtigungen konnten nicht gespeichert werden. Nochmal versuchen",
@@ -765,7 +811,12 @@ export const de: typeof ru = {
     prevMonth: "Vorheriger Monat",
     nextMonth: "Nächster Monat",
     noDate: "Kein Datum",
-    dotHint: "Ein Punkt unter der Zahl heißt: an diesem Tag gibt es ein Meeting",
+    dotHint: "Blauer Punkt — Termeet-Meeting",
+    yandexDotHint: "Gelb — Termin aus dem Yandex-Kalender",
+    yandexEvents: "Yandex-Kalender",
+    connectCalendar:
+      "Yandex-Kalender im Profil verbinden — Termine erscheinen im Raster, die Endzeit wird selbst geschrieben.",
+    calendarLoadError: "Yandex-Kalender konnte nicht geladen werden. Im Profil erneut verbinden.",
   },
   login: {
     wrong: "Falsche E-Mail oder Passwort",
@@ -817,6 +868,9 @@ export const de: typeof ru = {
     pageTitle: "Meeting erstellen",
     pickDays: "Mindestens einen Tag wählen",
     link: "Meeting-Link",
+    linkPlaceholder: "https://…",
+    linkHint:
+      "Den Anruflink selbst einfügen: Telemost, Zoom, Google Meet — was das Team nutzt. Termeet legt keinen Raum an.",
     choose: "Wählen",
     inviteLabel: "Aus Termeet einladen",
     invitePlaceholder: "Vor- oder Nachname",

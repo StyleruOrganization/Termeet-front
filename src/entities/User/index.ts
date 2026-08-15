@@ -8,6 +8,8 @@ export type {
   UserMeetingRole,
   IAvailabilityInterval,
   IUserSettingsUpdate,
+  IYandexCalendarEvent,
+  IYandexCalendarMonth,
 } from "./model/User.types";
 export { useSessionStore } from "./model/store/useSessionStore";
 export { useRestoreSession } from "./lib/useRestoreSession";
@@ -42,6 +44,7 @@ export {
   resetPasswordVerifyRequest,
   resendVerificationRequest,
   getMyMeetingsRequest,
+  getMyCalendarRequest,
   searchUsersRequest,
   deleteAccountRequest,
 } from "./api/userApi";

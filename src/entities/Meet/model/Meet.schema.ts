@@ -41,6 +41,10 @@ export interface MeetResponse {
   organizerName?: string | null;
   observers?: ObserverUser[];
   permissions?: MeetPermissions;
+  calendarSync?: {
+    synced?: number;
+    conflicts?: { name: string; titles?: string[] }[];
+  } | null;
 }
 
 export const getMeetDateRange = (meet: MeetResponse): [string, string][] => {

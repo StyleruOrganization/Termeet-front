@@ -583,7 +583,10 @@ const NotificationSettings = ({ user }: { user: IUser }) => {
 const IntegrationsSettings = ({ user }: { user: IUser }) => {
   const { t } = useTranslation();
   const hasYandex = Boolean(user.has_yandex);
-  const hasTelemost = Boolean(user.has_telemost);
+  const hasCalendar = Boolean(user.has_calendar);
+  const yandexName = user.yandex_name?.trim();
+  const yandexLogin = user.yandex_login?.trim();
+  const yandexEmail = user.yandex_email?.trim();
 
   return (
     <div className={styles.Profile__Stack}>
@@ -595,11 +598,30 @@ const IntegrationsSettings = ({ user }: { user: IUser }) => {
             <YandexLogo />
             {hasYandex ? t("profile.yandexConnected") : t("profile.yandexDisconnected")}
           </span>
-          {hasTelemost ? (
-            <span className={styles.Profile__IntegrationStatus}>{t("profile.yandexTelemost")}</span>
+          {hasCalendar ? (
+            <span className={styles.Profile__IntegrationStatus}>{t("profile.yandexCalendar")}</span>
           ) : null}
         </div>
-        <p className={styles.Profile__Hint}>{t("profile.yandex360")}</p>
+        {hasYandex ? (
+          <div className={styles.Profile__YandexCard}>
+            {yandexName ? <p className={styles.Profile__YandexName}>{yandexName}</p> : null}
+            {yandexLogin ? (
+              <p className={styles.Profile__Hint}>
+                {t("profile.yandexLogin")}: @{yandexLogin}
+              </p>
+            ) : null}
+            {yandexEmail ? (
+              <p className={styles.Profile__Hint}>
+                {t("profile.yandexMail")}: {yandexEmail}
+              </p>
+            ) : null}
+            <p className={styles.Profile__Hint}>
+              {hasCalendar ? t("profile.yandexCalendarOn") : t("profile.yandexCalendarOff")}
+            </p>
+          </div>
+        ) : (
+          <p className={styles.Profile__Hint}>{t("profile.yandexNeedConnect")}</p>
+        )}
         <button
           type='button'
           className={`baseButton ${hasYandex ? "outlineButton" : "mainButton"} ${styles.Profile__SaveTemplate}`}

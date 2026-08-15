@@ -1,7 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router";
-import { getMyMeetingsRequest, useSessionStore, type IUserMeeting, type UserMeetingRole } from "@/entities/User";
+import {
+  getMyCalendarRequest,
+  getMyMeetingsRequest,
+  useSessionStore,
+  type IUserMeeting,
+  type IYandexCalendarEvent,
+  type UserMeetingRole,
+} from "@/entities/User";
 import { LOCALE_BCP, parseLocale, useTranslation } from "@/shared/i18n";
 import { Container, ModalWrapper } from "@/shared/ui";
 import ApproveIcon from "@assets/icons/approve.svg";
@@ -11,6 +18,8 @@ import styles from "./Home.module.css";
 
 type DateFilter = "all" | "today" | "byDate";
 type HomeTab = "meetings" | "history";
+
+const EMPTY_YANDEX_EVENTS: IYandexCalendarEvent[] = [];
 
 const DATE_OPTIONS = [
   ["all", "home.all"],
@@ -81,6 +90,33 @@ export const Home = () => {
     retry: 1,
   });
 
+  const monthStart = useMemo(() => new Date(month.getFullYear(), month.getMonth(), 1), [month]);
+  const monthEnd = useMemo(() => new Date(month.getFullYear(), month.getMonth() + 1, 1), [month]);
+  const { data: calendar, isError: calendarError } = useQuery({
+    queryKey: ["user-calendar", monthStart.toISOString()],
+    queryFn: () => getMyCalendarRequest(monthStart.toISOString(), monthEnd.toISOString()),
+    retry: 1,
+  });
+
+  const yandexEvents = calendar?.events ?? EMPTY_YANDEX_EVENTS;
+  const yandexDays = useMemo(() => {
+    const days = new Set<string>();
+    yandexEvents.forEach(event => {
+      const day = event.start ? toDayKey(new Date(event.start)) : "";
+      if (day && !Number.isNaN(Date.parse(event.start))) {
+        days.add(day);
+      }
+    });
+    return days;
+  }, [yandexEvents]);
+
+  const dayYandexEvents = useMemo(() => {
+    if (!selectedDay) {
+      return [];
+    }
+    return yandexEvents.filter(event => event.start && toDayKey(new Date(event.start)) === selectedDay);
+  }, [selectedDay, yandexEvents]);
+
   const markedDays = useMemo(() => {
     const days = new Set<string>();
     meetings.forEach(meeting => {
@@ -146,6 +182,7 @@ export const Home = () => {
           <HomeCalendar
             month={month}
             markedDays={markedDays}
+            yandexDays={yandexDays}
             selectedDay={selectedDay}
             onMonthChange={setMonth}
             onSelectDay={day => {
@@ -158,6 +195,22 @@ export const Home = () => {
               setDateFilter("byDate");
             }}
           />
+          {user && calendar && !calendar.has_calendar ? (
+            <p className={styles.HomeCalendar__Hint}>{t("home.connectCalendar")}</p>
+          ) : null}
+          {calendarError || calendar?.error ? (
+            <p className={styles.HomeCalendar__Hint}>{t("home.calendarLoadError")}</p>
+          ) : null}
+          {dayYandexEvents.length > 0 ? (
+            <div className={styles.Home__YandexList}>
+              <p className={styles.Home__YandexTitle}>{t("home.yandexEvents")}</p>
+              {dayYandexEvents.map(event => (
+                <p key={event.id} className={styles.Home__YandexItem}>
+                  {formatEventTime(event.start, event.end, dateLocale)} · {event.title}
+                </p>
+              ))}
+            </div>
+          ) : null}
           <button type='button' className='baseButton mainButton' onClick={() => navigate("/create")}>
             {t("home.create")}
           </button>
@@ -395,15 +448,24 @@ const PeopleSnippet = ({ names, count }: { names: string[]; count: number }) => 
   );
 };
 
+const formatEventTime = (startIso: string, endIso: string, locale: string) => {
+  const start = new Date(startIso);
+  const end = new Date(endIso);
+  const time = new Intl.DateTimeFormat(locale, { hour: "2-digit", minute: "2-digit" });
+  return `${time.format(start)}–${time.format(end)}`;
+};
+
 const HomeCalendar = ({
   month,
   markedDays,
+  yandexDays,
   selectedDay,
   onMonthChange,
   onSelectDay,
 }: {
   month: Date;
   markedDays: Set<string>;
+  yandexDays: Set<string>;
   selectedDay: string | null;
   onMonthChange: (next: Date) => void;
   onSelectDay: (day: string) => void;
@@ -452,6 +514,7 @@ const HomeCalendar = ({
           const key = `${year}-${`${monthIndex + 1}`.padStart(2, "0")}-${`${day}`.padStart(2, "0")}`;
           const isSelected = selectedDay === key;
           const isMarked = markedDays.has(key);
+          const hasYandex = yandexDays.has(key);
           const isToday = key === todayKey;
           return (
             <button
@@ -461,7 +524,14 @@ const HomeCalendar = ({
               onClick={() => onSelectDay(key)}
             >
               {day}
-              {isMarked ? <span className={styles.HomeCalendar__Dot} /> : null}
+              {isMarked || hasYandex ? (
+                <span className={styles.HomeCalendar__Dots}>
+                  {isMarked ? <span className={styles.HomeCalendar__Dot} /> : null}
+                  {hasYandex ? (
+                    <span className={`${styles.HomeCalendar__Dot} ${styles.HomeCalendar__Dot_yandex}`} />
+                  ) : null}
+                </span>
+              ) : null}
             </button>
           );
         })}
@@ -469,6 +539,10 @@ const HomeCalendar = ({
       <p className={styles.HomeCalendar__Hint}>
         <span className={styles.HomeCalendar__HintDot} aria-hidden />
         {t("home.dotHint")}
+      </p>
+      <p className={styles.HomeCalendar__Hint}>
+        <span className={`${styles.HomeCalendar__HintDot} ${styles.HomeCalendar__HintDot_yandex}`} aria-hidden />
+        {t("home.yandexDotHint")}
       </p>
     </div>
   );

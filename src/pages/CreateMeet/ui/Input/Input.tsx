@@ -1,7 +1,7 @@
 import { Input as InputBase, type IInputProps } from "@shared/ui";
 import { type CreateMeetFields, useCreateMeetStore } from "../../model";
 
-type TextMeetField = Exclude<CreateMeetFields, "dates" | "invitedUsers" | "createTelemost">;
+type TextMeetField = Exclude<CreateMeetFields, "dates" | "invitedUsers">;
 
 export const Input = ({ name, ...props }: IInputProps & { name: TextMeetField }) => {
   const setValue = useCreateMeetStore(state => state.setValue);

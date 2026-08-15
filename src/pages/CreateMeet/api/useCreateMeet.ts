@@ -60,7 +60,7 @@ export const useCreateMeet = ({ onSuccess: onSuccessExternal }: { onSuccess: () 
     };
   }, []);
 
-  const handleSuccess = (response: MeetResponse, requestedTelemost: boolean) => {
+  const handleSuccess = (response: MeetResponse) => {
     onSuccessExternal();
     navigate(`/meet/${response.hash}`);
     removeToast("create-meet-wait");
@@ -69,14 +69,6 @@ export const useCreateMeet = ({ onSuccess: onSuccessExternal }: { onSuccess: () 
       message: "Встреча успешно создана",
       type: "success",
     });
-    if (requestedTelemost && !response.link) {
-      addToast({
-        id: "create-telemost-skipped",
-        message:
-          "Комнату Телемоста не создали: API доступен только в Яндекс 360 для бизнеса. Вставьте ссылку с telemost.yandex.ru",
-        type: "warning",
-      });
-    }
   };
 
   const handleError = (error: Error) => {
@@ -90,7 +82,7 @@ export const useCreateMeet = ({ onSuccess: onSuccessExternal }: { onSuccess: () 
 
   const { mutate, isPending } = useMutation({
     mutationFn: (data: MeetCreate) => apiClient.post<MeetResponse, MeetCreate>("/meet/create", data),
-    onSuccess: async (response: MeetResponse, variables: MeetCreate) => {
+    onSuccess: async (response: MeetResponse) => {
       //t.me/mikhailnaer/775 - используем правильно 300/500
       if (
         startShowLoaderTime.current &&
@@ -104,7 +96,7 @@ export const useCreateMeet = ({ onSuccess: onSuccessExternal }: { onSuccess: () 
       if (toastTimerRef.current) {
         clearTimeout(toastTimerRef.current);
       }
-      handleSuccess(response, Boolean(variables.createTelemost));
+      handleSuccess(response);
     },
     onMutate: () => {
       toastTimerRef.current = setTimeout(() => {
@@ -136,7 +128,6 @@ export const useCreateMeet = ({ onSuccess: onSuccessExternal }: { onSuccess: () 
       duration: formData.timeDuration?.trim() || null,
       dataRange: prepareDateRanges(formData.dates, formData.timeStart, formData.timeEnd),
       invitedUserIds: formData.invitedUsers.map(item => item.id),
-      createTelemost: formData.createTelemost,
     };
 
     console.log("preparedData", preparedData);

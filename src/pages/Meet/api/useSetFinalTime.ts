@@ -22,10 +22,12 @@ export const useSetFinalTime = (hash: string, isEdit = false) => {
         slots: getPreparedNewSlots(),
       });
     },
-    onSuccess: () => {
+    onSuccess: data => {
       clearNewSelectedSlots();
       setIsEditing(false);
       queryClient.invalidateQueries({ queryKey: MeetQueries.meet(hash).queryKey });
+      queryClient.invalidateQueries({ queryKey: ["user-meetings"] });
+      queryClient.invalidateQueries({ queryKey: ["user-calendar"] });
       removeToast("final-hint");
       addToast({
         id: `meet-final-success-${Date.now()}`,
@@ -33,6 +35,24 @@ export const useSetFinalTime = (hash: string, isEdit = false) => {
         duration: 6000,
         message: isEdit ? t("toast.finalUpdated") : t("toast.finalSet"),
       });
+      const synced = data?.calendarSync?.synced ?? 0;
+      if (synced > 0) {
+        addToast({
+          id: `meet-final-cal-${Date.now()}`,
+          type: "success",
+          duration: 6000,
+          message: t("toast.calendarSynced", { count: synced }),
+        });
+      }
+      const conflict = data?.calendarSync?.conflicts?.[0];
+      if (conflict?.name) {
+        addToast({
+          id: `meet-final-busy-${Date.now()}`,
+          type: "warning",
+          duration: 8000,
+          message: t("toast.calendarConflict", { name: conflict.name }),
+        });
+      }
     },
     onError: (error: Error) => {
       const isDuration =

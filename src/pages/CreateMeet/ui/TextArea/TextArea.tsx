@@ -1,7 +1,7 @@
 import { TextArea as TextAreaBase, type ITextAreaProps } from "@shared/ui";
 import { type CreateMeetFields, useCreateMeetStore } from "../../model";
 
-type TextMeetField = Exclude<CreateMeetFields, "dates" | "invitedUsers" | "createTelemost">;
+type TextMeetField = Exclude<CreateMeetFields, "dates" | "invitedUsers">;
 
 export const TextArea = ({ name, ...textAreaProps }: ITextAreaProps & { name: TextMeetField }) => {
   const setValue = useCreateMeetStore(state => state.setValue);

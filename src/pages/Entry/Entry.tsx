@@ -10,7 +10,6 @@ import TermeetLogo from "@assets/icons/logo.svg";
 import OutlukIcon from "@assets/icons/outluk.svg";
 import Pencil from "@assets/icons/pencil.svg";
 import StyleruLogo from "@assets/icons/styleru-logo.svg";
-import TelemostIcon from "@assets/icons/telemost.svg";
 import TgIcon from "@assets/icons/tg.svg";
 import TrashBinIcon from "@assets/icons/trash-bin.svg";
 import YandexCalendarIcon from "@assets/icons/yandex-calendar.svg";
@@ -324,14 +323,13 @@ export const Entry = () => {
 
           <div ref={advantagesContainerRef} className={styles.EntryPage__Advantages__Cards}>
             <Card
-              title='Интеграция с Яндекс Календарем и Телемост'
-              description='Больше не нужно создавать звонок отдельно, копировать ссылку и рассылать её вручную. Termeet позволяет уведомлять о финальном времени и создает встречу в Телемосте'
+              title='Интеграция с Яндекс Календарём'
+              description='Когда назначите итоговое время, оно сразу появится в Яндекс Календаре у всех, кто вошёл через Яндекс и попал в это окно. Ссылку на звонок вставляете сами — Телемост, Zoom или что угодно.'
               scrollSnapType='start'
               type='advantage'
             >
               <div className={styles.EntryPage__Advantages__Icons}>
                 <YandexCalendarIcon className={styles.EntryPage__Advantages__IconsYandex} />
-                <TelemostIcon className={styles.EntryPage__Advantages__IconsTelemost} />
 
                 <div className={styles.EntryPage__Advantages__Icons__Grd}></div>
               </div>
@@ -413,7 +411,7 @@ export const Entry = () => {
 
             <Card
               title='Управление календарем и историей встреч'
-              description='На главной странице можно подключить уведомления, вести календарь, который синхронизируется с Яндекс.Календарем, Outlook, и Google, а также смотреть историю прошлых и будущих встреч'
+              description='На главной видны ваши встречи Termeet и события из Яндекс Календаря. История — встречи, у которых уже выбрано итоговое время.'
               type='advantage'
               scrollSnapType='end'
             >
