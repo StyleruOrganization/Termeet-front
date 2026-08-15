@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.0.0] - 2026-08-15
+
+### Changes
+- Production deployment
+
+
+All notable changes to this project will be documented in this file.
+
 ## [3.0.4] - 2026-08-15
 
 ### Changes
