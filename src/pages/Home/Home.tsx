@@ -75,6 +75,29 @@ const matchesSelectedDay = (meeting: IUserMeeting, day: string) => {
   return Boolean(meeting.dataRange?.some(range => range[0]?.slice(0, 10) === day));
 };
 
+const matchesRoleFilter = (meeting: IUserMeeting, roles: UserMeetingRole[]) =>
+  roles.length === 0 || roles.includes(meeting.role);
+
+const addMeetingDays = (days: Set<string>, meeting: IUserMeeting, useFinal: boolean) => {
+  if (useFinal) {
+    const finalDays = finalDaysOf(meeting);
+    if (finalDays.size > 0) {
+      finalDays.forEach(day => days.add(day));
+      return;
+    }
+    const fallback = firstRangeDay(meeting);
+    if (fallback) {
+      days.add(fallback);
+    }
+    return;
+  }
+  meeting.dataRange?.forEach(([start]) => {
+    if (start) {
+      days.add(start.slice(0, 10));
+    }
+  });
+};
+
 const peopleWordKey = (count: number, locale: string) => {
   if (locale !== "ru") {
     return count === 1 ? "home.people1" : "home.people5";
@@ -146,30 +169,30 @@ export const Home = () => {
 
   const markedDays = useMemo(() => {
     const days = new Set<string>();
+    const wantFinal = tab === "meetings";
     meetings.forEach(meeting => {
-      if (!meeting.hasFinal) {
+      if (!matchesRoleFilter(meeting, roleFilters)) {
         return;
       }
-      const finalDays = finalDaysOf(meeting);
-      if (finalDays.size > 0) {
-        finalDays.forEach(day => days.add(day));
+      const isFinal = Boolean(meeting.hasFinal);
+      if (wantFinal ? !isFinal : isFinal) {
         return;
       }
-      const fallback = firstRangeDay(meeting);
-      if (fallback) {
-        days.add(fallback);
-      }
+      addMeetingDays(days, meeting, wantFinal);
     });
     return days;
-  }, [meetings]);
+  }, [meetings, roleFilters, tab]);
 
   const visibleMeetings = useMemo(() => {
     return meetings.filter(meeting => {
       const isFinal = Boolean(meeting.hasFinal);
+      if (tab === "meetings" && !isFinal) {
+        return false;
+      }
       if (tab === "pending" && isFinal) {
         return false;
       }
-      if (roleFilters.length > 0 && !roleFilters.includes(meeting.role)) {
+      if (!matchesRoleFilter(meeting, roleFilters)) {
         return false;
       }
       if (selectedDay) {
@@ -208,6 +231,7 @@ export const Home = () => {
             markedDays={markedDays}
             yandexDays={yandexDays}
             selectedDay={selectedDay}
+            termeetDotHint={tab === "pending" ? t("home.dotHintPending") : t("home.dotHint")}
             onMonthChange={setMonth}
             onSelectDay={day => {
               setSelectedDay(current => (current === day ? null : day));
@@ -322,7 +346,11 @@ export const Home = () => {
           ) : isError ? (
             <p className={styles.Home__Empty}>{t("home.loadError")}</p>
           ) : grouped.length === 0 ? (
-            <p className={styles.Home__Empty}>{t("home.emptyFilter", { name: user?.first_name ?? "" })}</p>
+            <p className={styles.Home__Empty}>
+              {t(selectedDay || roleFilters.length > 0 ? "home.emptyFilter" : "home.meetingsEmpty", {
+                name: user?.first_name ?? "",
+              })}
+            </p>
           ) : (
             grouped.map(([day, items]) => (
               <div key={day} className={styles.Home__Group}>
@@ -504,6 +532,7 @@ const HomeCalendar = ({
   markedDays,
   yandexDays,
   selectedDay,
+  termeetDotHint,
   onMonthChange,
   onSelectDay,
 }: {
@@ -511,6 +540,7 @@ const HomeCalendar = ({
   markedDays: Set<string>;
   yandexDays: Set<string>;
   selectedDay: string | null;
+  termeetDotHint: string;
   onMonthChange: (next: Date) => void;
   onSelectDay: (day: string) => void;
 }) => {
@@ -582,7 +612,7 @@ const HomeCalendar = ({
       </div>
       <p className={styles.HomeCalendar__Hint}>
         <span className={styles.HomeCalendar__HintDot} aria-hidden />
-        {t("home.dotHint")}
+        {termeetDotHint}
       </p>
       <p className={styles.HomeCalendar__Hint}>
         <span className={`${styles.HomeCalendar__HintDot} ${styles.HomeCalendar__HintDot_yandex}`} aria-hidden />

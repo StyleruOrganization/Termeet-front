@@ -81,7 +81,7 @@
 
 .ModalWrapper__ModalContainer_compact {
   width: min(480px, calc(100% - 32px));
-  padding: 40px 24px 24px;
+  padding: 20px 24px 24px;
 
   border-radius: 24px;
 
@@ -90,10 +90,11 @@
 
 .ModalWrapper__ModalContainer_compact .ModalWrapper__CloseButton {
   top: 16px;
+  right: 16px;
 
   padding: 10px;
 
-  margin-right: 16px;
+  margin-right: 0;
 
   svg {
     width: 16px;
@@ -194,11 +195,12 @@
 
   .ModalWrapper__CloseButton,
   .ModalWrapper__ModalContainer_compact .ModalWrapper__CloseButton {
-    top: 8px;
+    top: 12px;
+    right: 12px;
 
     padding: 10px;
 
-    margin-right: 12px;
+    margin-right: 0;
 
     svg {
       width: 16px;

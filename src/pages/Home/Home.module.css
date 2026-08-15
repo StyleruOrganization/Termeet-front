@@ -91,16 +91,21 @@
   flex-direction: column;
 
   width: 100%;
-  padding: 8px 0 16px;
+  padding: 0 0 8px;
 }
 
 .Home__FilterSheet h2 {
+  display: flex;
+  align-items: center;
+
   margin: 0 0 8px;
-  padding-right: 40px;
+  padding-right: 48px;
 
   color: var(--text-main);
 
   font-size: var(--text-heading);
+
+  min-height: 36px;
 }
 
 .Home__FilterGroupTitle {
@@ -659,5 +664,13 @@
 
   .Home__Content {
     gap: 12px;
+  }
+
+  .Home__FilterSheet {
+    padding: 4px 0 16px;
+  }
+
+  .Home__FilterSheet h2 {
+    padding-right: 48px;
   }
 }
