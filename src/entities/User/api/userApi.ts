@@ -25,6 +25,11 @@ type RawUser = IUser & {
   yandexEmail?: string | null;
   yandexName?: string | null;
   showOnboarding?: boolean;
+  hasAvatar?: boolean;
+  has_avatar?: boolean;
+  contactEmail?: string | null;
+  contactTelegram?: string | null;
+  contactVk?: string | null;
 };
 
 export const normalizeUser = (raw: RawUser): IUser => {
@@ -47,6 +52,10 @@ export const normalizeUser = (raw: RawUser): IUser => {
     yandex_email: raw.yandex_email ?? raw.yandexEmail ?? null,
     yandex_name: raw.yandex_name ?? raw.yandexName ?? null,
     show_onboarding: raw.show_onboarding ?? raw.showOnboarding ?? true,
+    has_avatar: raw.has_avatar ?? raw.hasAvatar ?? false,
+    contact_email: raw.contact_email ?? raw.contactEmail ?? null,
+    contact_telegram: raw.contact_telegram ?? raw.contactTelegram ?? null,
+    contact_vk: raw.contact_vk ?? raw.contactVk ?? null,
   };
 };
 
@@ -117,6 +126,13 @@ export const searchUsersRequest = (query: string) => {
   return apiClient.get<IUserSearchItem[]>(`/users/search?q=${encodeURIComponent(query)}`);
 };
 
+export const uploadAvatarRequest = async (file: File) => {
+  const body = new FormData();
+  body.append("file", file);
+  const user = await apiClient.postFormData<RawUser>("/users/me/avatar", body);
+  return normalizeUser(user);
+};
+
 export const getMyMeetingsRequest = async () => {
   const data = await apiClient.get<
     Array<
@@ -127,6 +143,9 @@ export const getMyMeetingsRequest = async () => {
         finalSlot?: [string, string][] | null;
         participant_names?: string[];
         participant_count?: number;
+        team_id?: number | null;
+        team_name?: string | null;
+        is_closed?: boolean;
       }
     >
   >("/users/me/meetings");
@@ -137,6 +156,9 @@ export const getMyMeetingsRequest = async () => {
     finalSlot: item.finalSlot ?? item.final_slot ?? [],
     participantNames: item.participantNames ?? item.participant_names ?? [],
     participantCount: item.participantCount ?? item.participant_count ?? item.participantNames?.length ?? 0,
+    teamId: item.teamId ?? item.team_id ?? null,
+    teamName: item.teamName ?? item.team_name ?? null,
+    isClosed: item.isClosed ?? item.is_closed ?? false,
   }));
 };
 

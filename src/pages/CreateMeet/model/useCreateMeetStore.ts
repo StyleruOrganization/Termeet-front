@@ -54,6 +54,11 @@ export const useCreateMeetStore = create<MeetingFormState>((set, get) => ({
     link: "",
     timeDuration: "",
     invitedUsers: [],
+    teamId: null,
+    isClosed: false,
+    inviteOnlyVote: false,
+    voteDeadlineDate: "",
+    voteDeadlineTime: "18 : 00",
   },
   lastCorrectedValues: {
     timeStart: "10 : 00",
@@ -204,6 +209,11 @@ export const useCreateMeetStore = create<MeetingFormState>((set, get) => ({
         link: "",
         timeDuration: "",
         invitedUsers: [],
+        teamId: null,
+        isClosed: false,
+        inviteOnlyVote: false,
+        voteDeadlineDate: "",
+        voteDeadlineTime: "18 : 00",
       },
       lastCorrectedValues: {
         timeStart: "10 : 00",
@@ -230,6 +240,32 @@ export const useCreateMeetStore = create<MeetingFormState>((set, get) => ({
       values: {
         ...state.values,
         invitedUsers: state.values.invitedUsers.filter(item => item.id !== id),
+      },
+    }));
+  },
+  setTeamId: id => {
+    set(state => ({
+      values: {
+        ...state.values,
+        teamId: id,
+        inviteOnlyVote: id ? state.values.inviteOnlyVote : false,
+      },
+    }));
+  },
+  setClosed: value => {
+    set(state => ({
+      values: {
+        ...state.values,
+        isClosed: value,
+        inviteOnlyVote: value ? true : state.values.inviteOnlyVote,
+      },
+    }));
+  },
+  setInviteOnlyVote: value => {
+    set(state => ({
+      values: {
+        ...state.values,
+        inviteOnlyVote: state.values.isClosed ? true : value,
       },
     }));
   },

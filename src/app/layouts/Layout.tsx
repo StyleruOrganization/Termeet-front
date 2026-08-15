@@ -75,7 +75,11 @@ export const Layout = () => {
             ) : user ? (
               <Link to='/profile' className={styles.header__profileLink}>
                 <span className={styles.header__userName}>{user.first_name}</span>
-                <UserIcon className={styles.header__userIcon} />
+                {user.has_avatar ? (
+                  <img src={`/api/users/${user.id}/avatar`} alt='' className={styles.header__avatar} />
+                ) : (
+                  <UserIcon className={styles.header__userIcon} />
+                )}
               </Link>
             ) : (
               <button className={`${styles.header__loginBtn} baseButton mainButton`} onClick={open}>

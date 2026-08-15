@@ -9,6 +9,7 @@ const CreateMeetPage = lazy(() => import("../../pages/CreateMeet").then(module =
 const MeetPage = lazy(() => import("../../pages/Meet").then(module => ({ default: module.Meet })));
 const EditMeetPage = lazy(() => import("../../pages/EditMeet").then(module => ({ default: module.EditMeet })));
 const ProfilePage = lazy(() => import("../../pages/Profile").then(module => ({ default: module.Profile })));
+const TeamsPage = lazy(() => import("../../pages/Teams").then(module => ({ default: module.Teams })));
 const AuthYandexPage = lazy(() => import("../../pages/AuthYandex").then(module => ({ default: module.AuthYandex })));
 const AuthConfirmPage = lazy(() => import("../../pages/AuthConfirm").then(module => ({ default: module.AuthConfirm })));
 const AuthResetPage = lazy(() => import("../../pages/AuthReset").then(module => ({ default: module.AuthReset })));
@@ -45,6 +46,7 @@ export const Routing = () => {
           )}
         />
         <Route path='profile' element={withSuspense(ProfilePage, "Загружаем кабинет...")} />
+        <Route path='teams' element={withSuspense(TeamsPage, "Загружаем команды...")} />
         <Route path='auth/yandex' element={withSuspense(AuthYandexPage, "Входим через Яндекс...")} />
         <Route path='auth/confirm' element={withSuspense(AuthConfirmPage, "Подтверждаем почту...")} />
         <Route path='auth/reset' element={withSuspense(AuthResetPage, "Обновляем пароль...")} />

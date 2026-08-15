@@ -256,6 +256,20 @@ export const transformMeetData = (meetData: MeetResponse, isLocal: boolean, curr
     },
     isCreator: meetData.isCreator,
     isCreatorAuth: meetData.isCreatorAuth,
+    accessDenied: Boolean(meetData.accessDenied || meetData.access_denied),
+    isClosed: Boolean(meetData.isClosed),
+    inviteOnlyVote: Boolean(meetData.inviteOnlyVote),
+    teamId: meetData.teamId ?? meetData.team_id ?? null,
+    teamName: meetData.teamName ?? meetData.team_name ?? null,
+    organizerContacts: meetData.organizerContacts ?? null,
+    voteDeadline: meetData.voteDeadline ?? meetData.vote_deadline ?? null,
+    remindEnabled: Boolean(meetData.remindEnabled ?? meetData.remind_enabled),
+    remindOffsets: Array.isArray(meetData.remindOffsets)
+      ? meetData.remindOffsets.filter(item => Number.isFinite(item)).map(item => Number(item))
+      : Array.isArray(meetData.remind_offsets)
+        ? meetData.remind_offsets.filter(item => Number.isFinite(item)).map(item => Number(item))
+        : [],
+    lockVoteAfterDeadline: Boolean(meetData.lockVoteAfterDeadline ?? meetData.lock_vote_after_deadline),
     mySlotName:
       currentUserId && currentUserId !== "guest"
         ? ((meetData.slots ?? []).find(slot => (slot.userId ?? slot.user_id) === currentUserId)?.name ?? null)

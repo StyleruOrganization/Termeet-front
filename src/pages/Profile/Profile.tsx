@@ -4,6 +4,7 @@ import {
   deleteAccountRequest,
   resendVerificationRequest,
   resetPasswordRequest,
+  uploadAvatarRequest,
   useSessionStore,
   fillWeekWithInterval,
   getAvailabilityDayRows,
@@ -17,7 +18,7 @@ import { useToastStore } from "@/features/ToastContainer";
 import { TIMES } from "@/shared/consts";
 import { LOCALE_LABEL, LOCALES, changeAppLocale, parseLocale, useTranslation } from "@/shared/i18n";
 import { useTheme } from "@/shared/libs";
-import { Container, Input, ModalWrapper, Select, TextArea } from "@/shared/ui";
+import { Container, Input, ModalWrapper, PhotoPicker, Select, TextArea, userAvatarUrl } from "@/shared/ui";
 import { FeedbackForm } from "@/widgets/FeedbackForm";
 import Arrow from "@assets/icons/arrow.svg";
 import YandexLogo from "@assets/icons/YandexID.svg";
@@ -150,11 +151,18 @@ const ProfileSettings = ({ user }: { user: IUser }) => {
   const navigate = useNavigate();
   const logout = useSessionStore(state => state.logout);
   const updateSettings = useSessionStore(state => state.updateSettings);
+  const setUser = useSessionStore(state => state.setUser);
   const addToast = useToastStore(state => state.addToast);
   const { t } = useTranslation();
   const [firstName, setFirstName] = useState(user.first_name);
   const [lastName, setLastName] = useState(user.last_name);
   const [nameSaving, setNameSaving] = useState(false);
+  const [avatarBust, setAvatarBust] = useState(0);
+  const [avatarSaving, setAvatarSaving] = useState(false);
+  const [contactEmail, setContactEmail] = useState(user.contact_email ?? "");
+  const [contactTelegram, setContactTelegram] = useState(user.contact_telegram ?? "");
+  const [contactVk, setContactVk] = useState(user.contact_vk ?? "");
+  const [contactsSaving, setContactsSaving] = useState(false);
   const [timezone, setTimezone] = useState(user.timezone || "UTC +3:00 (Москва)");
   const [passwordOpen, setPasswordOpen] = useState(false);
   const [passwordSending, setPasswordSending] = useState(false);
@@ -210,6 +218,77 @@ const ProfileSettings = ({ user }: { user: IUser }) => {
             {t("profile.saveName")}
           </button>
         ) : null}
+      </section>
+      <section>
+        <h2 className={styles.Profile__SectionTitle}>{t("profile.photoTitle")}</h2>
+        <PhotoPicker
+          src={user.has_avatar ? userAvatarUrl(user.id, avatarBust) : null}
+          label={t("profile.photo")}
+          hint={t("profile.photoHint")}
+          disabled={avatarSaving}
+          onFile={async file => {
+            setAvatarSaving(true);
+            try {
+              const next = await uploadAvatarRequest(file);
+              setUser(next);
+              setAvatarBust(bust => bust + 1);
+              addToast({ id: "avatar-saved", type: "success", message: t("toast.avatarSaved") });
+            } catch {
+              addToast({ id: "avatar-error", type: "error", message: t("toast.avatarError") });
+            } finally {
+              setAvatarSaving(false);
+            }
+          }}
+        />
+      </section>
+      <section>
+        <h2 className={styles.Profile__SectionTitle}>{t("profile.contactsTitle")}</h2>
+        <p className={styles.Profile__Hint}>{t("profile.contactsHint")}</p>
+        <Input
+          name='contact_email'
+          label={t("profile.contactEmail")}
+          placeholder='name@example.com'
+          value={contactEmail}
+          onChange={event => setContactEmail(event.target.value)}
+        />
+        <div className={styles.Profile__FieldGap} />
+        <Input
+          name='contact_telegram'
+          label={t("profile.contactTelegram")}
+          placeholder='@username'
+          value={contactTelegram}
+          onChange={event => setContactTelegram(event.target.value)}
+        />
+        <div className={styles.Profile__FieldGap} />
+        <Input
+          name='contact_vk'
+          label={t("profile.contactVk")}
+          placeholder='vk.com/id'
+          value={contactVk}
+          onChange={event => setContactVk(event.target.value)}
+        />
+        <button
+          type='button'
+          className={`baseButton mainButton ${styles.Profile__SaveTemplate}`}
+          disabled={contactsSaving}
+          onClick={async () => {
+            setContactsSaving(true);
+            try {
+              await updateSettings({
+                contact_email: contactEmail.trim() || null,
+                contact_telegram: contactTelegram.trim() || null,
+                contact_vk: contactVk.trim() || null,
+              });
+              addToast({ id: "contacts-saved", type: "success", message: t("toast.contactsSaved") });
+            } catch {
+              addToast({ id: "contacts-error", type: "error", message: t("toast.contactsError") });
+            } finally {
+              setContactsSaving(false);
+            }
+          }}
+        >
+          {t("profile.saveContacts")}
+        </button>
       </section>
       <section>
         <h2 className={styles.Profile__SectionTitle}>{t("profile.security")}</h2>

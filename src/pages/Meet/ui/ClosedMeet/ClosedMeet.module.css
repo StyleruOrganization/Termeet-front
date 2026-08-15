@@ -1,0 +1,39 @@
+.ClosedMeet {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  margin: 48px auto;
+
+  max-width: 560px;
+}
+
+.ClosedMeet h1 {
+  color: var(--text-main);
+
+  font-size: var(--text-heading);
+  font-weight: 800;
+}
+
+.ClosedMeet p {
+  color: var(--text-main);
+
+  font-size: var(--text-body);
+  line-height: 1.4;
+}
+
+.ClosedMeet__Contacts {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ClosedMeet__Contacts a {
+  color: var(--text-link);
+
+  font-size: var(--text-body);
+}
+
+.ClosedMeet__Empty {
+  color: var(--text-secondary);
+}

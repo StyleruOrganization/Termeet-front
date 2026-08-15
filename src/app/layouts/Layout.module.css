@@ -146,6 +146,15 @@ button.header__loginBtn {
   color: var(--text-main);
 }
 
+.header__avatar {
+  width: 32px;
+  height: 32px;
+
+  border-radius: 50%;
+
+  object-fit: cover;
+}
+
 @media (width < 1024px) {
   header {
     padding: 16px 16px 0; 

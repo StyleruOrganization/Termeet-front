@@ -269,6 +269,9 @@ export const Home = () => {
               </ul>
             </div>
           ) : null}
+          <button type='button' className='baseButton outlineButton' onClick={() => navigate("/teams")}>
+            {t("home.teams")}
+          </button>
           <button type='button' className='baseButton mainButton' onClick={() => navigate("/create")}>
             {t("home.create")}
           </button>
@@ -363,6 +366,12 @@ export const Home = () => {
                       onClick={() => navigate(`/meet/${meeting.hash}`)}
                     >
                       <span className={styles.Home__CardName}>{meeting.name}</span>
+                      {meeting.teamName ? (
+                        <span className={styles.Home__TeamBadge}>
+                          <span className={styles.Home__TeamBadgeLabel}>{t("home.teamBadge")}</span>
+                          <span className={styles.Home__TeamBadgeName}>{meeting.teamName}</span>
+                        </span>
+                      ) : null}
                       <span className={styles.Home__CardMeta}>
                         {meeting.hasFinal ? t("home.scheduled") : t("home.waiting")} · {t(ROLE_LABEL_KEY[meeting.role])}
                         {meeting.duration ? ` · ${meeting.duration}` : ""}

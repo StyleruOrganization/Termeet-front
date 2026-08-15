@@ -30,6 +30,10 @@ export interface IUser {
   yandex_email?: string | null;
   yandex_name?: string | null;
   show_onboarding?: boolean;
+  has_avatar?: boolean;
+  contact_email?: string | null;
+  contact_telegram?: string | null;
+  contact_vk?: string | null;
 }
 
 export interface IUserSettingsUpdate {
@@ -45,6 +49,9 @@ export interface IUserSettingsUpdate {
   notify_on_vote?: boolean;
   notify_on_final?: boolean;
   show_onboarding?: boolean;
+  contact_email?: string | null;
+  contact_telegram?: string | null;
+  contact_vk?: string | null;
 }
 
 export interface ITokenInfo {
@@ -71,6 +78,7 @@ export interface IUserSearchItem {
   id: string;
   first_name: string;
   last_name: string;
+  has_avatar?: boolean;
 }
 
 export interface IYandexCalendarEvent {
@@ -101,4 +109,7 @@ export interface IUserMeeting {
   finalSlot?: [string, string][];
   participantNames?: string[];
   participantCount?: number;
+  teamId?: number | null;
+  teamName?: string | null;
+  isClosed?: boolean;
 }

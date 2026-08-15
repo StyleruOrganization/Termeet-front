@@ -1,11 +1,11 @@
 import { getMeetPermissions } from "@/entities/Meet";
 import { useSessionStore } from "@/entities/User";
-import { useLoginModalStore } from "@/shared/libs";
+import { useLoginModalStore, useNow } from "@/shared/libs";
 import styles from "./MeetInfo.module.css";
 import { MeetHeader } from "../MeetHeader/MeetHeader";
 import { MeetModal } from "../MeetModal/MeetModal";
 import { MeetPeoples } from "../MeetPeoples/MeetPeoples";
-import { MeetPrivacy } from "../MeetPrivacy/MeetPrivacy";
+import { MeetSettings } from "../MeetSettings/MeetSettings";
 import { Onboarding } from "../Onboarding/Onboarding";
 import type { IMeetInfoProps } from "./MeetInfo.types";
 
@@ -15,6 +15,7 @@ export const MeetInfo = ({ data, hash }: IMeetInfoProps) => {
   const permissions = getMeetPermissions(data);
   const user = useSessionStore(state => state.user);
   const openLogin = useLoginModalStore(state => state.open);
+  const now = useNow();
 
   return (
     <>
@@ -35,6 +36,30 @@ export const MeetInfo = ({ data, hash }: IMeetInfoProps) => {
             {permissions.canSetFinal
               ? "Итоговое время назначено — фиолетовые ячейки. Слоты больше не принимают. Его можно изменить кнопкой внизу, участникам уйдёт письмо."
               : "Итоговое время уже назначено. Новые слоты не принимают — смотрите фиолетовые ячейки на сетке."}
+          </p>
+        ) : null}
+        {data.voteDeadline && data.finalSlot.size === 0 ? (
+          <p className={styles.MeetInfo__Banner}>
+            {now === 0 || new Date(data.voteDeadline).getTime() > now
+              ? `Голосование открыто до ${new Date(data.voteDeadline).toLocaleString("ru-RU", {
+                  day: "numeric",
+                  month: "long",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}.`
+              : data.lockVoteAfterDeadline
+                ? `Дедлайн голосования прошёл ${new Date(data.voteDeadline).toLocaleString("ru-RU", {
+                    day: "numeric",
+                    month: "long",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}. Новые слоты больше не принимают.`
+                : `Дедлайн голосования прошёл ${new Date(data.voteDeadline).toLocaleString("ru-RU", {
+                    day: "numeric",
+                    month: "long",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}. Слоты по-прежнему можно сохранить.`}
           </p>
         ) : null}
         {permissions.isObserver ? (
@@ -62,7 +87,7 @@ export const MeetInfo = ({ data, hash }: IMeetInfoProps) => {
           isCreator={data.isCreator}
           data={data}
         />
-        <MeetPrivacy hash={hash} data={data} />
+        <MeetSettings hash={hash} data={data} />
         {WINDOW_WIDTH >= 768 ? <Onboarding /> : null}
       </div>
       <MeetModal mySlotName={data.mySlotName} />

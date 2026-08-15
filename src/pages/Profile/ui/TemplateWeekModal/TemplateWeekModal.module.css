@@ -1,13 +1,15 @@
 .TemplateWeekModal {
   display: flex;
-  gap: 12px;
   flex-direction: column;
+  gap: 12px;
 
   width: 100%;
   padding: 8px 24px 24px;
 }
 
 .TemplateWeekModal h2 {
+  flex-shrink: 0;
+
   margin: 0;
   padding-right: 48px;
 
@@ -17,6 +19,8 @@
 }
 
 .TemplateWeekModal p {
+  flex-shrink: 0;
+
   margin: 0;
 
   color: var(--text-main);
@@ -27,6 +31,7 @@
 .TemplateWeekModal__Table {
   display: flex;
   overflow: hidden auto;
+  align-items: start;
 
   padding-right: 24px;
 
@@ -35,9 +40,18 @@
   border-radius: 32px;
 
   font-size: 3rem;
+  -ms-overflow-style: none;
   overscroll-behavior: contain;
+  scrollbar-width: none;
 
   user-select: none;
+}
+
+.TemplateWeekModal__Table::-webkit-scrollbar {
+  display: none;
+
+  width: 0;
+  height: 0;
 }
 
 .TemplateWeekModal__Times {
@@ -50,16 +64,20 @@
 
   color: var(--text-main);
   background-color: var(--fill-controls);
+}
 
-  touch-action: pan-y;
+.TemplateWeekModal__ColumnsWrap {
+  width: 100%;
+
+  min-width: 0;
 }
 
 .TemplateWeekModal__Columns {
   display: flex;
   overflow: auto hidden;
-  flex: 1;
 
-  min-width: 0;
+  width: 100%;
+
   -webkit-overflow-scrolling: touch;
 
   -ms-overflow-style: none;
@@ -94,29 +112,30 @@
 
 .TemplateWeekModal__TimeLabel {
   display: flex;
+  flex-shrink: 0;
   justify-content: center;
   align-items: center;
 
-  height: 20px;
+  height: 40px;
+  padding-bottom: 20px;
 
   text-align: center;
 
   color: var(--text-main);
 
   font-size: 3rem;
+  line-height: 20px;
 }
 
 .TemplateWeekModal__Day {
   display: flex;
-  flex: 0 0 92px;
   flex-direction: column;
-
-  width: 92px;
-
-  min-width: 92px;
+  flex-shrink: 0;
 }
 
 .TemplateWeekModal__Cell {
+  flex-shrink: 0;
+
   width: 100%;
   height: 20px;
   padding: 0;
@@ -158,33 +177,42 @@
 
 .TemplateWeekModal__Buttons {
   display: flex;
+  flex-shrink: 0;
   gap: 8px;
   flex-direction: column;
 }
 
-@media (width < 768px) {
+@media (width < 768px), (hover: none) and (pointer: coarse) {
   .TemplateWeekModal {
-    padding: 12px 12px 16px;
+    flex: 1 1 auto;
+
+    padding: 4px 12px 16px;
+
+    min-height: 0;
   }
 
   .TemplateWeekModal__Table {
     overflow: hidden auto;
+    flex: 1 1 auto;
 
     border-radius: 20px;
 
-    max-height: min(52dvh, 520px);
+    min-height: 0;
 
+    -ms-overflow-style: none;
     overscroll-behavior: contain;
+    scrollbar-width: none;
+  }
+
+  .TemplateWeekModal__Table::-webkit-scrollbar {
+    display: none;
+
+    width: 0;
+    height: 0;
   }
 
   .TemplateWeekModal__Times {
-    width: 48px;
-  }
-
-  .TemplateWeekModal__Day {
-    flex-basis: 92px;
-
-    width: 92px;
+    width: 64px;
   }
 
   .TemplateWeekModal__Day:first-child [data-first-cell="true"] {

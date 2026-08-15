@@ -43,6 +43,18 @@ const prepareDateRanges = (datesIntervals: ICreateMeet["dates"], start_time: str
   });
 };
 
+const toVoteDeadlineIso = (date: string, time: string): string | null => {
+  if (!date.trim()) {
+    return null;
+  }
+  const clock = (time || "18 : 00").replace(/\s/g, "");
+  const parsed = new Date(`${date}T${clock}:00`);
+  if (Number.isNaN(parsed.getTime())) {
+    return null;
+  }
+  return parsed.toISOString();
+};
+
 export const useCreateMeet = ({ onSuccess: onSuccessExternal }: { onSuccess: () => void }) => {
   const navigate = useNavigate();
   const addToast = useToastStore(store => store.addToast);
@@ -128,6 +140,10 @@ export const useCreateMeet = ({ onSuccess: onSuccessExternal }: { onSuccess: () 
       duration: formData.timeDuration?.trim() || null,
       dataRange: prepareDateRanges(formData.dates, formData.timeStart, formData.timeEnd),
       invitedUserIds: formData.invitedUsers.map(item => item.id),
+      teamId: formData.teamId,
+      isClosed: formData.isClosed,
+      inviteOnlyVote: formData.isClosed || formData.inviteOnlyVote,
+      voteDeadline: toVoteDeadlineIso(formData.voteDeadlineDate, formData.voteDeadlineTime),
     };
 
     console.log("preparedData", preparedData);

@@ -255,7 +255,11 @@ export const MeetTable = ({
                       <span>Сохранить</span>
                     </button>
                     {user && mySlotName ? (
-                      <button type='button' className={styles.MeetTable__NameLink} onClick={() => setIsModalOpen(true)}>
+                      <button
+                        type='button'
+                        className={`baseButton outlineButton ${styles.MeetTable__AddTimeButton}`}
+                        onClick={() => setIsModalOpen(true)}
+                      >
                         Изменить имя
                       </button>
                     ) : null}
@@ -308,6 +312,15 @@ export const MeetTable = ({
                   <button
                     onClick={() => {
                       if (!canVote) {
+                        if (user) {
+                          addToast({
+                            id: "meet-vote-closed",
+                            type: "info",
+                            message:
+                              "Сейчас голосовать нельзя. Если прошёл дедлайн — организатор может снова открыть слоты в настройках.",
+                          });
+                          return;
+                        }
                         openLogin();
                         addToast({
                           id: "meet-login-to-vote",
@@ -328,7 +341,11 @@ export const MeetTable = ({
                   </button>
                 ) : null}
                 {!hasFinal && user && mySlotName ? (
-                  <button type='button' className={styles.MeetTable__NameLink} onClick={() => setIsModalOpen(true)}>
+                  <button
+                    type='button'
+                    className={`baseButton outlineButton ${styles.MeetTable__AddTimeButton}`}
+                    onClick={() => setIsModalOpen(true)}
+                  >
                     Изменить имя
                   </button>
                 ) : null}
@@ -370,12 +387,14 @@ export const MeetTable = ({
           </div>
         </div>
         {!isEditingMode && (
-          <Toggle
-            LeftLabel={"По местному " + timeZones.local.utcString}
-            RightLabel={"По Москве " + timeZones.moscow.utcString}
-            defaultActive={isLocalTime ? "left" : "right"}
-            onChange={handleToggleChange}
-          />
+          <div className={styles.MeetTable__TimeZones}>
+            <Toggle
+              LeftLabel={"По местному " + timeZones.local.utcString}
+              RightLabel={"По Москве " + timeZones.moscow.utcString}
+              defaultActive={isLocalTime ? "left" : "right"}
+              onChange={handleToggleChange}
+            />
+          </div>
         )}
       </div>
     </div>

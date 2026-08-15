@@ -84,8 +84,9 @@
   background-color: var(--semantics-blue-950);
 }
 
-.MeetingForm__Switch_on::after {
-  transform: translateX(20px);
+.MeetingForm__Switch:disabled {
+  cursor: default;
+  opacity: 0.5;
 }
 
 .MeetingForm__Hint {
@@ -95,6 +96,18 @@
 
   font-size: 3rem;
   line-height: 1.4;
+}
+
+.MeetingForm__Deadline {
+  align-items: start;
+  display: flex;
+  gap: 8px;
+}
+
+.MeetingForm__DeadlineItem {
+  flex: 1;
+
+  min-width: 0;
 }
 
 /* Анимация мигания курсора */

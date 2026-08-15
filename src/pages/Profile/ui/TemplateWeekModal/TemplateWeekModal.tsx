@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   TEMPLATE_TIMES,
   WEEKDAY_SHORT,
@@ -16,6 +16,24 @@ type TemplateWeekModalProps = {
   onSave: (next: IAvailabilityInterval[]) => void;
 };
 
+const BREAKPOINT_MOBILE = 768;
+const MIN_WIDTH_COLUMN = 92;
+const MIN_WIDTH_COLUMN_MOBILE = 72;
+const WEEKDAY_COUNT = WEEKDAY_SHORT.length;
+const HOUR_LABELS = TEMPLATE_TIMES.filter(time => time.endsWith(":00"));
+
+const computeColumnWidth = (containerWidth: number) => {
+  if (containerWidth <= 0) {
+    return MIN_WIDTH_COLUMN;
+  }
+  const minWidth = containerWidth <= BREAKPOINT_MOBILE ? MIN_WIDTH_COLUMN_MOBILE : MIN_WIDTH_COLUMN;
+  if (containerWidth / WEEKDAY_COUNT < minWidth) {
+    const countVisible = Math.max(1, Math.min(WEEKDAY_COUNT, Math.floor(containerWidth / minWidth)));
+    return (containerWidth - minWidth / 2) / countVisible;
+  }
+  return containerWidth / WEEKDAY_COUNT;
+};
+
 const parseCell = (value: string | null) => {
   if (!value) {
     return null;
@@ -30,6 +48,8 @@ const parseCell = (value: string | null) => {
 
 export const TemplateWeekModal = ({ isOpen, intervals, onClose, onSave }: TemplateWeekModalProps) => {
   const [week, setWeek] = useState(() => intervalsToWeekMap(intervals));
+  const [columnWidth, setColumnWidth] = useState(MIN_WIDTH_COLUMN);
+  const columnsRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<{ remove: boolean } | null>(null);
 
   useEffect(() => {
@@ -38,6 +58,26 @@ export const TemplateWeekModal = ({ isOpen, intervals, onClose, onSave }: Templa
       dragRef.current = null;
     }
   }, [isOpen, intervals]);
+
+  useLayoutEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+    const el = columnsRef.current;
+    if (!el) {
+      return;
+    }
+    const updateWidth = () => {
+      const width = el.clientWidth;
+      if (width > 0) {
+        setColumnWidth(computeColumnWidth(width));
+      }
+    };
+    updateWidth();
+    const observer = new ResizeObserver(updateWidth);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [isOpen]);
 
   const toggleCell = (weekday: number, time: string, remove: boolean) => {
     setWeek(current => {
@@ -104,38 +144,45 @@ export const TemplateWeekModal = ({ isOpen, intervals, onClose, onSave }: Templa
         </p>
         <div className={styles.TemplateWeekModal__Table}>
           <div className={styles.TemplateWeekModal__Times}>
-            {TEMPLATE_TIMES.map(time => (
+            {HOUR_LABELS.map(time => (
               <span key={time} className={styles.TemplateWeekModal__TimeLabel}>
-                {time.endsWith(":00") ? time : ""}
+                {time}
               </span>
             ))}
           </div>
-          <div
-            className={styles.TemplateWeekModal__Columns}
-            onPointerDown={handlePointerDown}
-            onPointerMove={handlePointerMove}
-            onPointerUp={handlePointerUp}
-            onPointerCancel={handlePointerUp}
-          >
-            {WEEKDAY_SHORT.map((label, index) => {
-              const weekday = index + 1;
-              const selected = new Set(week.get(weekday) ?? []);
-              return (
-                <div key={weekday} className={styles.TemplateWeekModal__Day}>
-                  <span className={styles.TemplateWeekModal__DayTitle}>{label}</span>
-                  {TEMPLATE_TIMES.map((time, timeIndex) => (
-                    <div
-                      key={time}
-                      data-week-cell={`${weekday}T${time}`}
-                      data-first-cell={timeIndex === 0}
-                      data-last-cell={timeIndex === TEMPLATE_TIMES.length - 1}
-                      className={`${styles.TemplateWeekModal__Cell} ${selected.has(time) ? styles.TemplateWeekModal__Cell_selected : ""}`}
-                      aria-label={`${label} ${time}`}
-                    />
-                  ))}
-                </div>
-              );
-            })}
+          <div className={styles.TemplateWeekModal__ColumnsWrap}>
+            <div
+              ref={columnsRef}
+              className={styles.TemplateWeekModal__Columns}
+              onPointerDown={handlePointerDown}
+              onPointerMove={handlePointerMove}
+              onPointerUp={handlePointerUp}
+              onPointerCancel={handlePointerUp}
+            >
+              {WEEKDAY_SHORT.map((label, index) => {
+                const weekday = index + 1;
+                const selected = new Set(week.get(weekday) ?? []);
+                return (
+                  <div
+                    key={weekday}
+                    className={styles.TemplateWeekModal__Day}
+                    style={{ width: `${columnWidth}px`, minWidth: `${columnWidth}px` }}
+                  >
+                    <span className={styles.TemplateWeekModal__DayTitle}>{label}</span>
+                    {TEMPLATE_TIMES.map((time, timeIndex) => (
+                      <div
+                        key={time}
+                        data-week-cell={`${weekday}T${time}`}
+                        data-first-cell={timeIndex === 0}
+                        data-last-cell={timeIndex === TEMPLATE_TIMES.length - 1}
+                        className={`${styles.TemplateWeekModal__Cell} ${selected.has(time) ? styles.TemplateWeekModal__Cell_selected : ""}`}
+                        aria-label={`${label} ${time}`}
+                      />
+                    ))}
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
         <div className={styles.TemplateWeekModal__Buttons}>

@@ -1,0 +1,214 @@
+.Teams__Back {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
+  padding: 0;
+
+  color: var(--text-main);
+
+  background: none;
+  font-size: var(--text-heading);
+  font-weight: 800;
+  margin-bottom: 24px;
+}
+
+.Teams__BackIcon {
+  width: 16px;
+  height: 16px;
+
+  transform: rotate(180deg);
+}
+
+.Teams__Header {
+  align-items: center;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+
+  margin-bottom: 8px;
+}
+
+.Teams__Title {
+  color: var(--text-main);
+
+  font-size: var(--text-heading);
+  font-weight: 800;
+}
+
+.Teams__Lead {
+  color: var(--text-secondary);
+
+  font-size: var(--text-body);
+  margin-bottom: 24px;
+}
+
+.Teams__Empty {
+  color: var(--text-secondary);
+
+  font-size: var(--text-body);
+}
+
+.Teams__List {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.Teams__Card {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+
+  padding: 16px;
+
+  text-align: left;
+
+  color: var(--text-main);
+  background-color: var(--fill-controls);
+  border: 1px solid var(--semantics-gray-hover);
+  border-radius: 16px;
+
+  min-width: 0;
+}
+
+.Teams__CardPhoto,
+.Teams__CardPhotoFallback {
+  flex-shrink: 0;
+
+  width: 48px;
+  height: 48px;
+
+  border-radius: 12px;
+
+  object-fit: cover;
+}
+
+.Teams__CardPhotoFallback {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: var(--semantics-blue-950);
+  background-color: var(--semantics-blue-200);
+
+  font-weight: 700;
+}
+
+.Teams__CardBody {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+
+  min-width: 0;
+}
+
+.Teams__CardName {
+  overflow: hidden;
+
+  font-size: var(--text-body);
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.Teams__CardMeta {
+  color: var(--text-secondary);
+
+  font-size: 3rem;
+}
+
+.Teams__CardArrow {
+  flex-shrink: 0;
+
+  width: 16px;
+  height: 16px;
+
+  color: var(--text-secondary);
+}
+
+.Teams__Form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.Teams__Form h2,
+.Teams__Delete h2 {
+  color: var(--text-main);
+
+  font-size: var(--text-heading);
+  font-weight: 800;
+}
+
+.Teams__Chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.Teams__Chip {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+
+  padding: 4px 4px 4px 12px;
+
+  color: var(--text-main);
+  background-color: var(--fill-controls);
+  border: 1px solid var(--semantics-gray-hover);
+  border-radius: 160px;
+
+  font-size: var(--text-body);
+}
+
+.Teams__ChipRemove {
+  display: flex;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+
+  width: 28px;
+  height: 28px;
+  padding: 0;
+
+  color: var(--text-main);
+  border-radius: 50%;
+
+  background: none;
+  cursor: pointer;
+}
+
+.Teams__ChipRemove svg {
+  width: 16px;
+  height: 16px;
+
+  transform: rotate(45deg);
+}
+
+.Teams__Actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.Teams__Hint,
+.Teams__Delete p {
+  color: var(--text-secondary);
+
+  font-size: 3rem;
+}
+
+.Teams__Delete {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@media (width < 768px) {
+  .Teams__Header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}

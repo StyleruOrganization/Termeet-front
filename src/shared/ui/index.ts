@@ -11,3 +11,6 @@ export { Select } from "./Select/Select";
 export { Container } from "./Container/Container";
 export { CollapseContainer } from "./CollapseContainer/CollapseContainer";
 export { Onboarding, type OnboardingProps } from "./Onboarding/Onboarding";
+export { PhotoPicker } from "./PhotoPicker/PhotoPicker";
+export { UserSearch } from "./UserSearch/UserSearch";
+export { userAvatarUrl, teamPhotoUrl } from "./UserSearch/photoUrls";

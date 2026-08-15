@@ -6,7 +6,12 @@ export type ICreateMeet = {
   description?: string;
   link?: string;
   timeDuration?: string;
-  invitedUsers: { id: string; name: string }[];
+  invitedUsers: { id: string; name: string; hasAvatar?: boolean }[];
+  teamId: number | null;
+  isClosed: boolean;
+  inviteOnlyVote: boolean;
+  voteDeadlineDate: string;
+  voteDeadlineTime: string;
 };
 
 interface CalendarDateRange {
@@ -34,8 +39,11 @@ export interface MeetingFormState {
   setTime: (name: "timeStart" | "timeEnd" | "timeDuration", value: string, isSaveAsLast?: boolean) => void;
   blurTimeField: (name: "timeStart" | "timeEnd" | "timeDuration") => void;
   setDate: ({ start, end }: { start: Date | null; end: Date | null }, overrideCurrentInterval?: boolean) => void;
-  addInvitedUser: (user: { id: string; name: string }) => void;
+  addInvitedUser: (user: { id: string; name: string; hasAvatar?: boolean }) => void;
   removeInvitedUser: (id: string) => void;
+  setTeamId: (id: number | null) => void;
+  setClosed: (value: boolean) => void;
+  setInviteOnlyVote: (value: boolean) => void;
   /** Валидирует поле ввода и ошибку выставляет сразу в поле нужное в объекте errors */
   validateField: (name: keyof ICreateMeet) => void;
 }

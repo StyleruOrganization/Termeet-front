@@ -240,6 +240,39 @@
   white-space: nowrap;
 }
 
+.Home__TeamBadge {
+  align-items: center;
+  display: flex;
+  gap: 6px;
+
+  max-width: 100%;
+  min-width: 0;
+}
+
+.Home__TeamBadgeLabel {
+  flex-shrink: 0;
+
+  padding: 2px 8px;
+
+  color: var(--semantics-blue-950);
+  background-color: var(--semantics-blue-200);
+  border-radius: 160px;
+
+  font-size: 3rem;
+  font-weight: 700;
+}
+
+.Home__TeamBadgeName {
+  overflow: hidden;
+
+  color: var(--text-secondary);
+
+  font-size: 3rem;
+  min-width: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .Home__CardMeta {
   color: var(--text-secondary);
 

@@ -45,6 +45,27 @@ export interface MeetResponse {
     synced?: number;
     conflicts?: { name: string; titles?: string[] }[];
   } | null;
+  isClosed?: boolean;
+  inviteOnlyVote?: boolean;
+  teamId?: number | null;
+  teamName?: string | null;
+  team_id?: number | null;
+  team_name?: string | null;
+  accessDenied?: boolean;
+  access_denied?: boolean;
+  organizerContacts?: {
+    email?: string | null;
+    telegram?: string | null;
+    vk?: string | null;
+  } | null;
+  voteDeadline?: string | null;
+  vote_deadline?: string | null;
+  remindEnabled?: boolean;
+  remind_enabled?: boolean;
+  remindOffsets?: number[];
+  remind_offsets?: number[];
+  lockVoteAfterDeadline?: boolean;
+  lock_vote_after_deadline?: boolean;
 }
 
 export const getMeetDateRange = (meet: MeetResponse): [string, string][] => {
@@ -62,7 +83,11 @@ export interface MeetCreate {
   duration?: string | null;
   dataRange: string[][];
   invitedUserIds?: string[];
+  teamId?: number | null;
+  isClosed?: boolean;
+  inviteOnlyVote?: boolean;
   createTelemost?: boolean;
+  voteDeadline?: string | null;
 }
 
 export interface MeetSettingsUpdate {
@@ -70,6 +95,12 @@ export interface MeetSettingsUpdate {
   anyoneCanDeleteParticipants: boolean;
   requireLoginToVote: boolean;
   anyoneCanSetFinal?: boolean;
+  isClosed?: boolean;
+  inviteOnlyVote?: boolean;
+  voteDeadline?: string | null;
+  remindEnabled?: boolean;
+  remindOffsets?: number[];
+  lockVoteAfterDeadline?: boolean;
 }
 
 export interface ApiError {

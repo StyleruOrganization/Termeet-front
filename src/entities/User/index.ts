@@ -47,4 +47,5 @@ export {
   getMyCalendarRequest,
   searchUsersRequest,
   deleteAccountRequest,
+  uploadAvatarRequest,
 } from "./api/userApi";

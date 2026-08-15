@@ -20,4 +20,12 @@ export default defineConfig([
       "fsd/insignificant-slice": "off",
     },
   },
+  {
+    // Команды нужны и на /teams, и при создании встречи. Steiger не видит
+    // pages/Teams/Teams.tsx — файл в корне слайса, не в ui/api/model.
+    files: ["./src/entities/Team/**"],
+    rules: {
+      "fsd/insignificant-slice": "off",
+    },
+  },
 ]);

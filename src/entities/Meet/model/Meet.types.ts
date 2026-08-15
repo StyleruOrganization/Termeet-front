@@ -55,6 +55,16 @@ export interface IMeet {
    * Итоговое время: дата → часы ячеек. Пустая карта — ещё не назначили.
    */
   finalSlot: Map<string, string[]>;
+  accessDenied: boolean;
+  isClosed: boolean;
+  inviteOnlyVote: boolean;
+  teamId: number | null;
+  teamName: string | null;
+  organizerContacts: { email?: string | null; telegram?: string | null; vk?: string | null } | null;
+  voteDeadline: string | null;
+  remindEnabled: boolean;
+  remindOffsets: number[];
+  lockVoteAfterDeadline: boolean;
 }
 
 export interface IMeetStore {

@@ -31,16 +31,21 @@
 
 .MeetTable__Buttons {
   display: flex;
+  flex: 1 1 auto;
   gap: 8px;
-  flex: 1;
+  align-items: center;
+
+  min-width: 0;
 }
 
 .MeetTable__ButtonsEdit {
   display: flex;
+  flex: 1 1 auto;
   flex-wrap: wrap;
   gap: 8px;
-  flex: 1;
   align-items: center;
+
+  min-width: 0;
 }
 
 .MeetTable__ButtonsEdit :global(.baseButton) {
@@ -48,16 +53,20 @@
 
   width: auto;
   padding: 14px 16px;
+
+  white-space: nowrap;
 }
 
 .MeetTable__ShareButton {
   display: flex;
   gap: 4px;
+  flex-shrink: 0;
   justify-content: center;
   align-items: center;
 
-  width: fit-content;
-  padding: 16px;
+  width: auto;
+  height: 48px;
+  padding: 14px;
 
   color: var(--text-main);
   background-color: var(--fill-controls);
@@ -65,6 +74,8 @@
   border-radius: 16px;
 
   transition: background-color 0.3s ease-in-out;
+
+  align-self: center;
 
   font-size: var(--text-body);
 
@@ -87,23 +98,22 @@
   padding: 14px 16px;
 
   border-radius: 160px;
-}
 
-.MeetTable__NameLink {
-  padding: 0;
-
-  color: var(--text-link);
-
-  background: none;
-
-  font-size: 3rem;
+  white-space: nowrap;
 }
 
 .MeetTable__ButtonsWrapper {
   display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
   justify-content: space-between;
 
   width: 100%;
+}
+
+.MeetTable__TimeZones {
+  flex-shrink: 0;
 }
 
 
@@ -138,7 +148,11 @@
   }
 
   .MeetTable__ButtonsEdit :global(.baseButton) {
+    flex: 1 1 100%;
+
     width: 100%;
+
+    white-space: normal;
   }
 
   .MeetTable__FinalHint {
@@ -153,12 +167,6 @@
     font-size: var(--text-small);
     line-height: 1.35;
     text-overflow: ellipsis;
-  }
-
-  .MeetTable__NameLink {
-    width: 100%;
-
-    text-align: center;
   }
 
   .MeetTable__ButtonsWrapper {
