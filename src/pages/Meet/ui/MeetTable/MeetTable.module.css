@@ -134,11 +134,15 @@
   }
 
   .MeetTable__Buttons {
+    width: 100%;
+
     order: -1;
   }
 
   .MeetTable__ShareButton {
     width: 100%;
+
+    align-self: stretch;
   }
 
   .MeetTable__AddTimeButton {
@@ -171,7 +175,12 @@
 
   .MeetTable__ButtonsWrapper {
     flex-direction: column-reverse;
+    align-items: stretch;
     gap: 16px;
+  }
+
+  .MeetTable__TimeZones {
+    align-self: center;
   }
 }
 

@@ -132,10 +132,16 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+
+  width: 100%;
+  padding: 8px 24px 24px;
 }
 
 .Teams__Form h2,
 .Teams__Delete h2 {
+  margin: 0;
+  padding-right: 48px;
+
   color: var(--text-main);
 
   font-size: var(--text-heading);
@@ -204,11 +210,25 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+
+  padding: 8px 0;
 }
 
-@media (width < 768px) {
+@media (width < 768px), (hover: none) and (pointer: coarse) {
   .Teams__Header {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .Teams__Form {
+    padding: 4px 16px 16px;
+  }
+
+  .Teams__Delete {
+    padding: 4px 0 16px;
+  }
+
+  .Teams__Actions {
+    flex-flow: column nowrap;
   }
 }

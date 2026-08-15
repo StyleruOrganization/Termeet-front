@@ -116,11 +116,18 @@
   font-size: var(--text-heading);
 }
 
-@media (width < 768px) {
+@media (width < 768px), (hover: none) and (pointer: coarse) {
   .MeetModal__Wrapper {
     height: auto;
 
     max-height: none;
+  }
+
+  .MeetModal__Header {
+    overflow: hidden;
+
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
   }
 
   .MeetModal__Form {

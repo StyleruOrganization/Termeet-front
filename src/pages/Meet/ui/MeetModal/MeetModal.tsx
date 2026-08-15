@@ -54,6 +54,7 @@ export const MeetModal = ({ mySlotName }: { mySlotName: string | null }) => {
         animationDuration={300}
         isOpen={isOpen}
         onClose={() => setIsModalOpen(false)}
+        flushTop
       >
         <div className={styles.MeetModal__Wrapper}>
           {WINDOW_HEIGHT > 600 ? (

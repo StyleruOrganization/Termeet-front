@@ -86,6 +86,7 @@ export interface IYandexCalendarEvent {
   title: string;
   start: string;
   end: string;
+  href?: string;
   source?: "yandex";
 }
 

@@ -1,0 +1,136 @@
+.CreateMeetSettings__Open {
+  width: 100%;
+  padding: 14px 16px;
+}
+
+.CreateMeetSettings {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  width: 100%;
+  padding: 8px 24px 24px;
+}
+
+.CreateMeetSettings__Title {
+  margin: 0;
+  padding-right: 48px;
+
+  color: var(--text-main);
+
+  font-size: var(--text-heading);
+  font-weight: 800;
+}
+
+.CreateMeetSettings__Section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.CreateMeetSettings__SectionTitle {
+  margin: 0;
+
+  color: var(--text-main);
+
+  font-size: var(--text-body);
+  font-weight: 800;
+}
+
+.CreateMeetSettings__Hint {
+  margin: 0;
+
+  color: var(--text-main);
+
+  font-size: 3rem;
+  line-height: 1.4;
+}
+
+.CreateMeetSettings__Deadline {
+  align-items: end;
+  display: flex;
+  gap: 8px;
+}
+
+.CreateMeetSettings__Time {
+  flex-shrink: 0;
+
+  width: 140px;
+}
+
+.CreateMeetSettings__Row {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  align-items: center;
+
+  color: var(--text-main);
+
+  font-size: var(--text-body);
+  line-height: 1.3;
+}
+
+.CreateMeetSettings__Switch {
+  flex-shrink: 0;
+
+  width: 44px;
+  height: 24px;
+  padding: 2px;
+
+  background-color: var(--semantics-gray-active);
+  border-radius: 160px;
+
+  transition: background-color 0.2s ease;
+}
+
+.CreateMeetSettings__Switch::after {
+  display: block;
+
+  width: 20px;
+  height: 20px;
+
+  background-color: var(--light);
+  border-radius: 50%;
+
+  transition: transform 0.2s ease;
+
+  content: "";
+}
+
+.CreateMeetSettings__Switch_on {
+  background-color: var(--semantics-blue-950);
+}
+
+.CreateMeetSettings__Switch_on::after {
+  transform: translateX(20px);
+}
+
+.CreateMeetSettings__Switch:disabled {
+  opacity: 0.5;
+}
+
+.CreateMeetSettings__PushRow {
+  align-items: end;
+  display: flex;
+  gap: 8px;
+}
+
+.CreateMeetSettings__Offset {
+  width: 100%;
+
+  min-width: 0;
+}
+
+.CreateMeetSettings__Remove,
+.CreateMeetSettings__Add {
+  flex-shrink: 0;
+
+  padding: 12px 16px;
+  width: fit-content;
+}
+
+@media (width < 768px), (hover: none) and (pointer: coarse) {
+  .CreateMeetSettings {
+    padding: 4px 16px 16px;
+  }
+}

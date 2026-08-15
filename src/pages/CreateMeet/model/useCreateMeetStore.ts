@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { isDateBeforeToday, startOfToday } from "@/shared/libs";
+import { voteDeadlineError } from "../lib/formatting/dateValidators";
 import { isDurationValid } from "../lib/formatting/timeFormatters";
 import type { MeetingFormState, ICreateMeet } from "./createMeet.types";
 
@@ -44,22 +45,32 @@ const validators: {
   },
 };
 
+const emptyValues = (): ICreateMeet => ({
+  title: "",
+  timeStart: "10 : 00",
+  timeEnd: "19 : 00",
+  dates: [],
+  description: "",
+  link: "",
+  timeDuration: "",
+  invitedUsers: [],
+  teamId: null,
+  isClosed: false,
+  inviteOnlyVote: false,
+  voteDeadlineDate: "",
+  voteDeadlineTime: "18 : 00",
+  anyoneCanEdit: false,
+  anyoneCanDeleteParticipants: false,
+  requireLoginToVote: false,
+  anyoneCanSetFinal: false,
+  lockVoteAfterDeadline: false,
+  remindEnabled: false,
+  remindOffsets: [],
+  addToCalendar: false,
+});
+
 export const useCreateMeetStore = create<MeetingFormState>((set, get) => ({
-  values: {
-    title: "",
-    timeStart: "10 : 00",
-    timeEnd: "19 : 00",
-    dates: [],
-    description: "",
-    link: "",
-    timeDuration: "",
-    invitedUsers: [],
-    teamId: null,
-    isClosed: false,
-    inviteOnlyVote: false,
-    voteDeadlineDate: "",
-    voteDeadlineTime: "18 : 00",
-  },
+  values: emptyValues(),
   lastCorrectedValues: {
     timeStart: "10 : 00",
     timeEnd: "19 : 00",
@@ -73,9 +84,15 @@ export const useCreateMeetStore = create<MeetingFormState>((set, get) => ({
     }));
   },
 
+  patchValues: patch => {
+    set(state => ({
+      values: { ...state.values, ...patch },
+    }));
+  },
+
   setDate: ({ start, end }, overrideCurrentInterval = false) => {
     if (start == null || end == null) {
-      return set(state => ({
+      set(state => ({
         values: {
           ...get().values,
           dates: state.values.dates.filter(
@@ -85,6 +102,8 @@ export const useCreateMeetStore = create<MeetingFormState>((set, get) => ({
           ),
         },
       }));
+      get().validateField("voteDeadlineDate");
+      return;
     }
     const today = startOfToday();
     const rangeStart = isDateBeforeToday(start) ? today : start;
@@ -109,25 +128,27 @@ export const useCreateMeetStore = create<MeetingFormState>((set, get) => ({
       newIntervals.push({ start: rangeStart, end: rangeEnd });
 
       console.log("Всего интервалов получилось", newIntervals.length);
-      return set(state => ({
+      set(state => ({
         values: {
           ...state.values,
           dates: [...newIntervals],
         },
       }));
-    } else {
-      return set(state => ({
-        values: {
-          ...state.values,
-          dates: state.values.dates.map(interval =>
-            interval.start?.toDateString() === rangeStart?.toDateString() ||
-            interval.end?.toDateString() === rangeEnd?.toDateString()
-              ? { start: rangeStart, end: rangeEnd }
-              : interval,
-          ),
-        },
-      }));
+      get().validateField("voteDeadlineDate");
+      return;
     }
+    set(state => ({
+      values: {
+        ...state.values,
+        dates: state.values.dates.map(interval =>
+          interval.start?.toDateString() === rangeStart?.toDateString() ||
+          interval.end?.toDateString() === rangeEnd?.toDateString()
+            ? { start: rangeStart, end: rangeEnd }
+            : interval,
+        ),
+      },
+    }));
+    get().validateField("voteDeadlineDate");
   },
 
   setTime: (name, value, isSaveAsLast = true) => {
@@ -200,24 +221,11 @@ export const useCreateMeetStore = create<MeetingFormState>((set, get) => ({
 
   resetForm: () =>
     set({
-      values: {
-        title: "",
-        timeStart: "10 : 00",
-        timeEnd: "19 : 00",
-        dates: [],
-        description: "",
-        link: "",
-        timeDuration: "",
-        invitedUsers: [],
-        teamId: null,
-        isClosed: false,
-        inviteOnlyVote: false,
-        voteDeadlineDate: "",
-        voteDeadlineTime: "18 : 00",
-      },
+      values: emptyValues(),
       lastCorrectedValues: {
         timeStart: "10 : 00",
         timeEnd: "19 : 00",
+        timeDuration: "",
       },
       errors: {},
     }),
@@ -279,8 +287,15 @@ export const useCreateMeetStore = create<MeetingFormState>((set, get) => ({
       },
     })),
   validateField: name => {
-    const value = get().values[name];
+    const values = get().values;
     const setError = get().setError;
+
+    if (name === "voteDeadlineDate") {
+      setError(name, voteDeadlineError(values.voteDeadlineDate, values.voteDeadlineTime, values.dates));
+      return;
+    }
+
+    const value = values[name];
     const validator = validators[name];
 
     if (!validator) {

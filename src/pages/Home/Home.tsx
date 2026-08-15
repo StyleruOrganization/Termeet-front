@@ -1,7 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import {
+  createCalendarEventRequest,
+  deleteCalendarEventRequest,
   getMyCalendarRequest,
   getMyMeetingsRequest,
   useSessionStore,
@@ -9,11 +11,15 @@ import {
   type IYandexCalendarEvent,
   type UserMeetingRole,
 } from "@/entities/User";
+import { TIMES } from "@/shared/consts";
 import { LOCALE_BCP, parseLocale, useTranslation } from "@/shared/i18n";
-import { Container, ModalWrapper } from "@/shared/ui";
+import { isTimeBefore } from "@/shared/libs";
+import { Container, Input, ModalWrapper, Select } from "@/shared/ui";
 import ApproveIcon from "@assets/icons/approve.svg";
 import Arrow from "@assets/icons/arrow.svg";
 import ChevronDown from "@assets/icons/chevron-down.svg";
+import TrashIcon from "@assets/icons/trash-bin.svg";
+import { useToastStore } from "@features/ToastContainer";
 import styles from "./Home.module.css";
 
 type HomeTab = "meetings" | "pending";
@@ -118,6 +124,8 @@ export const Home = () => {
   const dateLocale = LOCALE_BCP[parseLocale(i18n.language)];
   const user = useSessionStore(state => state.user);
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const addToast = useToastStore(store => store.addToast);
   const [month, setMonth] = useState(() => {
     const now = new Date();
     return new Date(now.getFullYear(), now.getMonth(), 1);
@@ -126,6 +134,8 @@ export const Home = () => {
   const [tab, setTab] = useState<HomeTab>("meetings");
   const [roleFilters, setRoleFilters] = useState<UserMeetingRole[]>([]);
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [yandexFormOpen, setYandexFormOpen] = useState(false);
+  const [yandexToDelete, setYandexToDelete] = useState<IYandexCalendarEvent | null>(null);
 
   const {
     data: meetings = [],
@@ -146,6 +156,31 @@ export const Home = () => {
   });
 
   const yandexEvents = calendar?.events ?? EMPTY_YANDEX_EVENTS;
+  const hasYandexCalendar = Boolean(user?.has_calendar);
+
+  const deleteYandex = useMutation({
+    mutationFn: (href: string) => deleteCalendarEventRequest(href),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["user-calendar"] });
+      setYandexToDelete(null);
+      addToast({ id: "yandex-deleted", type: "success", message: t("home.yandexDeleted") });
+    },
+    onError: () => {
+      addToast({ id: "yandex-deleted-error", type: "error", message: t("home.yandexDeleteError") });
+    },
+  });
+
+  const createYandex = useMutation({
+    mutationFn: createCalendarEventRequest,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["user-calendar"] });
+      setYandexFormOpen(false);
+      addToast({ id: "yandex-created", type: "success", message: t("home.yandexCreated") });
+    },
+    onError: () => {
+      addToast({ id: "yandex-created-error", type: "error", message: t("home.yandexCreateError") });
+    },
+  });
   const yandexDays = useMemo(() => {
     const days = new Set<string>();
     yandexEvents.forEach(event => {
@@ -257,13 +292,28 @@ export const Home = () => {
               </div>
               <ul className={styles.Home__YandexItems}>
                 {dayYandexEvents.map(event => (
-                  <li key={event.id} className={styles.Home__YandexItem}>
-                    <span className={styles.Home__YandexName}>
-                      {(event.title ?? "").trim() || t("home.yandexNoTitle")}
-                    </span>
-                    <span className={styles.Home__YandexTime}>
-                      {formatEventTime(event.start, event.end, dateLocale, t("home.allDay"))}
-                    </span>
+                  <li key={event.id || event.href} className={styles.Home__YandexItem}>
+                    <div className={styles.Home__YandexBody}>
+                      <span className={styles.Home__YandexName}>
+                        {(event.title ?? "").trim() || t("home.yandexNoTitle")}
+                      </span>
+                      <span className={styles.Home__YandexTime}>
+                        {formatEventTime(event.start, event.end, dateLocale, t("home.allDay"))}
+                      </span>
+                    </div>
+                    {event.href ? (
+                      <button
+                        type='button'
+                        className={styles.Home__YandexDelete}
+                        aria-label={t("home.deleteYandex", {
+                          name: (event.title ?? "").trim() || t("home.yandexNoTitle"),
+                        })}
+                        disabled={deleteYandex.isPending}
+                        onClick={() => setYandexToDelete(event)}
+                      >
+                        <TrashIcon />
+                      </button>
+                    ) : null}
                   </li>
                 ))}
               </ul>
@@ -272,6 +322,11 @@ export const Home = () => {
           <button type='button' className='baseButton outlineButton' onClick={() => navigate("/teams")}>
             {t("home.teams")}
           </button>
+          {hasYandexCalendar ? (
+            <button type='button' className='baseButton outlineButton' onClick={() => setYandexFormOpen(true)}>
+              {t("home.addYandex")}
+            </button>
+          ) : null}
           <button type='button' className='baseButton mainButton' onClick={() => navigate("/create")}>
             {t("home.create")}
           </button>
@@ -339,6 +394,43 @@ export const Home = () => {
                   </button>
                 );
               })}
+            </div>
+          </ModalWrapper>
+
+          <YandexEventModal
+            isOpen={yandexFormOpen}
+            selectedDay={selectedDay}
+            isPending={createYandex.isPending}
+            onClose={() => setYandexFormOpen(false)}
+            onSubmit={payload => createYandex.mutate(payload)}
+          />
+
+          <ModalWrapper compact isOpen={Boolean(yandexToDelete)} onClose={() => setYandexToDelete(null)} isAnimate>
+            <div className={styles.Home__YandexConfirm}>
+              <h2>{t("home.deleteYandexTitle")}</h2>
+              <p>
+                {t("home.deleteYandexText", {
+                  name: (yandexToDelete?.title ?? "").trim() || t("home.yandexNoTitle"),
+                })}
+              </p>
+              <div className={styles.Home__YandexConfirmActions}>
+                <button
+                  type='button'
+                  className='baseButton outlineButton'
+                  disabled={deleteYandex.isPending || !yandexToDelete?.href}
+                  onClick={() => yandexToDelete?.href && deleteYandex.mutate(yandexToDelete.href)}
+                >
+                  {t("home.deleteYandexConfirm")}
+                </button>
+                <button
+                  type='button'
+                  className='baseButton secondaryButton'
+                  disabled={deleteYandex.isPending}
+                  onClick={() => setYandexToDelete(null)}
+                >
+                  {t("home.deleteYandexCancel")}
+                </button>
+              </div>
             </div>
           </ModalWrapper>
 
@@ -511,6 +603,100 @@ const PeopleSnippet = ({ names, count }: { names: string[]; count: number }) => 
 };
 
 const isLocalMidnight = (value: Date) => value.getHours() === 0 && value.getMinutes() === 0 && value.getSeconds() === 0;
+
+const YandexEventModal = ({
+  isOpen,
+  selectedDay,
+  isPending,
+  onClose,
+  onSubmit,
+}: {
+  isOpen: boolean;
+  selectedDay: string | null;
+  isPending: boolean;
+  onClose: () => void;
+  onSubmit: (payload: { title: string; start: string; end: string }) => void;
+}) => {
+  const { t } = useTranslation();
+  const [title, setTitle] = useState("");
+  const [date, setDate] = useState(selectedDay ?? toDayKey(new Date()));
+  const [timeStart, setTimeStart] = useState("10 : 00");
+  const [timeEnd, setTimeEnd] = useState("11 : 00");
+
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+    setTitle("");
+    setDate(selectedDay ?? toDayKey(new Date()));
+    setTimeStart("10 : 00");
+    setTimeEnd("11 : 00");
+  }, [isOpen, selectedDay]);
+
+  const canSave =
+    title.trim().length > 0 && Boolean(date) && isTimeBefore(timeStart.replace(/\s/g, ""), timeEnd.replace(/\s/g, ""));
+
+  return (
+    <ModalWrapper compact isOpen={isOpen} onClose={onClose} isAnimate>
+      <form
+        className={styles.Home__YandexForm}
+        onSubmit={event => {
+          event.preventDefault();
+          if (!canSave || isPending) {
+            return;
+          }
+          const startClock = timeStart.replace(/\s/g, "");
+          const endClock = timeEnd.replace(/\s/g, "");
+          onSubmit({
+            title: title.trim(),
+            start: new Date(`${date}T${startClock}:00`).toISOString(),
+            end: new Date(`${date}T${endClock}:00`).toISOString(),
+          });
+        }}
+      >
+        <h2>{t("home.addYandex")}</h2>
+        <p className={styles.Home__YandexFormHint}>{t("home.addYandexHint")}</p>
+        <Input
+          name='yandex-event-title'
+          label={t("home.yandexTitle")}
+          placeholder={t("home.yandexTitlePlaceholder")}
+          value={title}
+          onChange={event => setTitle(event.target.value)}
+        />
+        <Input
+          name='yandex-event-date'
+          type='date'
+          label={t("home.yandexDate")}
+          value={date}
+          onChange={event => setDate(event.target.value)}
+        />
+        <div className={styles.Home__YandexFormTimes}>
+          <Select
+            name='yandex-event-start'
+            label={t("home.yandexStart")}
+            placeholder={t("create.choose")}
+            options={TIMES}
+            value={timeStart}
+            disabledFunc={time => !isTimeBefore(time, timeEnd)}
+            onChange={setTimeStart}
+          />
+          <Select
+            name='yandex-event-end'
+            label={t("home.yandexEnd")}
+            placeholder={t("create.choose")}
+            options={TIMES}
+            value={timeEnd}
+            disabledFunc={time => isTimeBefore(time, timeStart) || time === timeStart}
+            onChange={setTimeEnd}
+          />
+        </div>
+        <button type='submit' className='baseButton mainButton' disabled={!canSave || isPending}>
+          {t("home.yandexSave")}
+        </button>
+      </form>
+    </ModalWrapper>
+  );
+};
 
 const formatEventTime = (startIso: string, endIso: string, locale: string, allDayLabel: string) => {
   const start = new Date(startIso);

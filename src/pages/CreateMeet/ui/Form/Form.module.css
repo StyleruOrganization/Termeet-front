@@ -47,48 +47,6 @@
   pointer-events: none;
 }
 
-.MeetingForm__ToggleRow {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  color: var(--text-main);
-
-  font-size: var(--text-body);
-}
-
-.MeetingForm__Switch {
-  width: 44px;
-  height: 24px;
-  padding: 2px;
-
-  background-color: var(--semantics-gray-active);
-  border-radius: 160px;
-}
-
-.MeetingForm__Switch::after {
-  display: block;
-
-  width: 20px;
-  height: 20px;
-
-  background-color: var(--light);
-  border-radius: 50%;
-
-  transition: transform 0.2s ease;
-
-  content: "";
-}
-
-.MeetingForm__Switch_on {
-  background-color: var(--semantics-blue-950);
-}
-
-.MeetingForm__Switch:disabled {
-  cursor: default;
-  opacity: 0.5;
-}
-
 .MeetingForm__Hint {
   margin: -12px 0 0;
 
@@ -96,18 +54,6 @@
 
   font-size: 3rem;
   line-height: 1.4;
-}
-
-.MeetingForm__Deadline {
-  align-items: start;
-  display: flex;
-  gap: 8px;
-}
-
-.MeetingForm__DeadlineItem {
-  flex: 1;
-
-  min-width: 0;
 }
 
 /* Анимация мигания курсора */

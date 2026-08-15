@@ -4,15 +4,8 @@ import { useNavigate } from "react-router";
 import { apiClient } from "@/shared/api";
 import { type MeetCreate, type MeetResponse } from "@entities/Meet";
 import { useToastStore } from "@features/ToastContainer";
+import { formatLocalDate } from "../lib";
 import type { ICreateMeet } from "../model";
-
-const formatLocalDate = (date: Date) => {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-
-  return `${year}-${month}-${day}`;
-};
 
 const prepareDateRanges = (datesIntervals: ICreateMeet["dates"], start_time: string, end_time: string) => {
   const dates: Date[] = [];
@@ -76,11 +69,19 @@ export const useCreateMeet = ({ onSuccess: onSuccessExternal }: { onSuccess: () 
     onSuccessExternal();
     navigate(`/meet/${response.hash}`);
     removeToast("create-meet-wait");
+    const synced = response.calendarSync?.synced ?? 0;
     addToast({
       id: "create-meet-success",
-      message: "Встреча успешно создана",
+      message: synced > 0 ? "Встреча создана и записана в Яндекс Календарь" : "Встреча успешно создана",
       type: "success",
     });
+    if (response.calendarSync && synced === 0) {
+      addToast({
+        id: "create-meet-calendar-miss",
+        message: "В календарь не записалось — проверьте Яндекс в кабинете",
+        type: "warning",
+      });
+    }
   };
 
   const handleError = (error: Error) => {
@@ -144,6 +145,14 @@ export const useCreateMeet = ({ onSuccess: onSuccessExternal }: { onSuccess: () 
       isClosed: formData.isClosed,
       inviteOnlyVote: formData.isClosed || formData.inviteOnlyVote,
       voteDeadline: toVoteDeadlineIso(formData.voteDeadlineDate, formData.voteDeadlineTime),
+      anyoneCanEdit: formData.anyoneCanEdit,
+      anyoneCanDeleteParticipants: formData.anyoneCanDeleteParticipants,
+      requireLoginToVote: formData.requireLoginToVote,
+      anyoneCanSetFinal: formData.anyoneCanSetFinal,
+      lockVoteAfterDeadline: formData.lockVoteAfterDeadline,
+      remindEnabled: formData.remindEnabled,
+      remindOffsets: formData.remindOffsets,
+      addToCalendar: formData.addToCalendar,
     };
 
     console.log("preparedData", preparedData);

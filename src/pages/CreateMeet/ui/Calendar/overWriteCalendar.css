@@ -58,6 +58,12 @@ abbr {
   margin-bottom: 16px;
 }
 
+.react-calendar__tile:disabled {
+  cursor: not-allowed;
+
+  pointer-events: none;
+}
+
 .react-calendar__month-view__days__day--neighboringMonth {
   color: var(--text-disabled)
 }

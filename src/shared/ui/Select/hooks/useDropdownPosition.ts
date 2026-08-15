@@ -13,15 +13,15 @@ export const useDropdownPosition = (
   dropdownRef: React.RefObject<HTMLDivElement | null>,
   name: string,
   onBlur?: (name: string) => void,
+  placement: "bottom" | "right" = "bottom",
 ) => {
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownPosition, setDropdownPosition] = useState<DropdownPosition>();
 
-  // Измеряем высоту дропдауна перед открытием
-  const measureDropdownHeight = useCallback((): Promise<number> => {
+  const measureDropdownSize = useCallback((): Promise<{ height: number; width: number }> => {
     return new Promise(resolve => {
       if (!dropdownRef.current) {
-        resolve(0);
+        resolve({ height: 0, width: 0 });
         return;
       }
 
@@ -33,33 +33,60 @@ export const useDropdownPosition = (
       tempDiv.style.pointerEvents = "none";
 
       const clone = dropdownRef.current.cloneNode(true) as HTMLElement;
+      clone.style.right = "auto";
+      clone.style.left = "auto";
+      clone.style.visibility = "visible";
       tempDiv.appendChild(clone);
       document.body.appendChild(tempDiv);
 
       const height = clone.offsetHeight;
+      const width = clone.offsetWidth;
 
       document.body.removeChild(tempDiv);
 
-      resolve(height);
+      resolve({ height, width });
     });
   }, [dropdownRef]);
 
   const calculatePosition = useCallback(async () => {
     const input = inputRef.current;
     if (!input) return;
-    // Получаем позицию именно input элемента
     const rect = input.getBoundingClientRect();
     const viewportHeight = window.innerHeight;
-    const spaceBelow = viewportHeight - rect.bottom;
-    const DROPDOWN_HEIGHT = await measureDropdownHeight();
+    const viewportWidth = window.innerWidth;
+    const { height: dropdownHeight, width: measuredWidth } = await measureDropdownSize();
+    const dropdownWidth = Math.max(measuredWidth, rect.width);
 
-    const shouldShowBelow = spaceBelow > DROPDOWN_HEIGHT + DROPDOWN_MARGIN;
+    if (placement === "right") {
+      let left = rect.right + DROPDOWN_MARGIN;
+      if (left + dropdownWidth > viewportWidth - DROPDOWN_MARGIN) {
+        left = rect.left - dropdownWidth - DROPDOWN_MARGIN;
+      }
+      if (left < DROPDOWN_MARGIN) {
+        left = DROPDOWN_MARGIN;
+      }
+
+      let top = rect.top;
+      if (top + dropdownHeight > viewportHeight - DROPDOWN_MARGIN) {
+        top = Math.max(DROPDOWN_MARGIN, viewportHeight - dropdownHeight - DROPDOWN_MARGIN);
+      }
+
+      setDropdownPosition({
+        top,
+        left,
+        width: dropdownWidth,
+      });
+      return;
+    }
+
+    const spaceBelow = viewportHeight - rect.bottom;
+    const shouldShowBelow = spaceBelow > dropdownHeight + DROPDOWN_MARGIN;
 
     let top: number;
     if (shouldShowBelow) {
       top = rect.bottom + DROPDOWN_MARGIN;
     } else {
-      top = rect.top - DROPDOWN_HEIGHT - DROPDOWN_MARGIN;
+      top = rect.top - dropdownHeight - DROPDOWN_MARGIN;
     }
 
     setDropdownPosition({
@@ -67,7 +94,7 @@ export const useDropdownPosition = (
       left: rect.left + window.scrollX,
       width: rect.width,
     });
-  }, [inputRef, measureDropdownHeight]);
+  }, [inputRef, measureDropdownSize, placement]);
 
   const openDropdown = useCallback(() => {
     calculatePosition();

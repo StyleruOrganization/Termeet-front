@@ -8,6 +8,7 @@ import type {
   IUserMeeting,
   IUserSearchItem,
   IUserSettingsUpdate,
+  IYandexCalendarEvent,
   IYandexCalendarMonth,
 } from "../model/User.types";
 
@@ -167,8 +168,24 @@ export const getMyCalendarRequest = async (start: string, end: string) => {
     `/users/me/calendar?start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}`,
   );
   return {
-    events: data.events ?? [],
+    events: (data.events ?? []).map(event => ({
+      ...event,
+      href: event.href ?? "",
+    })),
     has_calendar: data.has_calendar ?? false,
     error: data.error ?? null,
   };
+};
+
+export const createCalendarEventRequest = async (payload: {
+  title: string;
+  start: string;
+  end: string;
+  description?: string;
+}) => {
+  return apiClient.post<IYandexCalendarEvent, typeof payload>("/users/me/calendar", payload);
+};
+
+export const deleteCalendarEventRequest = async (href: string) => {
+  return apiClient.delete<{ detail: string }>(`/users/me/calendar?href=${encodeURIComponent(href)}`);
 };

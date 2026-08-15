@@ -12,6 +12,14 @@ export type ICreateMeet = {
   inviteOnlyVote: boolean;
   voteDeadlineDate: string;
   voteDeadlineTime: string;
+  anyoneCanEdit: boolean;
+  anyoneCanDeleteParticipants: boolean;
+  requireLoginToVote: boolean;
+  anyoneCanSetFinal: boolean;
+  lockVoteAfterDeadline: boolean;
+  remindEnabled: boolean;
+  remindOffsets: number[];
+  addToCalendar: boolean;
 };
 
 interface CalendarDateRange {
@@ -32,6 +40,7 @@ export interface MeetingFormState {
     timeDuration?: string;
   };
   setValue: (name: keyof ICreateMeet, value: string | string[]) => void;
+  patchValues: (patch: Partial<ICreateMeet>) => void;
   setError: (name: keyof ICreateMeet, error: string | undefined) => void;
   resetForm: () => void;
   clearErrors: () => void;

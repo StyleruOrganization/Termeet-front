@@ -45,6 +45,8 @@ export {
   resendVerificationRequest,
   getMyMeetingsRequest,
   getMyCalendarRequest,
+  createCalendarEventRequest,
+  deleteCalendarEventRequest,
   searchUsersRequest,
   deleteAccountRequest,
   uploadAvatarRequest,

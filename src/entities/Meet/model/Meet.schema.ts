@@ -87,7 +87,15 @@ export interface MeetCreate {
   isClosed?: boolean;
   inviteOnlyVote?: boolean;
   createTelemost?: boolean;
+  addToCalendar?: boolean;
   voteDeadline?: string | null;
+  anyoneCanEdit?: boolean;
+  anyoneCanDeleteParticipants?: boolean;
+  requireLoginToVote?: boolean;
+  anyoneCanSetFinal?: boolean;
+  remindEnabled?: boolean;
+  remindOffsets?: number[];
+  lockVoteAfterDeadline?: boolean;
 }
 
 export interface MeetSettingsUpdate {

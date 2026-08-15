@@ -14,6 +14,8 @@ export interface TimeSelectProps {
   /** Контролируемое значение */
   value?: string;
   className?: string;
+  /** Куда открывать список: под полем (по умолчанию) или справа от него */
+  dropdownPlacement?: "bottom" | "right";
   onChange?: (value: string) => void;
   onBlur?: () => void;
   onFocus?: () => void;

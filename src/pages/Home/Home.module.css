@@ -592,8 +592,8 @@
 
 .Home__YandexItem {
   display: flex;
-  gap: 4px;
-  flex-direction: column;
+  gap: 8px;
+  align-items: center;
 
   padding: 12px;
 
@@ -602,6 +602,15 @@
   border: 1px solid var(--semantics-gray-hover);
   border-radius: 16px;
   box-shadow: inset 3px 0 0 var(--semantics-yellow-main);
+
+  min-width: 0;
+}
+
+.Home__YandexBody {
+  display: flex;
+  flex: 1;
+  gap: 4px;
+  flex-direction: column;
 
   min-width: 0;
 }
@@ -616,6 +625,101 @@
   color: var(--text-secondary);
 
   font-size: 3rem;
+}
+
+.Home__YandexDelete {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+
+  padding: 4px;
+
+  color: var(--text-disabled);
+  background-color: transparent;
+}
+
+.Home__YandexDelete svg {
+  width: 16px;
+  height: 16px;
+}
+
+.Home__YandexDelete svg path {
+  fill: currentcolor;
+}
+
+.Home__YandexDelete:hover {
+  color: var(--semantics-red-main);
+}
+
+.Home__YandexDelete:disabled {
+  opacity: 0.4;
+}
+
+.Home__YandexForm {
+  display: flex;
+  gap: 12px;
+  flex-direction: column;
+
+  width: 100%;
+  padding: 0 0 8px;
+}
+
+.Home__YandexForm h2 {
+  margin: 0;
+  padding-right: 48px;
+
+  color: var(--text-main);
+
+  font-size: var(--text-heading);
+}
+
+.Home__YandexFormHint {
+  margin: 0;
+
+  color: var(--text-secondary);
+
+  font-size: 3rem;
+}
+
+.Home__YandexFormTimes {
+  display: grid;
+  gap: 8px;
+
+  grid-template-columns: 1fr 1fr;
+}
+
+.Home__YandexConfirm {
+  display: flex;
+  gap: 12px;
+  flex-direction: column;
+
+  width: 100%;
+  padding: 0 0 8px;
+}
+
+.Home__YandexConfirm h2 {
+  margin: 0;
+  padding-right: 48px;
+
+  color: var(--text-main);
+
+  font-size: var(--text-heading);
+  font-weight: 800;
+}
+
+.Home__YandexConfirm p {
+  margin: 0;
+
+  color: var(--text-secondary);
+
+  font-size: 3rem;
+}
+
+.Home__YandexConfirmActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 @media (width < 1024px) {

@@ -47,7 +47,17 @@ export function CreateMeet() {
   const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const values = useCreateMeetStore.getState().values;
+    const store = useCreateMeetStore.getState();
+    store.validateField("dates");
+    store.validateField("title");
+    store.validateField("voteDeadlineDate");
+    store.validateField("link");
+    store.validateField("description");
+
+    const { values, errors } = useCreateMeetStore.getState();
+    if (!values.title || values.dates.length === 0 || Object.values(errors).some(Boolean)) {
+      return;
+    }
     createMeet(values);
   };
 

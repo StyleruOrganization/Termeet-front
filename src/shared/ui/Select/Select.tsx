@@ -10,6 +10,7 @@ export const Select = ({
   options,
   name,
   className,
+  dropdownPlacement = "bottom",
   disabledFunc,
   onBlur: onBLurExternal,
   onChange: onChangeExternal,
@@ -28,6 +29,7 @@ export const Select = ({
     dropdownRef,
     name,
     onBLurExternal,
+    dropdownPlacement,
   );
 
   return (
@@ -62,6 +64,7 @@ export const Select = ({
         style={{
           top: `${dropdownPosition?.top}px`,
           left: `${dropdownPosition?.left}px`,
+          right: "auto",
           minWidth: `${dropdownPosition?.width}px`,
           visibility: isOpen ? "visible" : "hidden",
         }}

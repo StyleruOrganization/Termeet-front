@@ -258,6 +258,7 @@ export const MeetSettings = ({ hash, data }: MeetSettingsProps) => {
                 options={TIMES}
                 value={time}
                 className={styles.MeetSettings__Time}
+                dropdownPlacement='right'
                 onChange={option => {
                   setTime(option);
                   if (date) {

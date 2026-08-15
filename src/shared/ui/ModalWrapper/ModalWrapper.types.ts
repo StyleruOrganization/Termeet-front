@@ -13,4 +13,6 @@ export interface IModalWrapperProps extends React.PropsWithChildren {
   scrollbarWidth?: number;
   /** Уже окно для коротких диалогов (пароль, удаление), не на всю ширину встречи */
   compact?: boolean;
+  /** Ручка шита поверх контента — для модалок с картинкой на всю ширину сверху */
+  flushTop?: boolean;
 }
