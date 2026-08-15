@@ -1,8 +1,10 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { reportClientError } from "@/shared/api";
+import { initWebVitals, reportClientError } from "@/shared/api";
 import "@/shared/i18n";
 import { App } from "../App";
+
+initWebVitals();
 
 window.addEventListener("error", event => {
   reportClientError({ message: event.message, stack: event.error instanceof Error ? event.error.stack : undefined });
