@@ -431,6 +431,9 @@ export const ru = {
     telemostTitle: "Интеграция с Яндекс Календарём",
     telemostText:
       "Когда назначите итоговое время, оно появится в Яндекс Календаре у авторизованных участников, которые в это окно могут. Ссылку на звонок вставляете сами.",
+    botTitle: "Telegram-бот для быстрого планирования",
+    botText:
+      "Создавайте встречи за пару секунд прямо в рабочих чатах (например, /daily завтра @команда), используйте шаблоны из кабинета и отправляйте напоминания непроголосовавшим в один клик.",
     manageTitle: "Удобное управление встречей",
     manageText:
       "Можно изменить название встречи или ее описание, управлять списком участников, редактировать доступное время и уведомлять участников о финальном времени",
@@ -468,7 +471,10 @@ export const ru = {
   },
 } as const;
 
-export const en: typeof ru = {
+type DeepString<T> = { [K in keyof T]: T[K] extends object ? DeepString<T[K]> : string };
+export type Translation = DeepString<typeof ru>;
+
+export const en: Translation = {
   layout: {
     features: "Features",
     advantages: "Capabilities",
@@ -900,6 +906,9 @@ export const en: typeof ru = {
     telemostTitle: "Yandex Calendar and Telemost",
     telemostText:
       "No more creating a call separately, copying the link and sending it by hand. Termeet can notify about the final time and create a Telemost room",
+    botTitle: "Telegram Bot for Instant Scheduling",
+    botText:
+      "Create meetings in seconds right from your group chats (e.g. /daily tomorrow @team), use templates from your cabinet, and send 1-click reminders to pending voters.",
     manageTitle: "Easy meeting management",
     manageText:
       "Change the name or description, manage participants, edit available time and notify people about the final slot",
@@ -937,7 +946,7 @@ export const en: typeof ru = {
   },
 };
 
-export const de: typeof ru = {
+export const de: Translation = {
   layout: {
     features: "Funktionen",
     advantages: "Möglichkeiten",
@@ -1383,6 +1392,9 @@ export const de: typeof ru = {
     telemostTitle: "Yandex Kalender und Telemost",
     telemostText:
       "Kein extra Anruf mehr, kein Link-Kopieren von Hand. Termeet kann über die Endzeit informieren und einen Telemost-Raum anlegen",
+    botTitle: "Telegram-Bot für sofortige Planung",
+    botText:
+      "Erstellen Sie Meetings in Sekundenschnelle direkt aus Gruppenchats (z. B. /daily morgen @team), nutzen Sie Vorlagen aus dem Konto und erinnern Sie Teilnehmer mit einem Klick.",
     manageTitle: "Meeting einfach verwalten",
     manageText:
       "Name oder Beschreibung ändern, Teilnehmer verwalten, verfügbare Zeit bearbeiten und über den Endslot informieren",

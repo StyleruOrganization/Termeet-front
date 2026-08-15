@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router";
+import { useTranslation } from "@/shared/i18n";
 import { isTouchDevice, useInView, useLoginModalStore } from "@/shared/libs";
 import { Container } from "@/shared/ui";
 import { FeedbackForm } from "@/widgets/FeedbackForm";
@@ -37,6 +38,7 @@ import { TeamMemberCard } from "./ui/TeamMemberCard/TeamMemberCard";
 const getMessageDelay = (index: number) => index * CHAT_ANIMATION_STAGGER;
 
 export const Entry = () => {
+  const { t } = useTranslation();
   const [reasonCardWidth, setReasonCardWidth] = useState<number | "auto">(0);
   const [advantageCardWidth, setAdvantageCardWidth] = useState<number | "auto">(0);
   const [expandedDesc, setExpandedDesc] = useState(false);
@@ -334,6 +336,44 @@ export const Entry = () => {
                 <div className={styles.EntryPage__Advantages__Icons__Grd}></div>
               </div>
             </Card>
+
+            <Card title={t("entry.botTitle")} description={t("entry.botText")} scrollSnapType='start' type='advantage'>
+              <div className={styles.EntryPage__BotAdv}>
+                <div className={styles.EntryPage__BotAdv__Grd}></div>
+                <div className={styles.EntryPage__BotAdv__Chat}>
+                  <div className={styles.EntryPage__BotAdv__UserMsg}>
+                    <span className={styles.EntryPage__BotAdv__Command}>/daily</span>{" "}
+                    <span className={styles.EntryPage__BotAdv__Arg}>завтра</span>{" "}
+                    <span className={styles.EntryPage__BotAdv__Mention}>@команда</span>{" "}
+                    <span className={styles.EntryPage__BotAdv__Note}>&ldquo;Синхронизация&rdquo;</span>
+                  </div>
+
+                  <div className={styles.EntryPage__BotAdv__BotMsg}>
+                    <div className={styles.EntryPage__BotAdv__BotHeader}>
+                      <div className={styles.EntryPage__BotAdv__BotAvatar}>
+                        <TermeetLogo />
+                      </div>
+                      <div className={styles.EntryPage__BotAdv__BotMeta}>
+                        <span className={styles.EntryPage__BotAdv__BotName}>Termeet Bot</span>
+                        <span className={styles.EntryPage__BotAdv__BotBadge}>bot</span>
+                      </div>
+                    </div>
+                    <div className={styles.EntryPage__BotAdv__MeetCard}>
+                      <div className={styles.EntryPage__BotAdv__MeetTitle}>Discovery: Синхронизация</div>
+                      <div className={styles.EntryPage__BotAdv__MeetInfo}>
+                        <span>📅 Завтра (10:00–19:00 МСК)</span>
+                        <span>⏱️ 1 час · 👥 @alex, @danya, @kirill</span>
+                      </div>
+                    </div>
+                    <div className={styles.EntryPage__BotAdv__Buttons}>
+                      <div className={styles.EntryPage__BotAdv__Button}>🔗 Выбрать слоты</div>
+                      <div className={styles.EntryPage__BotAdv__Button}>🔔 Напомнить (3)</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Card>
+
             <Card
               title='Удобное управление встречей'
               description='Можно изменить название встречи или ее описание, управлять списком участников, редактировать доступное время и уведомлять участников о финальном времени'

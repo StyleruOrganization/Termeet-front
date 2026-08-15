@@ -508,6 +508,196 @@ section h2 {
   filter: blur(15px);
 }
 
+.EntryPage__BotAdv {
+  position: relative;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  padding: 12px;
+
+  min-height: 250px;
+  min-width: 440px;
+}
+
+.EntryPage__BotAdv__Grd {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+
+  border-radius: 50%;
+
+  animation: icons-grd-pulse 4s ease-in-out infinite alternate;
+
+  background-image: radial-gradient(transparent 30%, var(--semantics-blue-600));
+  filter: blur(15px);
+}
+
+.EntryPage__BotAdv__Chat {
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  width: 100%;
+
+  max-width: 360px;
+}
+
+.EntryPage__BotAdv__UserMsg {
+  padding: 8px 14px;
+
+  color: var(--text-main);
+  background-color: var(--semantics-blue-200);
+  border-radius: 16px 16px 4px;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 8%);
+
+  align-self: flex-end;
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.EntryPage__BotAdv__Command {
+  color: var(--semantics-blue-700);
+
+  font-weight: 700;
+}
+
+.EntryPage__BotAdv__Arg {
+  color: var(--text-main);
+}
+
+.EntryPage__BotAdv__Mention {
+  color: var(--semantics-blue-700);
+}
+
+.EntryPage__BotAdv__Note {
+  color: var(--text-secondary);
+}
+
+.EntryPage__BotAdv__BotMsg {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  padding: 14px 16px;
+
+  color: var(--text-main);
+  background-color: var(--fill-controls);
+  border: 1px solid var(--semantics-gray-hover);
+  border-radius: 16px 16px 16px 4px;
+  box-shadow: 0 5px 14px rgb(0 0 0 / 12%);
+}
+
+.EntryPage__BotAdv__BotHeader {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.EntryPage__BotAdv__BotAvatar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 24px;
+  height: 24px;
+
+  background-color: var(--semantics-blue-950);
+  border-radius: 50%;
+}
+
+.EntryPage__BotAdv__BotAvatar svg {
+  width: 14px;
+  height: 14px;
+
+  color: var(--light);
+}
+
+.EntryPage__BotAdv__BotMeta {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.EntryPage__BotAdv__BotName {
+  color: var(--text-main);
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.EntryPage__BotAdv__BotBadge {
+  padding: 1px 6px;
+
+  color: var(--text-secondary);
+  background-color: var(--semantics-gray-hover);
+  border-radius: 6px;
+
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.EntryPage__BotAdv__MeetCard {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  padding: 8px 10px;
+
+  background-color: var(--fill-bg);
+  border: 1px solid var(--semantics-gray-hover);
+  border-radius: 10px;
+}
+
+.EntryPage__BotAdv__MeetTitle {
+  color: var(--text-main);
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.EntryPage__BotAdv__MeetInfo {
+  display: flex;
+  gap: 2px;
+  flex-direction: column;
+
+  color: var(--text-secondary);
+
+  font-size: 11px;
+}
+
+.EntryPage__BotAdv__Buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.EntryPage__BotAdv__Button {
+  flex: 1;
+
+  padding: 6px 10px;
+
+  text-align: center;
+
+  color: var(--text-link);
+  background-color: var(--fill-bg);
+  border: 1px solid var(--semantics-gray-hover);
+  border-radius: 8px;
+
+  font-size: 11px;
+  font-weight: 600;
+}
+
 @keyframes icons-grd-pulse {
   0% {
     transform: rotate(331deg) scale(1);
@@ -960,7 +1150,17 @@ section h2 {
   .EntryPage__Advantages__Cards {
     gap: 16px;
 
-    grid-template-columns: repeat(3, var(--advantage-card-min-width))
+    grid-template-columns: repeat(4, var(--advantage-card-min-width));
+  }
+
+  .EntryPage__BotAdv {
+    padding: 8px 0;
+
+    min-width: initial;
+  }
+
+  .EntryPage__BotAdv__Chat {
+    max-width: 280px;
   }
 
   .MeetHeader {
