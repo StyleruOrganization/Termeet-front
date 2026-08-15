@@ -38,11 +38,14 @@ export function CreateMeet() {
   const { t } = useTranslation();
   const resetForm = useCreateMeetStore(state => state.resetForm);
 
+  // Имитация реального сбоя фронтенда для проверки мгновенного алертинга
+
   const { createMeet } = useCreateMeet({
     onSuccess: () => {
       resetForm();
     },
   });
+  throw new Error("Uncaught TypeError: Cannot read properties of undefined (reading 'calendarDates') in CreateMeet");
 
   const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();

@@ -6,6 +6,7 @@ import { useLoginModalStore } from "@/shared/libs";
 import { ModalWrapper } from "@/shared/ui";
 import UserIcon from "@assets/icons/user.svg";
 import styles from "./Layout.module.css";
+import { CustomErrorBoudary } from "../providers/ErrorBoudary";
 
 import "../styles/reset.css";
 import "../styles/global.css";
@@ -89,7 +90,9 @@ export const Layout = () => {
           </div>
         </header>
       </div>
-      <Outlet />
+      <CustomErrorBoudary errorMessage='Произошла непредвиденная ошибка на странице'>
+        <Outlet />
+      </CustomErrorBoudary>
 
       <ModalWrapper isOpen={isOpen} onClose={close}>
         <LoginForm />

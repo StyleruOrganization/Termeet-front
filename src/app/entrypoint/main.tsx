@@ -6,15 +6,29 @@ import { App } from "../App";
 
 initWebVitals();
 
+if (typeof window !== "undefined") {
+  (window as unknown as { __testCrash?: () => void }).__testCrash = () => {
+    throw new Error("Тестовая ошибка через window.__testCrash() для проверки мониторинга");
+  };
+}
+
 window.addEventListener("error", event => {
-  reportClientError({ message: event.message, stack: event.error instanceof Error ? event.error.stack : undefined });
+  reportClientError({
+    type: "client_error",
+    message: event.message,
+    stack: event.error instanceof Error ? event.error.stack : undefined,
+  });
 });
 
 window.addEventListener("unhandledrejection", event => {
   const reason = event.reason;
   const message = reason instanceof Error ? reason.message : String(reason);
   const stack = reason instanceof Error ? reason.stack : undefined;
-  reportClientError({ message, stack });
+  reportClientError({
+    type: "unhandled_rejection",
+    message,
+    stack,
+  });
 });
 
 async function startApp() {

@@ -18,10 +18,16 @@ export const CustomErrorBoudary = ({ errorMessage, children }: ICustomErrorBouda
         console.error("[ErrorBoundary] pathname=", pathname, err.message, err.stack, error);
         return <Stub message={errorMessage} error={err} />;
       }}
-      onError={(error: unknown) => {
+      onError={(error: unknown, info: { componentStack?: string | null }) => {
         const err = error instanceof Error ? error : new Error(String(error));
         console.error("[ErrorBoundary] onError", err.message, err.stack, error);
-        reportClientError({ message: err.message, stack: err.stack });
+        reportClientError({
+          type: "react_error_boundary",
+          message: err.message,
+          stack: err.stack,
+          componentStack: info?.componentStack ?? undefined,
+          pathname,
+        });
       }}
     >
       {children}
