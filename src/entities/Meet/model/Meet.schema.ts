@@ -37,6 +37,7 @@ export interface MeetResponse {
   requireLoginToVote?: boolean;
   anyoneCanSetFinal?: boolean;
   finalSlot?: [string, string][] | null;
+  final_slot?: [string, string][] | null;
   organizerName?: string | null;
   observers?: ObserverUser[];
   permissions?: MeetPermissions;

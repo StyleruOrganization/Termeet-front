@@ -34,7 +34,7 @@
     gap: 16px;
     flex-direction: column-reverse;
 
-    padding-bottom: 70px
+    padding-bottom: calc(200px + env(safe-area-inset-bottom, 0px));
   }
 
   .MeetPage__TableWrapper {

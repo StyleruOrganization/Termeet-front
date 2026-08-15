@@ -43,13 +43,19 @@
   border-bottom: 2px solid var(--semantics-blue-950);
 }
 
-.Home__Filters {
+.Home__Toolbar {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.Home__Chip {
+.Home__FilterButton {
+  display: flex;
+  flex-shrink: 0;
+  gap: 6px;
+  align-items: center;
+
   padding: 8px 16px;
 
   color: var(--text-main);
@@ -60,8 +66,83 @@
   font-size: var(--text-body);
 }
 
-.Home__Chip_active {
+.Home__FilterButton_active {
   color: var(--light);
+  background-color: var(--semantics-blue-950);
+
+  border-color: var(--semantics-blue-950);
+}
+
+.Home__FilterButtonIcon {
+  width: 16px;
+  height: 16px;
+}
+
+.Home__FilterSheet {
+  display: flex;
+  gap: 4px;
+  flex-direction: column;
+
+  width: 100%;
+  padding: 8px 0 16px;
+}
+
+.Home__FilterSheet h2 {
+  margin: 0 0 8px;
+  padding-right: 40px;
+
+  color: var(--text-main);
+
+  font-size: var(--text-heading);
+}
+
+.Home__FilterGroupTitle {
+  margin: 12px 0 4px;
+
+  color: var(--text-secondary);
+
+  font-size: 3rem;
+  font-weight: 700;
+}
+
+.Home__FilterRow {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 100%;
+  padding: 12px 0;
+
+  text-align: left;
+
+  color: var(--text-main);
+
+  background: none;
+
+  font-size: var(--text-body);
+}
+
+.Home__Check {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+
+  width: 22px;
+  height: 22px;
+
+  color: var(--light);
+  border: 1px solid var(--semantics-gray-active);
+  border-radius: 6px;
+
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+.Home__Check_on {
   background-color: var(--semantics-blue-950);
 
   border-color: var(--semantics-blue-950);
@@ -412,7 +493,7 @@
     font-size: var(--text-body);
   }
 
-  .Home__Chip {
+  .Home__FilterButton {
     padding: 6px 12px;
 
     font-size: 3rem;

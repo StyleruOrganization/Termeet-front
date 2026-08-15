@@ -32,6 +32,10 @@
 }
 
 @media (width < 768px) {
+  .MeetPrefillModal {
+    padding: 8px 0 16px;
+  }
+
   .MeetPrefillModal h2 {
     padding-right: 36px;
   }

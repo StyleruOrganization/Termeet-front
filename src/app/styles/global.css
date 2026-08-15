@@ -98,7 +98,7 @@ textarea:focus-visible {
 
   &:disabled {
     background-color: var(--semantics-gray-active);
-    color: var(--text-disabled);
+    color: var(--text-secondary);
   }
 }
 
@@ -175,4 +175,13 @@ textarea:focus-visible {
 
     opacity: 0.4;
   }
+}
+
+body.termeet-login-open iframe[src*="id.yandex"],
+body.termeet-login-open iframe[src*="oauth.yandex"],
+body.termeet-login-open iframe[src*="passport-sdk"],
+body.termeet-login-open iframe[src*="passport.yandex"] {
+  display: none !important;
+
+  pointer-events: none !important;
 }

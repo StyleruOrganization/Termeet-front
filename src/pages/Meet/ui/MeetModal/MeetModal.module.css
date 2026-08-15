@@ -117,6 +117,12 @@
 }
 
 @media (width < 768px) {
+  .MeetModal__Wrapper {
+    height: auto;
+
+    max-height: none;
+  }
+
   .MeetModal__Form {
     top: -20px;
 

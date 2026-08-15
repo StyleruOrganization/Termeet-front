@@ -114,7 +114,7 @@
     left: 0;
     right: 0;
 
-    padding: 10px 10px 32px;
+    padding: 10px 10px calc(32px + env(safe-area-inset-bottom, 0px));
 
     background-color: var(--fill-bg);
     box-shadow: 0 4px 24px rgb(0 0 0 / 12%);

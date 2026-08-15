@@ -60,18 +60,18 @@ export const TemplateWeekModal = ({ isOpen, intervals, onClose, onSave }: Templa
     if (!cell) {
       return;
     }
-    if (event.pointerType === "mouse") {
-      event.currentTarget.setPointerCapture(event.pointerId);
-    }
+    event.preventDefault();
+    event.currentTarget.setPointerCapture(event.pointerId);
     const selected = week.get(cell.weekday)?.includes(cell.time) ?? false;
-    dragRef.current = event.pointerType === "mouse" ? { remove: selected } : null;
+    dragRef.current = { remove: selected };
     toggleCell(cell.weekday, cell.time, selected);
   };
 
   const handlePointerMove: React.PointerEventHandler<HTMLDivElement> = event => {
-    if (!dragRef.current || event.pointerType !== "mouse") {
+    if (!dragRef.current) {
       return;
     }
+    event.preventDefault();
     const cell = parseCell(
       document
         .elementFromPoint(event.clientX, event.clientY)

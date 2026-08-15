@@ -26,13 +26,16 @@
 
 .TemplateWeekModal__Table {
   display: flex;
-  overflow: hidden;
+  overflow: hidden auto;
+
+  padding-right: 24px;
 
   background-color: var(--fill-controls);
   border: 1px solid var(--semantics-gray-hover);
   border-radius: 32px;
 
   font-size: 3rem;
+  overscroll-behavior: contain;
 
   user-select: none;
 }
@@ -46,8 +49,9 @@
   padding-top: 44px;
 
   color: var(--text-main);
+  background-color: var(--fill-controls);
 
-  align-self: start;
+  touch-action: pan-y;
 }
 
 .TemplateWeekModal__Columns {
@@ -60,7 +64,7 @@
 
   -ms-overflow-style: none;
   scrollbar-width: none;
-  touch-action: pan-x pan-y;
+  touch-action: pan-x;
 }
 
 .TemplateWeekModal__Columns::-webkit-scrollbar {
@@ -123,6 +127,7 @@
   transition: background-color 0.2s ease, border-color 0.2s ease;
 
   cursor: pointer;
+  touch-action: none;
 }
 
 .TemplateWeekModal__Cell:hover {
@@ -163,7 +168,13 @@
   }
 
   .TemplateWeekModal__Table {
+    overflow: hidden auto;
+
     border-radius: 20px;
+
+    max-height: min(52dvh, 520px);
+
+    overscroll-behavior: contain;
   }
 
   .TemplateWeekModal__Times {

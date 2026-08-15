@@ -43,12 +43,13 @@ export const MeetTable = ({
     setIsEditing(false);
   });
   const { mutate: observeMeeting, isPending: isObservePending } = useObserveMeeting(hash);
-  const { mutate: saveFinalTime, isPending: isFinalPending } = useSetFinalTime(hash);
+  const { mutate: saveFinalTime, isPending: isFinalPending } = useSetFinalTime(hash, hasFinal);
   const openLogin = useLoginModalStore(state => state.open);
   const addToast = useToastStore(store => store.addToast);
   const user = useSessionStore(state => state.user);
   const timeInfo = useMeetStore(store => store.timeInfo);
   const duration = useMeetStore(store => store.duration);
+  const finalSlot = useMeetStore(store => store.finalSlot);
   const hoveredUsers = useMeetStore(store => store.hoveredUsers);
   const [searchParams, setSearchParams] = useSearchParams();
   // Состояние для управления transition
@@ -268,7 +269,10 @@ export const MeetTable = ({
                     type='button'
                     className={`baseButton secondaryButton ${styles.MeetTable__AddTimeButton}`}
                     onClick={() => {
-                      const { prefill, people } = buildBestFinalPrefill(timeInfo, duration);
+                      const savedFinal = hasFinal && finalSlot.size > 0 ? finalSlot : null;
+                      const { prefill, people } = savedFinal
+                        ? { prefill: savedFinal, people: peopleAtSelection(timeInfo, savedFinal).length }
+                        : buildBestFinalPrefill(timeInfo, duration);
                       if (!prefill.size) {
                         addToast({
                           id: "final-empty",
@@ -283,8 +287,11 @@ export const MeetTable = ({
                       addToast({
                         id: "final-hint",
                         type: "info",
-                        message:
-                          WINDOW_WIDTH < 768
+                        message: savedFinal
+                          ? WINDOW_WIDTH < 768
+                            ? "Отмечено текущее итоговое время. Проведите пальцем, чтобы выбрать другое. Внизу видно, кто может прийти"
+                            : "Отмечено текущее итоговое время. Поправьте слоты и сохраните — участникам с письмами уйдёт уведомление"
+                          : WINDOW_WIDTH < 768
                             ? duration
                               ? `Подсказали пересечение не длиннее ${duration}. Проведите пальцем по сетке, как при выборе своего времени. Внизу видно, кто может прийти`
                               : "Подсказали самое плотное пересечение. Проведите пальцем по сетке, как при выборе своего времени. Внизу видно, кто может прийти"

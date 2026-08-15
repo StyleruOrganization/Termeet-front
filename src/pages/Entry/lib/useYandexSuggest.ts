@@ -1,8 +1,12 @@
 import { useEffect } from "react";
-import { yandexClientRequest, yandexTokenRequest } from "@/entities/User";
+import { useLocation } from "react-router";
+import { useSessionStore, yandexClientRequest, yandexTokenRequest } from "@/entities/User";
+import { useToastStore } from "@/features/ToastContainer";
 import { useLoginModalStore } from "@/shared/libs";
 
 const SUGGEST_SCRIPT = "https://yastatic.net/s3/passport-sdk/autofill/v1/sdk-suggest-with-polyfills-latest.js";
+const LOGIN_OPEN_CLASS = "termeet-login-open";
+const YANDEX_FRAME_RE = /passport\.yandex|oauth\.yandex|id\.yandex|passport-sdk/i;
 
 type SuggestPayload = {
   access_token?: string;
@@ -35,16 +39,39 @@ const loadScript = (src: string) => {
   });
 };
 
+const hideYandexSuggestUi = () => {
+  document.querySelectorAll("iframe").forEach(frame => {
+    const src = frame.getAttribute("src") || frame.src || "";
+    if (YANDEX_FRAME_RE.test(src)) {
+      frame.remove();
+    }
+  });
+};
+
 const readExpiresIn = (value: SuggestPayload["expires_in"]) => {
   const parsed = Number(value);
   return Number.isFinite(parsed) && parsed > 0 ? parsed : undefined;
 };
 
-export const useYandexSuggest = (onLoggedIn: (accessToken: string) => Promise<void>) => {
-  const isOpen = useLoginModalStore(state => state.isOpen);
+export const useYandexSuggest = () => {
+  const { pathname } = useLocation();
+  const isLoginOpen = useLoginModalStore(state => state.isOpen);
+  const closeLogin = useLoginModalStore(state => state.close);
+  const status = useSessionStore(state => state.status);
+  const applyAccessToken = useSessionStore(state => state.applyAccessToken);
+  const addToast = useToastStore(state => state.addToast);
+  const canShowWidget = status === "anonymous" && pathname === "/";
 
   useEffect(() => {
-    if (!isOpen) {
+    document.body.classList.toggle(LOGIN_OPEN_CLASS, isLoginOpen);
+    return () => {
+      document.body.classList.remove(LOGIN_OPEN_CLASS);
+    };
+  }, [isLoginOpen]);
+
+  useEffect(() => {
+    if (!canShowWidget) {
+      hideYandexSuggestUi();
       return;
     }
 
@@ -81,7 +108,14 @@ export const useYandexSuggest = (onLoggedIn: (accessToken: string) => Promise<vo
         if (cancelled) {
           return;
         }
-        await onLoggedIn(tokens.access_token);
+        await applyAccessToken(tokens.access_token);
+        closeLogin();
+        hideYandexSuggestUi();
+        addToast({
+          id: "auth-success",
+          type: "success",
+          message: "Вы вошли через Яндекс",
+        });
       } catch {
         return;
       }
@@ -91,6 +125,7 @@ export const useYandexSuggest = (onLoggedIn: (accessToken: string) => Promise<vo
 
     return () => {
       cancelled = true;
+      hideYandexSuggestUi();
     };
-  }, [isOpen, onLoggedIn]);
+  }, [addToast, applyAccessToken, canShowWidget, closeLogin]);
 };

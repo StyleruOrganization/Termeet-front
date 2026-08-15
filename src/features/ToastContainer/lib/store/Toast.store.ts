@@ -1,26 +1,43 @@
 import { create } from "zustand";
 import type { IToastStore } from "../../model/Toast.types";
 
+const hideTimers = new Map<string, ReturnType<typeof setTimeout>>();
+
+const clearHideTimer = (id: string) => {
+  const timer = hideTimers.get(id);
+  if (timer) {
+    clearTimeout(timer);
+    hideTimers.delete(id);
+  }
+};
+
 export const useToastStore = create<IToastStore>((set, get) => ({
   toasts: [],
   addToast: toastInfo => {
     console.log("TOAST INFO", toastInfo);
     console.log("TOASTS", get().toasts);
-    if (!get().toasts.some(toast => toast.id === toastInfo.id)) {
-      set(state => ({ toasts: [...state.toasts, toastInfo] }));
-      // Автоудаление для не-wait тостов
-      if (toastInfo.type !== "wait") {
+    clearHideTimer(toastInfo.id);
+    set(state => ({
+      toasts: [...state.toasts.filter(toast => toast.id !== toastInfo.id), { ...toastInfo, isExiting: false }],
+    }));
+    if (toastInfo.type !== "wait") {
+      hideTimers.set(
+        toastInfo.id,
         setTimeout(() => {
-          const currentToast = get().toasts.find(t => t.id === toastInfo.id);
-          // Удаляем только если тост еще существует и не в процессе анимации
+          hideTimers.delete(toastInfo.id);
+          const currentToast = get().toasts.find(toast => toast.id === toastInfo.id);
           if (currentToast && !currentToast.isExiting) {
             get().removeToast(currentToast.id);
           }
-        }, toastInfo.duration || 3000);
-      }
+        }, toastInfo.duration || 3000),
+      );
     }
   },
   removeToast: id => {
+    clearHideTimer(id);
+    if (!get().toasts.some(toast => toast.id === id)) {
+      return;
+    }
     get().updateAnimateState(id);
     setTimeout(() => {
       set(state => ({ toasts: state.toasts.filter(toast => toast.id !== id) }));

@@ -88,12 +88,19 @@
   }
 }
 
-.Toast__Wait,
-.Toast__Info {
+.Toast__Wait {
   border-left: 4px solid var(--semantics-blue-950);
 
   > svg {
     color: var(--semantics-blue-950);
+  }
+}
+
+.Toast__Info {
+  border-left: 4px solid var(--semantics-yellow-main);
+
+  > svg {
+    color: var(--semantics-yellow-main);
   }
 }
 

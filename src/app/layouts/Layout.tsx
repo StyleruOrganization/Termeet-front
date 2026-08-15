@@ -1,6 +1,6 @@
 import { Link, Outlet, useLocation, useNavigate } from "react-router";
 import { useSessionStore } from "@/entities/User";
-import { LoginForm, useActiveSectionStore } from "@/pages/Entry";
+import { LoginForm, useActiveSectionStore, useYandexSuggest } from "@/pages/Entry";
 import { useTranslation } from "@/shared/i18n";
 import { useLoginModalStore } from "@/shared/libs";
 import { ModalWrapper } from "@/shared/ui";
@@ -24,6 +24,7 @@ export const Layout = () => {
   const sessionReady = status === "authenticated" || status === "anonymous";
   const isLanding = pathname === "/" && !user;
   const { t } = useTranslation();
+  useYandexSuggest();
 
   return (
     <>

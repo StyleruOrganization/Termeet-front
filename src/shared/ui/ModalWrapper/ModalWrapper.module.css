@@ -49,6 +49,24 @@
   opacity: 0;
 }
 
+.ModalWrapper__Handle {
+  display: none;
+}
+
+.ModalWrapper__HandleBar {
+  width: 40px;
+  height: 4px;
+
+  background-color: var(--semantics-gray-active);
+  border-radius: 160px;
+}
+
+.ModalWrapper__SheetBody {
+  position: relative;
+
+  width: 100%;
+}
+
 .ModalWrapper__Content {
   position: relative;
 
@@ -123,17 +141,64 @@
   }
 }
 
-@media (width < 768px) {
+@media (width < 768px), (hover: none) and (pointer: coarse) {
   .ModalWrapper__Overlay {
-    padding: 10px 10px 60px;
+    overflow: hidden;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: stretch;
+
+    padding: 0;
   }
 
-  .ModalWrapper__CloseButton {
-    top: 16px;
+  .ModalWrapper__ModalContainer,
+  .ModalWrapper__ModalContainer_compact {
+    overflow: hidden;
+
+    width: 100%;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+
+    border-radius: 24px 24px 0 0;
+
+    transform: translateY(100%);
+    transition: transform var(--animation-duration, 300ms) ease-out;
+
+    align-self: stretch;
+    max-height: 92dvh;
+    max-width: 100%;
+    opacity: 1;
+  }
+
+  .ModalWrapper__ModalContainer_compact {
+    padding: 0 16px calc(16px + env(safe-area-inset-bottom, 0));
+  }
+
+  .ModalWrapper__ModalContainer_Opened {
+    transform: translateY(0);
+  }
+
+  .ModalWrapper__Handle {
+    display: flex;
+    flex-shrink: 0;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    height: 28px;
+    padding-top: 8px;
+
+    cursor: grab;
+
+    touch-action: none;
+  }
+
+  .ModalWrapper__CloseButton,
+  .ModalWrapper__ModalContainer_compact .ModalWrapper__CloseButton {
+    top: 8px;
 
     padding: 10px;
 
-    margin-right: 16px;
+    margin-right: 12px;
 
     svg {
       width: 16px;
@@ -141,9 +206,13 @@
     }
   }
 
-  .ModalWrapper__ModalContainer {
-    width: 100%;
+  .ModalWrapper__SheetBody {
+    overflow: auto;
+    flex: 1 1 auto;
 
-    border-radius: 24px;
+    min-height: 0;
+
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
   }
 }

@@ -14,6 +14,7 @@ export const useGetMeetInfo = (hash: string, isLocal: boolean) => {
     queryKey: [...MeetQueries.meet(hash).queryKey, userId],
     staleTime: 0,
     refetchOnWindowFocus: true,
+    structuralSharing: false,
   });
 
   const transformedMeetData = useMemo(() => {

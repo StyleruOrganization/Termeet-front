@@ -1,9 +1,11 @@
 .InvitePeople {
-  position: relative;
-
   display: flex;
   gap: 8px;
   flex-direction: column;
+}
+
+.InvitePeople__Field {
+  position: relative;
 }
 
 .InvitePeople__List {
@@ -57,12 +59,45 @@
 }
 
 .InvitePeople__Chip {
-  padding: 6px 12px;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+
+  padding: 4px 4px 4px 12px;
 
   color: var(--text-main);
   background-color: var(--fill-controls);
   border: 1px solid var(--semantics-gray-hover);
   border-radius: 160px;
 
-  font-size: 3rem;
+  font-size: var(--text-body);
+}
+
+.InvitePeople__ChipRemove {
+  display: flex;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+
+  width: 28px;
+  height: 28px;
+  padding: 0;
+
+  color: var(--text-main);
+  border-radius: 50%;
+
+  background: none;
+
+  cursor: pointer;
+
+  svg {
+    width: 16px;
+    height: 16px;
+
+    transform: rotate(45deg);
+  }
+
+  &:hover {
+    background-color: var(--components-hover);
+  }
 }

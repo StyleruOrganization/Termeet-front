@@ -3,13 +3,27 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } fr
 import { useNavigate } from "react-router";
 import { getMyMeetingsRequest, useSessionStore, type IUserMeeting, type UserMeetingRole } from "@/entities/User";
 import { LOCALE_BCP, parseLocale, useTranslation } from "@/shared/i18n";
-import { Container } from "@/shared/ui";
+import { Container, ModalWrapper } from "@/shared/ui";
+import ApproveIcon from "@assets/icons/approve.svg";
 import Arrow from "@assets/icons/arrow.svg";
+import ChevronDown from "@assets/icons/chevron-down.svg";
 import styles from "./Home.module.css";
 
 type DateFilter = "all" | "today" | "byDate";
-type RoleFilter = "all" | UserMeetingRole;
 type HomeTab = "meetings" | "history";
+
+const DATE_OPTIONS = [
+  ["all", "home.all"],
+  ["today", "home.today"],
+  ["byDate", "home.byDate"],
+] as const;
+
+const ROLE_OPTIONS = [
+  ["owner", "home.owner"],
+  ["participant", "home.participant"],
+  ["observer", "home.observer"],
+  ["invited", "home.invited"],
+] as const;
 
 const ROLE_LABEL_KEY: Record<UserMeetingRole, string> = {
   owner: "home.roleOwner",
@@ -54,7 +68,8 @@ export const Home = () => {
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const [tab, setTab] = useState<HomeTab>("meetings");
   const [dateFilter, setDateFilter] = useState<DateFilter>("all");
-  const [roleFilter, setRoleFilter] = useState<RoleFilter>("all");
+  const [roleFilters, setRoleFilters] = useState<UserMeetingRole[]>([]);
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   const {
     data: meetings = [],
@@ -89,7 +104,7 @@ export const Home = () => {
       if (tab === "meetings" && isFinal) {
         return false;
       }
-      if (roleFilter !== "all" && meeting.role !== roleFilter) {
+      if (roleFilters.length > 0 && !roleFilters.includes(meeting.role)) {
         return false;
       }
 
@@ -102,7 +117,7 @@ export const Home = () => {
       }
       return true;
     });
-  }, [dateFilter, meetings, roleFilter, selectedDay, tab, todayKey]);
+  }, [dateFilter, meetings, roleFilters, selectedDay, tab, todayKey]);
 
   const grouped = useMemo(() => {
     const groups = new Map<string, IUserMeeting[]>();
@@ -149,61 +164,78 @@ export const Home = () => {
         </aside>
 
         <section className={styles.Home__Content}>
-          <div className={styles.Home__Tabs}>
+          <div className={styles.Home__Toolbar}>
+            <div className={styles.Home__Tabs}>
+              <button
+                type='button'
+                className={`${styles.Home__Tab} ${tab === "meetings" ? styles.Home__Tab_active : ""}`}
+                onClick={() => setTab("meetings")}
+              >
+                {t("home.meetings")}
+              </button>
+              <button
+                type='button'
+                className={`${styles.Home__Tab} ${tab === "history" ? styles.Home__Tab_active : ""}`}
+                onClick={() => setTab("history")}
+              >
+                {t("home.history")}
+              </button>
+            </div>
             <button
               type='button'
-              className={`${styles.Home__Tab} ${tab === "meetings" ? styles.Home__Tab_active : ""}`}
-              onClick={() => setTab("meetings")}
+              className={`${styles.Home__FilterButton} ${dateFilter !== "all" || roleFilters.length > 0 ? styles.Home__FilterButton_active : ""}`}
+              onClick={() => setFiltersOpen(true)}
             >
-              {t("home.meetings")}
-            </button>
-            <button
-              type='button'
-              className={`${styles.Home__Tab} ${tab === "history" ? styles.Home__Tab_active : ""}`}
-              onClick={() => setTab("history")}
-            >
-              {t("home.history")}
+              {t("home.filters")}
+              <ChevronDown className={styles.Home__FilterButtonIcon} />
             </button>
           </div>
 
-          <div className={styles.Home__Filters}>
-            {(
-              [
-                ["all", "home.all"],
-                ["today", "home.today"],
-                ["byDate", "home.byDate"],
-              ] as const
-            ).map(([id, labelKey]) => (
-              <button
-                key={id}
-                type='button'
-                className={`${styles.Home__Chip} ${dateFilter === id ? styles.Home__Chip_active : ""}`}
-                onClick={() => setDateFilter(id)}
-              >
-                {t(labelKey)}
+          <ModalWrapper compact isOpen={filtersOpen} onClose={() => setFiltersOpen(false)} isAnimate>
+            <div className={styles.Home__FilterSheet}>
+              <h2>{t("home.filters")}</h2>
+              <p className={styles.Home__FilterGroupTitle}>{t("home.filterWhen")}</p>
+              {DATE_OPTIONS.map(([id, labelKey]) => (
+                <button key={id} type='button' className={styles.Home__FilterRow} onClick={() => setDateFilter(id)}>
+                  <span>{t(labelKey)}</span>
+                  <span className={`${styles.Home__Check} ${dateFilter === id ? styles.Home__Check_on : ""}`}>
+                    {dateFilter === id ? <ApproveIcon /> : null}
+                  </span>
+                </button>
+              ))}
+              <p className={styles.Home__FilterGroupTitle}>{t("home.filterRole")}</p>
+              <button type='button' className={styles.Home__FilterRow} onClick={() => setRoleFilters([])}>
+                <span>{t("home.allRoles")}</span>
+                <span className={`${styles.Home__Check} ${roleFilters.length === 0 ? styles.Home__Check_on : ""}`}>
+                  {roleFilters.length === 0 ? <ApproveIcon /> : null}
+                </span>
               </button>
-            ))}
-          </div>
-          <div className={styles.Home__Filters}>
-            {(
-              [
-                ["all", "home.allRoles"],
-                ["owner", "home.owner"],
-                ["participant", "home.participant"],
-                ["observer", "home.observer"],
-                ["invited", "home.invited"],
-              ] as const
-            ).map(([id, labelKey]) => (
-              <button
-                key={id}
-                type='button'
-                className={`${styles.Home__Chip} ${roleFilter === id ? styles.Home__Chip_active : ""}`}
-                onClick={() => setRoleFilter(id)}
-              >
-                {t(labelKey)}
-              </button>
-            ))}
-          </div>
+              {ROLE_OPTIONS.map(([id, labelKey]) => {
+                const checked = roleFilters.includes(id);
+                return (
+                  <button
+                    key={id}
+                    type='button'
+                    className={styles.Home__FilterRow}
+                    onClick={() => {
+                      setRoleFilters(current => {
+                        if (current.includes(id)) {
+                          return current.filter(role => role !== id);
+                        }
+                        const next = [...current, id];
+                        return next.length === ROLE_OPTIONS.length ? [] : next;
+                      });
+                    }}
+                  >
+                    <span>{t(labelKey)}</span>
+                    <span className={`${styles.Home__Check} ${checked ? styles.Home__Check_on : ""}`}>
+                      {checked ? <ApproveIcon /> : null}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </ModalWrapper>
 
           {tab === "history" && grouped.length === 0 && !isLoading && !isError ? (
             <p className={styles.Home__Empty}>{t("home.historyEmpty")}</p>

@@ -17,6 +17,12 @@ const eventMessage = (event: MeetLiveEvent, t: (key: string, options?: Record<st
   if (event.kind === "final") {
     return t("toast.liveFinal");
   }
+  if (event.kind === "finalEdit") {
+    return t("toast.liveFinalEdit");
+  }
+  if (event.kind === "info") {
+    return t("toast.liveInfo");
+  }
   return t("toast.liveMore", { count: event.extra });
 };
 
@@ -57,7 +63,7 @@ export const useMeetLiveToasts = (hash: string, meet: MeetResponse, mySlotName: 
     diffMeetLiveEvents(previous, next, skipNames).forEach((event, index) => {
       addToast({
         id: `meet-live-${hash}-${event.kind}-${index}-${Date.now()}`,
-        type: event.kind === "final" ? "success" : "info",
+        type: event.kind === "final" || event.kind === "finalEdit" ? "success" : "info",
         duration: 6000,
         message: eventMessage(event, t),
       });
