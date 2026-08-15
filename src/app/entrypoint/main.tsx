@@ -6,12 +6,6 @@ import { App } from "../App";
 
 initWebVitals();
 
-if (typeof window !== "undefined") {
-  (window as unknown as { __testCrash?: () => void }).__testCrash = () => {
-    throw new Error("Тестовая ошибка через window.__testCrash() для проверки мониторинга");
-  };
-}
-
 window.addEventListener("error", event => {
   reportClientError({
     type: "client_error",

@@ -19,12 +19,16 @@ server {
         add_header Cache-Control "public, immutable";
     }
 
+    # Docker DNS resolver (обновляет IP бэкенда каждые 5 сек без перезапуска Nginx)
+    resolver 127.0.0.11 valid=5s ipv6=off;
+
     # Проксируем запросы к API на бэкенд
     location /api/ {
         # ПОВТОРНО УКАЗЫВАЕМ ЛИМИТ для этого location
         client_max_body_size 30M;
         
-        proxy_pass http://${BACKEND_CONTAINER}:${BACKEND_PORT}/api/;
+        set $backend_upstream "http://${BACKEND_CONTAINER}:${BACKEND_PORT}";
+        proxy_pass $backend_upstream;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         set $conn_upgrade "";
