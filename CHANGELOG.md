@@ -2,6 +2,47 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.0.0] - 2026-08-15
+
+### Changes
+- increase bosy
+- increase bodyX2
+- added choosing time for creating meet via intervals
+- update layout for meet page
+- added onboarding for create meet and meet page
+- some corrections for mobile devices
+- some corrections for mobile devices
+- some corrections for mobile devices
+- added authorization
+- added authorization
+- added authorization
+- TERMEET - king
+- TERMEET - king
+- TERMEET - king
+- upgrade TERMEET EEEE
+- upgrade TERMEET EEEE
+- upgrade TERMEET EEEE
+- upgrade TERMEET EEEE
+- upgrade TERMEET EEEE
+- upgrade TERMEET EEEE
+- upgrade TERMEET EEEE
+- upgrade TERMEET EEEE
+- upgrade TERMEET EEEE
+- upgrade TERMEET EEEE
+- upgrade TERMEET EEEE
+- upgrade TERMEET EEEE
+- upgrade TERMEET EEEE
+- upgrade TERMEET EEEE
+- upgrade TERMEET EEEE
+- upgrade TERMEET EEEE
+- upgrade TERMEET EEEE
+- upgrade TERMEET EEEE
+- upgrade TERMEET EEEE
+- upgrade TERMEET EEEE
+
+
+All notable changes to this project will be documented in this file.
+
 ## [2.0.4] - 2026-06-30
 
 ### Changes
