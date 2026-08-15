@@ -124,6 +124,14 @@ export const ru = {
     yandexCalendarOff:
       "Яндекс привязан, но нет права на календарь. Нажмите кнопку ниже — Яндекс спросит доступ к календарю. В кабинете OAuth приложения должен быть включён scope calendar:all.",
     yandexNeedConnect: "Пока Яндекс не привязан: вход по паролю работает, календарь — после кнопки ниже.",
+    telegramTitle: "Telegram",
+    telegramHint:
+      "Ник в профиле — публичный контакт. Здесь привязывается аккаунт Telegram: бот в личке покажет ваши встречи. Нажмите кнопку, в боте Start. Ссылка живёт 15 минут.",
+    telegramConnected: "Telegram привязан",
+    telegramDisconnected: "Telegram не привязан",
+    telegramConnect: "Привязать Telegram",
+    telegramUnlink: "Отвязать",
+    telegramWait: "Откройте бота и нажмите Start. Когда привяжется — статус обновится сам.",
   },
   toast: {
     nameSaved: "Имя сохранено в аккаунте",
@@ -164,6 +172,12 @@ export const ru = {
     liveMore: "Ещё {{count}} обновлений по этой встрече",
     notifyError: "Не получилось сохранить уведомления. Попробуйте ещё раз",
     onboardingError: "Не получилось сохранить подсказки. Попробуйте ещё раз",
+    telegramLinkOpened: "Откройте бота и нажмите Start",
+    telegramLinkError: "Не получилось открыть привязку Telegram. Попробуйте ещё раз",
+    telegramNotConfigured: "Бот на сервере ещё не настроен. Привязка заработает после деплоя с секретом",
+    telegramLinked: "Telegram привязан к аккаунту",
+    telegramUnlinked: "Telegram отвязан",
+    telegramUnlinkError: "Не получилось отвязать Telegram. Попробуйте ещё раз",
   },
   home: {
     create: "Создать встречу",
@@ -530,6 +544,14 @@ export const en: typeof ru = {
     yandexCalendarOff:
       "Yandex is linked, but calendar access is missing. Use the button below — Yandex will ask for calendar access. The OAuth app must include calendar:all.",
     yandexNeedConnect: "Yandex is not linked yet: password login works, calendar starts after the button below.",
+    telegramTitle: "Telegram",
+    telegramHint:
+      "The nick in your profile is a public contact. Here you link the Telegram account so the bot can show your meetings in a private chat. Press the button, then Start in the bot. The link lasts 15 minutes.",
+    telegramConnected: "Telegram linked",
+    telegramDisconnected: "Telegram is not linked",
+    telegramConnect: "Link Telegram",
+    telegramUnlink: "Unlink",
+    telegramWait: "Open the bot and press Start. The status updates by itself when it is linked.",
   },
   toast: {
     nameSaved: "Name saved to your account",
@@ -570,6 +592,12 @@ export const en: typeof ru = {
     liveMore: "{{count}} more updates on this meeting",
     notifyError: "Could not save notification settings. Try again",
     onboardingError: "Could not save the hints setting. Try again",
+    telegramLinkOpened: "Open the bot and press Start",
+    telegramLinkError: "Could not start Telegram linking. Try again",
+    telegramNotConfigured: "The bot is not set up on the server yet. Linking will work after deploy with the secret",
+    telegramLinked: "Telegram is linked to your account",
+    telegramUnlinked: "Telegram unlinked",
+    telegramUnlinkError: "Could not unlink Telegram. Try again",
   },
   home: {
     create: "Create meeting",
@@ -941,8 +969,14 @@ export const de: typeof ru = {
       "Yandex ist verbunden, aber ohne Kalenderrecht. Button unten — Yandex fragt nach Kalenderzugriff. In der OAuth-App muss calendar:all aktiv sein.",
     yandexNeedConnect:
       "Yandex ist noch nicht verbunden: Login mit Passwort geht, der Kalender startet nach dem Button.",
-    yandex360:
-      "Automatische Räume gelten für Yandex-360-Organisationen. Mit privatem Yandex telemost.yandex.ru öffnen und den Link ins Meeting-Feld einfügen.",
+    telegramTitle: "Telegram",
+    telegramHint:
+      "Der Nick im Profil ist ein öffentlicher Kontakt. Hier binden Sie das Telegram-Konto, damit der Bot Ihre Meetings in der Privatchat zeigt. Button drücken, im Bot Start. Der Link gilt 15 Minuten.",
+    telegramConnected: "Telegram verbunden",
+    telegramDisconnected: "Telegram nicht verbunden",
+    telegramConnect: "Telegram verbinden",
+    telegramUnlink: "Trennen",
+    telegramWait: "Bot öffnen und Start drücken. Der Status aktualisiert sich selbst, sobald es verbunden ist.",
   },
   toast: {
     nameSaved: "Name im Konto gespeichert",
@@ -985,6 +1019,13 @@ export const de: typeof ru = {
     liveMore: "Noch {{count}} Updates zu diesem Meeting",
     notifyError: "Benachrichtigungen konnten nicht gespeichert werden. Nochmal versuchen",
     onboardingError: "Hinweise konnten nicht gespeichert werden. Nochmal versuchen",
+    telegramLinkOpened: "Bot öffnen und Start drücken",
+    telegramLinkError: "Telegram-Verbindung konnte nicht gestartet werden. Nochmal versuchen",
+    telegramNotConfigured:
+      "Der Bot ist auf dem Server noch nicht eingerichtet. Die Bindung geht nach dem Deploy mit Secret",
+    telegramLinked: "Telegram ist mit dem Konto verbunden",
+    telegramUnlinked: "Telegram getrennt",
+    telegramUnlinkError: "Telegram konnte nicht getrennt werden. Nochmal versuchen",
   },
   home: {
     create: "Meeting erstellen",

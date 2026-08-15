@@ -31,6 +31,8 @@ type RawUser = IUser & {
   contactEmail?: string | null;
   contactTelegram?: string | null;
   contactVk?: string | null;
+  telegramLinked?: boolean;
+  telegramUsername?: string | null;
 };
 
 export const normalizeUser = (raw: RawUser): IUser => {
@@ -57,6 +59,8 @@ export const normalizeUser = (raw: RawUser): IUser => {
     contact_email: raw.contact_email ?? raw.contactEmail ?? null,
     contact_telegram: raw.contact_telegram ?? raw.contactTelegram ?? null,
     contact_vk: raw.contact_vk ?? raw.contactVk ?? null,
+    telegram_linked: raw.telegram_linked ?? raw.telegramLinked ?? false,
+    telegram_username: raw.telegram_username ?? raw.telegramUsername ?? null,
   };
 };
 
@@ -188,4 +192,13 @@ export const createCalendarEventRequest = async (payload: {
 
 export const deleteCalendarEventRequest = async (href: string) => {
   return apiClient.delete<{ detail: string }>(`/users/me/calendar?href=${encodeURIComponent(href)}`);
+};
+
+export const startTelegramLinkRequest = () => {
+  return apiClient.post<{ url: string; bot_username: string }>("/users/me/telegram/link");
+};
+
+export const unlinkTelegramRequest = async () => {
+  const user = await apiClient.post<RawUser>("/users/me/telegram/unlink");
+  return normalizeUser(user);
 };

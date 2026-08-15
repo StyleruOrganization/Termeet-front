@@ -34,6 +34,8 @@ export interface IUser {
   contact_email?: string | null;
   contact_telegram?: string | null;
   contact_vk?: string | null;
+  telegram_linked?: boolean;
+  telegram_username?: string | null;
 }
 
 export interface IUserSettingsUpdate {

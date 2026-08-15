@@ -2,8 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import {
   deleteAccountRequest,
+  getMeRequest,
   resendVerificationRequest,
   resetPasswordRequest,
+  startTelegramLinkRequest,
+  unlinkTelegramRequest,
   uploadAvatarRequest,
   useSessionStore,
   fillWeekWithInterval,
@@ -21,12 +24,14 @@ import {
   type IUser,
 } from "@/entities/User";
 import { useToastStore } from "@/features/ToastContainer";
+import { HttpError } from "@/shared/api";
 import { TIMES } from "@/shared/consts";
 import { LOCALE_LABEL, LOCALES, changeAppLocale, parseLocale, useTranslation } from "@/shared/i18n";
 import { useTheme } from "@/shared/libs";
 import { Container, Input, ModalWrapper, PhotoPicker, Select, TextArea, userAvatarUrl } from "@/shared/ui";
 import { FeedbackForm } from "@/widgets/FeedbackForm";
 import Arrow from "@assets/icons/arrow.svg";
+import TelegramLogo from "@assets/icons/tg.svg";
 import YandexLogo from "@assets/icons/YandexID.svg";
 import styles from "./Profile.module.css";
 import { TemplateWeekModal } from "./ui/TemplateWeekModal/TemplateWeekModal";
@@ -747,14 +752,137 @@ const NotificationSettings = ({ user }: { user: IUser }) => {
 
 const IntegrationsSettings = ({ user }: { user: IUser }) => {
   const { t } = useTranslation();
+  const setUser = useSessionStore(state => state.setUser);
+  const addToast = useToastStore(state => state.addToast);
+  const [busy, setBusy] = useState(false);
+  const pollRef = useRef<number | null>(null);
   const hasYandex = Boolean(user.has_yandex);
   const hasCalendar = Boolean(user.has_calendar);
+  const telegramLinked = Boolean(user.telegram_linked);
+  const telegramNick = user.telegram_username?.trim();
   const yandexName = user.yandex_name?.trim();
   const yandexLogin = user.yandex_login?.trim();
   const yandexEmail = user.yandex_email?.trim();
 
+  const stopPoll = () => {
+    if (pollRef.current != null) {
+      window.clearInterval(pollRef.current);
+      pollRef.current = null;
+    }
+  };
+
+  const refreshUser = async () => {
+    const next = await getMeRequest();
+    setUser(next);
+    return next;
+  };
+
+  useEffect(() => {
+    const onFocus = () => {
+      void refreshUser().then(next => {
+        if (next.telegram_linked) {
+          stopPoll();
+        }
+      });
+    };
+    window.addEventListener("focus", onFocus);
+    document.addEventListener("visibilitychange", onFocus);
+    return () => {
+      window.removeEventListener("focus", onFocus);
+      document.removeEventListener("visibilitychange", onFocus);
+      stopPoll();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- статус привязки при возврате из Telegram
+  }, []);
+
+  const linkTelegram = async () => {
+    setBusy(true);
+    try {
+      const { url } = await startTelegramLinkRequest();
+      window.open(url, "_blank", "noopener,noreferrer");
+      addToast({ id: "tg-link-open", type: "info", message: t("toast.telegramLinkOpened") });
+      stopPoll();
+      const started = Date.now();
+      pollRef.current = window.setInterval(() => {
+        void (async () => {
+          if (Date.now() - started > 120000) {
+            stopPoll();
+            return;
+          }
+          try {
+            const next = await getMeRequest();
+            setUser(next);
+            if (next.telegram_linked) {
+              stopPoll();
+              addToast({ id: "tg-linked", type: "success", message: t("toast.telegramLinked") });
+            }
+          } catch {
+            // окно ещё открыто, аккаунт ещё не подтвердил
+          }
+        })();
+      }, 3000);
+    } catch (error) {
+      const notReady = error instanceof HttpError && error.status === 503;
+      addToast({
+        id: "tg-link-error",
+        type: "error",
+        message: t(notReady ? "toast.telegramNotConfigured" : "toast.telegramLinkError"),
+      });
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const unlinkTelegram = async () => {
+    setBusy(true);
+    stopPoll();
+    try {
+      const next = await unlinkTelegramRequest();
+      setUser(next);
+      addToast({ id: "tg-unlinked", type: "success", message: t("toast.telegramUnlinked") });
+    } catch {
+      addToast({ id: "tg-unlink-error", type: "error", message: t("toast.telegramUnlinkError") });
+    } finally {
+      setBusy(false);
+    }
+  };
+
   return (
     <div className={styles.Profile__Stack}>
+      <section>
+        <h2 className={styles.Profile__SectionTitle}>{t("profile.telegramTitle")}</h2>
+        <p className={styles.Profile__Hint}>{t("profile.telegramHint")}</p>
+        <div className={styles.Profile__Row}>
+          <span className={styles.Profile__IntegrationName}>
+            <TelegramLogo />
+            {telegramLinked ? t("profile.telegramConnected") : t("profile.telegramDisconnected")}
+          </span>
+          {telegramNick ? <span className={styles.Profile__IntegrationStatus}>@{telegramNick}</span> : null}
+        </div>
+        {telegramLinked ? null : <p className={styles.Profile__Hint}>{t("profile.telegramWait")}</p>}
+        <div className={styles.Profile__Actions}>
+          {telegramLinked ? (
+            <button
+              type='button'
+              className={`baseButton outlineButton ${styles.Profile__SaveTemplate}`}
+              disabled={busy}
+              onClick={() => void unlinkTelegram()}
+            >
+              {t("profile.telegramUnlink")}
+            </button>
+          ) : (
+            <button
+              type='button'
+              className={`baseButton mainButton ${styles.Profile__SaveTemplate}`}
+              disabled={busy}
+              onClick={() => void linkTelegram()}
+            >
+              <TelegramLogo />
+              <span>{t("profile.telegramConnect")}</span>
+            </button>
+          )}
+        </div>
+      </section>
       <section>
         <h2 className={styles.Profile__SectionTitle}>{t("profile.yandexTitle")}</h2>
         <p className={styles.Profile__Hint}>{t("profile.yandexHint")}</p>

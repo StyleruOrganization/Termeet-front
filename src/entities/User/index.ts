@@ -58,4 +58,6 @@ export {
   searchUsersRequest,
   deleteAccountRequest,
   uploadAvatarRequest,
+  startTelegramLinkRequest,
+  unlinkTelegramRequest,
 } from "./api/userApi";

@@ -171,6 +171,12 @@
   margin-top: 12px;
 }
 
+.Profile__Actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 .Profile__TemplateActions {
   display: flex;
   gap: 8px;
