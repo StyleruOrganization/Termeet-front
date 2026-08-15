@@ -60,15 +60,29 @@
 .BotTemplates__Form {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 
   width: 100%;
+  padding: 8px 24px 24px;
 }
 
 .BotTemplates__Form h2 {
+  margin: 0;
+  padding-right: 48px;
+
   color: var(--text-main);
 
   font-size: var(--text-heading);
+  font-weight: 800;
+}
+
+.BotTemplates__FormHint {
+  margin: 0;
+
+  color: var(--text-secondary);
+
+  font-size: var(--text-body);
+  line-height: 1.4;
 }
 
 .BotTemplates__Window {
@@ -90,6 +104,8 @@
 
   color: var(--text-main);
 
+  cursor: pointer;
+
   font-size: var(--text-body);
 }
 
@@ -99,7 +115,10 @@
   padding: 2px;
 
   background-color: var(--semantics-gray-active);
+  border: none;
   border-radius: 160px;
+
+  cursor: pointer;
 }
 
 .BotTemplates__Switch::after {
@@ -125,6 +144,7 @@
 }
 
 .BotTemplates__Preview {
+  margin: 0;
   padding: 12px 16px;
 
   color: var(--text-main);
@@ -133,9 +153,12 @@
 
   font-size: var(--text-body);
   font-weight: 600;
+  overflow-wrap: anywhere;
 }
 
 .BotTemplates__Error {
+  margin: 0;
+
   color: var(--semantics-red-main);
 
   font-size: var(--text-body);
@@ -145,9 +168,21 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+
+  margin-top: 8px;
 }
 
 .BotTemplates__Actions button {
   width: fit-content;
   padding: 12px 16px;
+}
+
+@media (width < 768px) {
+  .BotTemplates__Form {
+    padding: 4px 12px 16px;
+  }
+
+  .BotTemplates__Form h2 {
+    padding-right: 36px;
+  }
 }

@@ -132,7 +132,7 @@ export const BotTemplates = ({ templates }: Props) => {
         {draft ? (
           <div className={styles.BotTemplates__Form}>
             <h2>{draft.slug ? t("profile.botTemplatesEdit") : t("profile.botTemplatesAdd")}</h2>
-            <p className={styles.BotTemplates__Hint}>{t("profile.botTemplatesFormHint")}</p>
+            <p className={styles.BotTemplates__FormHint}>{t("profile.botTemplatesFormHint")}</p>
             <Input
               name='bot-slug'
               label={t("profile.botTemplatesSlug")}
@@ -207,7 +207,7 @@ export const BotTemplates = ({ templates }: Props) => {
                   value={aliasesDayAfter}
                   onChange={event => setAliasesDayAfter(event.target.value)}
                 />
-                <p className={styles.BotTemplates__Hint}>{t("profile.botAliasHint")}</p>
+                <p className={styles.BotTemplates__FormHint}>{t("profile.botAliasHint")}</p>
                 <label className={styles.BotTemplates__Toggle}>
                   <span>{t("profile.botDateDefaultToday")}</span>
                   <button
