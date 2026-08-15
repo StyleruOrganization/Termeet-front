@@ -8,6 +8,7 @@ export interface ITeamMember {
 export interface ITeam {
   id: number;
   name: string;
+  slug: string;
   description: string;
   hasPhoto?: boolean;
   isOwner?: boolean;
@@ -16,6 +17,7 @@ export interface ITeam {
 
 export interface ITeamPayload {
   name: string;
+  slug: string;
   description: string;
   memberIds: string[];
 }

@@ -1,0 +1,153 @@
+.BotTemplates__Title {
+  color: var(--text-main);
+
+  font-size: var(--text-body);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.BotTemplates__Hint {
+  color: var(--text-main);
+
+  font-size: var(--text-body);
+  margin-bottom: 12px;
+}
+
+.BotTemplates__List {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.BotTemplates__Row {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  align-items: center;
+
+  width: 100%;
+  padding: 16px;
+
+  text-align: left;
+
+  color: var(--text-main);
+  background-color: var(--fill-controls);
+  border: 1px solid var(--semantics-gray-hover);
+  border-radius: 16px;
+
+  cursor: pointer;
+
+  font-size: var(--text-body);
+}
+
+.BotTemplates__RowMeta {
+  overflow: hidden;
+
+  color: var(--text-secondary);
+
+  min-width: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.BotTemplates__Add {
+  width: fit-content;
+  padding: 12px 16px;
+
+  margin-top: 12px;
+}
+
+.BotTemplates__Form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  width: 100%;
+}
+
+.BotTemplates__Form h2 {
+  color: var(--text-main);
+
+  font-size: var(--text-heading);
+}
+
+.BotTemplates__Window {
+  display: flex;
+  align-items: end;
+  gap: 8px;
+}
+
+.BotTemplates__Window > * {
+  flex: 1;
+
+  min-width: 0;
+}
+
+.BotTemplates__Toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  color: var(--text-main);
+
+  font-size: var(--text-body);
+}
+
+.BotTemplates__Switch {
+  width: 44px;
+  height: 24px;
+  padding: 2px;
+
+  background-color: var(--semantics-gray-active);
+  border-radius: 160px;
+}
+
+.BotTemplates__Switch::after {
+  display: block;
+
+  width: 20px;
+  height: 20px;
+
+  background-color: var(--light);
+  border-radius: 50%;
+
+  transition: transform 0.2s ease;
+
+  content: "";
+}
+
+.BotTemplates__Switch_on {
+  background-color: var(--semantics-blue-950);
+}
+
+.BotTemplates__Switch_on::after {
+  transform: translateX(20px);
+}
+
+.BotTemplates__Preview {
+  padding: 12px 16px;
+
+  color: var(--text-main);
+  background-color: var(--fill-controls);
+  border-radius: 16px;
+
+  font-size: var(--text-body);
+  font-weight: 600;
+}
+
+.BotTemplates__Error {
+  color: var(--semantics-red-main);
+
+  font-size: var(--text-body);
+}
+
+.BotTemplates__Actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.BotTemplates__Actions button {
+  width: fit-content;
+  padding: 12px 16px;
+}

@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import {
   deleteAccountRequest,
-  getMeRequest,
   resendVerificationRequest,
   resetPasswordRequest,
   startTelegramLinkRequest,
@@ -34,6 +33,7 @@ import Arrow from "@assets/icons/arrow.svg";
 import TelegramLogo from "@assets/icons/tg.svg";
 import YandexLogo from "@assets/icons/YandexID.svg";
 import styles from "./Profile.module.css";
+import { BotTemplates } from "./ui/BotTemplates/BotTemplates";
 import { TemplateWeekModal } from "./ui/TemplateWeekModal/TemplateWeekModal";
 
 type ProfileTab = "profile" | "notifications" | "integrations" | "appearance" | "support";
@@ -369,10 +369,12 @@ const ProfileSettings = ({ user }: { user: IUser }) => {
             {t("profile.resend")}
           </button>
         ) : null}
-        <button type='button' className={styles.Profile__Row} onClick={() => setPasswordOpen(true)}>
-          <span>{t("profile.changePassword")}</span>
-          <Arrow className={styles.Profile__RowArrow} />
-        </button>
+        {user.has_password ? (
+          <button type='button' className={styles.Profile__Row} onClick={() => setPasswordOpen(true)}>
+            <span>{t("profile.changePassword")}</span>
+            <Arrow className={styles.Profile__RowArrow} />
+          </button>
+        ) : null}
       </section>
       <section>
         <h2 className={styles.Profile__SectionTitle}>{t("profile.timezone")}</h2>
@@ -711,8 +713,18 @@ const NotificationSettings = ({ user }: { user: IUser }) => {
   const { t } = useTranslation();
   const notifyVote = user.notify_on_vote ?? true;
   const notifyFinal = user.notify_on_final ?? true;
+  const notifyEmail = user.notify_email ?? true;
+  const notifyTelegram = user.notify_telegram ?? true;
+  const hasEmail = Boolean(user.email?.trim());
+  const hasTelegram = Boolean(user.telegram_linked);
+  const showChannels = hasEmail && hasTelegram;
 
-  const toggle = async (payload: { notify_on_vote?: boolean; notify_on_final?: boolean }) => {
+  const toggle = async (payload: {
+    notify_on_vote?: boolean;
+    notify_on_final?: boolean;
+    notify_email?: boolean;
+    notify_telegram?: boolean;
+  }) => {
     try {
       await updateSettings(payload);
     } catch {
@@ -746,6 +758,32 @@ const NotificationSettings = ({ user }: { user: IUser }) => {
           />
         </label>
       </section>
+      {showChannels ? (
+        <section>
+          <h2 className={styles.Profile__SectionTitle}>{t("profile.notifyChannelsTitle")}</h2>
+          <p className={styles.Profile__Hint}>{t("profile.notifyChannelsHint")}</p>
+          <label className={styles.Profile__ToggleRow}>
+            <span>{t("profile.notifyChannelEmail")}</span>
+            <button
+              type='button'
+              role='switch'
+              aria-checked={notifyEmail}
+              className={`${styles.Profile__Switch} ${notifyEmail ? styles.Profile__Switch_on : ""}`}
+              onClick={() => toggle({ notify_email: !notifyEmail })}
+            />
+          </label>
+          <label className={styles.Profile__ToggleRow}>
+            <span>{t("profile.notifyChannelTelegram")}</span>
+            <button
+              type='button'
+              role='switch'
+              aria-checked={notifyTelegram}
+              className={`${styles.Profile__Switch} ${notifyTelegram ? styles.Profile__Switch_on : ""}`}
+              onClick={() => toggle({ notify_telegram: !notifyTelegram })}
+            />
+          </label>
+        </section>
+      ) : null}
     </div>
   );
 };
@@ -755,7 +793,6 @@ const IntegrationsSettings = ({ user }: { user: IUser }) => {
   const setUser = useSessionStore(state => state.setUser);
   const addToast = useToastStore(state => state.addToast);
   const [busy, setBusy] = useState(false);
-  const pollRef = useRef<number | null>(null);
   const hasYandex = Boolean(user.has_yandex);
   const hasCalendar = Boolean(user.has_calendar);
   const telegramLinked = Boolean(user.telegram_linked);
@@ -764,63 +801,12 @@ const IntegrationsSettings = ({ user }: { user: IUser }) => {
   const yandexLogin = user.yandex_login?.trim();
   const yandexEmail = user.yandex_email?.trim();
 
-  const stopPoll = () => {
-    if (pollRef.current != null) {
-      window.clearInterval(pollRef.current);
-      pollRef.current = null;
-    }
-  };
-
-  const refreshUser = async () => {
-    const next = await getMeRequest();
-    setUser(next);
-    return next;
-  };
-
-  useEffect(() => {
-    const onFocus = () => {
-      void refreshUser().then(next => {
-        if (next.telegram_linked) {
-          stopPoll();
-        }
-      });
-    };
-    window.addEventListener("focus", onFocus);
-    document.addEventListener("visibilitychange", onFocus);
-    return () => {
-      window.removeEventListener("focus", onFocus);
-      document.removeEventListener("visibilitychange", onFocus);
-      stopPoll();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- статус привязки при возврате из Telegram
-  }, []);
-
   const linkTelegram = async () => {
     setBusy(true);
     try {
       const { url } = await startTelegramLinkRequest();
       window.open(url, "_blank", "noopener,noreferrer");
       addToast({ id: "tg-link-open", type: "info", message: t("toast.telegramLinkOpened") });
-      stopPoll();
-      const started = Date.now();
-      pollRef.current = window.setInterval(() => {
-        void (async () => {
-          if (Date.now() - started > 120000) {
-            stopPoll();
-            return;
-          }
-          try {
-            const next = await getMeRequest();
-            setUser(next);
-            if (next.telegram_linked) {
-              stopPoll();
-              addToast({ id: "tg-linked", type: "success", message: t("toast.telegramLinked") });
-            }
-          } catch {
-            // окно ещё открыто, аккаунт ещё не подтвердил
-          }
-        })();
-      }, 3000);
     } catch (error) {
       const notReady = error instanceof HttpError && error.status === 503;
       addToast({
@@ -835,7 +821,6 @@ const IntegrationsSettings = ({ user }: { user: IUser }) => {
 
   const unlinkTelegram = async () => {
     setBusy(true);
-    stopPoll();
     try {
       const next = await unlinkTelegramRequest();
       setUser(next);
@@ -883,6 +868,7 @@ const IntegrationsSettings = ({ user }: { user: IUser }) => {
           )}
         </div>
       </section>
+      <BotTemplates templates={user.bot_templates ?? []} />
       <section>
         <h2 className={styles.Profile__SectionTitle}>{t("profile.yandexTitle")}</h2>
         <p className={styles.Profile__Hint}>{t("profile.yandexHint")}</p>

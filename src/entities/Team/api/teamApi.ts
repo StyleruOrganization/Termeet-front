@@ -8,6 +8,7 @@ type RawTeam = ITeam & {
 
 const normalizeTeam = (raw: RawTeam): ITeam => ({
   ...raw,
+  slug: raw.slug ?? "",
   description: raw.description ?? "",
   hasPhoto: raw.hasPhoto ?? raw.has_photo ?? false,
   isOwner: raw.isOwner ?? raw.is_owner ?? false,

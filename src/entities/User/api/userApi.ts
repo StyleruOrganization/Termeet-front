@@ -19,6 +19,8 @@ type RawUser = IUser & {
   gridWindowEnd?: string;
   notifyOnVote?: boolean;
   notifyOnFinal?: boolean;
+  notifyEmail?: boolean;
+  notifyTelegram?: boolean;
   hasYandex?: boolean;
   hasTelemost?: boolean;
   hasCalendar?: boolean;
@@ -33,6 +35,8 @@ type RawUser = IUser & {
   contactVk?: string | null;
   telegramLinked?: boolean;
   telegramUsername?: string | null;
+  bot_templates?: IUser["bot_templates"];
+  botTemplates?: IUser["bot_templates"];
 };
 
 export const normalizeUser = (raw: RawUser): IUser => {
@@ -48,6 +52,8 @@ export const normalizeUser = (raw: RawUser): IUser => {
     grid_window_end: raw.grid_window_end ?? raw.gridWindowEnd ?? "19 : 00",
     notify_on_vote: raw.notify_on_vote ?? raw.notifyOnVote ?? true,
     notify_on_final: raw.notify_on_final ?? raw.notifyOnFinal ?? true,
+    notify_email: raw.notify_email ?? raw.notifyEmail ?? true,
+    notify_telegram: raw.notify_telegram ?? raw.notifyTelegram ?? true,
     has_yandex: raw.has_yandex ?? raw.hasYandex ?? false,
     has_telemost: raw.has_telemost ?? raw.hasTelemost ?? false,
     has_calendar: raw.has_calendar ?? raw.hasCalendar ?? false,
@@ -61,6 +67,7 @@ export const normalizeUser = (raw: RawUser): IUser => {
     contact_vk: raw.contact_vk ?? raw.contactVk ?? null,
     telegram_linked: raw.telegram_linked ?? raw.telegramLinked ?? false,
     telegram_username: raw.telegram_username ?? raw.telegramUsername ?? null,
+    bot_templates: raw.bot_templates ?? raw.botTemplates ?? [],
   };
 };
 

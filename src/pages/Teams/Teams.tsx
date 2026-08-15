@@ -10,7 +10,13 @@ import {
   type ITeam,
   type ITeamMember,
 } from "@/entities/Team";
-import { searchUsersRequest, useSessionStore, type IUserSearchItem } from "@/entities/User";
+import {
+  searchUsersRequest,
+  suggestTeamSlug,
+  useSessionStore,
+  validateTeamSlug,
+  type IUserSearchItem,
+} from "@/entities/User";
 import { useToastStore } from "@/features/ToastContainer";
 import { useTranslation } from "@/shared/i18n";
 import { Container, Input, ModalWrapper, PhotoPicker, TextArea, teamPhotoUrl, UserSearch } from "@/shared/ui";
@@ -21,6 +27,7 @@ import styles from "./Teams.module.css";
 type Draft = {
   id: number | null;
   name: string;
+  slug: string;
   description: string;
   members: ITeamMember[];
   photoSrc: string | null;
@@ -30,6 +37,7 @@ type Draft = {
 const emptyDraft = (): Draft => ({
   id: null,
   name: "",
+  slug: "",
   description: "",
   members: [],
   photoSrc: null,
@@ -75,6 +83,7 @@ export const Teams = () => {
     mutationFn: async (current: Draft) => {
       const payload = {
         name: current.name.trim(),
+        slug: current.slug.trim(),
         description: current.description.trim(),
         memberIds: current.members.map(item => item.id),
       };
@@ -116,6 +125,7 @@ export const Teams = () => {
     setDraft({
       id: team.id,
       name: team.name,
+      slug: team.slug ?? "",
       description: team.description,
       members: team.members,
       photoSrc: team.hasPhoto ? teamPhotoUrl(team.id, photoBust()) : null,
@@ -142,7 +152,24 @@ export const Teams = () => {
     });
   };
 
-  const canSave = Boolean(draft && draft.name.trim() && (draft.id == null || draft.id));
+  const copySlug = async (slug: string, event?: React.MouseEvent) => {
+    event?.stopPropagation();
+    try {
+      await navigator.clipboard.writeText(slug);
+      addToast({ id: "team-slug-copy", type: "success", message: t("teams.slugCopied") });
+    } catch {
+      addToast({ id: "team-slug-copy", type: "error", message: t("teams.saveError") });
+    }
+  };
+
+  const aliasPool = (user.bot_templates ?? []).flatMap(item =>
+    [item.slug, ...(item.aliases_today ?? []), ...(item.aliases_tomorrow ?? []), ...(item.aliases_day_after ?? [])].map(
+      token => token.trim().toLowerCase(),
+    ),
+  );
+
+  const slugError = draft ? validateTeamSlug(draft.slug, aliasPool) : null;
+  const canSave = Boolean(draft && draft.name.trim() && draft.slug.trim() && !slugError);
 
   return (
     <Container>
@@ -161,23 +188,35 @@ export const Teams = () => {
       {!isLoading && teams.length === 0 ? <p className={styles.Teams__Empty}>{t("teams.empty")}</p> : null}
       <div className={styles.Teams__List}>
         {teams.map(team => (
-          <button key={team.id} type='button' className={styles.Teams__Card} onClick={() => openEdit(team)}>
-            {team.hasPhoto ? (
-              <img src={teamPhotoUrl(team.id)} alt='' className={styles.Teams__CardPhoto} />
-            ) : (
-              <span className={styles.Teams__CardPhotoFallback} aria-hidden>
-                {team.name.slice(0, 1)}
+          <div key={team.id} className={styles.Teams__CardWrap}>
+            <button type='button' className={styles.Teams__Card} onClick={() => openEdit(team)}>
+              {team.hasPhoto ? (
+                <img src={teamPhotoUrl(team.id)} alt='' className={styles.Teams__CardPhoto} />
+              ) : (
+                <span className={styles.Teams__CardPhotoFallback} aria-hidden>
+                  {team.name.slice(0, 1)}
+                </span>
+              )}
+              <span className={styles.Teams__CardBody}>
+                <span className={styles.Teams__CardName}>{team.name}</span>
+                <span className={styles.Teams__CardMeta}>
+                  {team.slug ? `${team.slug} · ` : ""}
+                  {t("teams.people", { count: team.members.length })}
+                  {team.isOwner ? ` · ${t("teams.youOwner")}` : ""}
+                </span>
               </span>
-            )}
-            <span className={styles.Teams__CardBody}>
-              <span className={styles.Teams__CardName}>{team.name}</span>
-              <span className={styles.Teams__CardMeta}>
-                {t("teams.people", { count: team.members.length })}
-                {team.isOwner ? ` · ${t("teams.youOwner")}` : ""}
-              </span>
-            </span>
-            <Arrow className={styles.Teams__CardArrow} />
-          </button>
+              <Arrow className={styles.Teams__CardArrow} />
+            </button>
+            {team.slug ? (
+              <button
+                type='button'
+                className={`baseButton outlineButton ${styles.Teams__Copy}`}
+                onClick={event => void copySlug(team.slug, event)}
+              >
+                {t("teams.slugCopy")}
+              </button>
+            ) : null}
+          </div>
         ))}
       </div>
 
@@ -204,8 +243,34 @@ export const Teams = () => {
               placeholder={t("teams.namePlaceholder")}
               value={draft.name}
               readOnly={draft.id != null && !teams.find(item => item.id === draft.id)?.isOwner}
-              onChange={event => setDraft({ ...draft, name: event.target.value })}
+              onChange={event => {
+                const name = event.target.value;
+                setDraft({
+                  ...draft,
+                  name,
+                  slug: draft.id ? draft.slug : suggestTeamSlug(name),
+                });
+              }}
             />
+            <Input
+              name='team-slug'
+              label={t("teams.slug")}
+              placeholder={t("teams.slugPlaceholder")}
+              value={draft.slug}
+              readOnly={draft.id != null && !teams.find(item => item.id === draft.id)?.isOwner}
+              onChange={event => setDraft({ ...draft, slug: event.target.value })}
+            />
+            <p className={styles.Teams__Hint}>{t("teams.slugHint")}</p>
+            {draft.slug && !slugError ? (
+              <button
+                type='button'
+                className={`baseButton outlineButton ${styles.Teams__CopyInline}`}
+                onClick={() => void copySlug(draft.slug)}
+              >
+                {t("teams.slugCopy")}
+              </button>
+            ) : null}
+            {slugError && draft.slug.trim() ? <p className={styles.Teams__Error}>{slugError}</p> : null}
             <TextArea
               name='team-description'
               label={t("teams.description")}

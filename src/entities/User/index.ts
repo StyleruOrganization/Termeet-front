@@ -29,6 +29,15 @@ export {
   isNineToSixEveryDay,
   hasAvailability,
 } from "./lib/availability";
+export {
+  emptyBotTemplate,
+  parseAliasInput,
+  previewBotCommand,
+  suggestTeamSlug,
+  validateBotTemplates,
+  validateTeamSlug,
+  type IBotTemplate,
+} from "./lib/botTemplates";
 export { getProfileDisplayName } from "./lib/displayName";
 export {
   CONTACT_EMAIL_PATTERN,

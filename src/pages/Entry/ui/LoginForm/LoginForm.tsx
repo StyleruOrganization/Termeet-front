@@ -28,7 +28,10 @@ const getAuthErrorMessage = (error: unknown, view: AuthView) => {
       return "Неверный email или пароль";
     }
     if (error.status === 400) {
-      return "Пользователь с такой почтой уже есть";
+      if (error.detail) {
+        return error.detail;
+      }
+      return view === "register" ? "Пользователь с такой почтой уже есть" : "Неверный запрос";
     }
     if (error.status === 403) {
       return "Аккаунт заблокирован";

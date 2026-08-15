@@ -1,3 +1,5 @@
+import type { IBotTemplate } from "../lib/botTemplates";
+
 export interface IAvailabilityInterval {
   /** 1 = понедельник … 7 = воскресенье. Нет поля — интервал для всех дней. */
   weekday?: number | null;
@@ -23,6 +25,9 @@ export interface IUser {
   grid_window_end?: string;
   notify_on_vote?: boolean;
   notify_on_final?: boolean;
+  notify_email?: boolean;
+  notify_telegram?: boolean;
+  has_password?: boolean;
   has_yandex?: boolean;
   has_telemost?: boolean;
   has_calendar?: boolean;
@@ -36,6 +41,7 @@ export interface IUser {
   contact_vk?: string | null;
   telegram_linked?: boolean;
   telegram_username?: string | null;
+  bot_templates?: IBotTemplate[];
 }
 
 export interface IUserSettingsUpdate {
@@ -50,10 +56,13 @@ export interface IUserSettingsUpdate {
   grid_window_end?: string;
   notify_on_vote?: boolean;
   notify_on_final?: boolean;
+  notify_email?: boolean;
+  notify_telegram?: boolean;
   show_onboarding?: boolean;
   contact_email?: string | null;
   contact_telegram?: string | null;
   contact_vk?: string | null;
+  bot_templates?: IBotTemplate[];
 }
 
 export interface ITokenInfo {

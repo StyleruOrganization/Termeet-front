@@ -68,6 +68,16 @@
   gap: 12px;
 }
 
+.Teams__CardWrap {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.Teams__CardWrap .Teams__Card {
+  flex: 1;
+}
+
 .Teams__Card {
   display: flex;
   gap: 12px;
@@ -222,6 +232,26 @@
   color: var(--text-secondary);
 
   font-size: 3rem;
+}
+
+.Teams__Error {
+  color: var(--semantics-red-main);
+
+  font-size: 3rem;
+}
+
+.Teams__Copy {
+  flex-shrink: 0;
+
+  width: fit-content;
+  padding: 12px 16px;
+
+  align-self: center;
+}
+
+.Teams__CopyInline {
+  width: fit-content;
+  padding: 12px 16px;
 }
 
 .Teams__Delete {
