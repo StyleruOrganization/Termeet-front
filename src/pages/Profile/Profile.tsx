@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import {
   deleteAccountRequest,
@@ -49,6 +49,26 @@ const TIME_OPTIONS = Array.from({ length: 48 }, (_, index) => {
 });
 const END_TIME_OPTIONS = [...TIME_OPTIONS.slice(1), "24:00"];
 
+const scrollNavItemFullyVisible = (nav: HTMLElement, item: HTMLElement) => {
+  const navRect = nav.getBoundingClientRect();
+  const itemRect = item.getBoundingClientRect();
+  const padLeft = Number.parseFloat(getComputedStyle(nav).paddingLeft) || 0;
+  const padRight = Number.parseFloat(getComputedStyle(nav).paddingRight) || 0;
+  const leftBound = navRect.left + padLeft;
+  const rightBound = navRect.right - padRight;
+
+  if (itemRect.left >= leftBound && itemRect.right <= rightBound) {
+    return;
+  }
+
+  const delta =
+    itemRect.width > rightBound - leftBound || itemRect.left < leftBound
+      ? itemRect.left - leftBound
+      : itemRect.right - rightBound;
+
+  nav.scrollBy({ left: delta, behavior: "smooth" });
+};
+
 export const Profile = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -56,12 +76,21 @@ export const Profile = () => {
   const status = useSessionStore(state => state.status);
   const { t } = useTranslation();
   const tab = (searchParams.get("tab") as ProfileTab) || "profile";
+  const navRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     if (status === "anonymous") {
       navigate("/", { replace: true });
     }
   }, [navigate, status]);
+
+  useEffect(() => {
+    const nav = navRef.current;
+    const active = nav?.querySelector<HTMLElement>("[data-nav-active='true']");
+    if (nav && active) {
+      scrollNavItemFullyVisible(nav, active);
+    }
+  }, [tab]);
 
   if (!user) {
     return null;
@@ -86,13 +115,20 @@ export const Profile = () => {
         {t("profile.back")}
       </button>
       <div className={styles.Profile}>
-        <nav className={styles.Profile__Nav} aria-label={t("profile.navAria")}>
+        <nav ref={navRef} className={styles.Profile__Nav} aria-label={t("profile.navAria")}>
           {tabs.map(item => (
             <button
               key={item.id}
               type='button'
               className={`${styles.Profile__NavItem} ${tab === item.id ? styles.Profile__NavItem_active : ""}`}
-              onClick={() => setTab(item.id)}
+              data-nav-active={tab === item.id ? "true" : undefined}
+              onClick={event => {
+                setTab(item.id);
+                const nav = navRef.current;
+                if (nav) {
+                  scrollNavItemFullyVisible(nav, event.currentTarget);
+                }
+              }}
             >
               {item.label}
             </button>

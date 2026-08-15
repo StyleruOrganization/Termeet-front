@@ -123,6 +123,8 @@ export const getMyMeetingsRequest = async () => {
       IUserMeeting & {
         data_range?: [string, string][];
         has_final?: boolean;
+        final_slot?: [string, string][] | null;
+        finalSlot?: [string, string][] | null;
         participant_names?: string[];
         participant_count?: number;
       }
@@ -132,6 +134,7 @@ export const getMyMeetingsRequest = async () => {
     ...item,
     dataRange: item.dataRange ?? item.data_range ?? [],
     hasFinal: item.hasFinal ?? item.has_final ?? false,
+    finalSlot: item.finalSlot ?? item.final_slot ?? [],
     participantNames: item.participantNames ?? item.participant_names ?? [],
     participantCount: item.participantCount ?? item.participant_count ?? item.participantNames?.length ?? 0,
   }));

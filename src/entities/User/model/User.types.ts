@@ -98,6 +98,7 @@ export interface IUserMeeting {
   role: UserMeetingRole;
   dataRange: [string, string][];
   hasFinal?: boolean;
+  finalSlot?: [string, string][];
   participantNames?: string[];
   participantCount?: number;
 }

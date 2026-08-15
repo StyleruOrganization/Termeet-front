@@ -50,6 +50,18 @@ const toDayKey = (value: Date) => {
 
 const firstRangeDay = (meeting: IUserMeeting) => meeting.dataRange?.[0]?.[0]?.slice(0, 10) ?? "";
 
+const finalDaysOf = (meeting: IUserMeeting) => {
+  const days = new Set<string>();
+  (meeting.finalSlot ?? []).forEach(([start]) => {
+    if (!start) {
+      return;
+    }
+    const parsed = new Date(start);
+    days.add(Number.isNaN(parsed.getTime()) ? start.slice(0, 10) : toDayKey(parsed));
+  });
+  return days;
+};
+
 const peopleWordKey = (count: number, locale: string) => {
   if (locale !== "ru") {
     return count === 1 ? "home.people1" : "home.people5";
@@ -114,17 +126,27 @@ export const Home = () => {
     if (!selectedDay) {
       return [];
     }
-    return yandexEvents.filter(event => event.start && toDayKey(new Date(event.start)) === selectedDay);
+    return yandexEvents
+      .filter(event => event.start && toDayKey(new Date(event.start)) === selectedDay)
+      .slice()
+      .sort((left, right) => Date.parse(left.start) - Date.parse(right.start));
   }, [selectedDay, yandexEvents]);
 
   const markedDays = useMemo(() => {
     const days = new Set<string>();
     meetings.forEach(meeting => {
-      meeting.dataRange?.forEach(([start]) => {
-        if (start) {
-          days.add(start.slice(0, 10));
-        }
-      });
+      if (!meeting.hasFinal) {
+        return;
+      }
+      const finalDays = finalDaysOf(meeting);
+      if (finalDays.size > 0) {
+        finalDays.forEach(day => days.add(day));
+        return;
+      }
+      const fallback = firstRangeDay(meeting);
+      if (fallback) {
+        days.add(fallback);
+      }
     });
     return days;
   }, [meetings]);
@@ -201,14 +223,30 @@ export const Home = () => {
           {calendarError || calendar?.error ? (
             <p className={styles.HomeCalendar__Hint}>{t("home.calendarLoadError")}</p>
           ) : null}
-          {dayYandexEvents.length > 0 ? (
+          {dayYandexEvents.length > 0 && selectedDay ? (
             <div className={styles.Home__YandexList}>
-              <p className={styles.Home__YandexTitle}>{t("home.yandexEvents")}</p>
-              {dayYandexEvents.map(event => (
-                <p key={event.id} className={styles.Home__YandexItem}>
-                  {formatEventTime(event.start, event.end, dateLocale)} · {event.title}
-                </p>
-              ))}
+              <div className={styles.Home__YandexHead}>
+                <span
+                  className={`${styles.HomeCalendar__HintDot} ${styles.HomeCalendar__HintDot_yandex}`}
+                  aria-hidden
+                />
+                <div>
+                  <p className={styles.Home__YandexTitle}>{t("home.yandexEvents")}</p>
+                  <p className={styles.Home__YandexDay}>{formatGroupTitle(selectedDay)}</p>
+                </div>
+              </div>
+              <ul className={styles.Home__YandexItems}>
+                {dayYandexEvents.map(event => (
+                  <li key={event.id} className={styles.Home__YandexItem}>
+                    <span className={styles.Home__YandexName}>
+                      {(event.title ?? "").trim() || t("home.yandexNoTitle")}
+                    </span>
+                    <span className={styles.Home__YandexTime}>
+                      {formatEventTime(event.start, event.end, dateLocale, t("home.allDay"))}
+                    </span>
+                  </li>
+                ))}
+              </ul>
             </div>
           ) : null}
           <button type='button' className='baseButton mainButton' onClick={() => navigate("/create")}>
@@ -448,11 +486,30 @@ const PeopleSnippet = ({ names, count }: { names: string[]; count: number }) => 
   );
 };
 
-const formatEventTime = (startIso: string, endIso: string, locale: string) => {
+const isLocalMidnight = (value: Date) => value.getHours() === 0 && value.getMinutes() === 0 && value.getSeconds() === 0;
+
+const formatEventTime = (startIso: string, endIso: string, locale: string, allDayLabel: string) => {
   const start = new Date(startIso);
   const end = new Date(endIso);
+  if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+    return "";
+  }
+  const dayMs = 24 * 60 * 60 * 1000;
+  const duration = end.getTime() - start.getTime();
+  if (isLocalMidnight(start) && duration >= dayMs - 60_000) {
+    return allDayLabel;
+  }
   const time = new Intl.DateTimeFormat(locale, { hour: "2-digit", minute: "2-digit" });
-  return `${time.format(start)}–${time.format(end)}`;
+  if (toDayKey(start) === toDayKey(end)) {
+    return `${time.format(start)} – ${time.format(end)}`;
+  }
+  const withDay = new Intl.DateTimeFormat(locale, {
+    day: "numeric",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  return `${withDay.format(start)} – ${withDay.format(end)}`;
 };
 
 const HomeCalendar = ({
