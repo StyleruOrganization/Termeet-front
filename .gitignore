@@ -17,3 +17,15 @@ dist
 # React Router
 /.react-router/
 /build/
+
+# Terraform: local state and credentials
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfplan
+*.tfvars
+*.tfvars.json
+crash.log
+crash.*.log
+
+back/

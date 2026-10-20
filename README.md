@@ -6,6 +6,8 @@
 
 ## Фронтенд-часть проекта Termeet
 
+Восстановление ВМ Yandex Cloud, Terraform, nginx-proxy и настройка деплоя описаны в [инструкции по инфраструктуре](infra/terraform/README.md).
+
 [![Deploy PR](https://github.com/StyleruOrganization/Termeet-front/actions/workflows/deploy-pre-prod.yml/badge.svg?branch=main)](https://github.com/StyleruOrganization/Termeet-front/actions/workflows/deploy-pre-prod.yml)
 
 Версия из main ветки доступна по [адресу](https://termeet-dev.ru)

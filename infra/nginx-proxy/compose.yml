@@ -1,0 +1,48 @@
+name: termeet-proxy
+
+services:
+  nginx-proxy:
+    image: nginxproxy/nginx-proxy:1.11.6
+    container_name: nginx-proxy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    labels:
+      com.github.nginx-proxy.nginx: "true"
+    volumes:
+      - certs:/etc/nginx/certs:ro
+      - vhost:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./proxy.conf:/etc/nginx/conf.d/termeet.conf:ro
+    networks:
+      - nginx-proxy
+
+  acme-companion:
+    image: nginxproxy/acme-companion:2.8.2
+    container_name: nginx-proxy-acme
+    restart: unless-stopped
+    depends_on:
+      - nginx-proxy
+    environment:
+      DEFAULT_EMAIL: ${DEFAULT_EMAIL:?Set DEFAULT_EMAIL in .env}
+      NGINX_PROXY_CONTAINER: nginx-proxy
+    volumes:
+      - certs:/etc/nginx/certs
+      - vhost:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+      - acme:/etc/acme.sh
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - nginx-proxy
+
+networks:
+  nginx-proxy:
+    name: nginx-proxy
+
+volumes:
+  certs:
+  vhost:
+  html:
+  acme:
