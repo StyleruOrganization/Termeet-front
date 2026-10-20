@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [5.0.0] - 2026-10-20
+
+### Changes
+- upgrade TERMEET EEEE
+- added terraform
+
+
+All notable changes to this project will be documented in this file.
+
 ## [4.0.0] - 2026-08-15
 
 ### Changes
