@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [5.0.1] - 2026-11-12
+
+### Changes
+- feat(meet): show weekday in date headers
+
+
+All notable changes to this project will be documented in this file.
+
 ## [5.0.0] - 2026-10-20
 
 ### Changes
