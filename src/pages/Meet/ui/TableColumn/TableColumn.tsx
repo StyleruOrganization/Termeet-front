@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, memo } from "react";
-import { MONTHS_GENITIVE, isSlotInPast } from "@/shared/libs";
+import { MONTHS_GENITIVE, SHORT_DAYS, isSlotInPast } from "@/shared/libs";
 import styles from "./TableColumn.module.css";
 import { getCellIds, useColumnData } from "../../lib";
 import { TableCell } from "../TableCell/TableCell";
@@ -20,9 +20,10 @@ export const TableColumn = memo(({ columnId, columnWidth, timeRanges }: TableCol
 
   const date = useMemo(() => {
     const partsOfDate = columnId.split("-").map(Number);
-    const month = partsOfDate[1],
-      day = partsOfDate[2];
-    return day + " " + MONTHS_GENITIVE.at(month - 1);
+    const [year, month, day] = partsOfDate;
+    const weekday = SHORT_DAYS[(new Date(Date.UTC(year, month - 1, day)).getUTCDay() + 6) % 7];
+
+    return `${day} ${MONTHS_GENITIVE.at(month - 1)}, ${weekday}`;
   }, [columnId]);
 
   const disabledBeforeCells = useMemo(() => {
