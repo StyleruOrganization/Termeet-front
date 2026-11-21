@@ -1,0 +1,9 @@
+.git
+.env
+.env.*
+node_modules
+dist
+infra/terraform
+test-results
+playwright-report
+.cursorignore

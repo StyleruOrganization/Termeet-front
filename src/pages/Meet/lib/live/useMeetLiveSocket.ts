@@ -45,6 +45,7 @@ export const useMeetLiveSocket = (hash: string, userId: string) => {
       socket.onopen = () => {
         retry = 0;
         setConnected(true);
+        void queryClient.invalidateQueries({ queryKey: [...MeetQueries.meet(hash).queryKey, userId], exact: true });
         pingTimer = window.setInterval(() => {
           if (socket?.readyState === WebSocket.OPEN) {
             socket.send("ping");
@@ -55,6 +56,10 @@ export const useMeetLiveSocket = (hash: string, userId: string) => {
       socket.onmessage = event => {
         try {
           const payload = JSON.parse(event.data) as LiveMessage;
+          if (payload.type === "invalidate") {
+            void queryClient.invalidateQueries({ queryKey: [...MeetQueries.meet(hash).queryKey, userId], exact: true });
+            return;
+          }
           if (payload.type !== "meet" || !payload.meet) {
             return;
           }

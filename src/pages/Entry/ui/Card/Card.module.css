@@ -67,6 +67,28 @@
     }
 }
 
+.ReasonCard__Action {
+    align-self: flex-start;
+    padding: 0;
+    color: var(--text-link);
+    background: transparent;
+    border: 0;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.ReasonCard__Action:hover {
+    opacity: 0.8;
+}
+
+.ReasonCard__Action:focus-visible {
+    outline: 2px solid var(--text-link);
+    outline-offset: 6px;
+    border-radius: 4px;
+}
+
 @media (width < 768px) {
     .ReasonCard {
         padding: 35px 10px 24px;

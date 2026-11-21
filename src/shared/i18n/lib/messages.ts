@@ -431,9 +431,18 @@ export const ru = {
     telemostTitle: "Интеграция с Яндекс Календарём",
     telemostText:
       "Когда назначите итоговое время, оно появится в Яндекс Календаре у авторизованных участников, которые в это окно могут. Ссылку на звонок вставляете сами.",
-    botTitle: "Telegram-бот для быстрого планирования",
+    botTitle: "Встречи — прямо в Telegram",
     botText:
-      "Создавайте встречи за пару секунд прямо в рабочих чатах (например, /daily завтра @команда), используйте шаблоны из кабинета и отправляйте напоминания непроголосовавшим в один клик.",
+      "Одна команда в рабочем чате — и встреча создана. Используйте свои шаблоны, собирайте удобное время и напоминайте участникам в один клик.",
+    botChat: "Чат команды",
+    botTomorrow: "Завтра",
+    botTeam: "команда",
+    botCreated: "Встреча создана",
+    botMeeting: "Синхронизация команды",
+    botParticipants: "3 участника",
+    botPickSlots: "Выбрать время",
+    botRemind: "Напомнить",
+    botOpenMeeting: "Открыть встречу",
     manageTitle: "Удобное управление встречей",
     manageText:
       "Можно изменить название встречи или ее описание, управлять списком участников, редактировать доступное время и уведомлять участников о финальном времени",
@@ -906,9 +915,18 @@ export const en: Translation = {
     telemostTitle: "Yandex Calendar and Telemost",
     telemostText:
       "No more creating a call separately, copying the link and sending it by hand. Termeet can notify about the final time and create a Telemost room",
-    botTitle: "Telegram Bot for Instant Scheduling",
+    botTitle: "Meetings, right in Telegram",
     botText:
-      "Create meetings in seconds right from your group chats (e.g. /daily tomorrow @team), use templates from your cabinet, and send 1-click reminders to pending voters.",
+      "One command in your team chat creates a meeting. Use your templates, find a time that works and remind participants with a click.",
+    botChat: "Team chat",
+    botTomorrow: "Tomorrow",
+    botTeam: "team",
+    botCreated: "Meeting created",
+    botMeeting: "Team sync",
+    botParticipants: "3 participants",
+    botPickSlots: "Choose a time",
+    botRemind: "Remind",
+    botOpenMeeting: "Open meeting",
     manageTitle: "Easy meeting management",
     manageText:
       "Change the name or description, manage participants, edit available time and notify people about the final slot",
@@ -1392,9 +1410,18 @@ export const de: Translation = {
     telemostTitle: "Yandex Kalender und Telemost",
     telemostText:
       "Kein extra Anruf mehr, kein Link-Kopieren von Hand. Termeet kann über die Endzeit informieren und einen Telemost-Raum anlegen",
-    botTitle: "Telegram-Bot für sofortige Planung",
+    botTitle: "Meetings direkt in Telegram",
     botText:
-      "Erstellen Sie Meetings in Sekundenschnelle direkt aus Gruppenchats (z. B. /daily morgen @team), nutzen Sie Vorlagen aus dem Konto und erinnern Sie Teilnehmer mit einem Klick.",
+      "Ein Befehl im Teamchat erstellt ein Meeting. Nutzen Sie Ihre Vorlagen, finden Sie eine passende Zeit und erinnern Sie Teilnehmer mit einem Klick.",
+    botChat: "Teamchat",
+    botTomorrow: "Morgen",
+    botTeam: "team",
+    botCreated: "Meeting erstellt",
+    botMeeting: "Teamabstimmung",
+    botParticipants: "3 Teilnehmer",
+    botPickSlots: "Zeit auswählen",
+    botRemind: "Erinnern",
+    botOpenMeeting: "Meeting öffnen",
     manageTitle: "Meeting einfach verwalten",
     manageText:
       "Name oder Beschreibung ändern, Teilnehmer verwalten, verfügbare Zeit bearbeiten und über den Endslot informieren",

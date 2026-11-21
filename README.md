@@ -6,14 +6,14 @@
 
 ## Фронтенд-часть проекта Termeet
 
-Восстановление ВМ Yandex Cloud, Terraform, nginx-proxy и настройка деплоя описаны в [инструкции по инфраструктуре](infra/terraform/README.md).
+Совместное размещение frontend, backend и Telegram-бота на одном сервере,
+локальная сборка и blue-green описаны в [инструкции по развёртыванию](infra/README.md).
 
-[![Deploy PR](https://github.com/StyleruOrganization/Termeet-front/actions/workflows/deploy-pre-prod.yml/badge.svg?branch=main)](https://github.com/StyleruOrganization/Termeet-front/actions/workflows/deploy-pre-prod.yml)
-
-Версия из main ветки доступна по [адресу](https://termeet-dev.ru)
-**_\* После мерджа нужно подождать немного пока пересоберется проект._**
-
-Также собирается тестовый стенд для каждого пулл реквеста ссылку на которую можно найти в комментариях.
+Production: [termeet.tech](https://termeet.tech). Релизы запускаются вручную
+через GitHub Actions отдельного инфраструктурного репозитория:
+Release service → project termeet → service frontend → нужный ref. PR-стенды и
+автоматический preprod-деплой отключены. Образы собираются на сервере,
+без Container Registry Yandex Cloud.
 
 ## Технологический стек
 
@@ -40,6 +40,9 @@ pnpm run dev
 # Сборка для production
 pnpm run build
 ```
+
+Dev-сервер по умолчанию проксирует API на `http://127.0.0.1:8000`.
+Для другого локального адреса задайте `VITE_API_PROXY` при запуске.
 
 ## Настройка окружения
 

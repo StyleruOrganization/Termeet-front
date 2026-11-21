@@ -31,6 +31,7 @@ import {
 } from "./lib/consts/consts";
 import { useActiveSectionStore } from "./lib/store/useActiveSection";
 import { Calendar } from "./ui/Calendar/Calendar";
+import { BotPreview } from "./ui/BotPreview/BotPreview";
 import { Card } from "./ui/Card/Card";
 import { Notification } from "./ui/Notification/Notification";
 import { TeamMemberCard } from "./ui/TeamMemberCard/TeamMemberCard";
@@ -337,41 +338,14 @@ export const Entry = () => {
               </div>
             </Card>
 
-            <Card title={t("entry.botTitle")} description={t("entry.botText")} scrollSnapType='start' type='advantage'>
-              <div className={styles.EntryPage__BotAdv}>
-                <div className={styles.EntryPage__BotAdv__Grd}></div>
-                <div className={styles.EntryPage__BotAdv__Chat}>
-                  <div className={styles.EntryPage__BotAdv__UserMsg}>
-                    <span className={styles.EntryPage__BotAdv__Command}>/daily</span>{" "}
-                    <span className={styles.EntryPage__BotAdv__Arg}>завтра</span>{" "}
-                    <span className={styles.EntryPage__BotAdv__Mention}>@команда</span>{" "}
-                    <span className={styles.EntryPage__BotAdv__Note}>&ldquo;Синхронизация&rdquo;</span>
-                  </div>
-
-                  <div className={styles.EntryPage__BotAdv__BotMsg}>
-                    <div className={styles.EntryPage__BotAdv__BotHeader}>
-                      <div className={styles.EntryPage__BotAdv__BotAvatar}>
-                        <TermeetLogo />
-                      </div>
-                      <div className={styles.EntryPage__BotAdv__BotMeta}>
-                        <span className={styles.EntryPage__BotAdv__BotName}>Termeet Bot</span>
-                        <span className={styles.EntryPage__BotAdv__BotBadge}>bot</span>
-                      </div>
-                    </div>
-                    <div className={styles.EntryPage__BotAdv__MeetCard}>
-                      <div className={styles.EntryPage__BotAdv__MeetTitle}>Discovery: Синхронизация</div>
-                      <div className={styles.EntryPage__BotAdv__MeetInfo}>
-                        <span>📅 Завтра (10:00–19:00 МСК)</span>
-                        <span>⏱️ 1 час · 👥 @alex, @danya, @kirill</span>
-                      </div>
-                    </div>
-                    <div className={styles.EntryPage__BotAdv__Buttons}>
-                      <div className={styles.EntryPage__BotAdv__Button}>🔗 Выбрать слоты</div>
-                      <div className={styles.EntryPage__BotAdv__Button}>🔔 Напомнить (3)</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <Card
+              title={t("entry.botTitle")}
+              description={t("entry.botText")}
+              scrollSnapType='start'
+              type='advantage'
+              onTry={openLoginModal}
+            >
+              <BotPreview />
             </Card>
 
             <Card
