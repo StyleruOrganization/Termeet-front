@@ -33,15 +33,15 @@ jobs:
           git checkout -b "$BRANCH_NAME"
 
       - name: Fetch only tokens.json from fork
+        env:
+          FORK_URL: https://github.com/${{ github.event.pull_request.head.repo.full_name }}.git
+          FORK_BRANCH: ${{ github.event.pull_request.head.ref }}
         run: |
           # Забираем только tokens.json из форка
-          FORK_URL="https://github.com/${{ github.event.pull_request.head.repo.full_name }}.git"
-          FORK_BRANCH="${{ github.event.pull_request.head.ref }}"
-
-          git fetch $FORK_URL $FORK_BRANCH:fetch/$FORK_BRANCH
+          git fetch "$FORK_URL" "$FORK_BRANCH:fetch/$FORK_BRANCH"
 
           # Checkout только tokens.json из ветки форка
-          git checkout fetch/$FORK_BRANCH -- tokens.json
+          git checkout "fetch/$FORK_BRANCH" -- tokens.json
 
       - name: Check for tokens.json
         id: check-tokens
@@ -86,13 +86,15 @@ jobs:
         run: |
           # Создаем новый PR в основном репо
           gh pr create \
-            --title "🎨 Design sync: ${{ github.event.pull_request.title }}" \
-            --body "Auto-synced from fork PR #${{ github.event.pull_request.number }}" \
+            --title "🎨 Design sync: $PR_TITLE" \
+            --body "Auto-synced from fork PR #$PR_NUMBER" \
             --base main \
             --head ${{env.BRANCH_NAME}} \
 
           # Закрываем старый PR из форка
-          gh pr close ${{ github.event.pull_request.number }} \
+          gh pr close "$PR_NUMBER" \
             --comment "✅ Auto-synced to new PR in main repository"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
